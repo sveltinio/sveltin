@@ -1,0 +1,52 @@
+/*
+Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+
+Use of this source code is governed by Apache 2.0 license
+that can be found in the LICENSE file.
+*/
+package css
+
+import (
+	"embed"
+	"errors"
+	"time"
+
+	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/config"
+)
+
+type iCSSLib interface {
+	init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig) error
+	runCommand(pm string) error
+}
+
+type CSSLib struct {
+	ICSSLib iCSSLib
+}
+
+func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, backup bool) error {
+	if backup {
+		destFileExists, err := common.FileExists(fs, saveTo)
+		if destFileExists && err == nil {
+			fs.Rename(saveTo, saveTo+`_backup_`+time.Now().Format("2006-01-02_15:04:05"))
+			fs.Remove(saveTo)
+		}
+	}
+	err := common.CopyFileFromEmbeddedFS(efs, fs, sourceFile, saveTo)
+	if err != nil {
+		nErr := errors.New("something went wrong running copyConfigFiles: " + err.Error())
+		return common.NewDefaultError(nErr)
+	}
+	return nil
+}
+
+func (c *CSSLib) Setup(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, pm string) error {
+	if err := c.ICSSLib.init(efs, fs, conf); err != nil {
+		return err
+	}
+	if err := c.ICSSLib.runCommand(pm); err != nil {
+		return err
+	}
+	return nil
+}

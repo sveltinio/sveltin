@@ -1,0 +1,20 @@
+---
+title: {{ .Name | Capitalize }}
+---
+
+<script context="module">
+   import { website } from '$config/website.js';
+   import externals from '$config/externals.js';
+   export const prerender = true;
+</script>
+
+<svelte:head>
+   <title>{title} | {website.title}</title>
+</svelte:head>
+
+<section class="hero">
+	<div class="content">
+		<img class="logo" src="sveltin_logo.png" alt="sveltin logo" />
+      <h1>This is the {title} page</h1>
+      </div>
+</section>

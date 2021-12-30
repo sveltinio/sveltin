@@ -1,0 +1,13 @@
+---
+title: {{ .Name | ToTitle }}
+author: YOUR_NAME
+slug: {{ .Name | ToSlug }}
+headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
+date: {{ Today }}
+cover: image.jpg
+draft: false
+---
+
+## Heading 2 here
+
+Content text

@@ -1,0 +1,13 @@
+import {{ .Name }} from '$lib/{{ .Name }}/get{{ .Name | Capitalize }}.js';
+import type { EndpointOutput } from '@sveltejs/kit';
+
+export async function get(): Promise<EndpointOutput> {
+   const body = Object.keys({{ .Name }}).map((slug) => ({
+      slug,
+      ...{{ .Name }}[slug]
+   }));
+   return {
+      status: 200,
+      body: JSON.stringify(body)
+   };
+}

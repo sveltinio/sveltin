@@ -1,0 +1,50 @@
+{{ $withContent := .Menu.WithContent }}
+{{ $numOfResources := len .Menu.Resources}}
+const menu = [{
+			identifier: "home",
+			name: "Home",
+			url: "/",
+			weight: 1
+		}
+{{if (gt $numOfResources 0) }},{{end }}
+{{ range $index, $resource := .Menu.Resources }}
+{{ if $index}},{{ end }}
+		{
+			identifier: "{{ $resource.GetName }}",
+			name: "{{ $resource.GetName | Capitalize }}",
+			url: "{{ $resource.GetName | ToURL }}",
+			weight: {{ Sum 2 $index}}
+{{ if $withContent }}
+{{ $numOfResourceContents := len $resource.GetContents }}
+{{if (gt $numOfResources 0) }},{{end }}
+         children: [
+{{ range $i, $content := $resource.GetContents }}
+{{ if $i}},{{ end }}
+            {
+               identifier: "{{ $content }}",
+			      name: "{{ $content | Capitalize }}",
+			      url: "{{ $resource.GetName | ToURL }}{{ $content | ToURL }}",
+			      weight: {{ Sum 1 $i}}
+            }
+{{ end }}
+         ]
+{{ end }}
+      }
+{{ end }}
+
+{{ $pagesStartFrom := Sum $numOfResources 2}}
+{{ $numOfPages := len .Menu.Pages }}
+{{if (gt $numOfPages 0) }},{{end }}
+{{ range $index, $page := .Menu.Pages }}
+{{ if $index}},{{ end }}
+{{ if eq (PlusOne $index) $numOfPages }}
+{{ end }}
+		{
+			identifier: {{ $page }},
+			name: {{ $page | Capitalize }},
+			url: "{{ $page | ToURL }}",
+			weight: {{ Sum $pagesStartFrom $index}}
+		}
+{{ end }}];
+
+export { menu as default }

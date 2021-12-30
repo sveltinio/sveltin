@@ -1,0 +1,3 @@
+const sveltinVersion = '{{ .Misc }}'
+
+export { sveltinVersion as default };

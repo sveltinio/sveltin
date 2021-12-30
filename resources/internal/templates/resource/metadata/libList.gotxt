@@ -1,0 +1,12 @@
+import { groupedByMany } from '$lib/utils/collections.js';
+import filter from 'lodash-es/filter.js';
+
+const {{ .Resource }} = import.meta.globEager('/{{ .Config.Paths.Content }}/{{ .Resource }}/**/*.{md,svx}');
+const {{ .Resource }}List = Object.entries({{ .Resource }})
+   .map(([, item]) => item.metadata)
+   .sort((a, b) => (a.date < b.date ? 1 : -1));
+
+const published = filter({{ .Resource }}List, ['draft', false])
+const values = ['title', 'slug', 'headline'];
+
+export default groupedByMany('{{ .Name }}', published, values);

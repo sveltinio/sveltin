@@ -1,0 +1,59 @@
+<script lang="ts" context="module">
+   import { website } from '$config/website.js';
+   import externals from '$config/externals.js';
+   import { siteConfig } from '$lib/Env.js';
+   import type { Load } from '@sveltejs/kit';
+   import find from 'lodash-es/find.js';
+
+   import Ajv from 'ajv';
+   import SchemaValidator  from '$lib/utils/schema_validator';
+   import type { Metadata } from '$lib/interfaces';
+   import { MetadataItemSchema, MetadataArraySchema } from '$lib/schema';
+
+   const ajv = new Ajv();
+   const schemaValidator = new SchemaValidator(ajv);
+
+   export const load: Load = async ({ page: { params }, fetch }) => {
+      const { slug } = params;
+      const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
+      const res = await fetch(url);
+
+      if (res.ok) {
+         const data = await res.json();
+         const {{.Resource}} = schemaValidator.validate<Array<Metadata>>(MetadataArraySchema, data);
+         const obj = find({{.Resource}}, ['name', slug]);
+         const metadata = schemaValidator.validate<Metadata>(MetadataItemSchema, obj);
+         return {
+            props: { slug, metadata }
+         };
+      }
+      return {
+         status: res.status,
+         error: new Error(`Ops! Something went wrong loading ${url}`)
+      };
+   }
+</script>
+
+<script lang="ts">
+   import { base } from '$app/paths';
+   export let slug: string;
+   export let metadata: Metadata;
+   export let numOfItems = metadata.items.length;
+</script>
+
+<div class="artifact-container">
+   <div class="content">
+   {#if metadata }
+      <h2>{slug}&nbsp;<span>[ Total: {numOfItems} ]</span></h2>
+      <ul>
+         {#each metadata.items as item}
+            <li><a sveltekit:prefetch href="{base}/{{.Resource}}/{item.slug}">{item.title}</a></li>
+         {/each}
+      </ul>
+   {:else}
+      <h2 class="message warning">
+         Please, check all your content ensuring the YAML frontmatter contains "<i>{{.Name | Capitalize }}</i>".
+      </h2>
+   {/if}
+   </div>
+</div>

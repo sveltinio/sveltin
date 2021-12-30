@@ -1,0 +1,26 @@
+paths:
+  build: build
+  config: config
+  content: content
+  static: static
+  src: src
+  routes: routes
+  lib: lib
+  api: api
+  themes: themes
+pages:
+  content: index.svx
+  index: index.svelte
+  slug: '[slug].svelte'
+api:
+  version: v1
+  resource:
+    filename: published.json.ts
+    public: published.json
+  metadata:
+    filename: groupedBy.json.ts
+    public: groupedBy.json
+theme:
+  file: theme.config.js
+  components: components
+  partials: partials

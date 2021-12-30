@@ -1,0 +1,94 @@
+project_name: sveltin
+
+before:
+  hooks:
+    # Clean up unused dependencies
+    - go mod tidy
+    # Downloads all modules specified in go.mod
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    main: ./main.go
+    binary: sveltin
+brews:
+  # GitHub/GitLab repository to push the formula to
+  - tap:
+      owner: sveltinio
+      name: homebrew-sveltin
+      branch: main
+      token: '{{ .Env.GITHUB_TOKEN }}'
+    # Template for the url which is determined by the given Token (github or gitlab)
+    # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    url_template: 'http://github.com/sveltinio/sveltin/releases/download/{{ .Tag }}/{{ .ArtifactName }}'
+    # Git author used to commit to the repository.
+    commit_author:
+      name: indaco
+      email: github@mircoveltri.me
+    commit_msg_template: 'Brew formula update for {{ .ProjectName }} version {{ .Tag }}'
+    # Folder inside the repository to put the formula.
+    folder: Formula
+    # Caveats for the user of your binary.
+    caveats: 'How to use this binary'
+    # App's homepage.
+    homepage: https://sveltin.io
+    description: A powerful CLI for your next SvelteKit powered static website.
+    license: 'Apache-2.0'
+    dependencies:
+      - name: git
+    # Custom install script for brew.
+    install: |
+      bin.install "sveltin"
+scoop:
+  # Repository to push the app manifest to.
+  bucket:
+    owner: sveltinio
+    name: scoop-sveltin
+    branch: main
+    token: '{{ .Env.GITHUB_TOKEN }}'
+  url_template: 'https://github.com/sveltinio/sveltin/releases/download/{{ .Tag }}/{{ .ArtifactName }}'
+  # Folder inside the repository to put the scoop.
+  folder: Scoops
+  commit_author:
+    name: indaco
+    email: github@mircoveltri.me
+  commit_msg_template: 'Scoop update for {{ .ProjectName }} version {{ .Tag }}'
+  homepage: https://sveltin.io
+  description: A powerful CLI for your next SvelteKit powered static website.
+  license: 'Apache-2.0'
+  skip_upload: false
+archives:
+  # Default format for Mac and Linux
+  - format: tar.gz
+    # When windows, use .zip instead.
+    format_overrides:
+      - goos: windows
+        format: zip
+    # Just the naming convention for tarballs... Example: msconsole_1.0.0_darwin_64bit
+    name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    files:
+      - README.md
+      - LICENSE
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: '{{ .Tag }}-next'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - 'README'
+      - Merge pull request
+      - Merge branch
