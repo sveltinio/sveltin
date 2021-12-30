@@ -13,8 +13,8 @@
    const ajv = new Ajv();
    const schemaValidator = new SchemaValidator(ajv);
 
-   export const load: Load = async ({ page: { params } }) => {
-      const { slug } = params;
+   export const load: Load = async ({ params }) => {
+		const { slug } = params;
       const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}';
       const res = await fetch(url);
 

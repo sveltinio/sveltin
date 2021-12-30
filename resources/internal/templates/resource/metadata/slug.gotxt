@@ -13,7 +13,7 @@
    const ajv = new Ajv();
    const schemaValidator = new SchemaValidator(ajv);
 
-   export const load: Load = async ({ page: { params }, fetch }) => {
+   export const load: Load = async ( params, fetch }) => {
       const { slug } = params;
       const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
       const res = await fetch(url);
@@ -21,7 +21,7 @@
       if (res.ok) {
          const data = await res.json();
          const {{.Resource}} = schemaValidator.validate<Array<Metadata>>(MetadataArraySchema, data);
-         const obj = find({{.Resource}}, ['name', slug]);
+         let obj = find({{.Resource}}, ['name', slug]) as Metadata;
          const metadata = schemaValidator.validate<Metadata>(MetadataItemSchema, obj);
          return {
             props: { slug, metadata }
