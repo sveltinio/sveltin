@@ -13,7 +13,7 @@
    const ajv = new Ajv();
    const schemaValidator = new SchemaValidator(ajv);
 
-   export const load: Load = async ( params, fetch }) => {
+   export const load: Load = async ({ params, fetch }) => {
       const { slug } = params;
       const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
       const res = await fetch(url);
