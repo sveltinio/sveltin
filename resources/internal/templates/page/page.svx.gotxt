@@ -13,8 +13,13 @@ title: {{ .Name | Capitalize }}
 </svelte:head>
 
 <section class="hero">
-	<div class="content">
-		<img class="logo" src="sveltin_logo.png" alt="sveltin logo" />
-      <h1>This is the {title} page</h1>
+   <div class="content">
+      <div class="wrapper">
+         <div class="subwrapper">
+            <div class="herotext">
+               <h1>This is the {title} page</h1>
+            </div>
+         </div>
       </div>
+   </div>
 </section>
