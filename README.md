@@ -25,14 +25,9 @@
 
 # Sveltin
 
-## Motivations
+## Documentation
 
-If you are interested in reading why I decided to develop sveltin please, read [here](docs/why_sveltin.md).
-
-## Prerequisites
-
-- Git
-- Node (v14.18.1 or higher is required)
+You can read more on sveltin [here](https://docs.sveltin.io).
 
 ## Installation
 
@@ -60,6 +55,11 @@ scoop install sveltinio/sveltin
 
 ### From source
 
+#### Prerequisites
+
+- Git
+- Node (v16.13.1 or higher is required)
+
 Installation is done by using the `go install` command and rename installed binary in $GOPATH/bin. In this case, ensure to have **Go (v1.17 or higher) installed** on your machine:
 
 ```bash
@@ -68,9 +68,7 @@ go install github.com/sveltinio/sveltin@latest
 
 ## Directory Structure
 
-Sveltin uses a set of conventions over configuration. If we follow the conventions then, we do not have to configure a lot of things on our own.
-
-Sveltin's CLI scaffolds a project directory structure and use it as the root folder to create a complete website. A Sveltin based project has a directory structure like the following:
+A Sveltin app will have a number of generated files and folders that make up the structure of the project.
 
 ```bash
 .
@@ -87,10 +85,6 @@ Sveltin's CLI scaffolds a project directory structure and use it as the root fol
 ```
 
 Please, refer to [Sveltin application structure](https://docs.sveltin.io/application-structure) for a complete description.
-
-## Documentation
-
-You can read more on sveltin [here](https://docs.sveltin.io).
 
 ## Tutorials
 
