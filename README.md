@@ -33,7 +33,15 @@ You can read more on sveltin [here](https://docs.sveltin.io).
 
 Sveltin works on OSX, Windows, Linux, and others. Different installation options can be used
 
+### Prerequisites
+
+- Git
+- Node (v16.13.1 or higher is required)
+- PNPM
+
 ### OSX and Linux via Homebrew
+
+Homebrew will also install Git and Node. Ensure to have PNPM installed as package manager or pass your choice (npm|yarn) to the cli commands. Check the online help `sveltin <command_name> -h`
 
 ```bash
 # Tap a new formula:
@@ -54,11 +62,6 @@ scoop install sveltinio/sveltin
 ```
 
 ### From source
-
-#### Prerequisites
-
-- Git
-- Node (v16.13.1 or higher is required)
 
 Installation is done by using the `go install` command and rename installed binary in $GOPATH/bin. In this case, ensure to have **Go (v1.17 or higher) installed** on your machine:
 
