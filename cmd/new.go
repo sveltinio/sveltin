@@ -8,6 +8,7 @@ package cmd
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
@@ -57,6 +58,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	projectName, err := promptProjectName(args)
 	common.CheckIfError(err)
+
+	setPackageManager()
 
 	// Clone starter template github repository
 	starterTemplate := appTemplatesMap[SVELTEKIT_STARTER]
@@ -109,7 +112,12 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	utils.PrettyPrinter(&printer).Print()
 }
 
+func newCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "", "The name of the your preferred package manager.")
+}
+
 func init() {
+	newCmdFlags(newCmd)
 	rootCmd.AddCommand(newCmd)
 }
 
@@ -131,5 +139,50 @@ func promptProjectName(inputs []string) (string, error) {
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", common.NewDefaultError(err)
+	}
+}
+
+func promptPackageManager(items []string) (string, error) {
+	var pm string
+	switch nameLenght := len(packageManager); {
+	case nameLenght == 0:
+		if len(items) == 1 {
+			pm = items[0]
+		} else {
+			pmPromptContent := config.PromptContent{
+				ErrorMsg: "Please, provide the name of the package manager.",
+				Label:    "Which package manager do you want to use?",
+			}
+			_pm := common.PromptGetSelect(items, pmPromptContent)
+			if common.Contains(items, _pm) {
+				pm = _pm
+			} else {
+				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
+				return "", common.NewDefaultError(errN)
+			}
+		}
+		return pm, nil
+	case nameLenght != 0:
+		if !common.Contains(items, packageManager) {
+			return "", common.NewOptionNotValidError()
+		}
+		pm = packageManager
+		return pm, nil
+	default:
+		err := errors.New("something went wrong: value not valid")
+		return "", common.NewDefaultError(err)
+	}
+}
+
+/**
+ * Read the settings file, if it does not exists and no -p flag,
+ * prompt to select the package manager from the ones currently
+ * installed on the machine and store its value as settings.
+ */
+func setPackageManager() {
+	if len(settings.GetPackageManager()) == 0 && len(packageManager) == 0 {
+		selectedPackageManager, err := promptPackageManager(utils.GetAvailablePackageMangerList())
+		common.CheckIfError(err)
+		storeSelectedPackageManager(selectedPackageManager)
 	}
 }

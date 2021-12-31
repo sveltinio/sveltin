@@ -37,11 +37,10 @@ Sveltin works on OSX, Windows, Linux, and others. Different installation options
 
 - Git
 - Node (v16.13.1 or higher is required)
-- PNPM
 
 ### OSX and Linux via Homebrew
 
-Homebrew will also install Git and Node. Ensure to have PNPM installed as package manager or pass your choice (npm|yarn) to the cli commands. Check the online help `sveltin <command_name> -h`
+Homebrew will also install Git and Node.
 
 ```bash
 # Tap a new formula:
@@ -95,8 +94,6 @@ Please, refer to [Sveltin application structure](https://docs.sveltin.io/applica
 - [Personal Blog](https://docs.sveltin.io//tutorials/personal-blog)
 
 ## Commands & Options
-
-> By default, sveltin uses `pnpm` as package manager. You can choose `npm` or `yarn` simply passing it via the `–-package-manager` flag (in short `-p`) to the sveltin commands supporting it.
 
 ```bash
 $ sveltin -h
@@ -174,7 +171,7 @@ Read more [here][generate].
 
 ### sveltin prepare
 
-`sveltin prepare` is used to initialize the Sveltin project getting all depencencies from the `package.json` file. It acts as wrapper for `pnpm install`.
+`sveltin prepare` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
 
 Read more [here][prepare].
 
@@ -197,8 +194,6 @@ Read more [here][build].
 Read more [here][preview].
 
 ## Contributing
-
-I would love if you like the idea behind sveltin and you decide to contribute to it. A **community driven project**, that is the end-goal.
 
 Contribution of any kind including documentation, themes, tutorials, blog posts, bug reports, issues, feature requests, feature implementations, pull requests are more than welcome.
 

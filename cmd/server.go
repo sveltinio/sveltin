@@ -37,11 +37,6 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	common.CheckIfError(err)
 }
 
-func serverCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "pnpm", "The name of the your preferred package manager.")
-}
-
 func init() {
 	rootCmd.AddCommand(serverCmd)
-	serverCmdFlags(serverCmd)
 }

@@ -136,7 +136,6 @@ func RunNewThemeCmd(cmd *cobra.Command, args []string) {
 
 func themeCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&withCSS, "css", "c", "", "The name of the CSS framework to use. Possible values: css, tailwindcss, bulma, bootstrap")
-	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "pnpm", "The name of the your preferred package manager.")
 }
 
 func init() {

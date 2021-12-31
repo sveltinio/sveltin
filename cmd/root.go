@@ -7,12 +7,15 @@ that can be found in the LICENSE file.
 package cmd
 
 import (
+	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/spf13/viper"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
@@ -31,11 +34,12 @@ var (
 
 var (
 	packageManager  string
-	conf            config.SveltinConfig
-	siteConfig      config.SiteConfig
 	YamlConfig      []byte
 	appTemplatesMap map[string]config.AppTemplate
 	pathMaker       pathmaker.SveltinPathMaker
+	conf            config.SveltinConfig
+	siteConfig      config.SiteConfig
+	settings        config.SveltinSettings
 	fsManager       *fsm.SveltinFSManager
 )
 
@@ -50,24 +54,26 @@ const (
 )
 
 const (
-	ROOT    string = "root"
-	CONFIG  string = "config"
-	CONTENT string = "content"
-	ROUTES  string = "routes"
-	API     string = "api"
-	LIB     string = "lib"
-	STATIC  string = "static"
-	THEMES  string = "themes"
-	INDEX   string = "index"
-	SLUG    string = "slug"
+	ROOT          string = "root"
+	CONFIG        string = "config"
+	CONTENT       string = "content"
+	ROUTES        string = "routes"
+	API           string = "api"
+	LIB           string = "lib"
+	STATIC        string = "static"
+	THEMES        string = "themes"
+	INDEX         string = "index"
+	SLUG          string = "slug"
+	SETTINGS_FILE string = ".sveltin-settings.yaml"
 )
 
 //=============================================================================
 
 var rootCmd = &cobra.Command{
-	Use:     "sveltin",
-	Version: CLI_VERSION,
-	Short:   "sveltin is the main command to work with SvelteKit powered static websites.",
+	Use:              "sveltin",
+	Version:          CLI_VERSION,
+	TraverseChildren: true,
+	Short:            "sveltin is the main command to work with SvelteKit powered static websites.",
 	Long: resources.GetAsciiArt() + `
 sveltin is the main command to work with SvelteKit powered static website.`,
 }
@@ -77,29 +83,42 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(loadConfig, initSveltinManager, getEnvConfigFile, getAppTemplatesMap)
+	cobra.OnInitialize(loadSveltinConfig, loadSveltinSettings, initSveltin)
 }
 
 //=============================================================================
 
-func getAppTemplatesMap() {
-	appTemplatesMap = helpers.InitAppTemplatesMap()
-}
+func initSveltin() {
+	if len(settings.GetPackageManager()) > 0 && len(packageManager) == 0 {
+		packageManager = settings.GetPackageManager()
+	} else if len(packageManager) != 0 {
+		storeSelectedPackageManager(packageManager)
+	}
 
-func getEnvConfigFile() {
+	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
+	fsManager = fsm.NewSveltinFSManager(&pathMaker)
+	appTemplatesMap = helpers.InitAppTemplatesMap()
 	siteConfig, _ = loadEnvFile(DOTENV_PROD)
 }
 
-func loadConfig() {
+func loadSveltinConfig() {
 	err := yaml.Unmarshal(YamlConfig, &conf)
 	if err != nil {
 		jww.FATAL.Fatal(err)
 	}
 }
 
-func initSveltinManager() {
-	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
-	fsManager = fsm.NewSveltinFSManager(&pathMaker)
+func loadSveltinSettings() {
+	homedir, _ := os.UserHomeDir()
+	filepath := filepath.Join(homedir, SETTINGS_FILE)
+	exists, _ := common.FileExists(AppFs, filepath)
+	if exists {
+		yamlSettings, _ := afero.ReadFile(AppFs, filepath)
+		err := yaml.Unmarshal(yamlSettings, &settings)
+		if err != nil {
+			jww.FATAL.Fatal(err)
+		}
+	}
 }
 
 func loadEnvFile(filename string) (config config.SiteConfig, err error) {
@@ -117,6 +136,19 @@ func loadEnvFile(filename string) (config config.SiteConfig, err error) {
 
 	err = viper.Unmarshal(&config)
 	return
+}
+
+// Save the package mananer name on the settings file
+func storeSelectedPackageManager(pmName string) {
+	settings = helpers.NewSveltinSettings(pmName)
+	data, err := yaml.Marshal(&settings)
+	common.CheckIfError(err)
+
+	homedir, _ := os.UserHomeDir()
+	err = ioutil.WriteFile(filepath.Join(homedir, SETTINGS_FILE), data, 0755)
+	common.CheckIfError(err)
+
+	packageManager = pmName
 }
 
 //=============================================================================

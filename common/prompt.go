@@ -46,21 +46,24 @@ func PromptGetInput(pc config.PromptContent) string {
 }
 
 func PromptGetSelect(items []string, pc config.PromptContent) string {
-	index := -1
 	var result string
 	var err error
 
-	for index < 0 {
-		prompt := promptui.SelectWithAdd{
-			Label: pc.Label,
-			Items: items,
-		}
-
-		index, result, err = prompt.Run()
-		if index == -1 {
-			items = append(items, result)
+	validate := func(input string) error {
+		if len(input) == 0 {
+			return errors.New("your selection is invalid")
+		} else {
+			return nil
 		}
 	}
+
+	prompt := promptui.SelectWithAdd{
+		Label:    pc.Label,
+		Items:    items,
+		Validate: validate,
+	}
+
+	_, result, err = prompt.Run()
 
 	if err != nil {
 		jww.CRITICAL.Fatalf("Prompt failed %v\n", err)

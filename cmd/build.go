@@ -46,11 +46,6 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	utils.PrettyPrinter(&printer).Print()
 }
 
-func buildCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "pnpm", "The name of the your preferred package manager.")
-}
-
 func init() {
 	rootCmd.AddCommand(buildCmd)
-	buildCmdFlags(buildCmd)
 }

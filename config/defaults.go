@@ -11,6 +11,18 @@ import (
 	"path/filepath"
 )
 
+type SettingItem struct {
+	PackageManager string `yaml:"packageManager"`
+}
+
+type SveltinSettings struct {
+	Item SettingItem `yaml:"Settings"`
+}
+
+func (s *SveltinSettings) GetPackageManager() string {
+	return s.Item.PackageManager
+}
+
 type IConfig interface {
 	GetProjectRoot() string
 	GetBuildPath() string

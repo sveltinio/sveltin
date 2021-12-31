@@ -38,11 +38,6 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	common.CheckIfError(err)
 }
 
-func previewCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "pnpm", "The name of the your preferred package manager.")
-}
-
 func init() {
 	rootCmd.AddCommand(previewCmd)
-	previewCmdFlags(previewCmd)
 }

@@ -55,7 +55,6 @@ func RunPrepareCmd(cmd *cobra.Command, args []string) {
 }
 
 func prepareCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "pnpm", "The name of the your preferred package manager.")
 	cmd.Flags().BoolVarP(&update, "update", "u", false, "Update dependencies")
 }
 
