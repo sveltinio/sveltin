@@ -16,13 +16,13 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 )
 
-type TailwindCSS struct {
+type VanillaCSS struct {
 	CSSLib
 }
 
-func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error {
+func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error {
 	// Copying the package.json config file
-	sourceFile := resources.SveltinTailwindCSSThemeFS["package_json"]
+	sourceFile := resources.SveltinVanillaCSSThemeFS["package_json"]
 	tplConfig := helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
 		ProjectName: projectName,
 	})
@@ -31,24 +31,11 @@ func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfi
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
-	// Copying tailwindcss config file
-	sourceFile = resources.SveltinTailwindCSSThemeFS["tailwind_css_config"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "tailwind.config.cjs")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, false); err != nil {
-		return err
-	}
-	// Copying postcss config file
-	sourceFile = resources.SveltinTailwindCSSThemeFS["postcss"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "postcss.config.cjs")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, false); err != nil {
-		return err
-	}
 	// Copying app.css file
-	sourceFile = resources.SveltinTailwindCSSThemeFS["app_css"]
+	sourceFile = resources.SveltinVanillaCSSThemeFS["app_css"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.css")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
-
 	return nil
 }

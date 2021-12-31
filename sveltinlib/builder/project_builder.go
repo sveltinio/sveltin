@@ -16,12 +16,15 @@ import (
 )
 
 const (
-	DEFAULTS  string = "defaults"
-	EXTERNALS string = "externals"
-	WEBSITE   string = "website"
-	MENU      string = "menu"
-	INIT_MENU string = "init_menu"
-	DOTENV    string = "dotenv"
+	DEFAULTS     string = "defaults"
+	EXTERNALS    string = "externals"
+	WEBSITE      string = "website"
+	MENU         string = "menu"
+	INIT_MENU    string = "init_menu"
+	DOTENV       string = "dotenv"
+	README       string = "readme"
+	LICENSE      string = "license"
+	THEME_CONFIG string = "theme_config"
 )
 
 type projectBuilder struct {
@@ -61,6 +64,15 @@ func (b *projectBuilder) setPathToTplFile() error {
 		return nil
 	case DOTENV:
 		b.PathToTplFile = b.EmbeddedResources[DOTENV]
+		return nil
+	case README:
+		b.PathToTplFile = b.EmbeddedResources[README]
+		return nil
+	case LICENSE:
+		b.PathToTplFile = b.EmbeddedResources[LICENSE]
+		return nil
+	case THEME_CONFIG:
+		b.PathToTplFile = b.EmbeddedResources[THEME_CONFIG]
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")

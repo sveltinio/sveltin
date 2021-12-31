@@ -18,6 +18,6 @@ func NewThemeArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "theme",
-		resources: resources.SveltinThemeFS,
+		resources: resources.SveltinTailwindCSSThemeFS,
 	}
 }

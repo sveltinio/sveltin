@@ -15,10 +15,12 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
+/*
 const (
 	README  string = "readme"
 	LICENSE string = "license"
 )
+*/
 
 type themeContentBuilder struct {
 	ContentType       string

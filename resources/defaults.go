@@ -26,12 +26,15 @@ func GetAsciiArt() string {
 var SveltinFS embed.FS
 
 var SveltinProjectFS = map[string]string{
-	"defaults":  "internal/templates/site/defaults.js.gotxt",
-	"externals": "internal/templates/site/externals.js.gotxt",
-	"website":   "internal/templates/site/website.js.gotxt",
-	"init_menu": "internal/templates/site/init_menu.js.gotxt",
-	"menu":      "internal/templates/site/menu.js.gotxt",
-	"dotenv":    "internal/templates/misc/env.gotxt",
+	"defaults":     "internal/templates/site/defaults.js.gotxt",
+	"externals":    "internal/templates/site/externals.js.gotxt",
+	"website":      "internal/templates/site/website.js.gotxt",
+	"init_menu":    "internal/templates/site/init_menu.js.gotxt",
+	"menu":         "internal/templates/site/menu.js.gotxt",
+	"dotenv":       "internal/templates/misc/env.gotxt",
+	"readme":       "internal/templates/misc/README.md.gotxt",
+	"license":      "internal/templates/misc/LICENSE.gotxt",
+	"theme_config": "internal/templates/themes/theme.config.js.gotxt",
 }
 
 var SveltinResourceFS = map[string]string{
@@ -67,11 +70,14 @@ var SveltinXMLFS = map[string]string{
 	"rss_ssr":        "internal/templates/xml/ssr_rss.xml.ts.gotxt",
 }
 
-var SveltinThemeFS = map[string]string{
-	"readme":              "internal/templates/misc/README.md.gotxt",
-	"license":             "internal/templates/misc/LICENSE.gotxt",
-	"theme_config":        "internal/templates/theme/theme.config.js.gotxt",
-	"tailwind_css_config": "internal/templates/theme/tailwindcss/tailwind.config.cjs",
-	"tailwind_css_file":   "internal/templates/theme/tailwindcss/app.css",
-	"postcss":             "internal/templates/theme/tailwindcss/postcss.config.cjs",
+var SveltinVanillaCSSThemeFS = map[string]string{
+	"package_json": "internal/templates/themes/vanillacss/package.json.gotxt",
+	"app_css":      "internal/templates/themes/vanillacss/app.css",
+}
+
+var SveltinTailwindCSSThemeFS = map[string]string{
+	"package_json":        "internal/templates/themes/tailwindcss/package.json.gotxt",
+	"tailwind_css_config": "internal/templates/themes/tailwindcss/tailwind.config.cjs",
+	"app_css":             "internal/templates/themes/tailwindcss/app.css",
+	"postcss":             "internal/templates/themes/tailwindcss/postcss.config.cjs",
 }

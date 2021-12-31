@@ -24,13 +24,13 @@ func TestTemplates(t *testing.T) {
 	err = yaml.Unmarshal(yamlFile, &conf)
 	is.NoErr(err)
 
-	pathToTplFile := resources.SveltinThemeFS["theme_config"]
+	pathToTplFile := resources.SveltinProjectFS["theme_config"]
 	data := config.TemplateData{
 		Name: "white",
 	}
 
 	tplConfig := NewTplConfig(pathToTplFile, nil, data)
-	is.Equal("internal/templates/theme/theme.config.js.gotxt", tplConfig.PathToTplFile)
+	is.Equal("internal/templates/themes/theme.config.js.gotxt", tplConfig.PathToTplFile)
 
 	var dummyFuncMap template.FuncMap
 	is.Equal(reflect.TypeOf(dummyFuncMap), reflect.TypeOf(tplConfig.Funcs))
@@ -39,7 +39,7 @@ func TestTemplates(t *testing.T) {
 func TestExecSveltinTpl(t *testing.T) {
 	is := is.New(t)
 
-	pathToTplFile := resources.SveltinThemeFS["theme_config"]
+	pathToTplFile := resources.SveltinProjectFS["theme_config"]
 	data := config.TemplateData{
 		Name: "white",
 	}

@@ -128,25 +128,26 @@ Each command can be executed with inline arguments or interactivly.
 # Create myWebsite project
 sveltin new myWebsite
 
+# Create myWebsite project with TailwWindCSS as CSS Lib
+sveltin new myWebsite --css tailwindcss
+
 # or let sveltin prompt your inputs
 sveltin new
 ```
 
 ### sveltin new
 
-`sveltin new` is the main command to generate artifacts for your website.
+`sveltin new` is the main command to generate both the project and the artifacts for your website.
 
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
 
 | Subcommand | Alias | Description                                                   |
 | :--------- | :---: | :------------------------------------------------------------ |
-| [project]  | site  | Create a new sveltin based project.                           |
 | [resource] |       | Create new resources.                                         |
 | [content]  |       | Create a new content for existing resource.                   |
 | [metadata] |       | Add a new metadata from your content as a Sveltekit resource. |
 | [page]     |       | Create a new public page.                                     |
-| [theme]    |       | Create a new theme.                                           |
 
 </details>
 
@@ -175,11 +176,11 @@ Read more [here][generate].
 
 Read more [here][prepare].
 
-### sveltin serve
+### sveltin server
 
-`sveltin serve` is used to run the VITE server. It wraps svelte-kit defined commands to run the server.
+`sveltin server` is used to run the VITE server. It wraps svelte-kit defined commands to run the server.
 
-Read more [here][serve].
+Read more [here][server].
 
 ### sveltin build
 
@@ -208,12 +209,11 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [content]: https://docs.sveltin.io/cli/new-content
 [metadata]: https://docs.sveltin.io/cli/new-metadata
 [page]: https://docs.sveltin.io/cli/new-page
-[theme]: https://docs.sveltin.io/cli/new-theme
 [generate]: https://docs.sveltin.io/cli/generate
 [menu]: https://docs.sveltin.io/cli/generate-menu
 [sitemap]: https://docs.sveltin.io/cli/generate-sitemap
 [rss]: https://docs.sveltin.io/cli/generate-rss
-[serve]: https://docs.sveltin.io/cli/server
+[server]: https://docs.sveltin.io/cli/server
 [prepare]: https://docs.sveltin.io/cli/prepare
 [build]: https://docs.sveltin.io/cli/build
 [preview]: https://docs.sveltin.io/cli/preview

@@ -1,0 +1,360 @@
+:root {
+  --pure-white: #ffffff;
+  --dark: #2c2c35 /*haiti*/;
+  --deep-dark: #1e2028 /* pearl */;
+  --color-text-base: #464a5d /*river*/;
+  --color-text-muted: #a0a1b2 /* santa */;
+  --color-text-accent: #0b7599 /* cege */;
+}
+
+/* CSS RESET by https://www.joshwcomeau.com/css/custom-css-reset/ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* END OF CSS RESET by */
+
+body {
+  background-color: var(--pure-white);
+  font-family: 'IBM Plex Sans', sans-serif;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  flex-grow: 1;
+}
+
+h1 {
+  color: var(--color-text-base);
+  margin-top: 0.75rem /* 12px */;
+  margin-bottom: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.main-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero > .content {
+  max-width: 80rem /* 1280px */;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero > .content > .wrapper {
+  padding-top: 11rem /* 176px */;
+  padding-bottom: 11rem /* 176px */;
+}
+
+.subwrapper {
+  max-width: 64rem /* 1024px */;
+  padding-left: 1.5rem /* 24px */;
+  padding-right: 1.5rem /* 24px */;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.herotext {
+  padding-bottom: 6rem /* 96px */;
+  text-align: center;
+}
+
+.subwrapper > .herotext h1 {
+  font-size: 1.875rem /* 30px */;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.05em;
+  padding-bottom: 1rem /* 16px */;
+  line-height: 1.25;
+}
+
+.accent {
+  color: var(--color-text-accent);
+  font-style: italic;
+  font-weight: 400;
+  display: block;
+  text-transform: capitalize;
+}
+
+.buttons-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem /* 16px */;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-left: 0.5rem /* 8px */;
+  padding-right: 0.5rem /* 8px */;
+  padding-top: 0.5rem /* 8px */;
+  padding-bottom: 0.5rem /* 8px */;
+  font-size: 0.875rem /* 14px */;
+  font-weight: 500;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.btn-accent {
+  color: var(--pure-white);
+  background-color: var(--color-text-base);
+  border-top-left-radius: 0.5rem /* 8px */;
+  border-bottom-left-radius: 0.5rem /* 8px */;
+  border-color: var(--color-text-base);
+}
+
+.btn-accent:hover {
+  background-color: var(--dark);
+}
+
+.btn-accent:focus {
+  z-index: 10;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: var(--pure-white);
+}
+
+.btn-base {
+  margin-left: -1px;
+  color: var(--dark);
+  border-top-right-radius: 0.5rem /* 8px */;
+  border-bottom-right-radius: 0.5rem /* 8px */;
+  border-color: var(--color-text-base);
+}
+
+.btn-base:focus {
+  z-index: 10;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.artifact-container {
+  color: var(--dark);
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  max-width: 56rem;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.75rem;
+}
+
+.artifact-container > .content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.artifact-container > .content h1 {
+  text-align: left;
+  line-height: 2rem /* 32px */;
+  font-size: 1.5rem /* 24px */;
+  font-weight: 500;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.artifact-container > .content h2 {
+  text-align: left;
+  font-size: 1.25rem /* 20px */;
+  font-weight: 400;
+  line-height: 1.75rem /* 28px */;
+  margin-top: 0.5rem /* 8px */;
+  margin-bottom: 0.5rem /* 8px */;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.artifact-container > .content ul li {
+  padding-top: 0.5rem /* 8px */;
+  padding-bottom: 0.5rem /* 8px */;
+}
+
+.message {
+  padding: 0.5rem 1rem /* 8px 16px */;
+  border-radius: 0.375rem /* 6px */;
+}
+
+.warning {
+  background-color: rgb(254 215 170);
+}
+
+.text-default {
+  font-size: 1rem /* 16px */;
+  line-height: 1.5rem /* 24px */;
+}
+
+footer {
+  width: 100%;
+  background-color: rgb(30 32 40/1);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+footer > .content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 2rem /* 32px */;
+  padding-right: 1.25rem /* 20px */;
+  padding-bottom: 1.5rem /* 24px */;
+  padding-left: 1.25rem /* 20px */;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer > .content > .wrapper {
+  flex-shrink: 0;
+  text-align: left;
+  width: 18rem /* 288px */;
+}
+
+footer > .content > .wrapper > p {
+  margin-top: 1.5rem /* 24px */;
+  font-size: 0.875rem /* 14px */;
+  color: var(--color-text-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.markdown-body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+
+@media (min-width: 640px) {
+  .herotext h1 {
+    font-size: 2.25rem /* 36px */;
+  }
+
+  footer > .content {
+    padding-left: 1.5rem /* 24px */;
+    padding-right: 1.5rem /* 24px */;
+  }
+}
+
+@media (min-width: 768px) {
+  footer > .content {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .subwrapper {
+    padding-left: 4rem /* 64px */;
+    padding-right: 4rem /* 64px */;
+  }
+
+  .subwrapper > .herotext h1 {
+    font-size: 3rem /* 48px */;
+  }
+
+  .btn {
+    padding-left: 2rem /* 32px */;
+    padding-right: 2rem /* 32px */;
+  }
+
+  footer > .content {
+    padding-left: 3rem /* 48px */;
+    padding-right: 3rem /* 48px */;
+    padding-top: 3rem /* 48px */;
+    padding-bottom: 3rem /* 48px */;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+  }
+}
