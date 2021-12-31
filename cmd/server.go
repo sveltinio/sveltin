@@ -8,7 +8,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -34,7 +33,7 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	utils.PrettyPrinter(&printer).Print()
 
 	err := helpers.RunPMCommand(packageManager, "dev", "", nil, false)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 }
 
 func init() {

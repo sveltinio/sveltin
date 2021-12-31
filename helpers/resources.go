@@ -13,12 +13,13 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func ResourceExists(fs afero.Fs, name string, c *config.SveltinConfig) error {
 	availableResources := GetAllResources(fs, c.GetContentPath())
 	if !common.Contains(availableResources, name) {
-		return common.NewResourceNotFoundError()
+		return sveltinerr.NewResourceNotFoundError()
 	}
 	return nil
 }

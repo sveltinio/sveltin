@@ -16,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -54,10 +55,10 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	}
 
 	err := common.CheckMinMaxArgs(args, 0, 3)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	projectName, err := promptProjectName(args)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	setPackageManager()
 
@@ -105,7 +106,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewProjectArtifact(&resources.SveltinFS, AppFs)
 	err = rootFolder.Create(sfs)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	printer.SetContent(logger.Render())
@@ -138,7 +139,7 @@ func promptProjectName(inputs []string) (string, error) {
 		return name, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -158,19 +159,19 @@ func promptPackageManager(items []string) (string, error) {
 				pm = _pm
 			} else {
 				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
-				return "", common.NewDefaultError(errN)
+				return "", sveltinerr.NewDefaultError(errN)
 			}
 		}
 		return pm, nil
 	case nameLenght != 0:
 		if !common.Contains(items, packageManager) {
-			return "", common.NewOptionNotValidError()
+			return "", sveltinerr.NewOptionNotValidError()
 		}
 		pm = packageManager
 		return pm, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -182,7 +183,7 @@ func promptPackageManager(items []string) (string, error) {
 func setPackageManager() {
 	if len(settings.GetPackageManager()) == 0 && len(packageManager) == 0 {
 		selectedPackageManager, err := promptPackageManager(utils.GetAvailablePackageMangerList())
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 		storeSelectedPackageManager(selectedPackageManager)
 	}
 }

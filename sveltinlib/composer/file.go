@@ -10,10 +10,10 @@ import (
 	"errors"
 	"path/filepath"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type File struct {
@@ -55,7 +55,7 @@ func (f *File) Create(sf *factory.Artifact) error {
 
 	if err := helpers.WriteContentToDisk(sf.GetFS(), saveAs, fileContent); err != nil {
 		nErr := errors.New("something went wrong: " + err.Error())
-		return common.NewDefaultError(nErr)
+		return sveltinerr.NewDefaultError(nErr)
 	}
 	return nil
 }

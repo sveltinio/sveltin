@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func TestContains(t *testing.T) {
@@ -70,7 +71,7 @@ func TestCheckMinMaxArgsBoundaries(t *testing.T) {
 		is := is.New(t)
 
 		err := CheckMinMaxArgs(tc.items, tc.min, tc.max)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Message)
 		is.Equal(`SVELTIN NumOfArgsNotValidErrorWithMessage: This command expects at least `+strconv.Itoa(tc.min)+` argument.
@@ -91,7 +92,7 @@ func TestNotValidCheckMinMaxArgs(t *testing.T) {
 		is := is.New(t)
 
 		err := CheckMinMaxArgs(tc.items, tc.min, tc.max)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Message)
 		is.Equal(`SVELTIN NumOfArgsNotValidErrorWithMessage: This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
@@ -130,7 +131,7 @@ func TestCheckMinMaxArgsWithMaxEqualsZero(t *testing.T) {
 		is := is.New(t)
 
 		err := CheckMaxArgs(tc.items, tc.max)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Message)
 		is.Equal(`SVELTIN NumOfArgsNotValidErrorWithMessage: This command expects no arguments. Please check the help: sveltin [command] -h`, re.Error())
@@ -149,7 +150,7 @@ func TestCheckMinMaxArgsWithNumOfArgsGreaterThanMax(t *testing.T) {
 		is := is.New(t)
 
 		err := CheckMaxArgs(tc.items, tc.max)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Message)
 		is.Equal(`SVELTIN NumOfArgsNotValidErrorWithMessage: This command expects maximum `+strconv.Itoa(tc.max)+` arguments.

@@ -8,7 +8,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -44,13 +43,13 @@ func RunPrepareCmd(cmd *cobra.Command, args []string) {
 		printer.SetContent("* Updating dependencies")
 		utils.PrettyPrinter(&printer).Print()
 		err := helpers.RunPMCommand(packageManager, "update", "", nil, false)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 	default:
 		// LOG TO STDOUT
 		printer.SetContent("* Getting dependencies")
 		utils.PrettyPrinter(&printer).Print()
 		err := helpers.RunPMCommand(packageManager, "install", "", nil, false)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 	}
 }
 

@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func TestPageCmd(t *testing.T) {
@@ -23,7 +24,7 @@ func TestPageCmd(t *testing.T) {
 			function: func() func(cmd *cobra.Command, args []string) {
 				return func(cmd *cobra.Command, args []string) {
 					err := common.CheckMaxArgs(args, 1)
-					re := err.(*common.SveltinError)
+					re := err.(*sveltinerr.SveltinError)
 					is.Equal(32, re.Code)
 					is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Message)
 				}
@@ -54,7 +55,7 @@ func TestPageCmd(t *testing.T) {
 					is.NoErr(err)
 
 					_, err = getPageType(pageType)
-					re := err.(*common.SveltinError)
+					re := err.(*sveltinerr.SveltinError)
 					is.Equal("SVELTIN PageTypeNotValidError", re.Message)
 				}
 			},

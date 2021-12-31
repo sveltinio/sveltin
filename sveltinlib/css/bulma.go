@@ -10,8 +10,8 @@ import (
 	"embed"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type Bulma struct {
@@ -19,7 +19,7 @@ type Bulma struct {
 }
 
 func (f *Bulma) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig) error {
-	return common.NewNotImplementYetError()
+	return sveltinerr.NewNotImplementYetError()
 }
 
 func (f *Bulma) runCommand(pm string) error {

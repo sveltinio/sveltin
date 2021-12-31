@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type iCSSLib interface {
@@ -36,7 +37,7 @@ func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, 
 	err := common.CopyFileFromEmbeddedFS(efs, fs, sourceFile, saveTo)
 	if err != nil {
 		nErr := errors.New("something went wrong running copyConfigFiles: " + err.Error())
-		return common.NewDefaultError(nErr)
+		return sveltinerr.NewDefaultError(nErr)
 	}
 	return nil
 }

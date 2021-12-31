@@ -10,8 +10,8 @@ import (
 	"embed"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type Bootstrap struct {
@@ -19,7 +19,7 @@ type Bootstrap struct {
 }
 
 func (f *Bootstrap) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig) error {
-	return common.NewNotImplementYetError()
+	return sveltinerr.NewNotImplementYetError()
 }
 
 func (f *Bootstrap) runCommand(pm string) error {

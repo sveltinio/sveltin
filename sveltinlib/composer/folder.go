@@ -12,6 +12,7 @@ import (
 
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type Folder struct {
@@ -59,7 +60,7 @@ func (f *Folder) Create(sf *factory.Artifact) error {
 			composite.SetPath(f.GetPath())
 		default:
 			errN := errors.New("composite type not valid")
-			return common.NewDefaultError(errN)
+			return sveltinerr.NewDefaultError(errN)
 		}
 		composite.Create(sf)
 	}

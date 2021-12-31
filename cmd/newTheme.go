@@ -18,6 +18,7 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
 	"github.com/sveltinio/sveltin/sveltinlib/css"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -53,10 +54,10 @@ func RunNewThemeCmd(cmd *cobra.Command, args []string) {
 	}
 
 	themeName, err := promptThemeName(args)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	cssLibName, err := promptCSSLibName(withCSS)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// NEW FOLDER: themes/<theme_name>
 	newThemeFolder := composer.NewFolder(themeName)
@@ -113,7 +114,7 @@ func RunNewThemeCmd(cmd *cobra.Command, args []string) {
 	// GENERATE STRUCTURE
 	sfs := factory.NewThemeArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	printer.SetContent(logger.Render())
@@ -130,7 +131,7 @@ func RunNewThemeCmd(cmd *cobra.Command, args []string) {
 		printer.SetContent(logger.Render())
 		utils.PrettyPrinter(&printer).Print()
 		err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, packageManager)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 	}
 }
 
@@ -160,7 +161,7 @@ func promptThemeName(inputs []string) (string, error) {
 		return name, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -179,7 +180,7 @@ func promptCSSLibName(useFlag string) (string, error) {
 		return css, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -212,6 +213,6 @@ func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinCo
 		}
 		return c.Setup(efs, fs, conf, packageManager)
 	default:
-		return common.NewOptionNotValidError()
+		return sveltinerr.NewOptionNotValidError()
 	}
 }

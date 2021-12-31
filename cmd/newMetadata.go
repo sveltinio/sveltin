@@ -18,6 +18,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -53,13 +54,13 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	}
 
 	mdName, err := promptMetadataName(args)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	mdResource, err := promptResource(AppFs, resourceName, &conf)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	mdType, err := promptMetadataType(metadataType)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// NEW FOLDER: <metadata_name>
 	resourceMetadataAPIFolder := composer.NewFolder(mdName)
@@ -142,7 +143,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewMetadataArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	// LOG TO STDOUT
@@ -180,12 +181,12 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 	case nameLenght != 0:
 		resource = mdResourceFlag
 		if !common.Contains(availableResources, resource) {
-			return "", common.NewResourceNotFoundError()
+			return "", sveltinerr.NewResourceNotFoundError()
 		} else {
 			return resource, nil
 		}
 	default:
-		return "", common.NewResourceNotFoundError()
+		return "", sveltinerr.NewResourceNotFoundError()
 	}
 }
 
@@ -204,7 +205,7 @@ func promptMetadataName(inputs []string) (string, error) {
 		return name, nil
 	default:
 		err := errors.New("something went wrong: name not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 
 }
@@ -224,11 +225,11 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 	case nameLenght != 0:
 		metadataType = mdTypeFlag
 		if !common.Contains(valid, metadataType) {
-			return "", common.NewMetadataTypeNotValidError()
+			return "", sveltinerr.NewMetadataTypeNotValidError()
 		} else {
 			return metadataType, nil
 		}
 	default:
-		return "", common.NewMetadataTypeNotValidError()
+		return "", sveltinerr.NewMetadataTypeNotValidError()
 	}
 }

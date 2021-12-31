@@ -11,7 +11,6 @@ import (
 	"path/filepath"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 )
 
@@ -21,7 +20,7 @@ func GitClone(sveltinTemplate *config.AppTemplate, inpath string) {
 		Progress: nil,
 	})
 
-	common.CheckIfError(err)
+	CheckIfError(err)
 	cleanGitRepository(inpath, []string{".git"})
 }
 

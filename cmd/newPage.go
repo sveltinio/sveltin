@@ -14,6 +14,7 @@ import (
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -48,21 +49,21 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	logger.Reset()
 
 	pageName, err := getPageName(args)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	printer := utils.PrinterContent{
 		Title: `New "` + pageName + `" page added to your Sveltin project`,
 	}
 
 	pageType, err := getPageType(pageType)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// GET FOLDER: src/routes
 	routesFolder := fsManager.GetFolder(ROUTES)
 
 	// NEW FILE: src/routes/<page_name.svelte|svx>
 	pageFile := fsManager.NewPublicPage(pageName, pageType)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// ADD TO THE ROUTES FOLDER
 	routesFolder.Add(pageFile)
@@ -74,7 +75,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// GENERATE STRUCTURE
 	sfs := factory.NewPageArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	printer.SetContent(logger.Render())
@@ -107,7 +108,7 @@ func getPageName(inputs []string) (string, error) {
 		return name, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -125,11 +126,11 @@ func getPageType(pageTypeFlag string) (string, error) {
 	case nameLenght != 0:
 		page = pageTypeFlag
 		if !common.Contains(valid, page) {
-			return "", common.NewPageTypeNotValidError()
+			return "", sveltinerr.NewPageTypeNotValidError()
 		} else {
 			return page, nil
 		}
 	default:
-		return "", common.NewPageTypeNotValidError()
+		return "", sveltinerr.NewPageTypeNotValidError()
 	}
 }

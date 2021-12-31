@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func MkDir(fs afero.Fs, x ...string) error {
@@ -33,12 +34,12 @@ func DirExists(fs afero.Fs, path string) bool {
 func FileExists(fs afero.Fs, path string) (bool, error) {
 	exists, _ := afero.Exists(fs, path)
 	if !exists {
-		return false, NewFileNotFoundError()
+		return false, sveltinerr.NewFileNotFoundError()
 	}
 
 	isDir, _ := afero.IsDir(fs, path)
 	if isDir {
-		return false, NewDirInsteadOfFileError()
+		return false, sveltinerr.NewDirInsteadOfFileError()
 	}
 
 	return true, nil
@@ -67,11 +68,11 @@ func TouchFileSingle(fs afero.Fs, name string) error {
 func CopyFileFromEmbeddedFS(efs *embed.FS, fs afero.Fs, pathToFile string, saveTo string) error {
 	content, err := efs.ReadFile(pathToFile)
 	if err != nil {
-		return NewFileNotFoundError()
+		return sveltinerr.NewFileNotFoundError()
 	}
 	pathToSaveFile := filepath.Join(saveTo)
 	if err := WriteToDisk(fs, pathToSaveFile, bytes.NewReader(content)); err != nil {
-		return NewDefaultError(err)
+		return sveltinerr.NewDefaultError(err)
 	}
 	return nil
 }

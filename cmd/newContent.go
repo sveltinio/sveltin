@@ -19,6 +19,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -63,7 +64,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	logger.Reset()
 
 	contentData, err := getContentName(AppFs, args, &conf)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	printer := utils.PrinterContent{
 		Title: `New "` + contentData.Name + `" will be added to your Sveltin project`,
@@ -94,7 +95,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	printer.SetContent(logger.Render())
@@ -121,10 +122,10 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		}
 		contentName := common.PromptGetInput(contentNamePromptContent)
 		contentType, err := promptContentTemplateSelection(templateFlag)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 
 		contentResource, err := promptResourceList(fs, c)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 
 		return config.TemplateData{
 			Name:     contentName,
@@ -137,10 +138,10 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		contentResource, contentName := path.Split(name)
 		contentResource = strings.ReplaceAll(contentResource, "/", "")
 		err := helpers.ResourceExists(fs, contentResource, &conf)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 
 		contentType, err := promptContentTemplateSelection(templateFlag)
-		common.CheckIfError(err)
+		utils.CheckIfError(err)
 
 		return config.TemplateData{
 			Name:     contentName,
@@ -149,7 +150,7 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		}, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return config.TemplateData{}, common.NewDefaultError(err)
+		return config.TemplateData{}, sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -168,12 +169,12 @@ func promptContentTemplateSelection(templateType string) (string, error) {
 	case nameLenght != 0:
 		contentTemplate = templateType
 		if !common.Contains(validTemplates, contentTemplate) {
-			return "", common.NewContentTemplateTypeNotValidError()
+			return "", sveltinerr.NewContentTemplateTypeNotValidError()
 		} else {
 			return contentTemplate, nil
 		}
 	default:
-		return "", common.NewContentTemplateTypeNotValidError()
+		return "", sveltinerr.NewContentTemplateTypeNotValidError()
 	}
 }
 

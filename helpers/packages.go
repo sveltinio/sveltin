@@ -7,8 +7,9 @@ that can be found in the LICENSE file.
 package helpers
 
 import (
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/sveltinlib/shell"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // Execute package manager (npm, pnpm, yarn) commands
@@ -25,8 +26,8 @@ func RunPMCommand(pmName string, pmCmd string, mode string, packages []string, s
 	case "addPackages":
 		err = nodePM.RunAddPackages(pmName, pmCmd, mode, packages, silentMode)
 	default:
-		err = common.NewPackageManagerCommandNotValidError()
+		err = sveltinerr.NewPackageManagerCommandNotValidError()
 	}
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 	return nil
 }

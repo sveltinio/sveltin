@@ -11,7 +11,7 @@ import (
 	"fmt"
 
 	jww "github.com/spf13/jwalterweatherman"
-	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type NodePackageManager struct {
@@ -30,12 +30,12 @@ func (n *NodePackageManager) GetShell() Shell {
 
 func (n *NodePackageManager) RunInstall(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 	pmCmd := operation
 	err = n.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	return nil
@@ -43,7 +43,7 @@ func (n *NodePackageManager) RunInstall(pmName string, operation string, silentM
 
 func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	var pmCmd string
@@ -55,7 +55,7 @@ func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 
 	err = n.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	return nil
@@ -63,7 +63,7 @@ func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 
 func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	var pmCmd string
@@ -75,7 +75,7 @@ func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 
 	err = n.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	return nil
@@ -83,7 +83,7 @@ func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 
 func (n *NodePackageManager) RunAddPackages(pmName string, operation string, mode string, packages []string, silentMode bool) error {
 	if pmName == "" || operation == "" || mode == "" || packages == nil {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	var pmCmd string
@@ -97,7 +97,7 @@ func (n *NodePackageManager) RunAddPackages(pmName string, operation string, mod
 		jww.FEEDBACK.Printf("  * %s\n", p)
 		output, err := n.GetShell().BackgroundExecute(context.Background(), pmName, pmCmd, p)
 		if err != nil {
-			return common.NewExecSystemCommandErrorWithMsg(err)
+			return sveltinerr.NewExecSystemCommandErrorWithMsg(err)
 		}
 
 		if !silentMode {

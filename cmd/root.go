@@ -142,11 +142,11 @@ func loadEnvFile(filename string) (config config.SiteConfig, err error) {
 func storeSelectedPackageManager(pmName string) {
 	settings = helpers.NewSveltinSettings(pmName)
 	data, err := yaml.Marshal(&settings)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	homedir, _ := os.UserHomeDir()
 	err = ioutil.WriteFile(filepath.Join(homedir, SETTINGS_FILE), data, 0755)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	packageManager = pmName
 }

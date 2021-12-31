@@ -9,6 +9,8 @@ package common
 import (
 	"errors"
 	"strconv"
+
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func Contains(s []string, str string) bool {
@@ -26,16 +28,16 @@ func CheckMinMaxArgs(items []string, min int, max int) error {
 	case numOfArgs < min:
 		errA := errors.New(`This command expects at least ` + strconv.Itoa(min) + ` argument.
 Please check the help: sveltin [command] -h`)
-		return NewNumOfArgsNotValidErrorWithMessage(errA)
+		return sveltinerr.NewNumOfArgsNotValidErrorWithMessage(errA)
 	case (numOfArgs >= min) && (numOfArgs <= max):
 		return nil
 	case numOfArgs > max:
 		errA := errors.New(`This command expects maximum ` + strconv.Itoa(max) + ` arguments.
 Please check the help: sveltin [command] -h`)
-		return NewNumOfArgsNotValidErrorWithMessage(errA)
+		return sveltinerr.NewNumOfArgsNotValidErrorWithMessage(errA)
 	default:
 		errA := errors.New("")
-		return NewDefaultError(errA)
+		return sveltinerr.NewDefaultError(errA)
 	}
 }
 
@@ -53,9 +55,9 @@ Please check the help: sveltin [command] -h`
 		return nil
 	case numOfArgs > max:
 		errA := errors.New(errorMsg)
-		return NewNumOfArgsNotValidErrorWithMessage(errA)
+		return sveltinerr.NewNumOfArgsNotValidErrorWithMessage(errA)
 	default:
 		errA := errors.New(errorMsg)
-		return NewDefaultError(errA)
+		return sveltinerr.NewDefaultError(errA)
 	}
 }

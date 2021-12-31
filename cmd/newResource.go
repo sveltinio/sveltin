@@ -15,6 +15,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 
 	"github.com/spf13/cobra"
@@ -51,7 +52,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	}
 
 	resourceName, err := promptResourceName(args)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// GET FOLDER: content folder
 	contentFolder := fsManager.GetFolder(CONTENT)
@@ -130,7 +131,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// CREATE FOLDER STRUCTURE
 	sfs := factory.NewResourceArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	common.CheckIfError(err)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	printer.SetContent(logger.Render())
@@ -162,6 +163,6 @@ func promptResourceName(inputs []string) (string, error) {
 		return name, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return "", common.NewDefaultError(err)
+		return "", sveltinerr.NewDefaultError(err)
 	}
 }

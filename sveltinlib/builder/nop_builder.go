@@ -11,8 +11,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -47,7 +47,7 @@ func (b *nopContentBuilder) setPathToTplFile() error {
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
-		return common.NewDefaultError(errN)
+		return sveltinerr.NewDefaultError(errN)
 	}
 }
 

@@ -13,7 +13,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 type LocalShell struct {
@@ -24,7 +24,7 @@ func (s *LocalShell) Execute(pmName string, pmCmd string, silentMode bool) error
 
 	args := strings.Split(pmCmd, " ")
 	if len(args) < 1 || len(args) > 2 {
-		return common.NewExecSystemCommandError()
+		return sveltinerr.NewExecSystemCommandError()
 	}
 
 	switch len(args) {
@@ -34,7 +34,7 @@ func (s *LocalShell) Execute(pmName string, pmCmd string, silentMode bool) error
 		cmd = exec.Command(pmName, args[0], args[1])
 	default:
 		err := errors.New("invalid number of arguments")
-		return common.NewExecSystemCommandErrorWithMsg(err)
+		return sveltinerr.NewExecSystemCommandErrorWithMsg(err)
 	}
 
 	if !silentMode {
@@ -49,7 +49,7 @@ func (s *LocalShell) BackgroundExecute(ctx context.Context, pmName string, pmCmd
 	args := strings.Split(pmCmd, " ")
 	if len(args) != 2 {
 		err := errors.New("invalid number of arguments")
-		return nil, common.NewExecSystemCommandErrorWithMsg(err)
+		return nil, sveltinerr.NewExecSystemCommandErrorWithMsg(err)
 	}
 	wrapperCmd := exec.CommandContext(ctx, pmName, args[0], args[1], packageList)
 	output, error := wrapperCmd.CombinedOutput()

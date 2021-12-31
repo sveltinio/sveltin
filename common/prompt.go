@@ -13,13 +13,14 @@ import (
 	"github.com/manifoldco/promptui"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func PromptGetInput(pc config.PromptContent) string {
 	validate := func(input string) error {
 		if len(input) <= 0 {
 			errA := errors.New(pc.ErrorMsg)
-			return NewDefaultError(errA)
+			return sveltinerr.NewDefaultError(errA)
 		}
 		return nil
 	}

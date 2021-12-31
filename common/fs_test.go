@@ -7,6 +7,7 @@ import (
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func TestMkDir(t *testing.T) {
@@ -92,7 +93,7 @@ func TestFileExists(t *testing.T) {
 		is := is.New(t)
 
 		exists, err := FileExists(memFS, tc.pathToFile)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(11, re.Code)
 		is.Equal("SVELTIN FileNotFoundError", re.Message)
 		is.Equal(false, exists)
@@ -108,7 +109,7 @@ func TestFileExists(t *testing.T) {
 		is := is.New(t)
 
 		exists, err := FileExists(memFS, tc.pathToFile)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(12, re.Code)
 		is.Equal("SVELTIN DirInsteadOfFileError", re.Message)
 		is.Equal(false, exists)
@@ -148,7 +149,7 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 		is := is.New(t)
 
 		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
-		re := err.(*SveltinError)
+		re := err.(*sveltinerr.SveltinError)
 		is.Equal(11, re.Code)
 		is.Equal("SVELTIN FileNotFoundError: please, check the file path", re.Error())
 
