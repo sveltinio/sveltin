@@ -13,7 +13,7 @@
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.2.1-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.2.2-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/blob/main/LICENSE" target="_blank">
@@ -77,11 +77,9 @@ sveltin new
 
 Sveltin generates files and folders to build the application structure. Please, refer to [Sveltin application structure](https://docs.sveltin.io/application-structure) for a complete description about it.
 
-
 ## 📖 Documentation
 
 You can read more on sveltin [here](https://docs.sveltin.io).
-
 
 ## ⚙️ CLI Commands & Options
 
