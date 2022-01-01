@@ -25,13 +25,7 @@
 
 # Sveltin
 
-## Documentation
-
-You can read more on sveltin [here](https://docs.sveltin.io).
-
 ## Installation
-
-Sveltin works on OSX, Windows, Linux, and others. Different installation options can be used
 
 ### Prerequisites
 
@@ -60,69 +54,15 @@ scoop bucket add sveltinio https://github.com/sveltinio/sveltin.git
 scoop install sveltinio/sveltin
 ```
 
-### From source
+### From the source
 
-Installation is done by using the `go install` command and rename installed binary in $GOPATH/bin. In this case, ensure to have **Go (v1.17 or higher) installed** on your machine:
+Installation is done by using the `go install` command. In this case, ensure to have **Go (v1.17 or higher) installed** on your machine:
 
 ```bash
 go install github.com/sveltinio/sveltin@latest
 ```
 
-## Directory Structure
-
-A Sveltin app will have a number of generated files and folders that make up the structure of the project.
-
-```bash
-.
-├── config
-├── content
-├── src
-│   ├── components
-│   ├── lib
-│   ├── routes
-│   │   ├── api
-│   │   │   └── v1
-├── themes
-└── static
-```
-
-Please, refer to [Sveltin application structure](https://docs.sveltin.io/application-structure) for a complete description.
-
-## Tutorials
-
-- [Create a new Sveltin based project](https://docs.sveltin.io//tutorials/your-first-project)
-- [Personal Blog](https://docs.sveltin.io//tutorials/personal-blog)
-
-## Commands & Options
-
-```bash
-$ sveltin -h
-
-sveltin is the main command to work with SvelteKit powered static website.
-
-Usage:
-  sveltin [command]
-
-Available Commands:
-  build       Builds a production version of your static website
-  completion  generate the autocompletion script for the specified shell
-  generate    Command to generate static files like sitemap, rss etc
-  help        Help about any command
-  new         Command to create projects, resources, contents, pages and metadata
-  prepare     Get all the dependencies
-  preview     Preview the production version locally
-  serve       Run the server
-
-Flags:
-  -h, --help      help for sveltin
-  -v, --version   version for sveltin
-
-Use "sveltin [command] --help" for more information about a command.
-```
-
-sveltin comes with a set of commands and subcommands to help dealing with your SvelteKit project.
-
-Each command can be executed with inline arguments or interactivly.
+## ⚡️ Quick Start
 
 ```bash
 # Create myWebsite project
@@ -134,6 +74,44 @@ sveltin new myWebsite --css tailwindcss
 # or let sveltin prompt your inputs
 sveltin new
 ```
+
+Sveltin generates files and folders to build the application structure. Please, refer to [Sveltin application structure](https://docs.sveltin.io/application-structure) for a complete description about it.
+
+
+## 📖 Documentation
+
+You can read more on sveltin [here](https://docs.sveltin.io).
+
+
+## ⚙️ CLI Commands & Options
+
+```bash
+$ sveltin -h
+
+sveltin is the main command to work with SvelteKit powered static website.
+
+Usage:
+  sveltin [command]
+
+Available Commands:
+  build        Builds a production version of your static website
+  generate     Command to generate static files like sitemap, rss etc
+  help         Help about any command
+  new          Command to create projects, resources, contents, pages and metadata
+  prepare      Get all the dependencies
+  preview      Preview the production version locally
+  server       Run the server
+
+Flags:
+  -h, --help      help for sveltin
+  -v, --version   version for sveltin
+
+Use "sveltin [command] --help" for more information about a command.
+```
+
+sveltin comes with a set of commands and subcommands to help dealing with your SvelteKit project.
+
+Each command can be executed with inline arguments or interactivly.
 
 ### sveltin new
 
