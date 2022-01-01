@@ -207,20 +207,16 @@ func promptPackageManager(items []string) (string, error) {
 	var pm string
 	switch nameLenght := len(packageManager); {
 	case nameLenght == 0:
-		if len(items) == 1 {
-			pm = items[0]
+		pmPromptContent := config.PromptContent{
+			ErrorMsg: "Please, provide the name of the package manager.",
+			Label:    "Which package manager do you want to use?",
+		}
+		_pm := common.PromptGetSelect(items, pmPromptContent)
+		if common.Contains(items, _pm) {
+			pm = _pm
 		} else {
-			pmPromptContent := config.PromptContent{
-				ErrorMsg: "Please, provide the name of the package manager.",
-				Label:    "Which package manager do you want to use?",
-			}
-			_pm := common.PromptGetSelect(items, pmPromptContent)
-			if common.Contains(items, _pm) {
-				pm = _pm
-			} else {
-				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
-				return "", sveltinerr.NewDefaultError(errN)
-			}
+			errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
+			return "", sveltinerr.NewDefaultError(errN)
 		}
 		return pm, nil
 	case nameLenght != 0:
