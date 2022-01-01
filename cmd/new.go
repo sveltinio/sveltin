@@ -204,19 +204,27 @@ func getThemeName(name string) string {
 }
 
 func promptPackageManager(items []string) (string, error) {
+	if len(items) == 0 {
+		err := errors.New("it seems there is no package manager on your machine")
+		return "", sveltinerr.NewDefaultError(err)
+	}
 	var pm string
 	switch nameLenght := len(packageManager); {
 	case nameLenght == 0:
-		pmPromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide the name of the package manager.",
-			Label:    "Which package manager do you want to use?",
-		}
-		_pm := common.PromptGetSelect(items, pmPromptContent)
-		if common.Contains(items, _pm) {
-			pm = _pm
+		if len(items) == 1 {
+			pm = items[0]
 		} else {
-			errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
-			return "", sveltinerr.NewDefaultError(errN)
+			pmPromptContent := config.PromptContent{
+				ErrorMsg: "Please, provide the name of the package manager.",
+				Label:    "Which package manager do you want to use?",
+			}
+			_pm := common.PromptGetSelect(items, pmPromptContent)
+			if common.Contains(items, _pm) {
+				pm = _pm
+			} else {
+				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
+				return "", sveltinerr.NewDefaultError(errN)
+			}
 		}
 		return pm, nil
 	case nameLenght != 0:
