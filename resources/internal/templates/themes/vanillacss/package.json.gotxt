@@ -14,6 +14,7 @@
       "@indaco/svelte-iconoir": "^2.1.1",
       "@sveltejs/adapter-static": "^1.0.0-next.24",
       "@sveltejs/kit": "next",
+      "@types/gtag.js": "^0.0.8",
       "@types/lodash-es": "^4.17.5",
       "@typescript-eslint/eslint-plugin": "^5.8.1",
       "@typescript-eslint/parser": "^5.8.1",
