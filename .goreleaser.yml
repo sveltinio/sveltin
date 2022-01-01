@@ -40,7 +40,6 @@ brews:
     license: 'Apache-2.0'
     dependencies:
       - name: git
-      - name: node
     # Custom install script for brew.
     install: |
       bin.install "sveltin"
