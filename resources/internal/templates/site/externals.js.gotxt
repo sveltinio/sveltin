@@ -10,7 +10,7 @@ const userSettings = {
 		}
 	],
 	googleAnalytics: {
-		UA_ID: ''
+		propertyID: ''
 	},
 	github: {
 		username: 'sveltinio',
