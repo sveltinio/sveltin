@@ -45,7 +45,7 @@ sveltin new myBlog
 # Or sreate myBlog project with TailwWindCSS as CSS Lib
 sveltin new myBlog --css tailwindcss
 
-# Move into the myBlog folder
+# Move to the project folder
 cd myBlog 
 
 # Install all the dependencies
