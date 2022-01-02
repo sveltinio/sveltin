@@ -23,6 +23,65 @@
 
 # Sveltin
 
+The Smartest Way to Build SvelteKit static websites.
+
+## :mega: Features
+
+- Simple, quick and powerful CLI
+- Scaffold project
+- Generate resources, libs and endpoints
+- Generate content
+- Generate menu/sitemap/rss
+- Ready to use Svelte components
+- Out-of-the-box support for TailwindCSS, Bulma and Bootstrap
+- SEO Ready (Metadata, Json-LD, OpenGraph)
+
+## :rocket: Quick Start
+
+```bash
+# Create myBlog project
+sveltin new myBlog
+
+# Or sreate myBlog project with TailwWindCSS as CSS Lib
+sveltin new myBlog --css tailwindcss
+
+# Move into the myBlog folder
+cd myBlog 
+
+# Install all the dependencies
+sveltin prepare
+
+# Create new public page as Svelte component
+# (http://localhost:3000/contact)
+sveltin new page contact --type svelte
+
+# Create new public page as Markdown file
+# (http://localhost:3000/about)
+sveltin new page about -t markdown
+
+# Create new 'posts' resource
+sveltin new resource posts
+
+# Add new content to the posts resource
+# (http://localhost:3000/posts/getting-started)
+sveltin new content posts/getting-started
+
+# Add new 'category' metadata 
+# (http://localhost:3000/posts/category)
+sveltin new metadata category --resource posts --type single
+
+# Add new 'tags' metadata
+# (http://localhost:3000/posts/tags)
+sveltin new metadata tags -r posts --t lists
+
+# Run the server
+sveltin server
+```
+
+## :book: Documentation
+
+Please see the [documentation](https://docs.sveltin.io) for information about getting started with Sveltin.
+
 ## :computer: Installation
 
 ### :wrench: Prerequisites
@@ -59,25 +118,6 @@ Installation is done by using the `go install` command. In this case, ensure to 
 ```bash
 go install github.com/sveltinio/sveltin@latest
 ```
-
-## :rocket: Quick Start
-
-```bash
-# Create myWebsite project
-sveltin new myWebsite
-
-# Create myWebsite project with TailwWindCSS as CSS Lib
-sveltin new myWebsite --css tailwindcss
-
-# or let sveltin prompt your inputs
-sveltin new
-```
-
-Sveltin generates files and folders to build the application structure. Please, refer to [Sveltin application structure](https://docs.sveltin.io/application-structure) for a complete description about it.
-
-## :book: Documentation
-
-You can read more on sveltin [here](https://docs.sveltin.io).
 
 ## :gear: CLI Commands & Options
 
