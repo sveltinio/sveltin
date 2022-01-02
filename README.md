@@ -80,7 +80,7 @@ sveltin server
 
 ## :book: Documentation
 
-Please see the [documentation](https://docs.sveltin.io) for information about getting started with Sveltin.
+Please see the [documentation](https://docs.sveltin.io) for more information about Sveltin.
 
 ## :computer: Installation
 
