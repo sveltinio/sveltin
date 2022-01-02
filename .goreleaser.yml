@@ -52,8 +52,6 @@ scoop:
     branch: main
     token: '{{ .Env.GITHUB_TOKEN }}'
   url_template: 'https://github.com/sveltinio/sveltin/releases/download/{{ .Tag }}/{{ .ArtifactName }}'
-  # Folder inside the repository to put the scoop.
-  folder: Scoops
   commit_author:
     name: indaco
     email: github@mircoveltri.me
