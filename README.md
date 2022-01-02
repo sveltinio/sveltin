@@ -42,7 +42,7 @@ The Smartest Way to Build SvelteKit static websites.
 # Create myBlog project
 sveltin new myBlog
 
-# Or sreate myBlog project with TailwWindCSS as CSS Lib
+# Or with TailwindCSS
 sveltin new myBlog --css tailwindcss
 
 # Move to the project folder
