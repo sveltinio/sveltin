@@ -46,7 +46,7 @@ brew install sveltin
 
 ```bash
 # Tap a new bucket:
-scoop bucket add sveltinio https://github.com/sveltinio/sveltin.git
+scoop bucket add sveltinio https://github.com/sveltinio/scoop-sveltin.git
 
 # Install:
 scoop install sveltinio/sveltin
