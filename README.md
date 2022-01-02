@@ -21,13 +21,11 @@
     </a>
 </p>
 
-> Sveltin is in early development. Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section.
-
 # Sveltin
 
-## Installation
+## :computer: Installation
 
-### Prerequisites
+### :wrench: Prerequisites
 
 - Git
 - Node (v16.13.1 or higher is required)
@@ -62,7 +60,7 @@ Installation is done by using the `go install` command. In this case, ensure to 
 go install github.com/sveltinio/sveltin@latest
 ```
 
-## ⚡️ Quick Start
+## :rocket: Quick Start
 
 ```bash
 # Create myWebsite project
@@ -77,11 +75,11 @@ sveltin new
 
 Sveltin generates files and folders to build the application structure. Please, refer to [Sveltin application structure](https://docs.sveltin.io/application-structure) for a complete description about it.
 
-## 📖 Documentation
+## :book: Documentation
 
 You can read more on sveltin [here](https://docs.sveltin.io).
 
-## ⚙️ CLI Commands & Options
+## :gear: CLI Commands & Options
 
 ```bash
 $ sveltin -h
@@ -170,13 +168,13 @@ Read more [here][build].
 
 Read more [here][preview].
 
-## Contributing
+## :bulb: Contributing
 
 Contribution of any kind including documentation, themes, tutorials, blog posts, bug reports, issues, feature requests, feature implementations, pull requests are more than welcome.
 
 Read more [here][contributing].
 
-## License
+## :free: License
 
 Sveltin is free and open-source software licensed under the Apache 2.0 License.
 
