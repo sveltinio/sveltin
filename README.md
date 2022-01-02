@@ -29,6 +29,7 @@ The Smartest Way to Build SvelteKit static websites.
 
 - Simple, quick and powerful CLI
 - Scaffold project
+- Generate configurations
 - Generate resources, libs and endpoints
 - Add content to the resources
 - Generate menu structure, sitemap and rss
@@ -37,6 +38,8 @@ The Smartest Way to Build SvelteKit static websites.
 - SEO Ready (Metadata, Json-LD, OpenGraph)
 
 ## :rocket: Quick Start
+
+With few commands Sveltin flex the muscles 💪
 
 ```bash
 # Create myBlog project
