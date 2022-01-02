@@ -30,10 +30,10 @@ The Smartest Way to Build SvelteKit static websites.
 - Simple, quick and powerful CLI
 - Scaffold project
 - Generate resources, libs and endpoints
-- Generate content
-- Generate menu/sitemap/rss
-- Ready to use Svelte components
+- Add content to the resources
+- Generate menu structure, sitemap and rss
 - Out-of-the-box support for TailwindCSS, Bulma and Bootstrap
+- Ready to use Svelte components
 - SEO Ready (Metadata, Json-LD, OpenGraph)
 
 ## :rocket: Quick Start
