@@ -1,12 +1,9 @@
 <h1 align="center">
     <img src="resources/sveltin-logo.png" width="224px" alt="sveltin logo"/>
-
 </h1>
-<p align="center">
-    Sveltin is a CLI (Command Line Interface) to get easily started with <strong>SvelteKit powered static websites.</strong>
-    <br />
-    If you want to build a super fast static website based on the new SvelteKit framework, this is the project you need.
-</p>
+<h2 align="center">
+The Smartest Way to Build SvelteKit static websites.
+</h2>
 <p align="center">
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
         <img src="https://github.com/sveltinio/sveltin/actions/workflows/release.yml/badge.svg" alt="CI" />
@@ -23,33 +20,33 @@
 
 # Sveltin
 
-The Smartest Way to Build SvelteKit static websites.
+Sveltin is a CLI (Command Line Interface) to get easily started with <strong>SvelteKit powered static websites.</strong>
 
 ## :mega: Features
 
-- Simple, quick and powerful CLI
-- Scaffold project
-- Generate configurations
+Sveltin is a simple, quick and powerful CLI to:
+
+- Scaffold SvelteKit powered websites
 - Generate resources, libs and endpoints
 - Add content to the resources
 - Generate menu structure, sitemap and rss
+- Make your site SEO Ready (Metadata, Json-LD, OpenGraph) in a easy way
+
+Sveltin provides:
+
 - Out-of-the-box support for TailwindCSS, Bulma and Bootstrap
 - Ready to use Svelte components
-- SEO Ready (Metadata, Json-LD, OpenGraph)
 
 ## :rocket: Quick Start
 
 With few commands Sveltin flex the muscles 💪
 
 ```bash
-# Create myBlog project
-sveltin new myBlog
-
-# Or with TailwindCSS
+# Create a project with TailwindCSS support
 sveltin new myBlog --css tailwindcss
 
 # Move to the project folder
-cd myBlog 
+cd myBlog
 
 # Install all the dependencies
 sveltin prepare
@@ -58,10 +55,6 @@ sveltin prepare
 # (http://localhost:3000/contact)
 sveltin new page contact --type svelte
 
-# Create new public page as Markdown file
-# (http://localhost:3000/about)
-sveltin new page about -t markdown
-
 # Create new 'posts' resource
 sveltin new resource posts
 
@@ -69,13 +62,9 @@ sveltin new resource posts
 # (http://localhost:3000/posts/getting-started)
 sveltin new content posts/getting-started
 
-# Add new 'category' metadata 
+# Add new 'category' metadata
 # (http://localhost:3000/posts/category)
 sveltin new metadata category --resource posts --type single
-
-# Add new 'tags' metadata
-# (http://localhost:3000/posts/tags)
-sveltin new metadata tags -r posts --t lists
 
 # Run the server
 sveltin server
