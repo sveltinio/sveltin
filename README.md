@@ -2,7 +2,7 @@
     <img src="resources/sveltin-logo.png" width="224px" alt="sveltin logo"/>
 </h1>
 <h2 align="center">
-The Smartest Way to Build SvelteKit static websites.
+The Smartest Way to Build SvelteKit powered static websites.
 </h2>
 <p align="center">
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
@@ -22,7 +22,7 @@ The Smartest Way to Build SvelteKit static websites.
 
 Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit powered static websites.</strong>
 
-## :mega: Features
+## :mega: Overview
 
 Sveltin is a simple, quick and powerful CLI to:
 
