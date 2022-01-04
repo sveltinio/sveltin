@@ -51,18 +51,18 @@ cd myBlog
 # Install all the dependencies
 sveltin prepare
 
-# Create new public page as Svelte component
+# Create a public page as Svelte component
 # (http://localhost:3000/contact)
 sveltin new page contact --type svelte
 
-# Create new 'posts' resource
+# Create a 'posts' resource
 sveltin new resource posts
 
 # Add new content to the posts resource
 # (http://localhost:3000/posts/getting-started)
 sveltin new content posts/getting-started
 
-# Add new 'category' metadata
+# Add a 'category' metadata
 # (http://localhost:3000/posts/category)
 sveltin new metadata category --resource posts --type single
 
