@@ -13,6 +13,7 @@ const menu = [{
 			identifier: "{{ $resource.GetName }}",
 			name: "{{ $resource.GetName | Capitalize }}",
 			url: "{{ $resource.GetName | ToURL }}",
+         external: false,
 			weight: {{ Sum 2 $index}}
 {{ if $withContent }}
 {{ $numOfResourceContents := len $resource.GetContents }}
@@ -24,6 +25,7 @@ const menu = [{
                identifier: "{{ $content }}",
 			      name: "{{ $content | Capitalize }}",
 			      url: "{{ $resource.GetName | ToURL }}{{ $content | ToURL }}",
+               external: false,
 			      weight: {{ Sum 1 $i}}
             }
 {{ end }}
