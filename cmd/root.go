@@ -33,7 +33,7 @@ var (
 )
 
 var (
-	packageManager  string
+	npmClient       string
 	YamlConfig      []byte
 	appTemplatesMap map[string]config.AppTemplate
 	pathMaker       pathmaker.SveltinPathMaker
@@ -89,10 +89,10 @@ func init() {
 //=============================================================================
 
 func initSveltin() {
-	if len(settings.GetPackageManager()) > 0 && len(packageManager) == 0 {
-		packageManager = settings.GetPackageManager()
-	} else if len(packageManager) != 0 {
-		storeSelectedPackageManager(packageManager)
+	if len(settings.GetNPMClient()) > 0 && len(npmClient) == 0 {
+		npmClient = settings.GetNPMClient()
+	} else if len(npmClient) != 0 {
+		storeSelectedNPMClient(npmClient)
 	}
 
 	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
@@ -139,8 +139,8 @@ func loadEnvFile(filename string) (config config.SiteConfig, err error) {
 }
 
 // Save the package mananer name on the settings file
-func storeSelectedPackageManager(pmName string) {
-	settings = helpers.NewSveltinSettings(pmName)
+func storeSelectedNPMClient(npmClientName string) {
+	settings = helpers.NewSveltinSettings(npmClientName)
 	data, err := yaml.Marshal(&settings)
 	utils.CheckIfError(err)
 
@@ -148,7 +148,7 @@ func storeSelectedPackageManager(pmName string) {
 	err = ioutil.WriteFile(filepath.Join(homedir, SETTINGS_FILE), data, 0755)
 	utils.CheckIfError(err)
 
-	packageManager = pmName
+	npmClient = npmClientName
 }
 
 //=============================================================================

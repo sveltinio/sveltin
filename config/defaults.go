@@ -12,15 +12,15 @@ import (
 )
 
 type SettingItem struct {
-	PackageManager string `yaml:"packageManager"`
+	NPMClient string `yaml:"npmClient"`
 }
 
 type SveltinSettings struct {
 	Item SettingItem `yaml:"Settings"`
 }
 
-func (s *SveltinSettings) GetPackageManager() string {
-	return s.Item.PackageManager
+func (s *SveltinSettings) GetNPMClient() string {
+	return s.Item.NPMClient
 }
 
 type IConfig interface {

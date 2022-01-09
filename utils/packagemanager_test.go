@@ -9,34 +9,30 @@ import (
 
 func TestPackageManager(t *testing.T) {
 	tests := []struct {
-		pm     string
-		wanted bool
+		npmClient string
+		wanted    bool
 	}{
-		{pm: "npm", wanted: true},
-		{pm: "yarn", wanted: true},
-		{pm: "pnpm", wanted: true},
+		{npmClient: "npm", wanted: true},
 	}
 
 	for _, tc := range tests {
 		is := is.New(t)
-		exists := isCommandAvailable(tc.pm)
+		exists := isCommandAvailable(tc.npmClient)
 		is.Equal(exists, tc.wanted)
 	}
 }
 
 func TestGetAvailablePackageManager(t *testing.T) {
 	tests := []struct {
-		pm     string
-		wanted bool
+		npmClient string
+		wanted    bool
 	}{
-		{pm: "npm", wanted: true},
-		{pm: "yarn", wanted: true},
-		{pm: "pnpm", wanted: true},
+		{npmClient: "npm", wanted: true},
 	}
 
 	for _, tc := range tests {
 		is := is.New(t)
-		got := common.Contains(GetAvailablePackageMangerList(), tc.pm)
+		got := common.Contains(GetAvailableNPMClientList(), tc.npmClient)
 		is.Equal(got, tc.wanted)
 	}
 }

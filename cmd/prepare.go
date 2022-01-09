@@ -42,13 +42,13 @@ func RunPrepareCmd(cmd *cobra.Command, args []string) {
 		// LOG TO STDOUT
 		printer.SetContent("* Updating dependencies")
 		utils.PrettyPrinter(&printer).Print()
-		err := helpers.RunPMCommand(packageManager, "update", "", nil, false)
+		err := helpers.RunPMCommand(npmClient, "update", "", nil, false)
 		utils.CheckIfError(err)
 	default:
 		// LOG TO STDOUT
 		printer.SetContent("* Getting dependencies")
 		utils.PrettyPrinter(&printer).Print()
-		err := helpers.RunPMCommand(packageManager, "install", "", nil, false)
+		err := helpers.RunPMCommand(npmClient, "install", "", nil, false)
 		utils.CheckIfError(err)
 	}
 }

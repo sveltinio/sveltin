@@ -141,7 +141,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&packageManager, "package-manager", "p", "", "The name of the your preferred package manager.")
+	cmd.Flags().StringVarP(&npmClient, "npmClient", "n", "", "The name of the your preferred package manager.")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
 }
@@ -203,16 +203,16 @@ func getThemeName(name string) string {
 	}
 }
 
-func promptPackageManager(items []string) (string, error) {
+func promptNPMClient(items []string) (string, error) {
 	if len(items) == 0 {
 		err := errors.New("it seems there is no package manager on your machine")
 		return "", sveltinerr.NewDefaultError(err)
 	}
-	var pm string
-	switch nameLenght := len(packageManager); {
+	var client string
+	switch nameLenght := len(npmClient); {
 	case nameLenght == 0:
 		if len(items) == 1 {
-			pm = items[0]
+			client = items[0]
 		} else {
 			pmPromptContent := config.PromptContent{
 				ErrorMsg: "Please, provide the name of the package manager.",
@@ -220,19 +220,19 @@ func promptPackageManager(items []string) (string, error) {
 			}
 			_pm := common.PromptGetSelect(items, pmPromptContent)
 			if common.Contains(items, _pm) {
-				pm = _pm
+				client = _pm
 			} else {
 				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
 				return "", sveltinerr.NewDefaultError(errN)
 			}
 		}
-		return pm, nil
+		return client, nil
 	case nameLenght != 0:
-		if !common.Contains(items, packageManager) {
+		if !common.Contains(items, npmClient) {
 			return "", sveltinerr.NewOptionNotValidError()
 		}
-		pm = packageManager
-		return pm, nil
+		client = npmClient
+		return client, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -292,10 +292,10 @@ func makeThemeStructure(themeName string) *composer.Folder {
  * installed on the machine and store its value as settings.
  */
 func setupPackageManager() {
-	if len(settings.GetPackageManager()) == 0 && len(packageManager) == 0 {
-		selectedPackageManager, err := promptPackageManager(utils.GetAvailablePackageMangerList())
+	if len(settings.GetNPMClient()) == 0 && len(npmClient) == 0 {
+		selectedPackageManager, err := promptNPMClient(utils.GetAvailableNPMClientList())
 		utils.CheckIfError(err)
-		storeSelectedPackageManager(selectedPackageManager)
+		storeSelectedNPMClient(selectedPackageManager)
 	}
 }
 

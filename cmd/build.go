@@ -37,7 +37,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	}
 
 	os.Setenv("VITE_PUBLIC_BASE_PATH", siteConfig.BaseURL)
-	err := helpers.RunPMCommand(packageManager, "build", "", nil, false)
+	err := helpers.RunPMCommand(npmClient, "build", "", nil, false)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT

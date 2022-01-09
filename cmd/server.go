@@ -32,7 +32,7 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	printer.SetContent("")
 	utils.PrettyPrinter(&printer).Print()
 
-	err := helpers.RunPMCommand(packageManager, "dev", "", nil, false)
+	err := helpers.RunPMCommand(npmClient, "dev", "", nil, false)
 	utils.CheckIfError(err)
 }
 

@@ -10,7 +10,7 @@ import (
 	"os/exec"
 )
 
-func GetAvailablePackageMangerList() []string {
+func GetAvailableNPMClientList() []string {
 	valid := []string{"npm", "yarn", "pnpm"}
 	available := []string{}
 

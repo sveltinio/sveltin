@@ -2,10 +2,10 @@ package helpers
 
 import "github.com/sveltinio/sveltin/config"
 
-func NewSveltinSettings(pmName string) config.SveltinSettings {
+func NewSveltinSettings(npmClientName string) config.SveltinSettings {
 	return config.SveltinSettings{
 		Item: config.SettingItem{
-			PackageManager: pmName,
+			NPMClient: npmClientName,
 		},
 	}
 }
