@@ -87,7 +87,7 @@ func (s *SveltinFSManager) NewNoPage(name string, projectConfig *config.SiteConf
 }
 
 func (s *SveltinFSManager) NewConfigFile(projectName string, name string, cliVersion string) *composer.File {
-	filename := strings.ToLower(name) + ".js"
+	filename := strings.ToLower(name) + ".js.ts"
 	return &composer.File{
 		Name:       filename,
 		TemplateId: name,
