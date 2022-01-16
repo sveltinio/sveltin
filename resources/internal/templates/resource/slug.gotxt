@@ -1,104 +1,147 @@
 <script lang="ts" context="module">
-   export const ssr = false;
-   import type { Load } from '@sveltejs/kit';
-   import { website } from '$config/website.js';
-   import externals from '$config/externals.js';
-   import { siteConfig } from '$lib/Env.js';
+	import type { Load } from '@sveltejs/kit';
+	import { website } from '$config/website.js';
+	import { siteConfig } from '$lib/Env.js';
+	import { ResourceContent, ResourceContentMaker } from '@sveltinio/widgets/types';
+	import type { ContentMetadata } from '@sveltinio/widgets/types';
 
-   import Ajv from 'ajv';
-   import SchemaValidator  from '$lib/utils/schema_validator';
-   import type { ContentItem, NavigationItem } from '$lib/interfaces';
-   import { ContentItemSchema } from '$lib/schema';
-
-   const ajv = new Ajv();
-   const schemaValidator = new SchemaValidator(ajv);
-
-   export const load: Load = async ({ params }) => {
+	export const load: Load = async ({ params, fetch }) => {
 		const { slug } = params;
-      const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}';
-      const res = await fetch(url);
+		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}';
+		const res = await fetch(_url);
 
-      if (res.ok) {
-         const data = await res.json();
-         const published = schemaValidator.validate<Array<ContentItem>>(ContentItemSchema, data);
-         const itemIndex = published.findIndex((elem) => slug === elem.slug);
-         const item = published[itemIndex];
+		if (res.ok) {
+			const data = await res.json();
+			const selectedItemIndex = data.findIndex((elem) => slug === elem.slug);
+			const selectedItem = data[selectedItemIndex];
 
-         if (item) {
-            const resourceName = '{{ .Name }}';
-            const next: NavigationItem = {
-					title: published[itemIndex - 1]?.title,
-					slug: published[itemIndex - 1]?.slug
+			if (selectedItem) {
+				const resourceName = '{{ .Name }}';
+				const item = ResourceContentMaker.createWithValues(
+					resourceName,
+					<ContentMetadata>selectedItem,
+					selectedItem.html
+				);
+				const previous: ResourceContent = {
+					resource: resourceName,
+					metadata: <ContentMetadata>{
+						title: data[selectedItemIndex + 1]?.title,
+						slug: data[selectedItemIndex + 1]?.slug
+					}
 				};
-				const previous: NavigationItem = {
-					title: published[itemIndex + 1]?.title,
-					slug: published[itemIndex + 1]?.slug
+				const next: ResourceContent = {
+					resource: resourceName,
+					metadata: <ContentMetadata>{
+						title: data[selectedItemIndex - 1]?.title,
+						slug: data[selectedItemIndex - 1]?.slug
+					}
 				};
 
-            return {
-               props: {
-                  resourceName,
-                  item,
-                  next,
-                  previous
-               }
-            };
-         }
+				return {
+					props: {
+						item,
+						previous,
+						next
+					}
+				};
+			}
 
-         return {
-            status: 404,
-            error: new Error(`Ops! What you are looking for does not exists`)
-         };
-      }
+			return {
+				status: 404,
+				error: new Error(`Ops! What you are looking for does not exists`)
+			};
+		}
 
-      return {
-            status: res.status,
-            error: new Error(`Ops! Something went wrong loading ${url}`)
-         };
-   };
+		return {
+			status: res.status,
+			error: new Error(`Ops! Something went wrong loading ${_url}`)
+		};
+	};
 </script>
 
 <script lang="ts">
-   import TOC from '$components/_TOC.svelte';
-	import PrevNext from '$components/_PrevNext.svelte';
+	import { TOC, PrevNextButtons} from '@sveltinio/widgets';
 
-   export let item: ContentItem;
-   export let resourceName: string;
-   export let previous: NavigationItem;
-	export let next: NavigationItem;
+	export let item: ResourceContent;
+	export let previous: ResourceContent;
+	export let next: ResourceContent;
 </script>
 
 <svelte:head>
-   <title>{item.title} - {website.title}</title>
-   <meta property="og:type" content="article" />
-   <meta property="og:title" content={item.title} />
-   <meta property="og:url" content={siteConfig.baseURL} />
-   <meta property="og:image" content="{siteConfig.baseURL}/{resourceName}/{item.slug}/{item.cover}" />
-   <meta property="og:description" content={item.headline} />
-   <meta property="article:author" content={item.author} />
-   <meta property="article:published_time" content={item.date} />
+	<title>{item.metadata.title} - {website.title}</title>
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content={item.metadata.title} />
+	<meta property="og:url" content={siteConfig.baseURL} />
+	<meta
+		property="og:image"
+		content="{siteConfig.baseURL}/{item.resource}/{item.metadata.slug}/{item.metadata.cover}"
+	/>
+	<meta property="og:description" content={item.metadata.headline} />
+	{#if item.metadata.author}
+		<meta property="article:author" content={item.metadata.author} />
+	{/if}
+	{#if item.metadata.updated_at}
+		<meta property="article:published_time" content={item.metadata.updated_at} />
+	{:else if item.metadata.created_at}
+		<meta property="article:published_time" content={item.metadata.created_at} />
+	{/if}
 </svelte:head>
 
 <article class="artifact-container">
-   <div class="content">
-      <h1>{item.title}</h1>
-      <h3>
-         <time datetime={new Date(item.date).toISOString()} />
-      </h3>
-      <div>
-         <div class="">
-            <TOC resource={resourceName} slug={item.slug} headings={item.headings} withChildren={false} />
-         </div>
+	<div class="content">
+		<h1>{item.metadata.title}</h1>
+		{#if item.metadata.created_at}
+			<h3>
+				<time datetime={new Date(item.metadata.created_at).toISOString()} />
+			</h3>
+		{/if}
+		{#if item.metadata.cover}
+			<div class="cover">
+				<img
+					src={`/resources/${item.resource}/${item.metadata.slug}/${item.metadata.cover}`}
+					title={`cover for ${item.metadata.title}`}
+					alt={`cover for ${item.metadata.title}`}
+				/>
+			</div>
+		{/if}
+		<div>
+			<TOC
+				resource={item.resource}
+				slug={item.metadata.slug}
+				headings={item.metadata.headings}
+				withChildren={true}
+			/>
 
-         <div class="md-content">
-            {@html item.html}
-         </div>
-      </div>
-   </div>
-   <PrevNext resource={resourceName} {previous} {next} />
+			<div class="md-content">
+				{@html item.html}
+			</div>
+		</div>
+	</div>
+	<PrevNextButtons {previous} {next} />
 </article>
 
 <style>
+	.cover {
+		position: relative;
+		padding-bottom: calc(9 / 16 * 100%);
+		margin-bottom: 2rem;
+	}
+
+	.cover > * {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+
+	.cover img {
+		object-fit: cover;
+		border-radius: 0.75rem;
+	}
+
 	.md-content {
 		@apply markdown-body;
 	}
