@@ -22,6 +22,10 @@ The Smartest Way to Build SvelteKit powered static websites.
 
 Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit powered static websites.</strong>
 
+## :warning: Project Status
+
+> Sveltin is in early development but it does what it supposed to do. Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section.
+
 ## :mega: Overview
 
 Sveltin is a simple, quick and powerful CLI to:
