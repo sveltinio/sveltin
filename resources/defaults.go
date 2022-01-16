@@ -26,14 +26,16 @@ func GetAsciiArt() string {
 var SveltinFS embed.FS
 
 var SveltinProjectFS = map[string]string{
-	"defaults":     "internal/templates/site/defaults.js.gotxt",
-	"externals":    "internal/templates/site/externals.js.gotxt",
-	"website":      "internal/templates/site/website.js.gotxt",
-	"init_menu":    "internal/templates/site/init_menu.js.gotxt",
-	"menu":         "internal/templates/site/menu.js.gotxt",
+	"defaults":     "internal/templates/site/defaults.js.ts.gotxt",
+	"externals":    "internal/templates/site/externals.js.ts.gotxt",
+	"website":      "internal/templates/site/website.js.ts.gotxt",
+	"init_menu":    "internal/templates/site/init_menu.js.ts.gotxt",
+	"menu":         "internal/templates/site/menu.js.ts.gotxt",
 	"dotenv":       "internal/templates/misc/env.gotxt",
 	"readme":       "internal/templates/misc/README.md.gotxt",
 	"license":      "internal/templates/misc/LICENSE.gotxt",
+	"layout":       "internal/templates/themes/layout.svelte.gotxt",
+	"index":        "internal/templates/themes/index.svelte.gotxt",
 	"theme_config": "internal/templates/themes/theme.config.js.gotxt",
 }
 
@@ -73,6 +75,8 @@ var SveltinXMLFS = map[string]string{
 var SveltinVanillaCSSThemeFS = map[string]string{
 	"package_json": "internal/templates/themes/vanillacss/package.json.gotxt",
 	"app_css":      "internal/templates/themes/vanillacss/app.css",
+	"hero":         "internal/templates/themes/vanillacss/Hero.svelte",
+	"footer":       "internal/templates/themes/vanillacss/Footer.svelte",
 }
 
 var SveltinTailwindCSSThemeFS = map[string]string{
@@ -80,4 +84,6 @@ var SveltinTailwindCSSThemeFS = map[string]string{
 	"tailwind_css_config": "internal/templates/themes/tailwindcss/tailwind.config.cjs",
 	"app_css":             "internal/templates/themes/tailwindcss/app.css",
 	"postcss":             "internal/templates/themes/tailwindcss/postcss.config.cjs",
+	"hero":                "internal/templates/themes/tailwindcss/Hero.svelte",
+	"footer":              "internal/templates/themes/tailwindcss/Footer.svelte",
 }
