@@ -76,3 +76,4 @@ Temporary Items
 dist/
 
 docs/gen_doc.go
+scripts/
