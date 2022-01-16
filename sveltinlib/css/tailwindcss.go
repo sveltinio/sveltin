@@ -20,7 +20,7 @@ type TailwindCSS struct {
 	CSSLib
 }
 
-func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error {
+func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
 	// Copying the package.json config file
 	sourceFile := resources.SveltinTailwindCSSThemeFS["package_json"]
 	tplConfig := helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
@@ -46,6 +46,18 @@ func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfi
 	// Copying app.css file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["app_css"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.css")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copyng Hero.svelte component
+	sourceFile = resources.SveltinTailwindCSSThemeFS["hero"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Hero.svelte")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copyng Footer.svelte component
+	sourceFile = resources.SveltinTailwindCSSThemeFS["footer"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Footer.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}

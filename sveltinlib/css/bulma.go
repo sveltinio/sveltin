@@ -18,6 +18,6 @@ type Bulma struct {
 	CSSLib
 }
 
-func (f *Bulma) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error {
+func (f *Bulma) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
 	return sveltinerr.NewNotImplementYetError()
 }

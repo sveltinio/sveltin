@@ -112,6 +112,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	newThemeFolder := makeThemeStructure(themeName)
 	themesFolder.Add(newThemeFolder)
+	// ADD themes folder to the project
 	projectFolder.Add(themesFolder)
 
 	// NEW FILES: .env.development and env.production
@@ -132,7 +133,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// SETUP THE CSS LIB
 	logger.AppendItem("Setup the CSS Lib")
-	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, projectName)
+	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, projectName, themeName)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
@@ -141,7 +142,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&npmClient, "npmClient", "n", "", "The name of the your preferred package manager.")
+	cmd.Flags().StringVarP(&npmClient, "npmClient", "n", "", "The name of the your preferred npm client.")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
 }
@@ -299,32 +300,32 @@ func setupPackageManager() {
 	}
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, projectName string) error {
+func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, projectName string, themeName string) error {
 	switch name {
 	case VANILLACSS:
 		vanillaCSS := &css.VanillaCSS{}
 		c := css.CSSLib{
 			ICSSLib: vanillaCSS,
 		}
-		return c.Setup(efs, fs, conf, projectName)
+		return c.Setup(efs, fs, conf, projectName, themeName)
 	case TAILWINDCSS:
 		tailwind := &css.TailwindCSS{}
 		c := css.CSSLib{
 			ICSSLib: tailwind,
 		}
-		return c.Setup(efs, fs, conf, projectName)
+		return c.Setup(efs, fs, conf, projectName, themeName)
 	case BULMA:
 		bulma := &css.Bulma{}
 		c := css.CSSLib{
 			ICSSLib: bulma,
 		}
-		return c.Setup(efs, fs, conf, projectName)
+		return c.Setup(efs, fs, conf, projectName, themeName)
 	case BOOTSTRAP:
 		boostrap := &css.Bootstrap{}
 		c := css.CSSLib{
 			ICSSLib: boostrap,
 		}
-		return c.Setup(efs, fs, conf, projectName)
+		return c.Setup(efs, fs, conf, projectName, themeName)
 	default:
 		return sveltinerr.NewOptionNotValidError()
 	}

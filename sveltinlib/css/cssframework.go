@@ -17,12 +17,12 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
-type iCSSLib interface {
-	init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error
+type ICSSLib interface {
+	init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error
 }
 
 type CSSLib struct {
-	ICSSLib iCSSLib
+	ICSSLib ICSSLib
 }
 
 func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, backup bool) error {
@@ -41,8 +41,8 @@ func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, 
 	return nil
 }
 
-func (c *CSSLib) Setup(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error {
-	if err := c.ICSSLib.init(efs, fs, conf, projectName); err != nil {
+func (c *CSSLib) Setup(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
+	if err := c.ICSSLib.init(efs, fs, conf, projectName, themeName); err != nil {
 		return err
 	}
 	return nil

@@ -20,7 +20,7 @@ type VanillaCSS struct {
 	CSSLib
 }
 
-func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string) error {
+func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
 	// Copying the package.json config file
 	sourceFile := resources.SveltinVanillaCSSThemeFS["package_json"]
 	tplConfig := helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
@@ -34,6 +34,18 @@ func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig
 	// Copying app.css file
 	sourceFile = resources.SveltinVanillaCSSThemeFS["app_css"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.css")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copyng Hero.svelte component
+	sourceFile = resources.SveltinVanillaCSSThemeFS["hero"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Hero.svelte")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copyng Footer.svelte component
+	sourceFile = resources.SveltinVanillaCSSThemeFS["footer"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Footer.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
