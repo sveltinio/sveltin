@@ -106,6 +106,29 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	contentFolder := composer.NewFolder(CONTENT)
 	projectFolder.Add(contentFolder)
 
+	// GET FOLDER: src/routes folder
+	routesFolder := fsManager.GetFolder(ROUTES)
+	// NEW FILE: __layout.svelte
+	layoutFile := &composer.File{
+		Name:       "__layout.svelte",
+		TemplateId: "layout",
+		TemplateData: &config.TemplateData{
+			Name: themeName,
+		},
+	}
+	routesFolder.Add(layoutFile)
+	// NEW FILE: index.svelte
+	indexFile := &composer.File{
+		Name:       "index.svelte",
+		TemplateId: "index",
+		TemplateData: &config.TemplateData{
+			Name: themeName,
+		},
+	}
+	// ADD src/routes folder to the project
+	routesFolder.Add(indexFile)
+	projectFolder.Add(routesFolder)
+
 	// NEW FOLDER: themes
 	logger.AppendItem("Creating 'themes' folder")
 	themesFolder := composer.NewFolder(THEMES)

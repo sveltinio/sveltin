@@ -1,0 +1,10 @@
+<script context="module">
+	import { website } from '$config/website.js';
+	import Hero from '$themes/{{ .Name }}/partials/Hero.svelte';
+</script>
+
+<svelte:head>
+	<title>Home | {website.name}</title>
+</svelte:head>
+
+<Hero />
