@@ -4,14 +4,24 @@
 	import { userSettings } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
 	import orderBy from 'lodash-es/orderBy.js';
-
+	import {
+		JsonLdSiteNavigationElements,
+		JsonLdWebPage,
+		JsonLdWebSite,
+		SiteMetaTags
+	} from '@sveltinio/seo';
 	import { GoogleFonts, GoogleAnalytics } from '@sveltinio/services';
 	import ScrollToTopButton from '@sveltinio/widgets/components/ScrollToTopButton.svelte';
-	import Footer from '$themes/{{ .Name }}/partials/Footer.svelte';
+	import Footer from '$themes/basic/partials/Footer.svelte';
 
 	const sortedMenu = orderBy(menu, 'weight');
 	const gaPropertyID = userSettings.googleAnalytics.propertyID;
 </script>
+
+<SiteMetaTags websiteData={website} />
+<JsonLdWebSite websiteData={website} />
+<JsonLdWebPage websiteData={website} />
+<JsonLdSiteNavigationElements websiteData={website} menuData={sortedMenu} />
 
 <svelte:head>
 	<GoogleFonts fonts={userSettings.googleFonts} />
