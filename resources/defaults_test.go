@@ -22,11 +22,11 @@ func TestGetAsciiArt(t *testing.T) {
 
 func TestSveltinSiteFS(t *testing.T) {
 	is := is.New(t)
-	is.Equal("internal/templates/site/defaults.js.gotxt", SveltinProjectFS["defaults"])
-	is.Equal("internal/templates/site/externals.js.gotxt", SveltinProjectFS["externals"])
-	is.Equal("internal/templates/site/website.js.gotxt", SveltinProjectFS["website"])
-	is.Equal("internal/templates/site/init_menu.js.gotxt", SveltinProjectFS["init_menu"])
-	is.Equal("internal/templates/site/menu.js.gotxt", SveltinProjectFS["menu"])
+	is.Equal("internal/templates/site/defaults.js.ts.gotxt", SveltinProjectFS["defaults"])
+	is.Equal("internal/templates/site/externals.js.ts.gotxt", SveltinProjectFS["externals"])
+	is.Equal("internal/templates/site/website.js.ts.gotxt", SveltinProjectFS["website"])
+	is.Equal("internal/templates/site/init_menu.js.ts.gotxt", SveltinProjectFS["init_menu"])
+	is.Equal("internal/templates/site/menu.js.ts.gotxt", SveltinProjectFS["menu"])
 }
 
 func TestSveltinResourceFS(t *testing.T) {
