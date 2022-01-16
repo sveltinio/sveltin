@@ -7,6 +7,7 @@ that can be found in the LICENSE file.
 package cmd
 
 import (
+	"embed"
 	"errors"
 	"path"
 	"strings"
@@ -88,8 +89,12 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	resourceContentFolder.Add(contentFile)
 	contentFolder.Add(resourceContentFolder)
 
+	// SET STATIC FOLDER STRUCTURE for resouce and content
+	staticFolder := makeStaticFolderStructure(&resources.SveltinFS, AppFs, contentData)
+
 	// SET FOLDER STRUCTURE
 	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder.Add(staticFolder)
 	projectFolder.Add(contentFolder)
 
 	// GENERATE FOLDER STRUCTURE
@@ -187,4 +192,23 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 	}
 	resource := common.PromptGetSelect(availableResources, resourcePromptContent)
 	return resource, nil
+}
+
+//=============================================================================
+
+func makeStaticFolderStructure(efs *embed.FS, fs afero.Fs, contentData config.TemplateData) *composer.Folder {
+	// GET FOLDER: static
+	staticFolder := fsManager.GetFolder(STATIC)
+	// NEW FOLDER static/resources
+	imagesFolder := composer.NewFolder("resources")
+	// NEW FOLDER static/resources/<resource_name>
+	resourceImagesFolder := composer.NewFolder(contentData.Resource)
+	// NEW FOLDER static/resources/<resource_name>/<content_name>
+	contentImagesFolder := composer.NewFolder(contentData.Name)
+	// SET FOLDER STRUCTURE
+	resourceImagesFolder.Add(contentImagesFolder)
+	imagesFolder.Add(resourceImagesFolder)
+	staticFolder.Add(imagesFolder)
+
+	return staticFolder
 }
