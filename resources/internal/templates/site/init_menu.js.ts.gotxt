@@ -1,0 +1,12 @@
+import type { MenuItem } from '@sveltinio/seo/types';
+
+const menu: Array<MenuItem> = [
+	{
+		identifier: 'home',
+		name: 'Home',
+		url: '/',
+		weight: 1,
+	},
+];
+
+export { menu };

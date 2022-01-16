@@ -1,0 +1,3 @@
+const sveltinVersion: string = '{{ .Misc }}'
+
+export { sveltinVersion };
