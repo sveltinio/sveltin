@@ -3,8 +3,9 @@ title: {{ .Name | ToTitle }}
 author: YOUR_NAME
 slug: {{ .Name | ToSlug }}
 headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
-date: {{ Today }}
-cover: image.jpg
+created_at: {{ Today }}
+updated_at: {{ Today }}
+cover:
 draft: false
 ---
 
