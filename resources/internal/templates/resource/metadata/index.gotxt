@@ -1,57 +1,49 @@
 <script lang="ts" context="module">
-   import type { Load } from '@sveltejs/kit';
-   import { website } from '$config/website.js';
-   import externals from '$config/externals.js';
+	import type { Load } from '@sveltejs/kit';
 
-   import Ajv from 'ajv';
-   import SchemaValidator  from '$lib/utils/schema_validator';
-   import type { Metadata } from '$lib/interfaces';
-   import { MetadataArraySchema } from '$lib/schema';
-   import { siteConfig } from '$lib/Env.js';
+	export const load: Load = async ({ fetch }) => {
+		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
+		const res = await fetch(_url);
+		if (res.ok) {
+			const data = await res.json();
+			const {{ .Name }} = data as unknown as Array<Metadata>;
 
-   const ajv = new Ajv();
-   const schemaValidator = new SchemaValidator(ajv);
-
-   export const load: Load = async ({ fetch }) => {
-      const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
-      const res = await fetch(url);
-      if (res.ok) {
-         const data = await res.json();
-         const {{ .Name }} = schemaValidator.validate<Array<Metadata>>(MetadataArraySchema, data);
-         return {
-            props: { {{ .Name }} }
-         };
-      }
-      return {
-         status: res.status,
-         error: new Error(`Something went wrong loading ${url}`)
-      };
-   }
+			return {
+				props: { {{ .Name }} }
+			};
+		}
+		return {
+			status: res.status,
+			error: new Error(`Something went wrong loading ${_url}`)
+		};
+	}
 </script>
 
 <script lang="ts">
-   import { base } from '$app/paths';
-   export let {{ .Name }}: Array<Metadata>;
+	import { base } from '$app/paths';
+	import type { Metadata } from '$lib/interfaces';
+
+	export let {{ .Name }}: Array<Metadata>;
 </script>
 
 <div class="artifact-container">
-   <div class="content">
-      <h1>Grouped by {{ .Name | Capitalize }}</h1>
-      {#if {{ .Name }}.length != 0}
-         {#each {{ .Name }} as metadata}
-            <h2>
-               <a sveltekit:prefetch href="{base}/{{.Resource}}/{{ .Name }}/{metadata.name}">{metadata.name}</a>
-            </h2>
-            <ul>
-               {#each metadata.items as item}
-                  <li><a sveltekit:prefetch href="{base}/{{.Resource}}/{item.slug}">{item.title}</a></li>
-               {/each}
-            </ul>
-         {/each}
-      {:else}
-         <h2 class="message warning">
-            Please, check all your content ensuring the YAML frontmatter contains "<i>{{ .Name }}</i>".
-         </h2>
-      {/if}
-   </div>
+	<div class="content">
+		<h1>Grouped by {{ .Name | Capitalize }}</h1>
+		{#if {{ .Name }}.length != 0}
+			{#each {{ .Name }} as metadata}
+			<h2>
+				<a sveltekit:prefetch href="{base}/{{.Resource}}/{{ .Name }}/{metadata.name}">{metadata.name}</a>
+			</h2>
+			<ul>
+				{#each metadata.items as item}
+					<li><a sveltekit:prefetch href="{base}/{{.Resource}}/{item.slug}">{item.title}</a></li>
+				{/each}
+			</ul>
+			{/each}
+		{:else}
+			<h2 class="message warning">
+			Please, check all your content ensuring the YAML frontmatter contains "<i>{{ .Name }}</i>".
+			</h2>
+		{/if}
+	</div>
 </div>
