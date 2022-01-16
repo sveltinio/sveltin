@@ -14,8 +14,8 @@ indent_style = tab
 indent_size = 4
 
 [*.gotxt]
-indent_style = space
-indent_size = 3
+indent_style = tab
+indent_size = 4
 
 [*.cjs]
 indent_style = space
@@ -32,3 +32,7 @@ indent_size = 2
 [*.{js, js.ts, ts}]
 indent_style = tab
 indent_size = 3
+
+[*.svelte]
+indent_style = tab
+indent_size = 4
