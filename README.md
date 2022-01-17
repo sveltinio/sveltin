@@ -149,15 +149,17 @@ Each command can be executed with inline arguments or interactivly.
 
 `sveltin new` is the main command to generate both the project and the artifacts for your website.
 
+Alias: `create`
+
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
 
-| Subcommand | Alias | Description                                                   |
-| :--------- | :---: | :------------------------------------------------------------ |
-| [resource] |       | Create new resources.                                         |
-| [content]  |       | Create a new content for existing resource.                   |
-| [metadata] |       | Add a new metadata from your content as a Sveltekit resource. |
-| [page]     |       | Create a new public page.                                     |
+| Subcommand | Description                                                   |
+| :--------- | :------------------------------------------------------------ |
+| [resource] | Create new resources.                                         |
+| [content]  | Create a new content for existing resource.                   |
+| [metadata] | Add a new metadata from your content as a Sveltekit resource. |
+| [page]     | Create a new public page.                                     |
 
 </details>
 
@@ -167,14 +169,16 @@ Read more [here][new].
 
 `sveltin generate` is used to generate static files like sitemap, menu structure or rss feed file.
 
+Alias: `gen`
+
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
 
-| Subcommand | Alias | Description                                             |
-| :--------- | :---: | :------------------------------------------------------ |
-| [menu]     |       | Generate the menu config file for your Sveltin project. |
-| [sitemap]  |       | Generate a sitemap.xml file for your Sveltin project.   |
-| [rss]      |       | Generate a rss.xml file for your Sveltin project.       |
+| Subcommand | Description                                             |
+| :--------- | :------------------------------------------------------ |
+| [menu]     | Generate the menu config file for your Sveltin project. |
+| [sitemap]  | Generate a sitemap.xml file for your Sveltin project.   |
+| [rss]      | Generate a rss.xml file for your Sveltin project.       |
 
 </details>
 
@@ -184,11 +188,15 @@ Read more [here][generate].
 
 `sveltin prepare` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
 
+Alias: `init`
+
 Read more [here][prepare].
 
 ### sveltin server
 
 `sveltin server` is used to run the VITE server. It wraps svelte-kit defined commands to run the server.
+
+Alias: `serve`
 
 Read more [here][server].
 
