@@ -154,12 +154,12 @@ Alias: `create`
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
 
-| Subcommand | Description                                                   |
-| :--------- | :------------------------------------------------------------ |
-| [resource] | Create new resources.                                         |
-| [content]  | Create a new content for existing resource.                   |
-| [metadata] | Add a new metadata from your content as a Sveltekit resource. |
-| [page]     | Create a new public page.                                     |
+| Subcommand |   Aliases    | Description                                                   |
+| :--------- | :----------: | :------------------------------------------------------------ |
+| [resource] |      r       | Create new resources.                                         |
+| [content]  |      c       | Create a new content for existing resource.                   |
+| [metadata] | m, groupedBy | Add a new metadata from your content as a Sveltekit resource. |
+| [page]     |      p       | Create a new public page.                                     |
 
 </details>
 
@@ -169,7 +169,7 @@ Read more [here][new].
 
 `sveltin generate` is used to generate static files like sitemap, menu structure or rss feed file.
 
-Alias: `gen`
+Alias: `g`, `gen`
 
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
@@ -188,7 +188,7 @@ Read more [here][generate].
 
 `sveltin prepare` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
 
-Alias: `init`
+Alias: `i`, `init`
 
 Read more [here][prepare].
 
@@ -196,13 +196,15 @@ Read more [here][prepare].
 
 `sveltin server` is used to run the VITE server. It wraps svelte-kit defined commands to run the server.
 
-Alias: `serve`
+Alias: `s`, `serve`
 
 Read more [here][server].
 
 ### sveltin build
 
 `sveltin build` is used to build a production version of your static website. It wraps `sveltekit-build` command.
+
+Alias: `b`
 
 Read more [here][build].
 

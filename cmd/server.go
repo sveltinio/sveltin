@@ -17,7 +17,7 @@ import (
 
 var serverCmd = &cobra.Command{
 	Use:     "server",
-	Aliases: []string{"serve"},
+	Aliases: []string{"s", "serve"},
 	Short:   "Run the server",
 	Long: resources.GetAsciiArt() + `
 It wraps svelte-kit defined commands to run the server`,

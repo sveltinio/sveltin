@@ -38,8 +38,9 @@ const (
 //=============================================================================
 
 var newContentCmd = &cobra.Command{
-	Use:   "content [name]",
-	Short: "Create a new content for existing resource",
+	Use:     "content [name]",
+	Aliases: []string{"c"},
+	Short:   "Create a new content for existing resource",
 	Long: resources.GetAsciiArt() + `
 Create a new markdown file for your content.
 

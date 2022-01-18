@@ -21,7 +21,7 @@ var update bool
 
 var prepareCmd = &cobra.Command{
 	Use:     "prepare",
-	Aliases: []string{"init"},
+	Aliases: []string{"i", "init"},
 	Short:   "Get all the dependencies from the `package.json` file",
 	Long: resources.GetAsciiArt() + `
 Initialize the Sveltin project getting all depencencies from the package.json file.

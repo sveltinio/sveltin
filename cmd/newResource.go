@@ -25,8 +25,9 @@ import (
 //=============================================================================
 
 var newResourceCmd = &cobra.Command{
-	Use:   "resource [name]",
-	Short: "Command to create new resources",
+	Use:     "resource [name]",
+	Aliases: []string{"r"},
+	Short:   "Command to create new resources",
 	Long: resources.GetAsciiArt() + `
 Command to create new resources.
 
