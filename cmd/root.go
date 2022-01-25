@@ -44,7 +44,7 @@ var (
 )
 
 const (
-	CLI_VERSION       string = "0.2.6"
+	CLI_VERSION       string = "0.2.7"
 	SVELTEKIT_STARTER string = "starter"
 )
 
