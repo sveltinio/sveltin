@@ -4,13 +4,27 @@ title: {{ .Name | Capitalize }}
 
 <script context="module">
    import { website } from '$config/website.js';
-   import externals from '$config/externals.js';
-   export const prerender = true;
+   import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+   import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
+   import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+
+   const {{ .Name }}Page: IWebPageMetadata = {
+		url: getPageUrl('{{ .Name }}', website),
+		title: website.title,
+		description: website.seoDescription,
+		keywords: (website.keywords) ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
 </script>
 
-<svelte:head>
-   <title>{title} | {website.title}</title>
-</svelte:head>
+<PageMetaTags data={whySveltinPage} />
+<JsonLdWebPage data={whySveltinPage} />
 
 <section class="hero">
    <div class="content">

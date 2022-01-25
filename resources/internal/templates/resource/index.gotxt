@@ -43,6 +43,7 @@
 	import orderBy from 'lodash-es/orderBy.js';
 	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
+	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let resourceName: string;
 	export let urlData: URL;
@@ -51,11 +52,11 @@
 	const sortedItemsList = orderBy(itemsList, (item) => item.metadata.created_at, ['desc']);
 
 	const {{ .Name }}IndexPage: IWebPageMetadata = {
-		url: urlData.href,
+		url: getPageUrl(resourceName, website),
 		title: website.name,
 		description: 'Here you can find the list of all available {{ .Name }}.',
 		keywords: (website.keywords) ? website.keywords : '',
-		image: website.baseURL + '/' + website.favicon,
+		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Website
 		},

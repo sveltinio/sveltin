@@ -3,13 +3,14 @@
 	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
 	import Hero from '$themes/{{ .Name }}/partials/Hero.svelte';
+	import { getFavicon } from '$lib/utils/strings.js';
 
 	const homePage: IWebPageMetadata = {
 		url: website.baseURL,
 		title: website.title,
 		description: website.seoDescription,
 		keywords: (website.keywords) ? website.keywords : '',
-		image: website.baseURL + '/' + website.logo,
+		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Website
 		},

@@ -1,17 +1,26 @@
 <script context="module">
    import { website } from '$config/website.js';
-   import externals from '$config/externals.js';
-   import WebPage from '$components/seo/jsonld/WebPage.svelte';
-   export const prerender = true;
+   import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+   import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
+   import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+
+   const {{ .Name }}Page: IWebPageMetadata = {
+		url: getPageUrl('{{ .Name }}', website),
+		title: website.title,
+		description: website.seoDescription,
+		keywords: (website.keywords) ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
 </script>
 
-<svelte:head>
-   <title>{{ .Name | Capitalize }} | {website.title}</title>
-   <meta name="description" content="" />
-</svelte:head>
-
-<!-- JSON-LD WebPage-->
-<WebPage name="{{ .Name }}" description="" publisher={website.title} baseURL={website.baseURL}/>
+<PageMetaTags data={whySveltinPage} />
+<JsonLdWebPage data={whySveltinPage} />
 
 <!-- Page markup-->
 <section class="hero">

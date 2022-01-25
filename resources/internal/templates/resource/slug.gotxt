@@ -66,7 +66,7 @@
 	import { JsonLdWebPage, PageMetaTags } from '@sveltinio/seo';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { getCoverImagePath } from '$lib/utils/strings.js';
+	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
 
 	export let urlData: URL;
 	export let current: ResourceContent;
@@ -74,11 +74,12 @@
 	export let next: ResourceContent;
 
 	const slugPageData: IWebPageMetadata = {
-		url: urlData.href,
+		url: getSlugPageUrl(current, website),
 		title: current.metadata.title,
 		description: current.metadata.headline,
+		keywords: (website.keywords) ? website.keywords : ''
 		author: current.metadata.author,
-		image: getCoverImagePath(urlData, current, website),
+		image: getCoverImagePath(current, website),
 		opengraph: {
 			type: OpenGraphType.Article,
 			article: {
