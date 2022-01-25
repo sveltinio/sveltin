@@ -6,12 +6,15 @@
 		ResourceContentMaker
 	} from '@sveltinio/widgets/types';
 
-	export const load: Load = async ({ fetch }) => {
-		const url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}'
-		const res = await fetch(url);
+	export const load: Load = async ({ url, fetch }) => {
+		const resourceName = '{{ .Name }}';
+		const urlData = url;
+		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}'
+		const res = await fetch(_url);
+
 		if (res.ok) {
-			const data = await res.json();
-			const resourceName = '{{ .Name }}';
+			const res2 = res.clone();
+			const data = await res2.json();
 
 			const itemsList: Array<ResourceContent> = [];
 			data.forEach((element) => {
@@ -24,7 +27,7 @@
 			});
 
 			return {
-				props: { resourceName, itemsList },
+				props: { resourceName, urlData, itemsList },
 			};
 		}
 		return {
@@ -38,16 +41,32 @@
 	import { website } from '$config/website.js';
 	import { Card } from '@sveltinio/widgets';
 	import orderBy from 'lodash-es/orderBy.js';
+	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
 
 	export let resourceName: string;
+	export let urlData: URL;
 	export let itemsList: Array<ResourceContent>;
 
 	const sortedItemsList = orderBy(itemsList, (item) => item.metadata.created_at, ['desc']);
+
+	const {{ .Name }}IndexPage: IWebPageMetadata = {
+		url: urlData.href,
+		title: website.name,
+		description: 'Here you can find the list of all available {{ .Name }}.',
+		keywords: (website.keywords) ? website.keywords : '',
+		image: website.baseURL + '/' + website.favicon,
+		opengraph: {
+			type: OpenGraphType.Website
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
 </script>
 
-<svelte:head>
-	<title>{resourceName} | {website.name}</title>
-</svelte:head>
+<PageMetaTags data={ {{ .Name }}IndexPage } />
+<JsonLdWebPage data={ {{ .Name }}IndexPage } />
 
 <section class="artifact-container">
 	<div class="content">

@@ -1,10 +1,27 @@
-<script context="module">
+<script lang="ts">
 	import { website } from '$config/website.js';
+	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
 	import Hero from '$themes/{{ .Name }}/partials/Hero.svelte';
+
+	const homePage: IWebPageMetadata = {
+		url: website.baseURL,
+		title: website.title,
+		description: website.seoDescription,
+		keywords: (website.keywords) ? website.keywords : '',
+		image: website.baseURL + '/' + website.logo,
+		opengraph: {
+			type: OpenGraphType.Website
+		},
+		twitter: {
+			type: TwitterCardType.Large
+		}
+	};
 </script>
 
-<svelte:head>
-	<title>Home | {website.name}</title>
-</svelte:head>
+<!-- SEO Section -->
+<PageMetaTags data={homePage} />
+<JsonLdWebPage data={homePage} />
+<!-- End of SEO Section -->
 
 <Hero />

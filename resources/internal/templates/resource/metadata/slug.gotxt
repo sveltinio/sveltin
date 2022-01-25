@@ -8,7 +8,9 @@
 		const res = await fetch(url);
 
 		if (res.ok) {
-			const data = await res.json();
+			const res2 = res.clone();
+			const data = await res2.json();
+
 			const metadata = find(data, ['name', slug]) as unknown as Metadata;
 			return {
 				props: { slug, metadata }
@@ -24,6 +26,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { Metadata } from '$lib/interfaces';
+
 	export let slug: string;
 	export let metadata: Metadata;
 	export let numOfItems = metadata.items.length;
