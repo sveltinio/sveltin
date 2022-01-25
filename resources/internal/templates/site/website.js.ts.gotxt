@@ -1,5 +1,6 @@
-import type { WebSite } from '@sveltinio/seo/types';
-const website: WebSite = {
+import type { IWebSite } from '@sveltinio/seo/types';
+
+const website: IWebSite = {
 	name: '{{ .ProjectName }}',
 	baseURL: '',
 	language: 'en-GB',

@@ -1,7 +1,7 @@
 {{ $withContent := .Menu.WithContent }}
 {{ $numOfResources := len .Menu.Resources}}
-import type { MenuItem } from '@sveltinio/seo/types';
-const menu: Array<MenuItem> = [{
+import type { IMenuItem } from '@sveltinio/seo/types';
+const menu: Array<IMenuItem> = [{
 			identifier: "home",
 			name: "Home",
 			url: "/",
