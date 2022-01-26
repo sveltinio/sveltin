@@ -107,12 +107,22 @@ scoop bucket add sveltinio https://github.com/sveltinio/scoop-sveltin.git
 scoop install sveltinio/sveltin
 ```
 
-### From the source
+### Go Install
 
 Installation is done by using the `go install` command. In this case, ensure to have **Go (v1.17 or higher) installed** on your machine:
 
 ```bash
 go install github.com/sveltinio/sveltin@latest
+```
+
+### Manually
+
+You can download the pre-compiled binary for you specific OS from the [releases page](https://github.com/sveltinio/sveltin/releases). You will need to copy the and extract the binary, then move it to your local bin folder. Please, refer to the example below:
+
+```bash
+curl https://github.com/sveltinio/sveltin/releases/download/${VERSION}/${PACKAGE_NAME} -o ${PACKAGE_NAME}
+sudo tar -xvf ${PACKAGE_NAME} -C /usr/local/bin/
+sudo chmod +x /usr/local/bin/sveltin
 ```
 
 ## :gear: CLI Commands & Options
