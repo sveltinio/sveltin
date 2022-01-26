@@ -13,6 +13,7 @@ import (
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 const (
@@ -66,6 +67,12 @@ func (b *publicPageContentBuilder) SetTemplateData(artifactData *config.Template
 func (b *publicPageContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"Capitalize": strings.Title,
+		"ToTitle": func(text string) string {
+			return utils.ToTitle(text)
+		},
+		"ToPageVariableName": func(text string) string {
+			return utils.ToPageVariableName(text)
+		},
 	}
 }
 

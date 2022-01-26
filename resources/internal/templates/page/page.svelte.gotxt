@@ -1,14 +1,14 @@
-<script context="module">
-   import { website } from '$config/website.js';
-   import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-   import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
-   import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+<script lang="ts">
+	import { website } from '$config/website.js';
+	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
+	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
-   const {{ .Name }}Page: IWebPageMetadata = {
+	const {{ .Name | ToPageVariableName }}Page: IWebPageMetadata = {
 		url: getPageUrl('{{ .Name }}', website),
-		title: website.title,
+		title: '{{ .Name | ToTitle }}',
 		description: website.seoDescription,
-		keywords: (website.keywords) ? website.keywords : '',
+		keywords: website.keywords ? website.keywords : '',
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Article
@@ -19,18 +19,18 @@
 	};
 </script>
 
-<PageMetaTags data={whySveltinPage} />
-<JsonLdWebPage data={whySveltinPage} />
+<PageMetaTags data={ {{ .Name | ToPageVariableName }}Page } />
+<JsonLdWebPage data={ {{ .Name | ToPageVariableName }}Page } />
 
 <!-- Page markup-->
 <section class="hero">
-   <div class="content">
-      <div class="wrapper">
-         <div class="subwrapper">
-            <div class="herotext">
-               <h1>This is the {{ .Name | Capitalize }} page</h1>
-            </div>
-         </div>
-      </div>
-   </div>
+	<div class="content">
+		<div class="wrapper">
+			<div class="subwrapper">
+				<div class="herotext">
+					<h1>This is the {{ .Name | Capitalize }} page</h1>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>

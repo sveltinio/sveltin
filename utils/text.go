@@ -26,6 +26,20 @@ func Trimmed(txt string) string {
 	return strings.Trim(txt, "\"")
 }
 
+func ToValidName(txt string) string {
+	return strings.ReplaceAll(txt, "_", "-")
+}
+
+func ToPageVariableName(txt string) string {
+	var frags = strings.Split(txt, "-")
+	for i := range frags {
+		if i != 0 {
+			frags[i] = strings.Title(frags[i])
+		}
+	}
+	return strings.Join(frags, "")
+}
+
 func Today() string {
 	return time.Now().Format("02-Jan-2006")
 }

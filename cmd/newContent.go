@@ -134,7 +134,7 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		utils.CheckIfError(err)
 
 		return config.TemplateData{
-			Name:     contentName,
+			Name:     utils.ToValidName(contentName),
 			Type:     contentType,
 			Resource: contentResource,
 		}, nil
@@ -150,7 +150,7 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		utils.CheckIfError(err)
 
 		return config.TemplateData{
-			Name:     contentName,
+			Name:     utils.ToValidName(contentName),
 			Type:     contentType,
 			Resource: contentResource,
 		}, nil
