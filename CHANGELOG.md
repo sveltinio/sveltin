@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.2.9
+
+### Patch Changes
+
+- SvelteKit 1.0.0-next.244 fixed [#3473](https://github.com/sveltejs/kit/issues/3473) and [#3521](https://github.com/sveltejs/kit/pull/3521). `clone()` on fetch response as workaround to avoid '_body used already_' error when building the project removed.
+
 ## 0.2.8
 
 ### Patch Changes
