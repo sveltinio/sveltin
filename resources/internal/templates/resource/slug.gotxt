@@ -117,12 +117,12 @@
 				withChildren={true}
 			/>
 
-			<div class="md-content">
+			<div class="markdown-body">
 				{@html current.html}
 			</div>
 		</div>
+		<PrevNextButtons {previous} {next} />
 	</div>
-	<PrevNextButtons {previous} {next} />
 </article>
 
 <style>
@@ -145,9 +145,5 @@
 	.cover img {
 		object-fit: cover;
 		border-radius: 0.75rem;
-	}
-
-	.md-content {
-		@apply markdown-body;
 	}
 </style>
