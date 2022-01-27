@@ -34,7 +34,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	logger.Reset()
 
 	printer := utils.PrinterContent{
-		Title: "A 'menu.js' file will be created for your Sveltin project",
+		Title: "The menu structure for your Sveltin project will be created ",
 	}
 
 	projectFolder := fsManager.GetFolder(ROOT)
