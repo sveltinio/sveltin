@@ -24,7 +24,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :warning: Project Status
 
-> Sveltin is in early development but it does what it supposed to do. Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section.
+> Sveltin is under active development following the progress toward SvelteKit v1.0. Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section.
 
 ## :mega: Overview
 
