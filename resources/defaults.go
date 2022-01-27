@@ -73,16 +73,20 @@ var SveltinXMLFS = map[string]string{
 }
 
 var SveltinVanillaCSSThemeFS = map[string]string{
-	"package_json": "internal/templates/themes/vanillacss/package.json.gotxt",
-	"app_css":      "internal/templates/themes/vanillacss/app.css",
-	"hero":         "internal/templates/themes/vanillacss/Hero.svelte",
-	"footer":       "internal/templates/themes/vanillacss/Footer.svelte",
+	"package_json":  "internal/templates/themes/vanillacss/package.json.gotxt",
+	"app_html":      "internal/templates/themes/vanillacss/app.html",
+	"app_css":       "internal/templates/themes/vanillacss/app.css",
+	"svelte_config": "internal/templates/themes/vanillacss/svelte.config.js",
+	"hero":          "internal/templates/themes/vanillacss/Hero.svelte",
+	"footer":        "internal/templates/themes/vanillacss/Footer.svelte",
 }
 
 var SveltinTailwindCSSThemeFS = map[string]string{
 	"package_json":        "internal/templates/themes/tailwindcss/package.json.gotxt",
 	"tailwind_css_config": "internal/templates/themes/tailwindcss/tailwind.config.cjs",
+	"app_html":            "internal/templates/themes/tailwindcss/app.html",
 	"app_css":             "internal/templates/themes/tailwindcss/app.css",
+	"svelte_config":       "internal/templates/themes/tailwindcss/svelte.config.js",
 	"postcss":             "internal/templates/themes/tailwindcss/postcss.config.cjs",
 	"hero":                "internal/templates/themes/tailwindcss/Hero.svelte",
 	"footer":              "internal/templates/themes/tailwindcss/Footer.svelte",

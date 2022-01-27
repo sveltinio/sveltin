@@ -43,6 +43,12 @@ func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfi
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, false); err != nil {
 		return err
 	}
+	// Copying app.html file
+	sourceFile = resources.SveltinTailwindCSSThemeFS["app_html"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.html")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
 	// Copying app.css file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["app_css"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.css")
@@ -52,6 +58,12 @@ func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfi
 	// Copyng Hero.svelte component
 	sourceFile = resources.SveltinTailwindCSSThemeFS["hero"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Hero.svelte")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copying svelte.config.js file
+	sourceFile = resources.SveltinTailwindCSSThemeFS["svelte_config"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "svelte.config.js")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}

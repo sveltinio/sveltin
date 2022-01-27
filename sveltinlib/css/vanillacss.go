@@ -31,9 +31,21 @@ func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
+	// Copying app.html file
+	sourceFile = resources.SveltinVanillaCSSThemeFS["app_html"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.html")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
 	// Copying app.css file
 	sourceFile = resources.SveltinVanillaCSSThemeFS["app_css"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.css")
+	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copying svelte.config.js file
+	sourceFile = resources.SveltinVanillaCSSThemeFS["svelte_config"]
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "svelte.config.js")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
