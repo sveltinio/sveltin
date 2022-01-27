@@ -29,7 +29,7 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
-[*.{js, js.ts, ts}]
+[*.{js, cjs, js.ts, ts}]
 indent_style = tab
 indent_size = 3
 
