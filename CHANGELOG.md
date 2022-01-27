@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.2.11
+
+### Patch Changes
+
+- fix: paths to favicon, prism theme and script file
+
 ## 0.2.10
 
 ### Patch Changes
