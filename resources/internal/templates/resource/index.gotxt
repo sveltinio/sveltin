@@ -8,15 +8,13 @@
 
 	export const load: Load = async ({ url, fetch }) => {
 		const resourceName = '{{ .Name }}';
-		const urlData = url;
 		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}'
 		const res = await fetch(_url);
 
 		if (res.ok) {
-			const res2 = res.clone();
-			const data = await res2.json();
-
+			const data = await res.json();
 			const itemsList: Array<ResourceContent> = [];
+
 			data.forEach((element) => {
 				const item = ResourceContentMaker.createWithValues(
 					resourceName,
@@ -27,7 +25,7 @@
 			});
 
 			return {
-				props: { resourceName, urlData, itemsList },
+				props: { resourceName, itemsList },
 			};
 		}
 		return {
@@ -46,7 +44,6 @@
 	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let resourceName: string;
-	export let urlData: URL;
 	export let itemsList: Array<ResourceContent>;
 
 	const sortedItemsList = orderBy(itemsList, (item) => item.metadata.created_at, ['desc']);

@@ -5,10 +5,9 @@
 		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
 		const res = await fetch(_url);
 		if (res.ok) {
-			const res2 = res.clone();
-			const data = await res2.json();
-
+			const data = await res.json();
 			const {{ .Name }} = data as unknown as Array<Metadata>;
+
 			return {
 				props: { {{ .Name }} }
 			};

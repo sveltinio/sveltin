@@ -3,16 +3,14 @@
 	import { ResourceContent, ResourceContentMaker } from '@sveltinio/widgets/types';
 	import type { ContentMetadata } from '@sveltinio/widgets/types';
 
-	export const load: Load = async ({ url, params, fetch }) => {
+	export const load: Load = async ({ params, fetch }) => {
 		const resourceName = '{{ .Name }}';
-		const urlData = url;
 		const { slug } = params;
 		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}';
 
 		const res = await fetch(_url);
 		if (res.ok) {
-			const res2 = res.clone();
-			const data = await res2.json();
+			const data = await res.json();
 			const selectedItemIndex = data.findIndex((elem) => slug === elem.slug);
 			const selectedItem = data[selectedItemIndex];
 
@@ -39,7 +37,6 @@
 
 				return {
 					props: {
-						urlData,
 						current,
 						previous,
 						next
@@ -68,7 +65,6 @@
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
 
-	export let urlData: URL;
 	export let current: ResourceContent;
 	export let previous: ResourceContent;
 	export let next: ResourceContent;
@@ -77,7 +73,7 @@
 		url: getSlugPageUrl(current, website),
 		title: current.metadata.title,
 		description: current.metadata.headline,
-		keywords: (website.keywords) ? website.keywords : ''
+		keywords: (website.keywords) ? website.keywords : '',
 		author: current.metadata.author,
 		image: getCoverImagePath(current, website),
 		opengraph: {

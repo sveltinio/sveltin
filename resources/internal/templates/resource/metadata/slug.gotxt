@@ -8,10 +8,9 @@
 		const res = await fetch(url);
 
 		if (res.ok) {
-			const res2 = res.clone();
-			const data = await res2.json();
-
+			const data = await res.json();
 			const metadata = find(data, ['name', slug]) as unknown as Metadata;
+
 			return {
 				props: { slug, metadata }
 			};
