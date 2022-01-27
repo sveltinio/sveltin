@@ -120,10 +120,10 @@
   .text-default {
     @apply text-base leading-6;
   }
-
-  .markdown-body {
-    @apply prose;
-  }
 }
 
 @tailwind utilities;
+
+.markdown-body {
+  @apply prose;
+}
