@@ -49,9 +49,9 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	configFolder := fsManager.GetFolder(CONFIG)
 
 	// ADD FILE: config/menu.js
-	logger.AppendItem("Generating menu.js file")
+	logger.AppendItem("Generating menu.js.ts file")
 	menuFile := &composer.File{
-		Name:       "menu.js",
+		Name:       "menu.js.ts",
 		TemplateId: "menu",
 		TemplateData: &config.TemplateData{
 			Menu: &config.MenuConfig{
