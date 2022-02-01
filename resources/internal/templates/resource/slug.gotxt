@@ -60,7 +60,7 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
 	import { TOC, PrevNextButtons} from '@sveltinio/widgets';
-	import { JsonLdWebPage, PageMetaTags } from '@sveltinio/seo';
+	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
@@ -91,6 +91,7 @@
 
 <PageMetaTags data={slugPageData} />
 <JsonLdWebPage data={slugPageData} />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent={current.resource} currentTitle={slugPageData.title} />
 
 <article class="artifact-container">
 	<div class="content">

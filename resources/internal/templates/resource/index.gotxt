@@ -40,7 +40,7 @@
 	import { Card } from '@sveltinio/widgets';
 	import orderBy from 'lodash-es/orderBy.js';
 	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let resourceName: string;
@@ -65,6 +65,7 @@
 
 <PageMetaTags data={ {{ .Name }}IndexPage } />
 <JsonLdWebPage data={ {{ .Name }}IndexPage } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent={resourceName} currentTitle={ {{ .Name }}IndexPage.title} />
 
 <section class="artifact-container">
 	<div class="content">

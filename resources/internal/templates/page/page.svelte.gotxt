@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
 	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	const {{ .Name | ToPageVariableName }}Page: IWebPageMetadata = {
@@ -21,6 +21,7 @@
 
 <PageMetaTags data={ {{ .Name | ToPageVariableName }}Page } />
 <JsonLdWebPage data={ {{ .Name | ToPageVariableName }}Page } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ {{ .Name | ToPageVariableName }}Page.title} />
 
 <!-- Page markup-->
 <section class="hero">
