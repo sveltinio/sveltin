@@ -2,7 +2,6 @@ const plugin = require('tailwindcss/plugin');
 
 const config = {
    content: [
-      './src/components/*.{html,svelte,js,ts}',
       './src/routes/*.{html,svelte,js,ts}',
       './themes/**/*.{html,svelte,js,ts}',
    ],
