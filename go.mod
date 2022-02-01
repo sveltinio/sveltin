@@ -5,10 +5,10 @@ go 1.17
 require (
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/gosimple/slug v1.12.0
-	github.com/jedib0t/go-pretty/v6 v6.2.4
+	github.com/jedib0t/go-pretty/v6 v6.2.5
 	github.com/manifoldco/promptui v0.9.0
 	github.com/matryer/is v1.4.0
-	github.com/spf13/afero v1.7.1
+	github.com/spf13/afero v1.8.0
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/jwalterweatherman v1.1.0
 	github.com/spf13/viper v1.10.1
