@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.2.12
+
+### Patch Changes
+
+- feat: json-ld breadcrumbs added to the public and resources pages
+
 ## 0.2.11
 
 ### Patch Changes
