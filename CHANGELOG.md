@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.2.13
+
+### Patch Changes
+
+- chore: This version adheres to the changes introduced by `@sveltejs/kit 1.0.0-next.257` where the target option has been removed [#3674](https://github.com/sveltejs/kit/pull/3674)
+
 ## 0.2.12
 
 ### Patch Changes
