@@ -1,0 +1,208 @@
+/*
+ * Write your global styles here, in SCSS syntax.
+ * Variables and mixins from the src/variables.scss file are available here without importing
+ */
+
+/* Import only what you need from Bulma */
+@import 'bulma/sass/utilities/_all';
+@import 'bulma/sass/base/_all';
+@import 'bulma/sass/elements/_all';
+@import 'bulma/sass/form/_all';
+@import 'bulma/sass/components/_all';
+@import 'bulma/sass/grid/_all';
+@import 'bulma/sass/helpers/_all';
+@import 'bulma/sass/layout/_all';
+
+/* CSS RESET by https://www.joshwcomeau.com/css/custom-css-reset/ */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	line-height: 1.5;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+	isolation: isolate;
+}
+
+/* END OF CSS RESET by */
+
+body {
+	background-color: $white;
+	font-family: 'IBM Plex Sans', sans-serif;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+h1 {
+	color: $color-text-base;
+	margin-top: 0.75rem /* 12px */;
+	margin-bottom: 32px;
+	margin-left: auto;
+	margin-right: auto;
+	transition-property: all;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	padding-left: 0.5rem /* 8px */;
+	padding-right: 0.5rem /* 8px */;
+	padding-top: 0.5rem /* 8px */;
+	padding-bottom: 0.5rem /* 8px */;
+	font-size: 0.875rem /* 14px */;
+	font-weight: 500;
+	border-width: 2px;
+	border-style: solid;
+
+	@include from($lg) {
+		padding-left: 2rem /* 32px */;
+		padding-right: 2rem /* 32px */;
+	}
+}
+
+.btn-base {
+	margin-left: -1px;
+	color: $dark;
+	border-top-right-radius: 0.5rem /* 8px */;
+	border-bottom-right-radius: 0.5rem /* 8px */;
+	border-color: $color-text-base;
+
+	&:focus {
+		z-index: 10;
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+	}
+}
+
+.btn-accent {
+	color: $white;
+	background-color: $color-text-base;
+	border-top-left-radius: 0.5rem /* 8px */;
+	border-bottom-left-radius: 0.5rem /* 8px */;
+	border-color: $color-text-base;
+
+	&:hover {
+		color: $white;
+		background-color: $dark;
+	}
+
+	&:focus {
+		z-index: 10;
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+		border-color: $white;
+	}
+}
+
+.artifact-container {
+	color: var(--dark);
+	margin-top: 1.75rem;
+	margin-bottom: 1.75rem;
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	max-width: 56rem;
+	flex-direction: column;
+	justify-content: center;
+	padding: 2.75rem;
+
+	> .content {
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+
+		h1 {
+			text-align: left;
+			line-height: 2rem /* 32px */;
+			font-size: 1.5rem /* 24px */;
+			font-weight: 500;
+			margin-left: 0px;
+			margin-right: 0px;
+			margin-bottom: 32px;
+		}
+		h2 {
+			text-align: left;
+			font-size: 1.25rem /* 20px */;
+			font-weight: 400;
+			line-height: 1.75rem /* 28px */;
+			margin-top: 0.5rem /* 8px */;
+			margin-bottom: 0.5rem /* 8px */;
+			margin-left: 0px;
+			margin-right: 0px;
+		}
+		ul li {
+			padding-top: 0.5rem /* 8px */;
+			padding-bottom: 0.5rem /* 8px */;
+		}
+	}
+}
+
+.message {
+	padding: 0.5rem 1rem /* 8px 16px */;
+	border-radius: 0.375rem /* 6px */;
+}
+
+.warning {
+	background-color: rgb(254 215 170);
+}
+
+.text-default {
+	font-size: 1rem /* 16px */;
+	line-height: 1.5rem /* 24px */;
+}
+
+.markdown-body {
+	box-sizing: border-box;
+	min-width: 200px;
+	max-width: 980px;
+	margin: 0 auto;
+	padding: 45px;
+}

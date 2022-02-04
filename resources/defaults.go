@@ -92,3 +92,14 @@ var SveltinTailwindCSSThemeFS = map[string]string{
 	"hero":                "internal/templates/themes/tailwindcss/Hero.svelte",
 	"footer":              "internal/templates/themes/tailwindcss/Footer.svelte",
 }
+
+var SveltinBulmaCSSThemeFS = map[string]string{
+	"package_json":   "internal/templates/themes/bulma/package.json.gotxt",
+	"layout":         "internal/templates/themes/bulma/layout.svelte.gotxt",
+	"app_html":       "internal/templates/themes/bulma/app.html",
+	"app_css":        "internal/templates/themes/bulma/app.scss",
+	"variables_scss": "internal/templates/themes/bulma/variables.scss",
+	"svelte_config":  "internal/templates/themes/bulma/svelte.config.js",
+	"hero":           "internal/templates/themes/bulma/Hero.svelte",
+	"footer":         "internal/templates/themes/bulma/Footer.svelte",
+}
