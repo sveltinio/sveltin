@@ -18,7 +18,7 @@
 		"@sveltinio/essentials": "^0.1.2",
 		"@sveltinio/seo": "^0.1.5",
 		"@sveltinio/services": "^0.1.2",
-		"@sveltinio/widgets": "^0.1.4",
+		"@sveltinio/widgets": "^0.1.5",
 		"@types/gtag.js": "^0.0.8",
 		"@types/lodash-es": "^4.17.5",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
