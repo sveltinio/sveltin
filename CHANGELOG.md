@@ -1,5 +1,14 @@
 # sveltin
 
+## 0.2.14
+
+### Patch Changes
+
+- chore: dependency updated
+- feat: bulma support implemented
+- refactor: tailwind css and vanilla css themes updated
+- refactor: each CSS supported lib has its own `__layout.svelte` file
+
 ## 0.2.13
 
 ### Patch Changes
