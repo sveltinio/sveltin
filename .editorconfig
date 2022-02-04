@@ -25,14 +25,18 @@ indent_size = 3
 indent_style = tab
 indent_size = 2
 
-[*.{yaml, yml}]
+[*.{yaml,yml}]
 indent_style = space
 indent_size = 2
 
-[*.{js, cjs, js.ts, ts}]
+[*.{js,cjs,js.ts,ts}]
 indent_style = tab
 indent_size = 3
 
 [*.svelte]
 indent_style = tab
 indent_size = 4
+
+[*.{css,scss}]
+indent_style = tab
+indent_size = 2
