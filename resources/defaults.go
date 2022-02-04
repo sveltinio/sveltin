@@ -34,7 +34,6 @@ var SveltinProjectFS = map[string]string{
 	"dotenv":       "internal/templates/misc/env.gotxt",
 	"readme":       "internal/templates/misc/README.md.gotxt",
 	"license":      "internal/templates/misc/LICENSE.gotxt",
-	"layout":       "internal/templates/themes/layout.svelte.gotxt",
 	"index":        "internal/templates/themes/index.svelte.gotxt",
 	"theme_config": "internal/templates/themes/theme.config.js.gotxt",
 }
@@ -74,6 +73,7 @@ var SveltinXMLFS = map[string]string{
 
 var SveltinVanillaCSSThemeFS = map[string]string{
 	"package_json":  "internal/templates/themes/vanillacss/package.json.gotxt",
+	"layout":        "internal/templates/themes/vanillacss/layout.svelte.gotxt",
 	"app_html":      "internal/templates/themes/vanillacss/app.html",
 	"app_css":       "internal/templates/themes/vanillacss/app.css",
 	"svelte_config": "internal/templates/themes/vanillacss/svelte.config.js",
@@ -83,6 +83,7 @@ var SveltinVanillaCSSThemeFS = map[string]string{
 
 var SveltinTailwindCSSThemeFS = map[string]string{
 	"package_json":        "internal/templates/themes/tailwindcss/package.json.gotxt",
+	"layout":              "internal/templates/themes/tailwindcss/layout.svelte.gotxt",
 	"tailwind_css_config": "internal/templates/themes/tailwindcss/tailwind.config.cjs",
 	"app_html":            "internal/templates/themes/tailwindcss/app.html",
 	"app_css":             "internal/templates/themes/tailwindcss/app.css",

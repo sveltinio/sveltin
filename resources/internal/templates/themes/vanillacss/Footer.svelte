@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { sveltinVersion } from '$config/defaults.js';
-	import type { WebSite } from '@sveltinio/seo/types';
+	import type { IWebSite } from '@sveltinio/seo/types';
 
-	export let websiteData: WebSite;
+	export let websiteData: IWebSite;
 </script>
 
 <footer>

@@ -31,6 +31,16 @@ func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfi
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
+	// Copying __layout.svelte. file
+	sourceFile = resources.SveltinTailwindCSSThemeFS["layout"]
+	tplConfig = helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
+		Name: themeName,
+	})
+	content = helpers.ExecSveltinTpl(efs, tplConfig)
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "routes", "__layout.svelte")
+	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
+		return err
+	}
 	// Copying tailwindcss config file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["tailwind_css_config"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "tailwind.config.cjs")
@@ -67,7 +77,7 @@ func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfi
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
-	// Copyng Footer.svelte component
+	// Copying Footer.svelte component
 	sourceFile = resources.SveltinTailwindCSSThemeFS["footer"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Footer.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {

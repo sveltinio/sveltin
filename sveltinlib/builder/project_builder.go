@@ -25,7 +25,6 @@ const (
 	README       string = "readme"
 	LICENSE      string = "license"
 	THEME_CONFIG string = "theme_config"
-	LAYOUT       string = "layout"
 	INDEXPAGE    string = "index"
 )
 
@@ -75,9 +74,6 @@ func (b *projectBuilder) setPathToTplFile() error {
 		return nil
 	case THEME_CONFIG:
 		b.PathToTplFile = b.EmbeddedResources[THEME_CONFIG]
-		return nil
-	case LAYOUT:
-		b.PathToTplFile = b.EmbeddedResources[LAYOUT]
 		return nil
 	case INDEXPAGE:
 		b.PathToTplFile = b.EmbeddedResources[INDEXPAGE]

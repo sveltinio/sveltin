@@ -31,6 +31,16 @@ func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
+	// Copying __layout.svelte. file
+	sourceFile = resources.SveltinVanillaCSSThemeFS["layout"]
+	tplConfig = helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
+		Name: themeName,
+	})
+	content = helpers.ExecSveltinTpl(efs, tplConfig)
+	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "routes", "__layout.svelte")
+	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
+		return err
+	}
 	// Copying app.html file
 	sourceFile = resources.SveltinVanillaCSSThemeFS["app_html"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.html")
@@ -49,13 +59,13 @@ func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
-	// Copyng Hero.svelte component
+	// Copying Hero.svelte component
 	sourceFile = resources.SveltinVanillaCSSThemeFS["hero"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Hero.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
-	// Copyng Footer.svelte component
+	// Copying Footer.svelte component
 	sourceFile = resources.SveltinVanillaCSSThemeFS["footer"]
 	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Footer.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
