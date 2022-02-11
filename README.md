@@ -83,7 +83,7 @@ Please see the [documentation](https://docs.sveltin.io) for more information abo
 ### :wrench: Prerequisites
 
 - Git
-- Node (v16.13.1 or higher is required)
+- Node (v16.9.0 or higher is required)
 
 ### OSX and Linux via Homebrew
 
@@ -140,9 +140,10 @@ Available Commands:
   generate     Command to generate static files like sitemap, rss etc
   help         Help about any command
   new          Command to create projects, resources, contents, pages and metadata
-  prepare      Get all the dependencies
+  prepare      Install all the dependencies from the package.json file
   preview      Preview the production version locally
   server       Run the server
+  update       Update all the dependencies from the package.json file
 
 Flags:
   -h, --help      help for sveltin
@@ -198,9 +199,17 @@ Read more [here][generate].
 
 `sveltin prepare` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
 
-Alias: `i`, `init`
+Alias: `i`, `install`, `init`
 
 Read more [here][prepare].
+
+### sveltin update
+
+`sveltin update` is used to update all depencencies from the `package.json` file.
+
+Alias: `u`
+
+Read more [here][update].
 
 ### sveltin server
 
@@ -245,6 +254,7 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [rss]: https://docs.sveltin.io/cli/generate-rss
 [server]: https://docs.sveltin.io/cli/server
 [prepare]: https://docs.sveltin.io/cli/prepare
+[prepare]: https://docs.sveltin.io/cli/update
 [build]: https://docs.sveltin.io/cli/build
 [preview]: https://docs.sveltin.io/cli/preview
 [contributing]: CONTRIBUTING.md
