@@ -7,57 +7,49 @@ that can be found in the LICENSE file.
 package cmd
 
 import (
+	"path/filepath"
+
+	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/sveltinlib/packagejson"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var update bool
-
-//=============================================================================
-
 var prepareCmd = &cobra.Command{
 	Use:     "prepare",
-	Aliases: []string{"i", "init"},
+	Aliases: []string{"i", "install", "init"},
 	Short:   "Get all the dependencies from the `package.json` file",
 	Long: resources.GetAsciiArt() + `
 Initialize the Sveltin project getting all depencencies from the package.json file.
 
 It wraps (npm|pnpm|yarn) install.
-
-By default, sveltin uses pnpm as package manager. You can choose npm or yarn simply passing it via the –-package-manager flag.
-	`,
+`,
 	Run: RunPrepareCmd,
 }
 
 func RunPrepareCmd(cmd *cobra.Command, args []string) {
+	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
+	pkgFileContent, err := afero.ReadFile(AppFs, pathToPkgFile)
+	utils.CheckIfError(err)
+	pkgParsed := packagejson.Parse(pkgFileContent)
+	pmInfoString := pkgParsed.PackageManager
+	npmClient := utils.GetNPMClient(pmInfoString)
+
+	// LOG TO STDOUT
 	printer := utils.PrinterContent{
 		Title: "Prepare Sveltin project",
 	}
-	switch update {
-	case true:
-		// LOG TO STDOUT
-		printer.SetContent("* Updating dependencies")
-		utils.PrettyPrinter(&printer).Print()
-		err := helpers.RunPMCommand(npmClient, "update", "", nil, false)
-		utils.CheckIfError(err)
-	default:
-		// LOG TO STDOUT
-		printer.SetContent("* Getting dependencies")
-		utils.PrettyPrinter(&printer).Print()
-		err := helpers.RunPMCommand(npmClient, "install", "", nil, false)
-		utils.CheckIfError(err)
-	}
-}
+	printer.SetContent("* Getting dependencies")
+	utils.PrettyPrinter(&printer).Print()
 
-func prepareCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&update, "update", "u", false, "Update dependencies")
+	err = helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
+	utils.CheckIfError(err)
 }
 
 func init() {
 	rootCmd.AddCommand(prepareCmd)
-	prepareCmdFlags(prepareCmd)
 }

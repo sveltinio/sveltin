@@ -18,7 +18,7 @@ import (
 )
 
 type ICSSLib interface {
-	init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error
+	init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClient string, themeName string) error
 }
 
 type CSSLib struct {
@@ -41,8 +41,8 @@ func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, 
 	return nil
 }
 
-func (c *CSSLib) Setup(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
-	if err := c.ICSSLib.init(efs, fs, conf, projectName, themeName); err != nil {
+func (c *CSSLib) Setup(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
+	if err := c.ICSSLib.init(efs, fs, conf, projectName, npmClientName, themeName); err != nil {
 		return err
 	}
 	return nil

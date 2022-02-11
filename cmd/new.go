@@ -79,7 +79,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	themeName := getThemeName(projectName)
 
-	setupPackageManager()
+	npmClient := getSelectedNPMClient()
+	npmClientName = npmClient.Name
 
 	// Clone starter template github repository
 	starterTemplate := appTemplatesMap[SVELTEKIT_STARTER]
@@ -147,7 +148,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// SETUP THE CSS LIB
 	logger.AppendItem("Setup the CSS Lib")
-	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, projectName, themeName)
+	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, projectName, npmClient.ToString(), themeName)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
@@ -156,7 +157,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&npmClient, "npmClient", "n", "", "The name of the your preferred npm client.")
+	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client.")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
 }
@@ -224,7 +225,7 @@ func promptNPMClient(items []string) (string, error) {
 		return "", sveltinerr.NewDefaultError(err)
 	}
 	var client string
-	switch nameLenght := len(npmClient); {
+	switch nameLenght := len(npmClientName); {
 	case nameLenght == 0:
 		if len(items) == 1 {
 			client = items[0]
@@ -243,10 +244,10 @@ func promptNPMClient(items []string) (string, error) {
 		}
 		return client, nil
 	case nameLenght != 0:
-		if !common.Contains(items, npmClient) {
+		if !common.Contains(items, npmClientName) {
 			return "", sveltinerr.NewOptionNotValidError()
 		}
-		client = npmClient
+		client = npmClientName
 		return client, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
@@ -306,40 +307,40 @@ func makeThemeStructure(themeName string) *composer.Folder {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func setupPackageManager() {
-	if len(settings.GetNPMClient()) == 0 && len(npmClient) == 0 {
-		selectedPackageManager, err := promptNPMClient(utils.GetAvailableNPMClientList())
-		utils.CheckIfError(err)
-		storeSelectedNPMClient(selectedPackageManager)
-	}
+func getSelectedNPMClient() utils.NPMClient {
+	installedNPMClients := utils.GetInstalledNPMClientList()
+	npmClientNames := utils.GetNPMClientNames(installedNPMClients)
+	client, err := promptNPMClient(npmClientNames)
+	utils.CheckIfError(err)
+	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, projectName string, themeName string) error {
+func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
 	switch name {
 	case VANILLACSS:
 		vanillaCSS := &css.VanillaCSS{}
 		c := css.CSSLib{
 			ICSSLib: vanillaCSS,
 		}
-		return c.Setup(efs, fs, conf, projectName, themeName)
+		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
 	case TAILWINDCSS:
 		tailwind := &css.TailwindCSS{}
 		c := css.CSSLib{
 			ICSSLib: tailwind,
 		}
-		return c.Setup(efs, fs, conf, projectName, themeName)
+		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
 	case BULMA:
 		bulma := &css.Bulma{}
 		c := css.CSSLib{
 			ICSSLib: bulma,
 		}
-		return c.Setup(efs, fs, conf, projectName, themeName)
+		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
 	case BOOTSTRAP:
 		boostrap := &css.Bootstrap{}
 		c := css.CSSLib{
 			ICSSLib: boostrap,
 		}
-		return c.Setup(efs, fs, conf, projectName, themeName)
+		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
 	default:
 		return sveltinerr.NewOptionNotValidError()
 	}

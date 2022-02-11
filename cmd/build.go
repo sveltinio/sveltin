@@ -8,10 +8,13 @@ package cmd
 
 import (
 	"os"
+	"path/filepath"
 
+	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/sveltinlib/packagejson"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -33,15 +36,21 @@ your production environment
 }
 
 func RunBuildCmd(cmd *cobra.Command, args []string) {
-	printer := utils.PrinterContent{
-		Title: "Building Sveltin project",
-	}
+	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
+	pkgFileContent, err := afero.ReadFile(AppFs, pathToPkgFile)
+	utils.CheckIfError(err)
+	pkgParsed := packagejson.Parse(pkgFileContent)
+	pmInfoString := pkgParsed.PackageManager
+	npmClient := utils.GetNPMClient(pmInfoString)
 
 	os.Setenv("VITE_PUBLIC_BASE_PATH", siteConfig.BaseURL)
-	err := helpers.RunPMCommand(npmClient, "build", "", nil, false)
+	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
+	printer := utils.PrinterContent{
+		Title: "Building Sveltin project",
+	}
 	printer.SetContent("")
 	utils.PrettyPrinter(&printer).Print()
 }

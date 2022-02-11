@@ -18,6 +18,6 @@ type Bootstrap struct {
 	CSSLib
 }
 
-func (f *Bootstrap) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
+func (f *Bootstrap) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
 	return sveltinerr.NewNotImplementYetError()
 }

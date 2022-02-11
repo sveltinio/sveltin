@@ -20,11 +20,12 @@ type VanillaCSS struct {
 	CSSLib
 }
 
-func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, themeName string) error {
+func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
 	// Copying the package.json config file
 	sourceFile := resources.SveltinVanillaCSSThemeFS["package_json"]
 	tplConfig := helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
 		ProjectName: projectName,
+		NPMClient:   npmClientName,
 	})
 	content := helpers.ExecSveltinTpl(efs, tplConfig)
 	saveAs := filepath.Join(conf.GetProjectRoot(), projectName, "package.json")

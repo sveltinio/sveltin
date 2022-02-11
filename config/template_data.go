@@ -8,6 +8,7 @@ package config
 
 type TemplateData struct {
 	ProjectName string
+	NPMClient   string
 	Name        string
 	Resource    string
 	Type        string

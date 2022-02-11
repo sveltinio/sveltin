@@ -7,15 +7,12 @@ that can be found in the LICENSE file.
 package cmd
 
 import (
-	"io/ioutil"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/spf13/viper"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
@@ -33,13 +30,12 @@ var (
 )
 
 var (
-	npmClient       string
+	npmClientName   string
 	YamlConfig      []byte
 	appTemplatesMap map[string]config.AppTemplate
 	pathMaker       pathmaker.SveltinPathMaker
 	conf            config.SveltinConfig
 	siteConfig      config.SiteConfig
-	settings        config.SveltinSettings
 	fsManager       *fsm.SveltinFSManager
 )
 
@@ -83,18 +79,12 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(loadSveltinConfig, loadSveltinSettings, initSveltin)
+	cobra.OnInitialize(loadSveltinConfig, initSveltin)
 }
 
 //=============================================================================
 
 func initSveltin() {
-	if len(settings.GetNPMClient()) > 0 && len(npmClient) == 0 {
-		npmClient = settings.GetNPMClient()
-	} else if len(npmClient) != 0 {
-		storeSelectedNPMClient(npmClient)
-	}
-
 	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
 	fsManager = fsm.NewSveltinFSManager(&pathMaker)
 	appTemplatesMap = helpers.InitAppTemplatesMap()
@@ -105,19 +95,6 @@ func loadSveltinConfig() {
 	err := yaml.Unmarshal(YamlConfig, &conf)
 	if err != nil {
 		jww.FATAL.Fatal(err)
-	}
-}
-
-func loadSveltinSettings() {
-	homedir, _ := os.UserHomeDir()
-	filepath := filepath.Join(homedir, SETTINGS_FILE)
-	exists, _ := common.FileExists(AppFs, filepath)
-	if exists {
-		yamlSettings, _ := afero.ReadFile(AppFs, filepath)
-		err := yaml.Unmarshal(yamlSettings, &settings)
-		if err != nil {
-			jww.FATAL.Fatal(err)
-		}
 	}
 }
 
@@ -138,23 +115,10 @@ func loadEnvFile(filename string) (config config.SiteConfig, err error) {
 	return
 }
 
-// Save the package mananer name on the settings file
-func storeSelectedNPMClient(npmClientName string) {
-	settings = helpers.NewSveltinSettings(npmClientName)
-	data, err := yaml.Marshal(&settings)
-	utils.CheckIfError(err)
-
-	homedir, _ := os.UserHomeDir()
-	err = ioutil.WriteFile(filepath.Join(homedir, SETTINGS_FILE), data, 0755)
-	utils.CheckIfError(err)
-
-	npmClient = npmClientName
-}
-
 //=============================================================================
 
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
-		newCmd, generateCmd, prepareCmd, serverCmd, buildCmd, previewCmd,
+		newCmd, generateCmd, prepareCmd, updateCmd, serverCmd, buildCmd, previewCmd,
 	}
 }

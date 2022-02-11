@@ -11,18 +11,6 @@ import (
 	"path/filepath"
 )
 
-type SettingItem struct {
-	NPMClient string `yaml:"npmClient"`
-}
-
-type SveltinSettings struct {
-	Item SettingItem `yaml:"Settings"`
-}
-
-func (s *SveltinSettings) GetNPMClient() string {
-	return s.Item.NPMClient
-}
-
 type IConfig interface {
 	GetProjectRoot() string
 	GetBuildPath() string

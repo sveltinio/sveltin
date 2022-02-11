@@ -9,30 +9,39 @@ import (
 
 func TestPackageManager(t *testing.T) {
 	tests := []struct {
-		npmClient string
+		npmClient NPMClient
 		wanted    bool
 	}{
-		{npmClient: "npm", wanted: true},
+		{
+			npmClient: NPMClient{
+				Name:    "npm",
+				Version: "1",
+			},
+			wanted: true},
 	}
 
 	for _, tc := range tests {
 		is := is.New(t)
-		exists := isCommandAvailable(tc.npmClient)
+		exists := isCommandAvailable(tc.npmClient.Name)
 		is.Equal(exists, tc.wanted)
 	}
 }
 
-func TestGetAvailablePackageManager(t *testing.T) {
+func TestGetAvailableNPMClient(t *testing.T) {
 	tests := []struct {
-		npmClient string
+		npmClient NPMClient
 		wanted    bool
 	}{
-		{npmClient: "npm", wanted: true},
+		{npmClient: NPMClient{
+			Name:    "npm",
+			Version: "1",
+		}, wanted: true},
 	}
 
 	for _, tc := range tests {
 		is := is.New(t)
-		got := common.Contains(GetAvailableNPMClientList(), tc.npmClient)
+		installed := GetInstalledNPMClientList()
+		got := common.Contains(GetNPMClientNames(installed), tc.npmClient.Name)
 		is.Equal(got, tc.wanted)
 	}
 }

@@ -1,6 +1,7 @@
 {
 	"name": "{{ .ProjectName }}",
 	"version": "0.1.0",
+	"packageManager": "{{ .NPMClient }}",
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"clean": "rimraf build",
