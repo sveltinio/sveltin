@@ -254,7 +254,7 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [rss]: https://docs.sveltin.io/cli/generate-rss
 [server]: https://docs.sveltin.io/cli/server
 [prepare]: https://docs.sveltin.io/cli/prepare
-[prepare]: https://docs.sveltin.io/cli/update
+[update]: https://docs.sveltin.io/cli/update
 [build]: https://docs.sveltin.io/cli/build
 [preview]: https://docs.sveltin.io/cli/preview
 [contributing]: CONTRIBUTING.md
