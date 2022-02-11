@@ -4,7 +4,30 @@ Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
 Use of this source code is governed by Apache 2.0 license
 that can be found in the LICENSE file.
 */
-package packagejson
+package npmc
+
+import (
+	"strings"
+)
+
+type NPMClient struct {
+	Name    string
+	Version string
+}
+
+type NPMClientInfoStr string
+
+func (n NPMClient) ToString() string {
+	return strings.TrimSuffix(n.Name+"@"+n.Version, "\n")
+}
+
+func (s NPMClientInfoStr) ToNPMClient() NPMClient {
+	splitted := strings.Split(string(s), "@")
+	return NPMClient{
+		Name:    splitted[0],
+		Version: splitted[1],
+	}
+}
 
 type Script map[string]string
 type Engine map[string]string

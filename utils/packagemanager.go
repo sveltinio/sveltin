@@ -8,25 +8,18 @@ package utils
 
 import (
 	"os/exec"
-	"strings"
+
+	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/sveltinlib/npmc"
 )
 
-type NPMClient struct {
-	Name    string
-	Version string
-}
-
-func (n NPMClient) ToString() string {
-	return TrimmedSuffix(n.Name + "@" + n.Version)
-}
-
-func GetInstalledNPMClientList() []NPMClient {
+func GetInstalledNPMClientList() []npmc.NPMClient {
 	valid := []string{"npm", "yarn", "pnpm"}
-	npmClientList := []NPMClient{}
+	npmClientList := []npmc.NPMClient{}
 	for _, pm := range valid {
 		valid, version := GetNPMClientInfo(pm)
 		if valid {
-			a := NPMClient{
+			a := npmc.NPMClient{
 				Name:    pm,
 				Version: version,
 			}
@@ -36,24 +29,12 @@ func GetInstalledNPMClientList() []NPMClient {
 	return npmClientList
 }
 
-func GetNPMClientNames(items []NPMClient) []string {
+func GetNPMClientNames(items []npmc.NPMClient) []string {
 	npmClientNames := []string{}
 	for _, v := range items {
 		npmClientNames = append(npmClientNames, v.Name)
 	}
 	return npmClientNames
-}
-
-func GetNPMClientName(infoStr string) string {
-	return strings.Split(infoStr, "@")[0]
-}
-
-func GetNPMClient(infoStr string) NPMClient {
-	splitted := strings.Split(infoStr, "@")
-	return NPMClient{
-		Name:    splitted[0],
-		Version: splitted[1],
-	}
 }
 
 func isCommandAvailable(name string) bool {
@@ -72,8 +53,8 @@ func GetNPMClientInfo(name string) (bool, string) {
 	return true, string(out)
 }
 
-func filter(in []NPMClient, name string) NPMClient {
-	var out NPMClient
+func filter(in []npmc.NPMClient, name string) npmc.NPMClient {
+	var out npmc.NPMClient
 	for _, each := range in {
 		if each.Name == name {
 			out = each
@@ -82,6 +63,14 @@ func filter(in []NPMClient, name string) NPMClient {
 	return out
 }
 
-func GetSelectedNPMClient(in []NPMClient, name string) NPMClient {
+func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return filter(in, name)
+}
+
+func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) npmc.NPMClient {
+	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
+	CheckIfError(err)
+	pkgParsed := npmc.Parse(pkgFileContent)
+	pmInfoString := npmc.NPMClientInfoStr(pkgParsed.PackageManager)
+	return pmInfoString.ToNPMClient()
 }

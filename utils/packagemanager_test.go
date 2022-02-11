@@ -5,15 +5,16 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/sveltinlib/npmc"
 )
 
 func TestPackageManager(t *testing.T) {
 	tests := []struct {
-		npmClient NPMClient
+		npmClient npmc.NPMClient
 		wanted    bool
 	}{
 		{
-			npmClient: NPMClient{
+			npmClient: npmc.NPMClient{
 				Name:    "npm",
 				Version: "1",
 			},
@@ -29,10 +30,10 @@ func TestPackageManager(t *testing.T) {
 
 func TestGetAvailableNPMClient(t *testing.T) {
 	tests := []struct {
-		npmClient NPMClient
+		npmClient npmc.NPMClient
 		wanted    bool
 	}{
-		{npmClient: NPMClient{
+		{npmClient: npmc.NPMClient{
 			Name:    "npm",
 			Version: "1",
 		}, wanted: true},

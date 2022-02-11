@@ -9,11 +9,9 @@ package cmd
 import (
 	"path/filepath"
 
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/packagejson"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -30,11 +28,7 @@ It wraps svelte-kit defined commands to run the server`,
 
 func RunServerCmd(cmd *cobra.Command, args []string) {
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	pkgFileContent, err := afero.ReadFile(AppFs, pathToPkgFile)
-	utils.CheckIfError(err)
-	pkgParsed := packagejson.Parse(pkgFileContent)
-	pmInfoString := pkgParsed.PackageManager
-	npmClient := utils.GetNPMClient(pmInfoString)
+	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
 	// LOG TO STDOUT
 	printer := utils.PrinterContent{
@@ -43,7 +37,7 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	printer.SetContent("")
 	utils.PrettyPrinter(&printer).Print()
 
-	err = helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)
+	err := helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)
 	utils.CheckIfError(err)
 }
 

@@ -4,19 +4,20 @@ Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
 Use of this source code is governed by Apache 2.0 license
 that can be found in the LICENSE file.
 */
-package packagejson
+package npmc
 
 import (
 	"encoding/json"
+	"fmt"
 
-	"github.com/sveltinio/sveltin/utils"
+	jww "github.com/spf13/jwalterweatherman"
 )
 
 func Parse(content []byte) *PackageJson {
 	var pkgParsed PackageJson
-
 	err := json.Unmarshal(content, &pkgParsed)
-	utils.CheckIfError(err)
-
+	if err != nil {
+		jww.FATAL.Fatalf("\x1b[31;1m%s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+	}
 	return &pkgParsed
 }

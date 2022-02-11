@@ -9,11 +9,9 @@ package cmd
 import (
 	"path/filepath"
 
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/packagejson"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -33,11 +31,7 @@ It wraps (npm|pnpm|yarn) update.
 
 func RunUpdateCmd(cmd *cobra.Command, args []string) {
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	pkgFileContent, err := afero.ReadFile(AppFs, pathToPkgFile)
-	utils.CheckIfError(err)
-	pkgParsed := packagejson.Parse(pkgFileContent)
-	pmInfoString := pkgParsed.PackageManager
-	npmClient := utils.GetNPMClient(pmInfoString)
+	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
 	// LOG TO STDOUT
 	printer := utils.PrinterContent{
@@ -46,7 +40,7 @@ func RunUpdateCmd(cmd *cobra.Command, args []string) {
 	printer.SetContent("* Updating dependencies")
 	utils.PrettyPrinter(&printer).Print()
 
-	err = helpers.RunPMCommand(npmClient.Name, "update", "", nil, false)
+	err := helpers.RunPMCommand(npmClient.Name, "update", "", nil, false)
 	utils.CheckIfError(err)
 }
 

@@ -19,6 +19,7 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
 	"github.com/sveltinio/sveltin/sveltinlib/css"
+	"github.com/sveltinio/sveltin/sveltinlib/npmc"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -307,7 +308,7 @@ func makeThemeStructure(themeName string) *composer.Folder {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func getSelectedNPMClient() utils.NPMClient {
+func getSelectedNPMClient() npmc.NPMClient {
 	installedNPMClients := utils.GetInstalledNPMClientList()
 	npmClientNames := utils.GetNPMClientNames(installedNPMClients)
 	client, err := promptNPMClient(npmClientNames)

@@ -26,10 +26,6 @@ func Trimmed(txt string) string {
 	return strings.Trim(txt, "\"")
 }
 
-func TrimmedSuffix(txt string) string {
-	return strings.TrimSuffix(txt, "\n")
-}
-
 func ToValidName(txt string) string {
 	return strings.ReplaceAll(txt, "_", "-")
 }
