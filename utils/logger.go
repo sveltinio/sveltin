@@ -49,6 +49,10 @@ func (w LoggerWriter) SetStyle(style list.Style) {
 	w.content.SetStyle(style)
 }
 
+func (w LoggerWriter) SetBulletTriangleStyle() {
+	w.content.SetStyle(list.StyleBulletTriangle)
+}
+
 type PrinterBuffer struct {
 	buf bytes.Buffer
 }

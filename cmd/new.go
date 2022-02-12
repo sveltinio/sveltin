@@ -150,25 +150,37 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// SETUP THE CSS LIB
 	logger.AppendItem("Setup the CSS Lib")
-	tplData := &config.TemplateData{
+	tplData := config.TemplateData{
 		ProjectName: projectName,
 		NPMClient:   npmClient.ToString(),
 		PortNumber:  withPortNumber,
 		ThemeName:   themeName,
 	}
-	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, tplData)
+	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, &tplData)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	printer.SetContent(logger.Render())
 	utils.PrettyPrinter(&printer).Print()
+
+	// Next Steps
+	logger.Reset()
+	printer = utils.PrinterContent{
+		Title: "Next Steps",
+	}
+	logger.SetBulletTriangleStyle()
+	logger.AppendItem("1. cd " + projectName)
+	logger.AppendItem("2. sveltin prepare (or sveltin init, etc)")
+	logger.AppendItem("3. sveltin server")
+	printer.SetContent(logger.Render())
+	utils.PrettyPrinter(&printer).Print()
 }
 
 func newCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client.")
+	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
-	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
+	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The port to start the server on")
 }
 
 func init() {
@@ -324,8 +336,8 @@ func getSelectedNPMClient() npmc.NPMClient {
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, tplData *config.TemplateData) error {
-	switch name {
+func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+	switch cssLibName {
 	case VANILLACSS:
 		vanillaCSS := &css.VanillaCSS{}
 		c := css.CSSLib{
