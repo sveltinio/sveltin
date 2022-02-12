@@ -20,61 +20,56 @@ type Bulma struct {
 	CSSLib
 }
 
-func (f *Bulma) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
+func (f *Bulma) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	// Copying the package.json config file
 	sourceFile := resources.SveltinBulmaCSSThemeFS["package_json"]
-	tplConfig := helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
-		ProjectName: projectName,
-		NPMClient:   npmClientName,
-	})
+	tplConfig := helpers.NewTplConfig(sourceFile, nil, tplData)
 	content := helpers.ExecSveltinTpl(efs, tplConfig)
-	saveAs := filepath.Join(conf.GetProjectRoot(), projectName, "package.json")
+	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
 	// Copying __layout.svelte. file
 	sourceFile = resources.SveltinBulmaCSSThemeFS["layout"]
-	tplConfig = helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
-		Name: themeName,
-	})
+	tplConfig = helpers.NewTplConfig(sourceFile, nil, tplData)
 	content = helpers.ExecSveltinTpl(efs, tplConfig)
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
 	// Copying app.html file
 	sourceFile = resources.SveltinBulmaCSSThemeFS["app_html"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.html")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying app.scss file
 	sourceFile = resources.SveltinBulmaCSSThemeFS["app_css"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.scss")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.scss")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying variables.scss file
 	sourceFile = resources.SveltinBulmaCSSThemeFS["variables_scss"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "variables.scss")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying svelte.config.js file
 	sourceFile = resources.SveltinBulmaCSSThemeFS["svelte_config"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "svelte.config.js")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying Hero.svelte component
 	sourceFile = resources.SveltinBulmaCSSThemeFS["hero"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Hero.svelte")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Hero.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying Footer.svelte component
 	sourceFile = resources.SveltinBulmaCSSThemeFS["footer"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Footer.svelte")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Footer.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}

@@ -103,3 +103,14 @@ var SveltinBulmaCSSThemeFS = map[string]string{
 	"hero":           "internal/templates/themes/bulma/Hero.svelte",
 	"footer":         "internal/templates/themes/bulma/Footer.svelte",
 }
+
+var SveltinBootstrapCSSThemeFS = map[string]string{
+	"package_json":   "internal/templates/themes/bootstrap/package.json.gotxt",
+	"layout":         "internal/templates/themes/bootstrap/layout.svelte.gotxt",
+	"app_html":       "internal/templates/themes/bootstrap/app.html",
+	"app_css":        "internal/templates/themes/bootstrap/app.scss",
+	"variables_scss": "internal/templates/themes/bootstrap/variables.scss",
+	"svelte_config":  "internal/templates/themes/bootstrap/svelte.config.js",
+	"hero":           "internal/templates/themes/bootstrap/Hero.svelte",
+	"footer":         "internal/templates/themes/bootstrap/Footer.svelte",
+}

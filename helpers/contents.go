@@ -35,7 +35,7 @@ func PrepareContent(name string, resources map[string]string, templateId string,
 }
 
 func MakeFileContent(efs *embed.FS, content builder.Content) []byte {
-	tplConfig := NewTplConfig(content.PathToTplFile, content.Funcs, *content.TemplateData)
+	tplConfig := NewTplConfig(content.PathToTplFile, content.Funcs, content.TemplateData)
 	return ExecSveltinTpl(efs, tplConfig)
 }
 

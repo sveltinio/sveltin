@@ -27,8 +27,9 @@ import (
 //=============================================================================
 
 var (
-	withCSSLib    string
-	withThemeName string
+	withCSSLib     string
+	withThemeName  string
+	withPortNumber string
 )
 
 const (
@@ -149,7 +150,13 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// SETUP THE CSS LIB
 	logger.AppendItem("Setup the CSS Lib")
-	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, projectName, npmClient.ToString(), themeName)
+	tplData := &config.TemplateData{
+		ProjectName: projectName,
+		NPMClient:   npmClient.ToString(),
+		PortNumber:  withPortNumber,
+		ThemeName:   themeName,
+	}
+	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, tplData)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
@@ -161,6 +168,7 @@ func newCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client.")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
+	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
 }
 
 func init() {
@@ -316,32 +324,32 @@ func getSelectedNPMClient() npmc.NPMClient {
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
+func setupCSSLib(efs *embed.FS, fs afero.Fs, name string, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	switch name {
 	case VANILLACSS:
 		vanillaCSS := &css.VanillaCSS{}
 		c := css.CSSLib{
 			ICSSLib: vanillaCSS,
 		}
-		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
+		return c.Setup(efs, fs, conf, tplData)
 	case TAILWINDCSS:
 		tailwind := &css.TailwindCSS{}
 		c := css.CSSLib{
 			ICSSLib: tailwind,
 		}
-		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
+		return c.Setup(efs, fs, conf, tplData)
 	case BULMA:
 		bulma := &css.Bulma{}
 		c := css.CSSLib{
 			ICSSLib: bulma,
 		}
-		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
+		return c.Setup(efs, fs, conf, tplData)
 	case BOOTSTRAP:
 		boostrap := &css.Bootstrap{}
 		c := css.CSSLib{
 			ICSSLib: boostrap,
 		}
-		return c.Setup(efs, fs, conf, projectName, npmClientName, themeName)
+		return c.Setup(efs, fs, conf, tplData)
 	default:
 		return sveltinerr.NewOptionNotValidError()
 	}

@@ -25,7 +25,7 @@ func TestTemplates(t *testing.T) {
 	is.NoErr(err)
 
 	pathToTplFile := resources.SveltinProjectFS["theme_config"]
-	data := config.TemplateData{
+	data := &config.TemplateData{
 		Name: "white",
 	}
 
@@ -41,10 +41,10 @@ func TestExecSveltinTpl(t *testing.T) {
 
 	pathToTplFile := resources.SveltinProjectFS["theme_config"]
 	data := config.TemplateData{
-		Name: "white",
+		ThemeName: "white",
 	}
 
-	tplConfig := NewTplConfig(pathToTplFile, nil, data)
+	tplConfig := NewTplConfig(pathToTplFile, nil, &data)
 	retrievedContent := ExecSveltinTpl(&resources.SveltinFS, tplConfig)
 
 	validContent := `// theme.config.js file for your sveltin theme

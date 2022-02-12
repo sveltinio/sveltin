@@ -16,11 +16,11 @@ import (
 	"github.com/sveltinio/sveltin/config"
 )
 
-func NewTplConfig(tplPath string, funcs template.FuncMap, data config.TemplateData) *config.TplConfig {
+func NewTplConfig(tplPath string, funcs template.FuncMap, data *config.TemplateData) *config.TplConfig {
 	c := new(config.TplConfig)
 	c.PathToTplFile = tplPath
 	c.Funcs = funcs
-	c.Data = data
+	c.Data = *data
 	return c
 }
 

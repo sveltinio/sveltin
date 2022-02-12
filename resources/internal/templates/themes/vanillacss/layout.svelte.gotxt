@@ -7,7 +7,7 @@
 	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
 	import { GoogleFonts, GoogleAnalytics } from '@sveltinio/services';
 	import ScrollToTopButton from '@sveltinio/widgets/components/ScrollToTopButton.svelte';
-	import Footer from '$themes/{{ .Name }}/partials/Footer.svelte';
+	import Footer from '$themes/{{ .ThemeName }}/partials/Footer.svelte';
 
 	const sortedMenu = orderBy(menu, 'weight');
 	const gaPropertyID = userSettings.googleAnalytics.propertyID;

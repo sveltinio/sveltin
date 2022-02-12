@@ -20,67 +20,62 @@ type TailwindCSS struct {
 	CSSLib
 }
 
-func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClientName string, themeName string) error {
+func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	// Copying the package.json config file
 	sourceFile := resources.SveltinTailwindCSSThemeFS["package_json"]
-	tplConfig := helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
-		ProjectName: projectName,
-		NPMClient:   npmClientName,
-	})
+	tplConfig := helpers.NewTplConfig(sourceFile, nil, tplData)
 	content := helpers.ExecSveltinTpl(efs, tplConfig)
-	saveAs := filepath.Join(conf.GetProjectRoot(), projectName, "package.json")
+	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
 	// Copying __layout.svelte. file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["layout"]
-	tplConfig = helpers.NewTplConfig(sourceFile, nil, config.TemplateData{
-		Name: themeName,
-	})
+	tplConfig = helpers.NewTplConfig(sourceFile, nil, tplData)
 	content = helpers.ExecSveltinTpl(efs, tplConfig)
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
 	// Copying tailwindcss config file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["tailwind_css_config"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "tailwind.config.cjs")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "tailwind.config.cjs")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, false); err != nil {
 		return err
 	}
 	// Copying postcss config file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["postcss"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "postcss.config.cjs")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "postcss.config.cjs")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, false); err != nil {
 		return err
 	}
 	// Copying app.html file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["app_html"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.html")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying app.css file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["app_css"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "src", "app.css")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.css")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copyng Hero.svelte component
 	sourceFile = resources.SveltinTailwindCSSThemeFS["hero"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Hero.svelte")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Hero.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying svelte.config.js file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["svelte_config"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "svelte.config.js")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying Footer.svelte component
 	sourceFile = resources.SveltinTailwindCSSThemeFS["footer"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), projectName, "themes", themeName, "partials", "Footer.svelte")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Footer.svelte")
 	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}

@@ -9,11 +9,13 @@ package config
 type TemplateData struct {
 	ProjectName string
 	NPMClient   string
+	PortNumber  string
 	Name        string
 	Resource    string
 	Type        string
 	Config      *SveltinConfig
 	Menu        *MenuConfig
 	NoPage      *NoPage
+	ThemeName   string
 	Misc        string
 }

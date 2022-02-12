@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"packageManager": "{{ .NPMClient }}",
 	"scripts": {
-		"dev": "svelte-kit dev",
+		"dev": "svelte-kit dev --port {{ .PortNumber }}",
 		"clean": "rimraf build",
 		"build": "npm run clean && svelte-kit build",
 		"preview": "svelte-kit preview",
