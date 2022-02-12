@@ -45,6 +45,10 @@ func (w LoggerWriter) UnIndent() {
 	w.content.UnIndent()
 }
 
+func (w LoggerWriter) SetStyle(style list.Style) {
+	w.content.SetStyle(style)
+}
+
 type PrinterBuffer struct {
 	buf bytes.Buffer
 }
