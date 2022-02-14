@@ -23,16 +23,16 @@ type TailwindCSS struct {
 func (f *TailwindCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	// Copying the package.json config file
 	sourceFile := resources.SveltinTailwindCSSThemeFS["package_json"]
-	tplConfig := helpers.NewTplConfig(sourceFile, nil, tplData)
-	content := helpers.ExecSveltinTpl(efs, tplConfig)
+	template := helpers.BuildTemplate(sourceFile, nil, tplData)
+	content := template.Run(efs)
 	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
 	// Copying __layout.svelte. file
 	sourceFile = resources.SveltinTailwindCSSThemeFS["layout"]
-	tplConfig = helpers.NewTplConfig(sourceFile, nil, tplData)
-	content = helpers.ExecSveltinTpl(efs, tplConfig)
+	template = helpers.BuildTemplate(sourceFile, nil, tplData)
+	content = template.Run(efs)
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err

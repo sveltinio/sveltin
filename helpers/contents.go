@@ -35,8 +35,8 @@ func PrepareContent(name string, resources map[string]string, templateId string,
 }
 
 func MakeFileContent(efs *embed.FS, content builder.Content) []byte {
-	tplConfig := NewTplConfig(content.PathToTplFile, content.Funcs, content.TemplateData)
-	return ExecSveltinTpl(efs, tplConfig)
+	template := BuildTemplate(content.PathToTplFile, content.Funcs, content.TemplateData)
+	return template.Run(efs)
 }
 
 func WriteContentToDisk(fs afero.Fs, saveAs string, fileContent []byte) error {

@@ -29,7 +29,7 @@ func TestTemplates(t *testing.T) {
 		Name: "white",
 	}
 
-	tplConfig := NewTplConfig(pathToTplFile, nil, data)
+	tplConfig := BuildTemplate(pathToTplFile, nil, data)
 	is.Equal("internal/templates/themes/theme.config.js.gotxt", tplConfig.PathToTplFile)
 
 	var dummyFuncMap template.FuncMap
@@ -44,8 +44,8 @@ func TestExecSveltinTpl(t *testing.T) {
 		ThemeName: "white",
 	}
 
-	tplConfig := NewTplConfig(pathToTplFile, nil, &data)
-	retrievedContent := ExecSveltinTpl(&resources.SveltinFS, tplConfig)
+	tplConfig := BuildTemplate(pathToTplFile, nil, &data)
+	retrievedContent := tplConfig.Run(&resources.SveltinFS)
 
 	validContent := `// theme.config.js file for your sveltin theme
 const config = {
