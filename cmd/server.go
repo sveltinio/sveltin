@@ -31,12 +31,13 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	textLogger.SetTitle("Running Vite server")
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	utils.PrettyPrinter(textLogger).Print()
 
-	err := helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)
+	err = helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)
 	utils.CheckIfError(err)
 }
 

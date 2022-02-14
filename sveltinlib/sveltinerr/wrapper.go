@@ -18,7 +18,7 @@ type SveltinError struct {
 }
 
 func (e *SveltinError) Error() string {
-	return fmt.Sprintf("%s: %v", e.Message, e.Err)
+	return fmt.Sprintf("[%s] %v", e.Message, e.Err)
 }
 
 func newSveltinError(code int, err error, message string) error {
@@ -104,4 +104,14 @@ func NewExecSystemCommandError() error {
 func NewExecSystemCommandErrorWithMsg(err error) error {
 	errN := errors.New("cannot exec the system command. please, check it and its arguments: " + err.Error())
 	return newSveltinError(82, errN, "SVELTIN ExecSystemCommandError")
+}
+
+func NewPackageManagerKeyNotFoundOnPackageJSONFile() error {
+	errN := errors.New(`
+
+did not find the "packageManager" key in your package.json file
+
+[HINT]: add "packageManager": "<your_npm_client>@<version>" to it and run the command again
+`)
+	return newSveltinError(83, errN, "SVELTIN PackageManagerCommandNotValidError")
 }

@@ -38,10 +38,11 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	textLogger.SetTitle("Building Sveltin project")
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	utils.CheckIfError(err)
 
 	os.Setenv("VITE_PUBLIC_BASE_PATH", siteConfig.BaseURL)
-	err := helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
+	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT

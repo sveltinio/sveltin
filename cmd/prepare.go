@@ -35,12 +35,13 @@ func RunPrepareCmd(cmd *cobra.Command, args []string) {
 	textLogger.SetContent("* Getting dependencies")
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
 	utils.PrettyPrinter(textLogger).Print()
 
-	err := helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
+	err = helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
 	utils.CheckIfError(err)
 }
 

@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/sveltinlib/npmc"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func GetInstalledNPMClientList() []npmc.NPMClient {
@@ -67,10 +68,13 @@ func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return filter(in, name)
 }
 
-func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) npmc.NPMClient {
+func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) (npmc.NPMClient, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
 	CheckIfError(err)
 	pkgParsed := npmc.Parse(pkgFileContent)
-	pmInfoString := npmc.NPMClientInfoStr(pkgParsed.PackageManager)
-	return pmInfoString.ToNPMClient()
+	if pkgParsed.PackageManager != "" {
+		pmInfoString := npmc.NPMClientInfoStr(pkgParsed.PackageManager)
+		return pmInfoString.ToNPMClient(), nil
+	}
+	return npmc.NPMClient{}, sveltinerr.NewPackageManagerKeyNotFoundOnPackageJSONFile()
 }
