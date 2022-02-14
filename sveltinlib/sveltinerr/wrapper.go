@@ -111,7 +111,6 @@ func NewPackageManagerKeyNotFoundOnPackageJSONFile() error {
 
 did not find the "packageManager" key in your package.json file
 
-[HINT]: add "packageManager": "<your_npm_client>@<version>" to it and run the command again
-`)
+[HINT]: add "packageManager": "<your_npm_client>@<version>" to it and run the command again`)
 	return newSveltinError(83, errN, "SVELTIN PackageManagerCommandNotValidError")
 }
