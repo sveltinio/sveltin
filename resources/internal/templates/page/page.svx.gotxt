@@ -27,14 +27,26 @@ title: {{ .Name | ToTitle }}
 <JsonLdWebPage data={ {{ .Name | ToPageVariableName }}Page } />
 <JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ {{ .Name | ToPageVariableName }}Page.title} />
 
-<section class="hero">
-   	<div class="content">
-	  	<div class="wrapper">
-			<div class="subwrapper">
-				<div class="herotext">
-					<h1>This is the {title} page</h1>
-				</div>
-		 	</div>
-	  	</div>
+<!-- Page markup-->
+<section class="page">
+	<div class="content">
+		<div class="centered">
+			<h1>This is the {{ .Name | Capitalize }} page</h1>
+		</div>
 	</div>
 </section>
+
+<style>
+	.centered {
+		position: fixed;
+		top: 30%;
+		left: 40%;
+		margin-top: -50px;
+		margin-left: -100px;
+	}
+
+	.centered h1 {
+		font-size: 3rem;
+		line-height: 1;
+	}
+</style>
