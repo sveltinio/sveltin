@@ -30,15 +30,15 @@ It wraps (npm|pnpm|yarn) install.
 }
 
 func RunPrepareCmd(cmd *cobra.Command, args []string) {
+	textLogger.Reset()
+	textLogger.SetTitle("Prepare Sveltin project")
+	textLogger.SetContent("* Getting dependencies")
+
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
 	// LOG TO STDOUT
-	printer := utils.PrinterContent{
-		Title: "Prepare Sveltin project",
-	}
-	printer.SetContent("* Getting dependencies")
-	utils.PrettyPrinter(&printer).Print()
+	utils.PrettyPrinter(textLogger).Print()
 
 	err := helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
 	utils.CheckIfError(err)

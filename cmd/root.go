@@ -24,23 +24,8 @@ import (
 
 //=============================================================================
 
-var (
-	AppFs  = afero.NewOsFs()
-	logger = utils.NewLoggerWriter()
-)
-
-var (
-	npmClientName   string
-	YamlConfig      []byte
-	appTemplatesMap map[string]config.AppTemplate
-	pathMaker       pathmaker.SveltinPathMaker
-	conf            config.SveltinConfig
-	siteConfig      config.SiteConfig
-	fsManager       *fsm.SveltinFSManager
-)
-
 const (
-	CLI_VERSION       string = "0.2.14"
+	CLI_VERSION       string = "0.3.0"
 	SVELTEKIT_STARTER string = "starter"
 )
 
@@ -61,6 +46,22 @@ const (
 	INDEX         string = "index"
 	SLUG          string = "slug"
 	SETTINGS_FILE string = ".sveltin-settings.yaml"
+)
+
+var (
+	AppFs      = afero.NewOsFs()
+	YamlConfig []byte
+)
+
+var (
+	textLogger      = utils.NewTextLogger()
+	listLogger      = utils.NewListWriter()
+	npmClientName   string
+	appTemplatesMap map[string]config.AppTemplate
+	pathMaker       pathmaker.SveltinPathMaker
+	conf            config.SveltinConfig
+	siteConfig      config.SiteConfig
+	fsManager       *fsm.SveltinFSManager
 )
 
 //=============================================================================

@@ -15,55 +15,94 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 )
 
-type LoggerWriter struct {
+//=============================================================================
+
+type Logger interface {
+	SetTitle(text string)
+	GetTitle() string
+	SetContent(text string)
+	GetContent() string
+	Reset()
+}
+
+type TextLogger struct {
+	title   string
+	content string
+}
+
+func NewTextLogger() *TextLogger {
+	return &TextLogger{}
+}
+
+func (t *TextLogger) SetTitle(title string) {
+	t.title = title
+}
+
+func (t *TextLogger) GetTitle() string {
+	return t.title
+}
+
+func (t *TextLogger) SetContent(content string) {
+	t.content = content
+}
+
+func (t *TextLogger) GetContent() string {
+	return t.content
+}
+
+func (tl *TextLogger) Reset() {
+	tl.title = ""
+	tl.content = ""
+}
+
+//=============================================================================
+
+type ListWriter struct {
 	content list.Writer
 }
 
-func NewLoggerWriter() LoggerWriter {
-	return LoggerWriter{
+func NewListWriter() ListWriter {
+	return ListWriter{
 		content: list.NewWriter(),
 	}
 }
 
-func (w LoggerWriter) Reset() {
-	w.content.Reset()
+func (lw ListWriter) Reset() {
+	lw.content.Reset()
 }
 
-func (w LoggerWriter) Render() string {
-	return w.content.Render()
+func (lw ListWriter) Render() string {
+	return lw.content.Render()
 }
 
-func (w LoggerWriter) AppendItem(message string) {
-	w.content.AppendItem(message)
+func (lw ListWriter) AppendItem(message string) {
+	lw.content.AppendItem(message)
 }
 
-func (w LoggerWriter) Indent() {
-	w.content.Indent()
+func (lw ListWriter) Indent() {
+	lw.content.Indent()
 }
 
-func (w LoggerWriter) UnIndent() {
-	w.content.UnIndent()
+func (lw ListWriter) UnIndent() {
+	lw.content.UnIndent()
 }
 
-func (w LoggerWriter) SetStyle(style list.Style) {
-	w.content.SetStyle(style)
+func (lw ListWriter) SetStyle(style list.Style) {
+	lw.content.SetStyle(style)
 }
 
-func (w LoggerWriter) SetBulletTriangleStyle() {
-	w.content.SetStyle(list.StyleBulletTriangle)
+func (lw ListWriter) SetBulletTriangleStyle() {
+	lw.content.SetStyle(list.StyleBulletTriangle)
+}
+
+//=============================================================================
+
+type Printer interface {
+	Print()
 }
 
 type PrinterBuffer struct {
 	buf bytes.Buffer
-}
-
-type PrinterContent struct {
-	Title   string
-	content string
-}
-
-func (p *PrinterContent) SetContent(content string) {
-	p.content = content
 }
 
 func (pb PrinterBuffer) Print() {
@@ -74,14 +113,16 @@ func (pb PrinterBuffer) ToString() string {
 	return pb.buf.String()
 }
 
-func PrettyPrinter(pc *PrinterContent) PrinterBuffer {
-	var buffer bytes.Buffer
-	fmt.Fprintf(&buffer, "\n%s:\n", pc.Title)
+//=============================================================================
 
-	buffer.WriteString(strings.Repeat("-", len(pc.Title)+1))
+func PrettyPrinter(tl *TextLogger) PrinterBuffer {
+	var buffer bytes.Buffer
+	fmt.Fprintf(&buffer, "\n%s:\n", tl.GetTitle())
+
+	buffer.WriteString(strings.Repeat("-", len(tl.GetTitle())+1))
 	buffer.WriteString("\n")
-	if pc.content != "" {
-		for _, line := range strings.Split(pc.content, "\n") {
+	if tl.GetContent() != "" {
+		for _, line := range strings.Split(tl.GetContent(), "\n") {
 			fmt.Fprintf(&buffer, "%s\n", line)
 		}
 	}

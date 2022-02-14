@@ -29,15 +29,14 @@ It wraps sveltekit-preview command.`,
 }
 
 func RunPreviewCmd(cmd *cobra.Command, args []string) {
+	textLogger.Reset()
+	textLogger.SetTitle("Preview your Sveltin project")
+
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
 	// LOG TO STDOUT
-	printer := utils.PrinterContent{
-		Title: "Preview your Sveltin project",
-	}
-	printer.SetContent("")
-	utils.PrettyPrinter(&printer).Print()
+	utils.PrettyPrinter(textLogger).Print()
 
 	err := helpers.RunPMCommand(npmClient.Name, "preview", "", nil, false)
 	utils.CheckIfError(err)

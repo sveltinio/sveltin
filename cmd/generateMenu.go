@@ -31,25 +31,23 @@ It creates a 'menu.json' file into the 'config' folder to be used by Svelte comp
 }
 
 func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
-	logger.Reset()
-
-	printer := utils.PrinterContent{
-		Title: "The menu structure for your Sveltin project will be created ",
-	}
+	textLogger.Reset()
+	textLogger.SetTitle("The menu structure for your Sveltin project will be created")
 
 	projectFolder := fsManager.GetFolder(ROOT)
 
-	logger.AppendItem("Getting list of existing public pages")
+	listLogger.Reset()
+	listLogger.AppendItem("Getting list of existing public pages")
 	publicPages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	logger.AppendItem("Getting list of existing resources")
+	listLogger.AppendItem("Getting list of existing resources")
 	availableResources := helpers.GetAllResourcesWithContentName(AppFs, pathMaker.GetPathToExistingResources(), withContentFlag)
 
 	// GET FOLDER: config
 	configFolder := fsManager.GetFolder(CONFIG)
 
 	// ADD FILE: config/menu.js
-	logger.AppendItem("Generating menu.js.ts file")
+	listLogger.AppendItem("Generating menu.js.ts file")
 	menuFile := &composer.File{
 		Name:       "menu.js.ts",
 		TemplateId: "menu",
@@ -72,8 +70,8 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	printer.SetContent(logger.Render())
-	utils.PrettyPrinter(&printer).Print()
+	textLogger.SetContent(listLogger.Render())
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func menuCmdFlags(cmd *cobra.Command) {

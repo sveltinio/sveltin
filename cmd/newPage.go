@@ -47,14 +47,13 @@ This command allows you to select between a svelte component page and a markdown
 }
 
 func NewPageCmdRun(cmd *cobra.Command, args []string) {
-	logger.Reset()
+	textLogger.Reset()
+	listLogger.Reset()
 
 	pageName, err := getPageName(args)
 	utils.CheckIfError(err)
 
-	printer := utils.PrinterContent{
-		Title: `New "` + pageName + `" page added to your Sveltin project`,
-	}
+	textLogger.SetTitle(`New "` + pageName + `" page added to your Sveltin project`)
 
 	pageType, err := getPageType(pageType)
 	utils.CheckIfError(err)
@@ -79,8 +78,8 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	printer.SetContent(logger.Render())
-	utils.PrettyPrinter(&printer).Print()
+	textLogger.SetContent(listLogger.Render())
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func pageCmdFlags(cmd *cobra.Command) {

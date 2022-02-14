@@ -22,12 +22,11 @@ var generateCmd = &cobra.Command{
 	Long: resources.GetAsciiArt() + `
 Used to generate static files through its own subcommands`,
 	Run: func(cmd *cobra.Command, args []string) {
-		printer := utils.PrinterContent{
-			Title: "generate command called",
-		}
+		textLogger.Reset()
+		textLogger.SetTitle("generate command called")
+		textLogger.SetContent("Run 'sveltin generate -h'")
 		// LOG TO STDOUT
-		printer.SetContent("Run 'sveltin generate -h'")
-		utils.PrettyPrinter(&printer).Print()
+		utils.PrettyPrinter(textLogger).Print()
 	},
 }
 

@@ -30,15 +30,15 @@ It wraps (npm|pnpm|yarn) update.
 }
 
 func RunUpdateCmd(cmd *cobra.Command, args []string) {
+	textLogger.Reset()
+	textLogger.SetTitle("Update dependencies Sveltin project")
+	textLogger.SetContent("* Updating dependencies")
+
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
 	// LOG TO STDOUT
-	printer := utils.PrinterContent{
-		Title: "Update dependencies Sveltin project",
-	}
-	printer.SetContent("* Updating dependencies")
-	utils.PrettyPrinter(&printer).Print()
+	utils.PrettyPrinter(textLogger).Print()
 
 	err := helpers.RunPMCommand(npmClient.Name, "update", "", nil, false)
 	utils.CheckIfError(err)

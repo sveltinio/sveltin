@@ -27,15 +27,14 @@ It wraps svelte-kit defined commands to run the server`,
 }
 
 func RunServerCmd(cmd *cobra.Command, args []string) {
+	textLogger.Reset()
+	textLogger.SetTitle("Running Vite server")
+
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
 	// LOG TO STDOUT
-	printer := utils.PrinterContent{
-		Title: "Running Vite server",
-	}
-	printer.SetContent("")
-	utils.PrettyPrinter(&printer).Print()
+	utils.PrettyPrinter(textLogger).Print()
 
 	err := helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)
 	utils.CheckIfError(err)

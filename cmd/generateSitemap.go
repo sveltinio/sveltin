@@ -25,29 +25,27 @@ It creates a sitemap file for your Sveltin project.`,
 }
 
 func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
-	logger.Reset()
+	textLogger.Reset()
+	textLogger.SetTitle("A Sitemap will be created for your Sveltin project")
 
-	printer := utils.PrinterContent{
-		Title: "A Sitemap will be created for your Sveltin project",
-	}
-
-	logger.AppendItem("Getting list of existing public pages")
+	listLogger.Reset()
+	listLogger.AppendItem("Getting list of existing public pages")
 	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	logger.AppendItem("Getting list of existing resources")
+	listLogger.AppendItem("Getting list of existing resources")
 	existingResources := helpers.GetAllResources(AppFs, conf.GetContentPath())
 
-	logger.AppendItem("Getting list of all contents for the resources")
+	listLogger.AppendItem("Getting list of all contents for the resources")
 	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
 
-	logger.AppendItem("Getting list of all metadata for the resources")
+	listLogger.AppendItem("Getting list of all metadata for the resources")
 	metadata := helpers.GetResourceMetadataMap(AppFs, existingResources, conf.GetRoutesPath())
 
 	// GET FOLDER: static
 	staticFolder := fsManager.GetFolder(STATIC)
 
 	// NEW FILE: static/rss.xml
-	logger.AppendItem("Generating the sitemap.xml file")
+	listLogger.AppendItem("Generating the sitemap.xml file")
 	sitemapFile := fsManager.NewNoPage("sitemap", &siteConfig, existingResources, contents, metadata, pages)
 	staticFolder.Add(sitemapFile)
 
@@ -61,8 +59,8 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	printer.SetContent(logger.Render())
-	utils.PrettyPrinter(&printer).Print()
+	textLogger.SetContent(listLogger.Render())
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func init() {

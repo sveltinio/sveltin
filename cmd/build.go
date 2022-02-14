@@ -34,6 +34,9 @@ your production environment
 }
 
 func RunBuildCmd(cmd *cobra.Command, args []string) {
+	textLogger.Reset()
+	textLogger.SetTitle("Building Sveltin project")
+
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 
@@ -42,11 +45,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	printer := utils.PrinterContent{
-		Title: "Building Sveltin project",
-	}
-	printer.SetContent("")
-	utils.PrettyPrinter(&printer).Print()
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func init() {

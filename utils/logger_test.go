@@ -11,24 +11,22 @@ func TestLogger(t *testing.T) {
 
 	tc1 := "\ntest case 1:\n------------\n"
 
-	printer := PrinterContent{
-		Title: "test case 1",
-	}
-	printer.SetContent("")
-	is.Equal(tc1, PrettyPrinter(&printer).ToString())
+	textLogger := NewTextLogger()
+	textLogger.SetTitle("test case 1")
+	textLogger.SetContent("")
+	is.Equal(tc1, PrettyPrinter(textLogger).ToString())
 
-	logger := NewLoggerWriter()
+	logger := NewListWriter()
 	logger.Reset()
 	logger.AppendItem("first")
 	logger.AppendItem("second")
 
 	tc2 := "\ntest case 2:\n------------\n* first\n* second\n"
 
-	printer = PrinterContent{
-		Title: "test case 2",
-	}
-	printer.SetContent(logger.Render())
-	is.Equal(tc2, PrettyPrinter(&printer).ToString())
+	textLogger.Reset()
+	textLogger.SetTitle("test case 2")
+	textLogger.SetContent(logger.Render())
+	is.Equal(tc2, PrettyPrinter(textLogger).ToString())
 
 	logger.Reset()
 	logger.AppendItem("first")
@@ -37,11 +35,10 @@ func TestLogger(t *testing.T) {
 	logger.AppendItem("subItem")
 	logger.UnIndent()
 
-	printer = PrinterContent{
-		Title: "test case 3",
-	}
-	printer.SetContent(logger.Render())
+	textLogger.Reset()
+	textLogger.SetTitle("test case 3")
+	textLogger.SetContent(logger.Render())
 
 	tc4 := "\ntest case 3:\n------------\n* first\n* second\n  * subItem\n"
-	is.Equal(tc4, PrettyPrinter(&printer).ToString())
+	is.Equal(tc4, PrettyPrinter(textLogger).ToString())
 }

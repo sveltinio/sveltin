@@ -63,14 +63,12 @@ As result:
 }
 
 func RunNewContentCmd(cmd *cobra.Command, args []string) {
-	logger.Reset()
+	textLogger.Reset()
 
 	contentData, err := getContentName(AppFs, args, &conf)
 	utils.CheckIfError(err)
 
-	printer := utils.PrinterContent{
-		Title: `New "` + contentData.Name + `" will be added to your Sveltin project`,
-	}
+	textLogger.SetTitle(`New "` + contentData.Name + `" will be added to your Sveltin project`)
 
 	// GET FOLDER: content
 	contentFolder := fsManager.GetFolder(CONTENT)
@@ -104,8 +102,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	printer.SetContent(logger.Render())
-	utils.PrettyPrinter(&printer).Print()
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func contentCmdFlags(cmd *cobra.Command) {

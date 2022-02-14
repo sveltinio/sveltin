@@ -11,7 +11,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
@@ -48,11 +47,10 @@ Whatever you enter in the front-matter of your markdown content for which you wa
 }
 
 func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
-	logger.Reset()
+	textLogger.Reset()
+	listLogger.Reset()
 
-	printer := utils.PrinterContent{
-		Title: "New metadata folder structure is going to be created:",
-	}
+	textLogger.SetTitle("New metadata folder structure is going to be created:")
 
 	mdName, err := promptMetadataName(args)
 	utils.CheckIfError(err)
@@ -67,7 +65,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceMetadataAPIFolder := composer.NewFolder(mdName)
 
 	// NEW FILE: groupedBy.json.ts
-	logger.AppendItem("Creating an API endpoint for the metadata")
+	listLogger.AppendItem("Creating an API endpoint for the metadata")
 	resourceMetadataAPIFile := &composer.File{
 		Name:       conf.GetMetadataAPIFilename(),
 		TemplateId: API,
@@ -89,7 +87,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	apiFolder.Add(resourceAPIFolder)
 
 	// NEW FILE: <metadata_name>.js file into src/lib folder
-	logger.AppendItem("Creating a lib file for the metadata")
+	listLogger.AppendItem("Creating a lib file for the metadata")
 	libFile := &composer.File{
 		Name:       pathMaker.GetResourceLibFilename(mdName),
 		TemplateId: LIB,
@@ -112,7 +110,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceMedatadaRoutesFolder := composer.NewFolder(mdName)
 
 	// NEW FILE: <resource_name>/<metadata_name>/index.svelte
-	logger.AppendItem("Creating an index.svelte component for the metadata")
+	listLogger.AppendItem("Creating an index.svelte component for the metadata")
 	for _, item := range []string{INDEX, SLUG} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
@@ -147,11 +145,14 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	// LOG TO STDOUT
-	printer.SetContent(logger.Render())
-	utils.PrettyPrinter(&printer).Print()
-	jww.FEEDBACK.Println("Your metadata is ready to be used. Ensure your markdown frontmatter consider it.")
+	textLogger.SetContent(listLogger.Render())
+	utils.PrettyPrinter(textLogger).Print()
 
+	// NEXT STEPS
+	textLogger.Reset()
+	textLogger.SetTitle("Next Steps")
+	textLogger.SetContent(common.HelperTextNewMetadata(mdName))
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {

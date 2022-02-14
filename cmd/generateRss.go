@@ -27,26 +27,24 @@ Do you wish to have an RSS feed for your content?
 }
 
 func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
-	logger.Reset()
+	textLogger.Reset()
+	textLogger.SetTitle("An RSS feed file will be created for your Sveltin project")
 
-	printer := utils.PrinterContent{
-		Title: "An RSS feed file will be created for your Sveltin project",
-	}
-
-	logger.AppendItem("Getting all existing public pages")
+	listLogger.Reset()
+	listLogger.AppendItem("Getting all existing public pages")
 	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	logger.AppendItem("Getting all existing resources")
+	listLogger.AppendItem("Getting all existing resources")
 	existingResources := helpers.GetAllResources(AppFs, pathMaker.GetPathToExistingResources())
 
-	logger.AppendItem("Getting all contents for the resources")
+	listLogger.AppendItem("Getting all contents for the resources")
 	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
 
 	// GET FOLDER: static
 	staticFolder := fsManager.GetFolder(STATIC)
 
 	// NEW FILE: static/rss.xml
-	logger.AppendItem("Generating the rss.xml file")
+	listLogger.AppendItem("Generating the rss.xml file")
 	rssFile := fsManager.NewNoPage("rss", &siteConfig, existingResources, contents, nil, pages)
 	staticFolder.Add(rssFile)
 
@@ -60,9 +58,8 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	utils.CheckIfError(err)
 
 	// LOG TO STDOUT
-	// LOG TO STDOUT
-	printer.SetContent(logger.Render())
-	utils.PrettyPrinter(&printer).Print()
+	textLogger.SetContent(listLogger.Render())
+	utils.PrettyPrinter(textLogger).Print()
 }
 
 func init() {
