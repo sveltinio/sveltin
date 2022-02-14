@@ -151,7 +151,7 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(11, re.Code)
-		is.Equal("SVELTIN FileNotFoundError: please, check the file path", re.Error())
+		is.Equal("[SVELTIN FileNotFoundError] please, check the file path", re.Error())
 
 	}
 

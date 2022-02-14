@@ -26,7 +26,7 @@ func TestErrors(t *testing.T) {
 	re = errVar.(*SveltinError)
 	is.Equal(12, re.Code)
 	is.Equal("SVELTIN DirInsteadOfFileError", re.Message)
-	is.Equal("SVELTIN DirInsteadOfFileError: please, check the file path. It seems to be a directory, not a file", re.Error())
+	is.Equal("[SVELTIN DirInsteadOfFileError] please, check the file path. It seems to be a directory, not a file", re.Error())
 
 	errVar = NewDirNotFoundError()
 	re = errVar.(*SveltinError)
