@@ -115,7 +115,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 		Name:       "index.svelte",
 		TemplateId: "index",
 		TemplateData: &config.TemplateData{
-			Name: themeName,
+			ThemeName: themeName,
 		},
 	}
 	// ADD src/routes folder to the project
