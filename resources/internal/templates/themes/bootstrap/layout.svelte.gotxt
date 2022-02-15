@@ -1,0 +1,33 @@
+<script lang="ts">
+	import '../app.scss';
+	import { website } from '$config/website.js';
+	import { userSettings } from '$config/externals.js';
+	import { menu } from '$config/menu.js';
+	import orderBy from 'lodash-es/orderBy.js';
+	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
+	import { GoogleFonts, GoogleAnalytics } from '@sveltinio/services';
+	import ScrollToTopButton from '@sveltinio/widgets/components/ScrollToTopButton.svelte';
+	import Footer from '$themes/sbootra_theme/partials/Footer.svelte';
+
+	const sortedMenu = orderBy(menu, 'weight');
+	const gaPropertyID = userSettings.googleAnalytics.propertyID;
+</script>
+
+<JsonLdWebSite websiteData={website} />
+<JsonLdSiteNavigationElements websiteData={website} menuData={sortedMenu} />
+
+<svelte:head>
+	<GoogleFonts fonts={userSettings.googleFonts} />
+</svelte:head>
+
+{#if gaPropertyID != ''}
+	<GoogleAnalytics enabled={true} trackingId={gaPropertyID} />
+{/if}
+
+<div class="w-full min-vh-100 d-flex flex-column justify-content-center">
+	<main class="flex-grow-1">
+		<slot />
+	</main>
+	<Footer websiteData={website} />
+</div>
+<ScrollToTopButton />

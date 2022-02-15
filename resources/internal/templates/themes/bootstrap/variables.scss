@@ -1,0 +1,261 @@
+/* Variables and mixins declared here will be available in all other SCSS files */
+@import 'bootstrap/scss/functions'; /* Override Bootstrap's variables here */
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/utilities';
+
+/* additional colours */
+$dark: #2c2c35 /*haiti*/;
+$deep-dark: #1e2028 /* pearl */;
+$color-text-base: #464a5d /*river*/;
+$color-text-muted: #a0a1b2 /* santa */;
+$color-text-accent: #0b7599 /* cege */;
+
+$spacer: 1rem;
+$spacers: (
+	0: 0,
+	'0_5': $spacer * 0.125,
+	1: $spacer * 0.25,
+	'1_5': $spacer * 0.375,
+	2: $spacer * 0.5,
+	'2_5': $spacer * 0.625,
+	3: $spacer * 0.75,
+	4: $spacer,
+	5: $spacer * 1.25,
+	6: $spacer * 1.5,
+	7: $spacer * 1.75,
+	8: $spacer * 2,
+	9: $spacer * 2.25,
+	10: $spacer * 2.5,
+	11: $spacer * 2.75,
+	12: $spacer * 3,
+	14: $spacer * 3.5,
+	16: $spacer * 4,
+	20: $spacer * 5,
+	24: $spacer * 6,
+	28: $spacer * 7,
+	32: $spacer * 8,
+	36: $spacer * 9,
+	40: $spacer * 10,
+	44: $spacer * 11,
+	48: $spacer * 12,
+	52: $spacer * 13,
+	56: $spacer * 14,
+	60: $spacer * 15,
+	64: $spacer * 16,
+	72: $spacer * 18,
+	80: $spacer * 20,
+	96: $spacer * 24,
+);
+
+$sizes: (
+	'xxs': 18rem,
+	'xs': 20rem,
+	'sm': 24rem,
+	'md': 28rem,
+	'lg': 32rem,
+	'xl': 36rem,
+	'2xl': 42rem,
+	'3xl': 48rem,
+	'4xl': 56rem,
+	'5xl': 64rem,
+	'6xl': 72rem,
+	'7xl': 80rem,
+	'full': 100%,
+	'100': 100%,
+);
+
+$utilities: map-merge(
+	$utilities,
+	(
+		'margin':
+			map-merge(
+				map-get($utilities, 'margin'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'margin-x':
+			map-merge(
+				map-get($utilities, 'margin-x'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin-x'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'margin-y':
+			map-merge(
+				map-get($utilities, 'margin-y'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin-y'), 'values'),
+							(($spacers))
+						),
+				)
+			),
+		'margin-top':
+			map-merge(
+				map-get($utilities, 'margin-top'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin-top'), 'values'),
+							(($spacers))
+						),
+				)
+			),
+		'margin-end':
+			map-merge(
+				map-get($utilities, 'margin-end'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin-end'), 'values'),
+							(($spacers))
+						),
+				)
+			),
+		'margin-bottom':
+			map-merge(
+				map-get($utilities, 'margin-bottom'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin-bottom'), 'values'),
+							(($spacers))
+						),
+				)
+			),
+		'margin-start':
+			map-merge(
+				map-get($utilities, 'margin-start'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'margin-start'), 'values'),
+							(($spacers))
+						),
+				)
+			),
+		'padding':
+			map-merge(
+				map-get($utilities, 'padding'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'padding-x':
+			map-merge(
+				map-get($utilities, 'padding-x'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding-x'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'padding-y':
+			map-merge(
+				map-get($utilities, 'padding-y'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding-y'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'padding-top':
+			map-merge(
+				map-get($utilities, 'padding-top'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding-top'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'padding-end':
+			map-merge(
+				map-get($utilities, 'padding-end'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding-end'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'padding-bottom':
+			map-merge(
+				map-get($utilities, 'padding-bottom'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding-bottom'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'padding-start':
+			map-merge(
+				map-get($utilities, 'padding-start'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'padding-start'), 'values'),
+							($spacers)
+						),
+				)
+			),
+		'width':
+			map-merge(
+				map-get($utilities, 'width'),
+				(
+					values:
+						map-merge(map-get(map-get($utilities, 'width'), 'values'), ($sizes)),
+				)
+			),
+		'max-width':
+			map-merge(
+				map-get($utilities, 'max-width'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'max-width'), 'values'),
+							($sizes)
+						),
+				)
+			),
+		'color':
+			map-merge(
+				map-get($utilities, 'color'),
+				(
+					values:
+						map-merge(
+							map-get(map-get($utilities, 'color'), 'values'),
+							(
+								'teal': $color-text-accent,
+								'muted': $color-text-muted,
+								'dark': $dark,
+							)
+						),
+				)
+			),
+	)
+);
+
+@import 'bootstrap/scss/mixins';
