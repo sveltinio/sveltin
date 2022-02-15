@@ -114,3 +114,14 @@ var SveltinBootstrapCSSThemeFS = map[string]string{
 	"hero":           "internal/templates/themes/bootstrap/Hero.svelte",
 	"footer":         "internal/templates/themes/bootstrap/Footer.svelte",
 }
+
+var SveltinSCSSThemeFS = map[string]string{
+	"package_json":   "internal/templates/themes/scss/package.json.gotxt",
+	"layout":         "internal/templates/themes/scss/layout.svelte.gotxt",
+	"app_html":       "internal/templates/themes/scss/app.html",
+	"app_css":        "internal/templates/themes/scss/app.scss",
+	"variables_scss": "internal/templates/themes/scss/variables.scss",
+	"svelte_config":  "internal/templates/themes/scss/svelte.config.js",
+	"hero":           "internal/templates/themes/scss/Hero.svelte",
+	"footer":         "internal/templates/themes/scss/Footer.svelte",
+}

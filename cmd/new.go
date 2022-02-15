@@ -37,6 +37,7 @@ const (
 	TAILWINDCSS string = "tailwindcss"
 	BULMA       string = "bulma"
 	BOOTSTRAP   string = "bootstrap"
+	SCSS        string = "scss"
 )
 
 const (
@@ -172,7 +173,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 func newCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap")
+	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap, scss")
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The port to start the server on")
 }
 
@@ -204,7 +205,7 @@ func promptProjectName(inputs []string) (string, error) {
 
 func promptCSSLibName(cssLibName string) (string, error) {
 	var css string
-	valid := []string{VANILLACSS, TAILWINDCSS, BULMA, BOOTSTRAP}
+	valid := []string{VANILLACSS, TAILWINDCSS, BULMA, BOOTSTRAP, SCSS}
 	switch nameLenght := len(cssLibName); {
 	case nameLenght == 0:
 		cssPromptContent := config.PromptContent{
@@ -353,6 +354,12 @@ func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, conf *config.Sve
 		boostrap := &css.Bootstrap{}
 		c := css.CSSLib{
 			ICSSLib: boostrap,
+		}
+		return c.Setup(efs, fs, conf, tplData)
+	case SCSS:
+		scss := &css.Scss{}
+		c := css.CSSLib{
+			ICSSLib: scss,
 		}
 		return c.Setup(efs, fs, conf, tplData)
 	default:
