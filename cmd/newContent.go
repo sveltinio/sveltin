@@ -42,12 +42,12 @@ var newContentCmd = &cobra.Command{
 	Aliases: []string{"c"},
 	Short:   "Create a new content for existing resource",
 	Long: resources.GetAsciiArt() + `
-Create a new markdown file for your content.
+Create a new markdown file for your content and a folder to store the statics used by the content itself.
 
 New file can contain just the frontmatter or a sample content.
 Use the --template flag to select the right one to you. Valid options: blank or sample
 
-**Note**: This command has to be used after you create a resource for the content.
+**Note**: This command must be used after you create a resource for the content.
 
 Example:
 
@@ -56,8 +56,9 @@ Example:
 
 As result:
 
-- a new "my-first-post" folder within "content/posts" is created.
+- a new "my-first-post" folder within "content/posts" is created
 - an index.svx file is placed there
+- a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
 `,
 	Run: RunNewContentCmd,
 }
