@@ -38,7 +38,7 @@ Sveltin is a simple, quick and powerful CLI to:
 
 Sveltin provides:
 
-- Out-of-the-box support for vanilla CSS, TailwindCSS, Bulma, Bootstrap and SCSS
+- Out-of-the-box support for vanilla CSS, Sass/SCSS, TailwindCSS, Bulma and Bootstrap
 - Ready to use Svelte components
 
 ## :rocket: Quick Start
