@@ -9,7 +9,7 @@
 - chore: **next steps** texts added to some commands
 - refactor: go templates execution functions
 - refactor: logger and pretty printer
-- breaking: `--flag` on `prepare` cmd removed. `prepare` now install the dependencies from `package.json` file only
+- breaking: `--update` flag on `prepare` cmd removed. `prepare` now install the dependencies from `package.json` file only
 - breaking: npmClient handling. It is now project specific and make uses of the packageManager key from `package.json`.
 - feat: `update` cmd added to update all the dependecies from `package.json` file
 - feat: `--port` flag added to `new` cmd to set the port to start the server on
