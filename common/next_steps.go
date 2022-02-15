@@ -3,7 +3,7 @@ package common
 func HelperTextNewProject(projectName string) string {
 	return `
    1. cd ` + projectName + `
-   2. sveltin prepare (or sveltin init, etc)")
+   2. sveltin prepare (or sveltin init, etc)
    3. sveltin server
 
 To close the dev server, hit Ctrl-C
