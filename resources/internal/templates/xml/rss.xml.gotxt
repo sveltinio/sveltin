@@ -18,13 +18,13 @@
 	</url>
 	{{ range $resource := .NoPage.Items.Resources }}
 	<url>
-		<loc>{{ $baseURL }}/{{ $resource }}</loc>
+		<loc>{{ $baseURL }}/{{ $resource }}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>
 		{{ range $content := index $contentValues $resource }}
 	<url>
-		<loc>{{ $baseURL }}/{{ $resource }}/{{ $content }}</loc>
+		<loc>{{ $baseURL }}/{{ $resource }}/{{ $content }}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>

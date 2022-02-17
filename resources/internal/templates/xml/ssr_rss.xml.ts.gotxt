@@ -42,7 +42,7 @@ const sitemap = ({{ StringsJoin .Resources ", " }}) => `<?xml version="1.0" enco
 	${ {{ $res }}
 		.map((item) => `
 	<url>
-		<loc>{{ $baseURL }}/{{ $res }}/${item.slug}</loc>
+		<loc>{{ $baseURL }}/{{ $res }}/${item.slug}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>

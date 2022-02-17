@@ -44,7 +44,7 @@ const sitemap = ({{ StringsJoin .Resources ", " }}{{if (gt $numOfResources 0) }}
 	${ pages
 		.map((item) => `
 	<url>
-		<loc>{{ $baseURL }}/${item}</loc>
+		<loc>{{ $baseURL }}/${item}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>
@@ -54,7 +54,7 @@ const sitemap = ({{ StringsJoin .Resources ", " }}{{if (gt $numOfResources 0) }}
 	${ {{ $res }}
 		.map((item) => `
 	<url>
-		<loc>{{ $baseURL }}/{{ $res }}/${item.slug}</loc>
+		<loc>{{ $baseURL }}/{{ $res }}/${item.slug}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>
@@ -62,7 +62,7 @@ const sitemap = ({{ StringsJoin .Resources ", " }}{{if (gt $numOfResources 0) }}
 		).join('')}
 		{{ range $m := index $metadataValues $res }}
 	<url>
-		<loc>{{ $baseURL }}/{{ $res }}/{{ $m }}</loc>
+		<loc>{{ $baseURL }}/{{ $res }}/{{ $m }}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>
