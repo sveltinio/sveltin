@@ -25,7 +25,7 @@ import (
 //=============================================================================
 
 const (
-	CLI_VERSION       string = "0.3.0"
+	CLI_VERSION       string = "0.3.1"
 	SVELTEKIT_STARTER string = "starter"
 )
 

@@ -1,5 +1,12 @@
 # sveltin
 
+## 0.3.1
+
+### Patch Changes
+
+- fix: Routing in app built by adapter-static and next.265 [#3801](https://github.com/sveltejs/kit/pull/3801)
+- fix: .env file templates with server port number
+
 ## 0.3.0
 
 ### Minor Changes
