@@ -135,7 +135,12 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// NEW FILES: .env.development and env.production
 	listLogger.AppendItem("Adding 'dotenv' files")
 	for _, item := range []string{DOTENV_DEV, DOTENV_PROD} {
-		f := fsManager.NewDotEnvFile(projectName, item)
+		dotEnvTplData := &config.TemplateData{
+			Name:       item,
+			BaseURL:    "http://localhost",
+			PortNumber: withPortNumber,
+		}
+		f := fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 		projectFolder.Add(f)
 	}
 

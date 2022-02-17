@@ -99,14 +99,11 @@ func (s *SveltinFSManager) NewConfigFile(projectName string, name string, cliVer
 	}
 }
 
-func (s *SveltinFSManager) NewDotEnvFile(projectName string, name string) *composer.File {
+func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.TemplateData) *composer.File {
 	return &composer.File{
-		Name:       name,
-		TemplateId: "dotenv",
-		TemplateData: &config.TemplateData{
-			Name: name,
-			Misc: "http://localhost:3000",
-		},
+		Name:         tplData.Name,
+		TemplateId:   "dotenv",
+		TemplateData: tplData,
 	}
 }
 

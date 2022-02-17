@@ -9,6 +9,7 @@ package config
 type TemplateData struct {
 	ProjectName string
 	NPMClient   string
+	BaseURL     string
 	PortNumber  string
 	Name        string
 	Resource    string
