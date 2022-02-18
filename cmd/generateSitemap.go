@@ -20,7 +20,10 @@ var generateSitemapCmd = &cobra.Command{
 	Use:   "sitemap",
 	Short: "Generate a sitemap.xml file for your Sveltin project",
 	Long: resources.GetAsciiArt() + `
-It creates a sitemap file for your Sveltin project.`,
+It creates a sitemap file for your website project.
+
+It makes use of the .env.production file to reflect the base url for your website.
+`,
 	Run: RunGenerateSitemapCmd,
 }
 

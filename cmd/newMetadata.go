@@ -40,9 +40,11 @@ Command to add new metadata from your content to an existing resource.
 What is a "metadata" for Sveltin?
 Whatever you enter in the front-matter of your markdown content for which you want content grouped by it.
 
-- 1:1 relationship is the use for metadata type "single" (E.g. posts by category)
-- 1:many relationship is the use for metadata type "list" (E.g. posts by tags)
-	`,
+Types:
+
+- single: 1:1 relationship (e.g. category)
+- list: 1:many relationship (e.g. tags)
+`,
 	Run: RunNewMetadataCmd,
 }
 
@@ -198,7 +200,7 @@ func promptMetadataName(inputs []string) (string, error) {
 	case numOfArgs < 1:
 		metadataNamePromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide a name for the metadata.",
-			Label:    "What's the name of the metadata to be added?",
+			Label:    "What's the metadata name?",
 		}
 		name = common.PromptGetInput(metadataNamePromptContent)
 		return name, nil

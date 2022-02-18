@@ -56,7 +56,7 @@ var newCmd = &cobra.Command{
 	Args:    cobra.RangeArgs(0, 3),
 	Short:   "Command to create projects, resources, contents, pages, metadata, theme",
 	Long: resources.GetAsciiArt() + `
-This command creates customized resources like blog posts, a new theme for your website, new page etc. depending on the subcommand used with it.
+This command creates projects, resources (e.g. blog posts), pagee, content, metadata etc. depending on the subcommand used with it.
 
 Examples:
 
@@ -210,7 +210,7 @@ func promptProjectName(inputs []string) (string, error) {
 
 func promptCSSLibName(cssLibName string) (string, error) {
 	var css string
-	valid := []string{VANILLACSS, TAILWINDCSS, BULMA, BOOTSTRAP, SCSS}
+	valid := []string{VANILLACSS, SCSS, TAILWINDCSS, BULMA, BOOTSTRAP}
 	switch nameLenght := len(cssLibName); {
 	case nameLenght == 0:
 		cssPromptContent := config.PromptContent{
@@ -343,6 +343,12 @@ func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, conf *config.Sve
 			ICSSLib: vanillaCSS,
 		}
 		return c.Setup(efs, fs, conf, tplData)
+	case SCSS:
+		scss := &css.Scss{}
+		c := css.CSSLib{
+			ICSSLib: scss,
+		}
+		return c.Setup(efs, fs, conf, tplData)
 	case TAILWINDCSS:
 		tailwind := &css.TailwindCSS{}
 		c := css.CSSLib{
@@ -359,12 +365,6 @@ func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, conf *config.Sve
 		boostrap := &css.Bootstrap{}
 		c := css.CSSLib{
 			ICSSLib: boostrap,
-		}
-		return c.Setup(efs, fs, conf, tplData)
-	case SCSS:
-		scss := &css.Scss{}
-		c := css.CSSLib{
-			ICSSLib: scss,
 		}
 		return c.Setup(efs, fs, conf, tplData)
 	default:

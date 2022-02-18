@@ -20,7 +20,10 @@ var generateCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Command to generate static files (sitemap, rss, menu)",
 	Long: resources.GetAsciiArt() + `
-Used to generate static files through its own subcommands`,
+Used to generate static files through its own subcommands.
+
+Run 'sveltin generate -h' for further details.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		textLogger.Reset()
 		textLogger.SetTitle("generate command called")

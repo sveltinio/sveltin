@@ -154,8 +154,8 @@ func promptResourceName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		resourceNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for your resource.",
-			Label:    "What's the name of your resource?",
+			ErrorMsg: "Please, provide a name for the resource.",
+			Label:    "What's the resource name? (e.g. posts, portfolio ...)",
 		}
 		name = common.PromptGetInput(resourceNamePromptContent)
 		return name, nil

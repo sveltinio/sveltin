@@ -98,8 +98,8 @@ func getPageName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		pageNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for your page.",
-			Label:    "What's the name of your page?",
+			ErrorMsg: "Please, provide a name for the page.",
+			Label:    "What's the page name?",
 		}
 		name = common.PromptGetInput(pageNamePromptContent)
 		return utils.ToValidName(name), nil
@@ -119,7 +119,7 @@ func getPageType(pageTypeFlag string) (string, error) {
 	case nameLenght == 0:
 		pagePromptContent := config.PromptContent{
 			ErrorMsg: "Please, select a type for your page",
-			Label:    "What's the page type you prefer?",
+			Label:    "What's the page type?",
 		}
 		page = common.PromptGetSelect(valid, pagePromptContent)
 		return page, nil

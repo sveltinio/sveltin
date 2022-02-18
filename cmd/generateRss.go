@@ -20,9 +20,10 @@ var generateRssCmd = &cobra.Command{
 	Use:   "rss",
 	Short: "Generate a rss.xml file for your Sveltin project",
 	Long: resources.GetAsciiArt() + `
-Do you wish to have an RSS feed for your content?
+It creates an rss file for your website.
 
-	The "generate rss" command generates it for you.`,
+It makes use of the .env.production file to reflect the base url for your website.
+`,
 	Run: RunGenerateRSSCmd,
 }
 
