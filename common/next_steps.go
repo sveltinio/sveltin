@@ -21,7 +21,7 @@ Visit the Quick Start guide at https://docs.sveltin.io/quick-start
 func HelperTextNewResource(resourceName string) string {
 	placeHolderText := `Your resource is ready to be used. Start by adding content to it.
 
-Eg: sveltin new content %s /getting-started
+Eg: sveltin new content %s/getting-started
 `
 	return fmt.Sprintf(placeHolderText, resourceName)
 }
