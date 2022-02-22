@@ -22,7 +22,7 @@ var prepareCmd = &cobra.Command{
 	Aliases: []string{"i", "install", "init"},
 	Short:   "Get all the dependencies from the `package.json` file",
 	Long: resources.GetAsciiArt() + `
-Initialize the Sveltin project getting all depencencies from the package.json file.
+Initialize the Sveltin project getting all dependencies from the package.json file.
 
 It wraps (npm|pnpm|yarn) install.
 `,

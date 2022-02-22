@@ -22,7 +22,7 @@ var updateCmd = &cobra.Command{
 	Aliases: []string{"u"},
 	Short:   "Update the dependencies from the `package.json` file",
 	Long: resources.GetAsciiArt() + `
-Update all depencencies from the package.json file.
+Update all dependencies from the package.json file.
 
 It wraps (npm|pnpm|yarn) update.
 `,
