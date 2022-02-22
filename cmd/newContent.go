@@ -31,8 +31,8 @@ var (
 )
 
 const (
-	BLANK  string = "frontmatter only"
-	SAMPLE string = "sample content"
+	BLANK  string = "blank"
+	SAMPLE string = "sample"
 )
 
 //=============================================================================
