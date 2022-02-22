@@ -30,6 +30,10 @@ func ToValidName(txt string) string {
 	return strings.ReplaceAll(txt, "_", "-")
 }
 
+func ToBasePath(fullpath string, replace string) string {
+	return strings.ReplaceAll(fullpath, replace+"/", "")
+}
+
 func ToPageVariableName(txt string) string {
 	var frags = strings.Split(txt, "-")
 	for i := range frags {
