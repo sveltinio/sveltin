@@ -41,7 +41,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 	utils.CheckIfError(err)
 
-	os.Setenv("VITE_PUBLIC_BASE_PATH", siteConfig.BaseURL)
+	os.Setenv("VITE_PUBLIC_BASE_PATH", projectConfig.BaseURL)
 	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
 	utils.CheckIfError(err)
 

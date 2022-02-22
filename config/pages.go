@@ -6,12 +6,6 @@ that can be found in the LICENSE file.
 */
 package config
 
-type SiteConfig struct {
-	BaseURL           string `mapstructure:"VITE_PUBLIC_BASE_PATH"`
-	SitemapChangeFreq string `mapstructure:"sitemapChangeFreq"`
-	SitemapPriority   string `mapstructure:"sitemapPriority"`
-}
-
 type Pages struct {
 	Content string `mapstructure:"content"`
 	Index   string `mapstructure:"index"`
@@ -19,7 +13,7 @@ type Pages struct {
 }
 
 type NoPage struct {
-	Config *SiteConfig
+	Config *ProjectConfig
 	Items  *NoPageItems
 }
 

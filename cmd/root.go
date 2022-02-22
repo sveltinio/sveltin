@@ -60,7 +60,7 @@ var (
 	appTemplatesMap map[string]config.AppTemplate
 	pathMaker       pathmaker.SveltinPathMaker
 	conf            config.SveltinConfig
-	siteConfig      config.SiteConfig
+	projectConfig   config.ProjectConfig
 	fsManager       *fsm.SveltinFSManager
 )
 
@@ -89,7 +89,7 @@ func initSveltin() {
 	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
 	fsManager = fsm.NewSveltinFSManager(&pathMaker)
 	appTemplatesMap = helpers.InitAppTemplatesMap()
-	siteConfig, _ = loadEnvFile(DOTENV_PROD)
+	projectConfig, _ = loadEnvFile(DOTENV_PROD)
 }
 
 func loadSveltinConfig() {
@@ -99,7 +99,7 @@ func loadSveltinConfig() {
 	}
 }
 
-func loadEnvFile(filename string) (config config.SiteConfig, err error) {
+func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
 	viper.SetConfigName(filename)

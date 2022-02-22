@@ -46,7 +46,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: static/rss.xml
 	listLogger.AppendItem("Generating the rss.xml file")
-	rssFile := fsManager.NewNoPage("rss", &siteConfig, existingResources, contents, nil, pages)
+	rssFile := fsManager.NewNoPage("rss", &projectConfig, existingResources, contents, nil, pages)
 	staticFolder.Add(rssFile)
 
 	// SET FOLDER STRUCTURE

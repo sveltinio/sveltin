@@ -49,7 +49,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: static/rss.xml
 	listLogger.AppendItem("Generating the sitemap.xml file")
-	sitemapFile := fsManager.NewNoPage("sitemap", &siteConfig, existingResources, contents, metadata, pages)
+	sitemapFile := fsManager.NewNoPage("sitemap", &projectConfig, existingResources, contents, metadata, pages)
 	staticFolder.Add(sitemapFile)
 
 	// SET FOLDER STRUCTURE

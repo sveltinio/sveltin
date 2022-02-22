@@ -73,7 +73,7 @@ func (s *SveltinFSManager) NewPublicPage(name string, language string) *composer
 	}
 }
 
-func (s *SveltinFSManager) NewNoPage(name string, projectConfig *config.SiteConfig, resources []string, contents map[string][]string, metadata map[string][]string, pages []string) *composer.File {
+func (s *SveltinFSManager) NewNoPage(name string, projectConfig *config.ProjectConfig, resources []string, contents map[string][]string, metadata map[string][]string, pages []string) *composer.File {
 	return &composer.File{
 		Name:       name + ".xml",
 		TemplateId: name,
