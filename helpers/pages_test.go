@@ -24,7 +24,7 @@ func TestGetPublicPages(t *testing.T) {
 
 	memFS := afero.NewMemMapFs()
 	for _, tc := range tests {
-		common.TouchFile(memFS, filepath.Join(path, tc.filename))
+		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
 	}
 
 	pages := GetAllPublicPages(memFS, path)

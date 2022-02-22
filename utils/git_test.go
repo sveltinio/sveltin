@@ -19,7 +19,8 @@ func TestGit(t *testing.T) {
 	}
 
 	helloWorld := appTemplatesMap["hello-world"]
-	GitClone(&helloWorld, helloWorld.Name)
+	err := GitClone(&helloWorld, helloWorld.Name)
+	is.NoErr(err)
 
 	exists, err := afero.DirExists(osFs, helloWorld.Name)
 	is.NoErr(err)
@@ -28,5 +29,5 @@ func TestGit(t *testing.T) {
 	_, err = afero.ReadDir(osFs, helloWorld.Name)
 	is.NoErr(err)
 
-	osFs.RemoveAll(helloWorld.Name)
+	is.NoErr(osFs.RemoveAll(helloWorld.Name))
 }

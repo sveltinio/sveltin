@@ -87,7 +87,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// Clone starter template github repository
 	starterTemplate := appTemplatesMap[SVELTEKIT_STARTER]
 	listLogger.AppendItem(`Cloning ` + starterTemplate.URL)
-	utils.GitClone(&starterTemplate, pathMaker.GetProjectRoot(projectName))
+	err = utils.GitClone(&starterTemplate, pathMaker.GetProjectRoot(projectName))
+	utils.CheckIfError(err)
 
 	// GET FOLDER: <project_name>
 	projectFolder := fsManager.GetFolder(projectName)

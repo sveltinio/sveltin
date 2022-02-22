@@ -51,7 +51,9 @@ func WriteToDisk(fs afero.Fs, inpath string, r io.Reader) (err error) {
 
 func TouchFile(fs afero.Fs, x ...string) error {
 	inpath := filepath.Join(x...)
-	MkDir(fs, filepath.Dir(inpath))
+	if err := MkDir(fs, filepath.Dir(inpath)); err != nil {
+		return err
+	}
 	if err := WriteToDisk(fs, inpath, bytes.NewReader([]byte{})); err != nil {
 		return err
 	}

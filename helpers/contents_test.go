@@ -23,7 +23,7 @@ func TestValidFileForContent(t *testing.T) {
 
 	memFS := afero.NewMemMapFs()
 	for _, tc := range tests {
-		common.TouchFile(memFS, filepath.Join(path, tc.filename))
+		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
 	}
 
 	files, err := afero.ReadDir(memFS, path)
@@ -47,7 +47,7 @@ func TestNotValidFileForContent(t *testing.T) {
 
 	memFS := afero.NewMemMapFs()
 	for _, tc := range notValidFileExtTests {
-		common.TouchFile(memFS, filepath.Join(path, tc.filename))
+		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
 	}
 
 	files, err := afero.ReadDir(memFS, path)

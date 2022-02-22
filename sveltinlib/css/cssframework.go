@@ -30,8 +30,12 @@ func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, 
 	if backup {
 		destFileExists, err := common.FileExists(fs, saveTo)
 		if destFileExists && err == nil {
-			fs.Rename(saveTo, saveTo+`_backup_`+time.Now().Format("2006-01-02_15:04:05"))
-			fs.Remove(saveTo)
+			if err := fs.Rename(saveTo, saveTo+`_backup_`+time.Now().Format("2006-01-02_15:04:05")); err != nil {
+				return err
+			}
+			if err := fs.Remove(saveTo); err != nil {
+				return err
+			}
 		}
 	}
 	err := common.CopyFileFromEmbeddedFS(efs, fs, sourceFile, saveTo)

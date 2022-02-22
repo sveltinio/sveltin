@@ -22,7 +22,9 @@ func (d *director) SetBuilder(b iFileContentBuilder) {
 
 func (d *director) GetContent() Content {
 	d.builder.setContentType()
-	d.builder.setPathToTplFile()
+	if err := d.builder.setPathToTplFile(); err != nil {
+		panic("something went wrong calling setPathToTplFile")
+	}
 	d.builder.setFuncs()
 	return d.builder.GetContent()
 }

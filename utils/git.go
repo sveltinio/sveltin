@@ -14,14 +14,17 @@ import (
 	"github.com/sveltinio/sveltin/config"
 )
 
-func GitClone(sveltinTemplate *config.AppTemplate, inpath string) {
+func GitClone(sveltinTemplate *config.AppTemplate, inpath string) error {
 	_, err := git.PlainClone(inpath, false, &git.CloneOptions{
 		URL:      sveltinTemplate.URL,
 		Progress: nil,
 	})
 
 	CheckIfError(err)
-	cleanGitRepository(inpath, []string{".git"})
+	if err := cleanGitRepository(inpath, []string{".git"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func cleanGitRepository(inpath string, foldersToRemove []string) error {

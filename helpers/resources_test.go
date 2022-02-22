@@ -25,12 +25,12 @@ func TestGetResources(t *testing.T) {
 	is.Equal(filepath.Join("content"), conf.GetContentPath())
 
 	memFs := afero.NewMemMapFs()
-	common.MkDir(memFs, conf.GetContentPath())
+	is.NoErr(common.MkDir(memFs, conf.GetContentPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r))
+		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r)))
 	}
 
 	resources := GetAllResources(memFs, conf.GetContentPath())
@@ -63,12 +63,12 @@ func TestGetResourceContentMap(t *testing.T) {
 	is.Equal(filepath.Join("content"), conf.GetContentPath())
 
 	memFs := afero.NewMemMapFs()
-	common.MkDir(memFs, conf.GetContentPath())
+	is.NoErr(common.MkDir(memFs, conf.GetContentPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r))
+		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r)))
 	}
 
 	resources := GetAllResources(memFs, conf.GetContentPath())
@@ -78,9 +78,7 @@ func TestGetResourceContentMap(t *testing.T) {
 	dummyContents := []string{"first", "second", "third"}
 	for _, r := range dummyResources {
 		for _, c := range dummyContents {
-			common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r, c))
-			// not needed
-			//common.TouchFile(memFs, filepath.Join(contentPath, r, c, "index.svx"))
+			is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r, c)))
 		}
 	}
 	retrievedContents := GetResourceContentMap(memFs, resources, conf.GetContentPath())
@@ -110,13 +108,13 @@ func TestGetResourceMetadataMap(t *testing.T) {
 	is.Equal(filepath.Join("src", "routes"), conf.GetRoutesPath())
 
 	memFs := afero.NewMemMapFs()
-	common.MkDir(memFs, conf.GetRoutesPath())
+	is.NoErr(common.MkDir(memFs, conf.GetRoutesPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r))
-		common.MkDir(memFs, filepath.Join(conf.GetRoutesPath(), r))
+		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r)))
+		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetRoutesPath(), r)))
 	}
 
 	resources := GetAllResources(memFs, conf.GetContentPath())
@@ -126,7 +124,7 @@ func TestGetResourceMetadataMap(t *testing.T) {
 	dummyMetadata := []string{"author", "category"}
 	for _, r := range resources {
 		for _, m := range dummyMetadata {
-			common.MkDir(memFs, filepath.Join(pwd, conf.GetRoutesPath(), r, m))
+			is.NoErr(common.MkDir(memFs, filepath.Join(pwd, conf.GetRoutesPath(), r, m)))
 		}
 	}
 
