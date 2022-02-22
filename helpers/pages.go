@@ -24,7 +24,7 @@ func GetAllPublicPages(fs afero.Fs, path string) []string {
 	}
 
 	for _, f := range files {
-		var pageName = ""
+		pageName := ""
 		if IsValidFileForContent(f) {
 			if f.Name() != "index.svelte" {
 				pageName = strings.TrimSuffix(f.Name(), filepath.Ext(f.Name()))
