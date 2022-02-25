@@ -256,6 +256,12 @@ Read more [here][build].
 
 Read more [here][preview].
 
+### sveltin deploy
+
+`sveltin deploy` is used to deploy your website over FTP on your hosting platform.
+
+Read more [here][deploy].
+
 ## :bulb: Contributing
 
 Contribution of any kind including documentation, themes, tutorials, blog posts, bug reports, issues, feature requests, feature implementations, pull requests are more than welcome.
@@ -266,18 +272,19 @@ Read more [here][contributing].
 
 Sveltin is free and open-source software licensed under the Apache 2.0 License.
 
-[new]: https://docs.sveltin.io/cli/new
-[resource]: https://docs.sveltin.io/cli/new-resource
-[content]: https://docs.sveltin.io/cli/new-content
-[metadata]: https://docs.sveltin.io/cli/new-metadata
-[page]: https://docs.sveltin.io/cli/new-page
-[generate]: https://docs.sveltin.io/cli/generate
-[menu]: https://docs.sveltin.io/cli/generate-menu
-[sitemap]: https://docs.sveltin.io/cli/generate-sitemap
-[rss]: https://docs.sveltin.io/cli/generate-rss
-[server]: https://docs.sveltin.io/cli/server
-[prepare]: https://docs.sveltin.io/cli/prepare
-[update]: https://docs.sveltin.io/cli/update
-[build]: https://docs.sveltin.io/cli/build
-[preview]: https://docs.sveltin.io/cli/preview
+[new]: https://docs.sveltin.io/cli/new/
+[resource]: https://docs.sveltin.io/cli/new-resource/
+[content]: https://docs.sveltin.io/cli/new-content/
+[metadata]: https://docs.sveltin.io/cli/new-metadata/
+[page]: https://docs.sveltin.io/cli/new-page/
+[generate]: https://docs.sveltin.io/cli/generate/
+[menu]: https://docs.sveltin.io/cli/generate-menu/
+[sitemap]: https://docs.sveltin.io/cli/generate-sitemap/
+[rss]: https://docs.sveltin.io/cli/generate-rss/
+[server]: https://docs.sveltin.io/cli/server/
+[prepare]: https://docs.sveltin.io/cli/prepare/
+[update]: https://docs.sveltin.io/cli/update/
+[build]: https://docs.sveltin.io/cli/build/
+[preview]: https://docs.sveltin.io/cli/preview/
+[deploy]: https://docs.sveltin.io/cli/deploy/
 [contributing]: CONTRIBUTING.md
