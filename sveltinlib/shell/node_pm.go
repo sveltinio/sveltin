@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package shell ...
 package shell
 
 import (
@@ -14,20 +16,24 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// NodePackageManager is a Shell implementation used to interact with a npnClient.
 type NodePackageManager struct {
 	shell Shell
 }
 
+// NewNodePackageManager returns a pointer to a NodePackageManager struct.
 func NewNodePackageManager() *NodePackageManager {
 	return &NodePackageManager{
 		shell: &LocalShell{},
 	}
 }
 
+// GetShell returns a Shell.
 func (n *NodePackageManager) GetShell() Shell {
 	return n.shell
 }
 
+// RunInstall execute the relative npmClient install command.
 func (n *NodePackageManager) RunInstall(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
 		return sveltinerr.NewExecSystemCommandError()
@@ -41,6 +47,7 @@ func (n *NodePackageManager) RunInstall(pmName string, operation string, silentM
 	return nil
 }
 
+// RunUpdate execute the relative npmClient update command.
 func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
 		return sveltinerr.NewExecSystemCommandError()
@@ -61,6 +68,7 @@ func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 	return nil
 }
 
+// RunSvelteKitCommand execute the relative npmClient sveltekit script command as defined on the package.json file.
 func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
 		return sveltinerr.NewExecSystemCommandError()
@@ -81,6 +89,7 @@ func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 	return nil
 }
 
+// RunAddPackages execute the relative npmClient install|add package command.
 func (n *NodePackageManager) RunAddPackages(pmName string, operation string, mode string, packages []string, silentMode bool) error {
 	if pmName == "" || operation == "" || mode == "" || packages == nil {
 		return sveltinerr.NewExecSystemCommandError()

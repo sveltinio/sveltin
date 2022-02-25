@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package builder ...
 package builder
 
 import (
@@ -15,6 +17,7 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
+// constants representing different file names.
 const (
 	DEFAULTS     string = "defaults"
 	EXTERNALS    string = "externals"
@@ -37,6 +40,7 @@ type projectBuilder struct {
 	Funcs             template.FuncMap
 }
 
+// NewProjectBuilder create a projectBuilder struct.
 func NewProjectBuilder() *projectBuilder {
 	return &projectBuilder{}
 }
@@ -45,6 +49,7 @@ func (b *projectBuilder) setContentType() {
 	b.ContentType = "project"
 }
 
+// SetEmbeddedResources set the map to relative embed FS.
 func (b *projectBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
@@ -84,10 +89,12 @@ func (b *projectBuilder) setPathToTplFile() error {
 	}
 }
 
+// SetTemplateId set the id for the template to be used.
 func (b *projectBuilder) SetTemplateId(id string) {
 	b.TemplateId = id
 }
 
+// SetTemplateData set the data used by the template.
 func (b *projectBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
@@ -100,6 +107,7 @@ func (b *projectBuilder) setFuncs() {
 	}
 }
 
+// GetContent returns the full Content config needed by the Builder.
 func (b *projectBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,

@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package utils ...
 package utils
 
 import (
@@ -14,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// GetInstalledNPMClientList returns the list of installed npmClient as slice of NPMClient.
 func GetInstalledNPMClientList() []npmc.NPMClient {
 	valid := []string{"npm", "yarn", "pnpm"}
 	npmClientList := []npmc.NPMClient{}
@@ -30,6 +33,7 @@ func GetInstalledNPMClientList() []npmc.NPMClient {
 	return npmClientList
 }
 
+// GetNPMClientNames returns the list of installed npmClient as slice of strings.
 func GetNPMClientNames(items []npmc.NPMClient) []string {
 	npmClientNames := []string{}
 	for _, v := range items {
@@ -46,6 +50,7 @@ func isCommandAvailable(name string) bool {
 	return true
 }
 
+// GetNPMClientInfo returns true and npm client version as string.
 func GetNPMClientInfo(name string) (bool, string) {
 	out, err := exec.Command(name, "-v").Output()
 	if err != nil {
@@ -64,10 +69,12 @@ func filter(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return out
 }
 
+// GetSelectedNPMClient returns the selected NPMClient struct out of the available ones.
 func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return filter(in, name)
 }
 
+// RetrievePackageManagerFromPkgJson returns NPMClient struct parsing the package.json file.
 func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) (npmc.NPMClient, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
 	CheckIfError(err)

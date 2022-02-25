@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -25,7 +27,9 @@ var (
 )
 
 const (
-	SVELTE   string = "svelte"
+	// SVELTE set svelte as the language used to scaffold a new page
+	SVELTE string = "svelte"
+	// MARKDOWN set markdown as the language used to scaffold a new page
 	MARKDOWN string = "markdown"
 )
 
@@ -46,6 +50,7 @@ This command allows you to select between a svelte component page and a markdown
 	Run: NewPageCmdRun,
 }
 
+// NewPageCmdRun is the actual work function.
 func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	listLogger.Reset()
@@ -127,9 +132,8 @@ func getPageType(pageTypeFlag string) (string, error) {
 		page = pageTypeFlag
 		if !common.Contains(valid, page) {
 			return "", sveltinerr.NewPageTypeNotValidError()
-		} else {
-			return page, nil
 		}
+		return page, nil
 	default:
 		return "", sveltinerr.NewPageTypeNotValidError()
 	}

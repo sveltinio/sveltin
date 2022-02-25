@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package composer ...
 package composer
 
 import (
@@ -15,43 +17,49 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// Folder is the struct representing a folder on the file system.
 type Folder struct {
 	Name       string
 	path       string
 	components []component
 }
 
+// NewFolder returns a pointer to a Folder struct.
 func NewFolder(name string) *Folder {
 	return &Folder{
 		Name: name,
 	}
 }
 
+// GetName returns the Folder name as string.
 func (f *Folder) GetName() string {
 	return f.Name
 }
 
+// SetName sets the folder name.
 func (f *Folder) SetName(name string) {
 	f.Name = name
 }
 
+// GetPath returns the Folder path as string.
 func (f *Folder) GetPath() string {
 	return f.path
 }
 
+// SetPath sets the Folder path.
 func (f *Folder) SetPath(path string) {
 	f.path = path
 }
 
+// GetComponents returns the slice of component for a Folder struct.
 func (f *Folder) GetComponents() []component {
 	return f.components
 }
 
+// Create is the function to create the entire folder structure on the file system.
 func (f *Folder) Create(sf *factory.Artifact) error {
 	if !common.DirExists(sf.GetFS(), f.GetPath()) {
-		if err := common.MkDir(sf.GetFS(), f.GetPath()); err != nil {
-			return err
-		}
+		common.MkDir(sf.GetFS(), f.GetPath())
 	}
 
 	for _, composite := range f.GetComponents() {
@@ -71,6 +79,7 @@ func (f *Folder) Create(sf *factory.Artifact) error {
 	return nil
 }
 
+// Add append an item to the Folder's components list.
 func (f *Folder) Add(c component) {
 	f.components = append(f.components, c)
 }

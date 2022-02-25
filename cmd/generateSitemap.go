@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -27,6 +29,7 @@ It makes use of the .env.production file to reflect the base url for your websit
 	Run: RunGenerateSitemapCmd,
 }
 
+// RunGenerateSitemapCmd is the actual work function.
 func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	textLogger.SetTitle("A Sitemap will be created for your Sveltin project")

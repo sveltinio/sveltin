@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package common ...
 package common
 
 import (
@@ -16,6 +18,7 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// PromptGetInput is used to prompt an input the user and retrieve the value.
 func PromptGetInput(pc config.PromptContent) string {
 	validate := func(input string) error {
 		if len(input) <= 0 {
@@ -46,6 +49,7 @@ func PromptGetInput(pc config.PromptContent) string {
 	return result
 }
 
+// PromptGetSelect is used to prompt a list of available options to the user and retrieve the selection.
 func PromptGetSelect(items []string, pc config.PromptContent) string {
 	var result string
 	var err error
@@ -53,9 +57,8 @@ func PromptGetSelect(items []string, pc config.PromptContent) string {
 	validate := func(input string) error {
 		if len(input) == 0 {
 			return errors.New("your selection is invalid")
-		} else {
-			return nil
 		}
+		return nil
 	}
 
 	prompt := promptui.SelectWithAdd{

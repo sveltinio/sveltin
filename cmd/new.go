@@ -1,14 +1,17 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
 	"embed"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -32,6 +35,7 @@ var (
 	withPortNumber string
 )
 
+// names for the available CSS Lib options
 const (
 	VANILLACSS  string = "vanillacss"
 	TAILWINDCSS string = "tailwindcss"
@@ -40,6 +44,7 @@ const (
 	SCSS        string = "scss"
 )
 
+// names for config files
 const (
 	DEFAULTS  string = "defaults"
 	EXTERNALS string = "externals"
@@ -67,6 +72,7 @@ sveltin new resource posts`,
 	Run: NewCmdRun,
 }
 
+// NewCmdRun is the actual work function.
 func NewCmdRun(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	textLogger.SetTitle("A new Sveltin based project will be created")
@@ -92,6 +98,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// GET FOLDER: <project_name>
 	projectFolder := fsManager.GetFolder(projectName)
+	fmt.Println(projectFolder.Name)
+	fmt.Println(projectFolder.GetPath())
 
 	// NEW FOLDER: config
 	listLogger.AppendItem("Creating 'config' folder")
@@ -147,6 +155,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// SET FOLDER STRUCTURE
 	rootFolder := fsManager.GetFolder(ROOT)
+	fmt.Println("ROOT: " + rootFolder.GetName())
+	fmt.Println("ROOT: " + rootFolder.GetPath())
 	rootFolder.Add(projectFolder)
 
 	// GENERATE FOLDER STRUCTURE
@@ -235,9 +245,8 @@ func promptCSSLibName(cssLibName string) (string, error) {
 func getThemeName(name string) string {
 	if len(withThemeName) != 0 {
 		return withThemeName
-	} else {
-		return strings.Join([]string{name, "theme"}, "_")
 	}
+	return strings.Join([]string{name, "theme"}, "_")
 }
 
 func promptNPMClient(items []string) (string, error) {

@@ -5,12 +5,35 @@
 The Smartest Way to Build SvelteKit powered static websites.
 </h2>
 <p align="center">
+<a href="https://sveltin.io/" target="_blank">
+        Website
+    </a> |
+    <a href="https://docs.sveltin.io/quick-start" target="_blank">
+        Quick Start
+    </a> |
+    <a href="https://docs.sveltin.io/" target="_blank">
+        Documentation
+    </a>
+    |
+    <a href="https://github.com/sveltinio/sveltin/blob/main/CONTRIBUTING.md" target="_blank">
+        Contributing
+    </a>
+</p>
+<p align="center">
+    <a href="https://pkg.go.dev/github.com/sveltinio/sveltin/" target="_blank">
+        <img src="https://pkg.go.dev/badge/github.com/sveltinio/sveltin/.svg" alt="go reference" />
+    </a>
+    &nbsp;
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
         <img src="https://github.com/sveltinio/sveltin/actions/workflows/release.yml/badge.svg" alt="CI" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
         <img src="https://img.shields.io/badge/version-v0.3.1-success?style=flat-square&logo=none" alt="sveltin cli version" />
+    </a>
+    &nbsp;
+    <a href="https://goreportcard.com/report/github.com/sveltinio/sveltin/" target="_blank">
+        <img src="https://goreportcard.com/badge/github.com/sveltinio/sveltin" alt="go report card" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/blob/main/LICENSE" target="_blank">

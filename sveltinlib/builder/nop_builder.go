@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package builder ...
 package builder
 
 import (
@@ -25,6 +27,7 @@ type nopContentBuilder struct {
 	Funcs             template.FuncMap
 }
 
+// NewNoPageContentBuilder create a nopContentBuilder struct.
 func NewNoPageContentBuilder() *nopContentBuilder {
 	return &nopContentBuilder{}
 }
@@ -33,6 +36,7 @@ func (b *nopContentBuilder) setContentType() {
 	b.ContentType = "nopage"
 }
 
+// SetEmbeddedResources set the map to relative embed FS.
 func (b *nopContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
@@ -51,10 +55,12 @@ func (b *nopContentBuilder) setPathToTplFile() error {
 	}
 }
 
+// SetTemplateId set the id for the template to be used.
 func (b *nopContentBuilder) SetTemplateId(id string) {
 	b.TemplateId = id
 }
 
+// SetTemplateData set the data used by the template.
 func (b *nopContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
@@ -69,6 +75,7 @@ func (b *nopContentBuilder) setFuncs() {
 	}
 }
 
+// GetContent returns the full Content config needed by the Builder.
 func (b *nopContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,

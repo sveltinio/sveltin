@@ -1,3 +1,4 @@
+// Package pathmaker
 package pathmaker
 
 import (

@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -44,6 +46,7 @@ This command:
 	Run: RunNewResourceCmd,
 }
 
+// RunNewResourceCmd is the actual work function.
 func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	listLogger.Reset()

@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -25,15 +27,19 @@ import (
 //=============================================================================
 
 const (
-	CLI_VERSION       string = "0.3.1"
+	// CLI_VERSION is the current sveltin clie version number.
+	CLI_VERSION string = "0.3.1"
+	// SVELTEKIT_STARTER a string rapresenting the project template id.
 	SVELTEKIT_STARTER string = "starter"
 )
 
+// names for .env files.
 const (
 	DOTENV_DEV  string = ".env.development"
 	DOTENV_PROD string = ".env.production"
 )
 
+// folder and file names for a Sveltin project structure.
 const (
 	ROOT          string = "root"
 	CONFIG        string = "config"
@@ -49,7 +55,9 @@ const (
 )
 
 var (
-	AppFs      = afero.NewOsFs()
+	// AppFs is the Afero wrapper around the native OS calls.
+	AppFs = afero.NewOsFs()
+	// YamlConfig is used by yaml.Unmarshal to decode the YAML file.
 	YamlConfig []byte
 )
 
@@ -75,6 +83,7 @@ var rootCmd = &cobra.Command{
 sveltin is the main command to work with SvelteKit powered static website.`,
 }
 
+// Execute executes the root command.
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
@@ -118,6 +127,7 @@ func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
 
 //=============================================================================
 
+// GetSveltinCommands returns an array of pointers to the implemented cobra.Command
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
 		newCmd, generateCmd, prepareCmd, updateCmd, serverCmd, buildCmd, previewCmd,

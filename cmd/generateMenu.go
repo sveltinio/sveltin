@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -35,6 +37,7 @@ The --full flag will also includes content names for all resources.
 	Run: RunGenerateMenuCmd,
 }
 
+// RunGenerateMenuCmd is the actual work function.
 func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	textLogger.SetTitle("The menu structure for your Sveltin project will be created")

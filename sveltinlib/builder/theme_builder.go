@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package builder ...
 package builder
 
 import (
@@ -15,13 +17,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-/*
-const (
-	README  string = "readme"
-	LICENSE string = "license"
-)
-*/
-
 type themeContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
@@ -31,6 +26,7 @@ type themeContentBuilder struct {
 	Funcs             template.FuncMap
 }
 
+// NewThemeContentBuilder create a themeContentBuilder struct.
 func NewThemeContentBuilder() *themeContentBuilder {
 	return &themeContentBuilder{}
 }
@@ -39,6 +35,7 @@ func (b *themeContentBuilder) setContentType() {
 	b.ContentType = "theme"
 }
 
+// SetEmbeddedResources set the map to relative embed FS.
 func (b *themeContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
@@ -60,10 +57,12 @@ func (b *themeContentBuilder) setPathToTplFile() error {
 	}
 }
 
+// SetTemplateId set the id for the template to be used.
 func (b *themeContentBuilder) SetTemplateId(id string) {
 	b.TemplateId = id
 }
 
+// SetTemplateData set the data used by the template.
 func (b *themeContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
@@ -76,6 +75,7 @@ func (b *themeContentBuilder) setFuncs() {
 	}
 }
 
+// GetContent returns the full Content config needed by the Builder.
 func (b *themeContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,

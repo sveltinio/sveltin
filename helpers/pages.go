@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package helpers ...
 package helpers
 
 import (
@@ -15,6 +17,7 @@ import (
 	"github.com/sveltinio/sveltin/config"
 )
 
+// GetAllPublicPages return a slice of all available public page names as string.
 func GetAllPublicPages(fs afero.Fs, path string) []string {
 	files, err := afero.ReadDir(fs, path)
 	pages := []string{}
@@ -36,6 +39,7 @@ func GetAllPublicPages(fs afero.Fs, path string) []string {
 	return pages
 }
 
+// GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
 func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
 	if txt == "index" {
 		return c.GetIndexPageFilename()
@@ -46,6 +50,7 @@ func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
 	}
 }
 
+// PublicPageFilename returns the filename string for a public page based on the page type (svelte or markdown).
 func PublicPageFilename(name string, pageType string) string {
 	switch pageType {
 	case "svelte":
@@ -57,6 +62,7 @@ func PublicPageFilename(name string, pageType string) string {
 	}
 }
 
+// NewNoPageItems return a NoPageItems.
 func NewNoPageItems(resources []string, content map[string][]string, metadata map[string][]string, pages []string) *config.NoPageItems {
 	r := new(config.NoPageItems)
 	r.Resources = resources

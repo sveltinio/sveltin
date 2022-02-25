@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package builder ...
 package builder
 
 import (
@@ -16,10 +18,18 @@ import (
 )
 
 const (
+	// API_SINGLE is a string representing the api template file
+	// to be used when creating a metadata of type 'single'.
 	API_SINGLE string = "api_single"
-	API_LIST   string = "api_list"
+	// API_LIST is a string representing the api template file
+	// to be used when creating a metadata of type 'list'.
+	API_LIST string = "api_list"
+	// LIB_SINGLE is a string representing the lib template file
+	// to be used when creating a metadata of type 'single'.
 	LIB_SINGLE string = "lib_single"
-	LIB_LIST   string = "lib_list"
+	// LIB_LIST is a string representing the libe template file
+	//  to be used when creating a metadata of type 'single'.
+	LIB_LIST string = "lib_list"
 )
 
 type metadataContentBuilder struct {
@@ -31,6 +41,7 @@ type metadataContentBuilder struct {
 	Funcs             template.FuncMap
 }
 
+// NewMetadataContentBuilder create a metadataContentBuilder struct.
 func NewMetadataContentBuilder() *metadataContentBuilder {
 	return &metadataContentBuilder{}
 }
@@ -39,6 +50,7 @@ func (b *metadataContentBuilder) setContentType() {
 	b.ContentType = "metadata"
 }
 
+// SetEmbeddedResources set the map to relative embed FS.
 func (b *metadataContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
@@ -71,10 +83,12 @@ func (b *metadataContentBuilder) setPathToTplFile() error {
 	}
 }
 
+// SetTemplateId set the id for the template to be used.
 func (b *metadataContentBuilder) SetTemplateId(id string) {
 	b.TemplateId = id
 }
 
+// SetTemplateData set the data used by the template
 func (b *metadataContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
@@ -85,6 +99,7 @@ func (b *metadataContentBuilder) setFuncs() {
 	}
 }
 
+// GetContent returns the full Content config needed by the Builder.
 func (b *metadataContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,

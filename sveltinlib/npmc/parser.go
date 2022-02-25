@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package npmc ...
 package npmc
 
 import (
@@ -13,6 +15,7 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 )
 
+// Parse parses the JSON-encoded data and stores the result in the value pointed to by v.
 func Parse(content []byte) *PackageJson {
 	var pkgParsed PackageJson
 	err := json.Unmarshal(content, &pkgParsed)

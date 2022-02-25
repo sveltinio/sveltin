@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package utils ...
 package utils
 
 import (
@@ -14,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/config"
 )
 
+// GitClone clones the git repo to the specified path.
 func GitClone(sveltinTemplate *config.AppTemplate, inpath string) error {
 	_, err := git.PlainClone(inpath, false, &git.CloneOptions{
 		URL:      sveltinTemplate.URL,

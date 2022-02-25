@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -26,6 +28,7 @@ It wraps svelte-kit defined commands to run the server`,
 	Run: RunServerCmd,
 }
 
+// RunServerCmd is the actual work function.
 func RunServerCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	textLogger.SetTitle("Running Vite server")

@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package common ...
 package common
 
 import (
@@ -13,6 +15,7 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// Contains returns true if an element is in a slice.
 func Contains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {
@@ -23,6 +26,7 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
+// CheckMinMaxArgs returns an error if the number of args is not within the expected range.
 func CheckMinMaxArgs(items []string, min int, max int) error {
 	switch numOfArgs := len(items); {
 	case numOfArgs < min:
@@ -41,6 +45,7 @@ Please check the help: sveltin [command] -h`)
 	}
 }
 
+// CheckMaxArgs returns an error if there are more than N args.
 func CheckMaxArgs(items []string, max int) error {
 	var errorMsg string
 	if max == 0 {

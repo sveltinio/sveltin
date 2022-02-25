@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package builder ...
 package builder
 
 import (
@@ -17,7 +19,9 @@ import (
 )
 
 const (
-	SVELTE   string = "svelte"
+	// SVELTE set svelte as the language used to scaffold a new page
+	SVELTE string = "svelte"
+	// MARKDOWN set markdown as the language used to scaffold a new page
 	MARKDOWN string = "markdown"
 )
 
@@ -30,6 +34,7 @@ type publicPageContentBuilder struct {
 	Funcs             template.FuncMap
 }
 
+// NewPageContentBuilder create a publicPageContentBuilder struct.
 func NewPageContentBuilder() *publicPageContentBuilder {
 	return &publicPageContentBuilder{}
 }
@@ -38,6 +43,7 @@ func (b *publicPageContentBuilder) setContentType() {
 	b.ContentType = "page"
 }
 
+// SetEmbeddedResources set the map to relative embed FS.
 func (b *publicPageContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
@@ -56,10 +62,12 @@ func (b *publicPageContentBuilder) setPathToTplFile() error {
 	}
 }
 
+// SetTemplateId set the id for the template to be used.
 func (b *publicPageContentBuilder) SetTemplateId(id string) {
 	b.TemplateId = id
 }
 
+// SetTemplateData set the data used by the template.
 func (b *publicPageContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
@@ -76,6 +84,7 @@ func (b *publicPageContentBuilder) setFuncs() {
 	}
 }
 
+// GetContent returns the full Content config needed by the Builder.
 func (b *publicPageContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,

@@ -1,3 +1,11 @@
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
+
+// Package helpers ...
 package helpers
 
 import (
@@ -6,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ExecuteCommandC is a @DEPRECATED function, not used anymore.
 func ExecuteCommandC(root *cobra.Command, args ...string) (c *cobra.Command, err error) {
 	buf := new(bytes.Buffer)
 	root.SetOut(buf)

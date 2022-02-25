@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package utils ...
 package utils
 
 import (
@@ -17,6 +19,7 @@ import (
 
 //=============================================================================
 
+// Logger interface declares the methods to set the loggers props.
 type Logger interface {
 	SetTitle(text string)
 	GetTitle() string
@@ -25,31 +28,38 @@ type Logger interface {
 	Reset()
 }
 
+// TextLogger is the struct used to write on the stdout as plain text.
 type TextLogger struct {
 	title   string
 	content string
 }
 
+// NewTextLogger returns a pointer to a TextLogger.
 func NewTextLogger() *TextLogger {
 	return &TextLogger{}
 }
 
-func (t *TextLogger) SetTitle(title string) {
-	t.title = title
+// SetTitle sets the title for the TextLogger.
+func (tl *TextLogger) SetTitle(title string) {
+	tl.title = title
 }
 
-func (t *TextLogger) GetTitle() string {
-	return t.title
+// GetTitle returns the TextLogger title as string.
+func (tl *TextLogger) GetTitle() string {
+	return tl.title
 }
 
-func (t *TextLogger) SetContent(content string) {
-	t.content = content
+// SetContent sets the content for the TextLogger.
+func (tl *TextLogger) SetContent(content string) {
+	tl.content = content
 }
 
-func (t *TextLogger) GetContent() string {
-	return t.content
+// GetContent returns the TextLogger content as string.
+func (tl *TextLogger) GetContent() string {
+	return tl.content
 }
 
+// Reset the TextLogger.
 func (tl *TextLogger) Reset() {
 	tl.title = ""
 	tl.content = ""
@@ -57,64 +67,78 @@ func (tl *TextLogger) Reset() {
 
 //=============================================================================
 
+// ListWriter is the struct wrapping the list.Writer.
 type ListWriter struct {
 	content list.Writer
 }
 
+// NewListWriter creates a new ListWriter.
 func NewListWriter() ListWriter {
 	return ListWriter{
 		content: list.NewWriter(),
 	}
 }
 
+// Reset the ListWriter.
 func (lw ListWriter) Reset() {
 	lw.content.Reset()
 }
 
+// Render printout the ListWriter to the stadout.
 func (lw ListWriter) Render() string {
 	return lw.content.Render()
 }
 
+// AppendItem addend an item to the ListWriter.
 func (lw ListWriter) AppendItem(message string) {
 	lw.content.AppendItem(message)
 }
 
+// Indent applies indent the output.
 func (lw ListWriter) Indent() {
 	lw.content.Indent()
 }
 
+// UnIndent applies unindent to the outout.
 func (lw ListWriter) UnIndent() {
 	lw.content.UnIndent()
 }
 
+// SetStyle sets the list style to be applied on the ListWriter.
 func (lw ListWriter) SetStyle(style list.Style) {
 	lw.content.SetStyle(style)
 }
 
+// SetBulletTriangleStyle sets BulletTriangle as style to the ListWriter.
 func (lw ListWriter) SetBulletTriangleStyle() {
 	lw.content.SetStyle(list.StyleBulletTriangle)
 }
 
 //=============================================================================
 
+// Printer interface declares just the single method for printing the buffer content.
 type Printer interface {
 	Print()
 }
 
+// PrinterBuffer is the struct representing the buffer.
 type PrinterBuffer struct {
 	buf bytes.Buffer
 }
 
+// Print prints out the buffer content to the stdout.
 func (pb PrinterBuffer) Print() {
 	jww.FEEDBACK.Println(pb.buf.String())
 }
 
+// ToString returns the buffer content as string.
 func (pb PrinterBuffer) ToString() string {
 	return pb.buf.String()
 }
 
 //=============================================================================
 
+// PrettyPrinter returns a PrinterBuffer as formatted content ready to be printout to stdout.
 func PrettyPrinter(tl *TextLogger) PrinterBuffer {
 	var buffer bytes.Buffer
 	fmt.Fprintf(&buffer, "\n%s:\n", tl.GetTitle())

@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -28,6 +30,7 @@ It wraps sveltekit-preview command.`,
 	Run: RunPreviewCmd,
 }
 
+// RunPreviewCmd is the actual work function.
 func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	textLogger.SetTitle("Preview your Sveltin project")

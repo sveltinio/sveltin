@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package shell ...
 package shell
 
 import (
@@ -16,9 +18,11 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// LocalShell is a Shell implementation.
 type LocalShell struct {
 }
 
+// Execute runs an action on the npm client.
 func (s *LocalShell) Execute(pmName string, pmCmd string, silentMode bool) error {
 	var cmd *exec.Cmd
 
@@ -45,6 +49,7 @@ func (s *LocalShell) Execute(pmName string, pmCmd string, silentMode bool) error
 	return cmd.Run()
 }
 
+// BackgroundExecute runs an action on the npm client in background.
 func (s *LocalShell) BackgroundExecute(ctx context.Context, pmName string, pmCmd string, packageList string) ([]byte, error) {
 	args := strings.Split(pmCmd, " ")
 	if len(args) != 2 {

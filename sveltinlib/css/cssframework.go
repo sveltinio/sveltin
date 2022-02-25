@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package css ...
 package css
 
 import (
@@ -17,16 +19,17 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// ICSSLib defines the methods to be implemented by each CSSLib.
 type ICSSLib interface {
-	//init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, projectName string, npmClient string, themeName string) error
 	init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error
 }
 
+// CSSLib ...
 type CSSLib struct {
 	ICSSLib ICSSLib
 }
 
-func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, backup bool) error {
+func (c *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, backup bool) error {
 	if backup {
 		destFileExists, err := common.FileExists(fs, saveTo)
 		if destFileExists && err == nil {
@@ -46,6 +49,7 @@ func (t *CSSLib) copyConfigFiles(efs *embed.FS, fs afero.Fs, sourceFile string, 
 	return nil
 }
 
+// Setup call the relative init method on CSSLib
 func (c *CSSLib) Setup(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	if err := c.ICSSLib.init(efs, fs, conf, tplData); err != nil {
 		return err

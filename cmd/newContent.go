@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -31,7 +33,9 @@ var (
 )
 
 const (
-	BLANK  string = "blank"
+	// BLANK represents the fontmatter-only template id used when generating the content file.
+	BLANK string = "blank"
+	// SAMPLE represents the sample-content template id used when generating the content file.
 	SAMPLE string = "sample"
 )
 
@@ -63,6 +67,7 @@ As result:
 	Run: RunNewContentCmd,
 }
 
+// RunNewContentCmd is the actual work function.
 func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 
@@ -174,9 +179,8 @@ func promptContentTemplateSelection(templateType string) (string, error) {
 		contentTemplate = templateType
 		if !common.Contains(validTemplates, contentTemplate) {
 			return "", sveltinerr.NewContentTemplateTypeNotValidError()
-		} else {
-			return contentTemplate, nil
 		}
+		return contentTemplate, nil
 	default:
 		return "", sveltinerr.NewContentTemplateTypeNotValidError()
 	}

@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package npmc ...
 package npmc
 
 import (
@@ -13,6 +15,7 @@ import (
 	"github.com/spf13/afero"
 )
 
+// WriteToFile saves a json string to a file on the file system
 func WriteToFile(appFS afero.Fs, pkg *PackageJson, saveAs string, prefix string, indent string) error {
 	file, _ := jsonMarshalIndent(pkg, prefix, indent)
 	return afero.WriteFile(appFS, saveAs, file, 0644)

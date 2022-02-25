@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package cmd ...
 package cmd
 
 import (
@@ -48,6 +50,7 @@ Types:
 	Run: RunNewMetadataCmd,
 }
 
+// RunNewMetadataCmd is the actual work function.
 func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 	listLogger.Reset()
@@ -186,9 +189,8 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 		resource = mdResourceFlag
 		if !common.Contains(availableResources, resource) {
 			return "", sveltinerr.NewResourceNotFoundError()
-		} else {
-			return resource, nil
 		}
+		return resource, nil
 	default:
 		return "", sveltinerr.NewResourceNotFoundError()
 	}
@@ -230,9 +232,8 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 		metadataType = mdTypeFlag
 		if !common.Contains(valid, metadataType) {
 			return "", sveltinerr.NewMetadataTypeNotValidError()
-		} else {
-			return metadataType, nil
 		}
+		return metadataType, nil
 	default:
 		return "", sveltinerr.NewMetadataTypeNotValidError()
 	}

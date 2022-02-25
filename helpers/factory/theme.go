@@ -1,9 +1,11 @@
-/*
-Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+/**
+ * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ *
+ * Use of this source code is governed by Apache 2.0 license
+ * that can be found in the LICENSE file.
+ */
 
-Use of this source code is governed by Apache 2.0 license
-that can be found in the LICENSE file.
-*/
+// Package factory ...
 package factory
 
 import (
@@ -13,6 +15,7 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 )
 
+// NewThemeArtifact create an Artifact struct.
 func NewThemeArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 	return &Artifact{
 		efs:       efs,
