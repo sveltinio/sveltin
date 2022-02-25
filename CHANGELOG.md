@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- feat: `deploy` over FTP command added. [docs](https://doc.sveltin.io/cli/deploy)
+- feat: `deploy` over FTP command added. [docs](https://docs.sveltin.io/cli/deploy)
 - docs: overall code comments
 - chore: code cleansing
 - chore: better error handling
