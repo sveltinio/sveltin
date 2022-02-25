@@ -141,22 +141,17 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// ADD themes folder to the project
 	projectFolder.Add(themesFolder)
 
-	// NEW FILES: .env.development and env.production
-	listLogger.AppendItem("Adding 'dotenv' files")
-	for _, item := range []string{DOTENV_DEV, DOTENV_PROD} {
-		dotEnvTplData := &config.TemplateData{
-			Name:       item,
-			BaseURL:    "http://localhost",
-			PortNumber: withPortNumber,
-		}
-		f := fsManager.NewDotEnvFile(projectName, dotEnvTplData)
-		projectFolder.Add(f)
+	// NEW FILE: env.production
+	listLogger.AppendItem("Adding '.env.production' file")
+	dotEnvTplData := &config.TemplateData{
+		Name:    DOTENV_PROD,
+		BaseURL: fmt.Sprintf("http://%s.com", projectName),
 	}
+	f := fsManager.NewDotEnvFile(projectName, dotEnvTplData)
+	projectFolder.Add(f)
 
 	// SET FOLDER STRUCTURE
 	rootFolder := fsManager.GetFolder(ROOT)
-	fmt.Println("ROOT: " + rootFolder.GetName())
-	fmt.Println("ROOT: " + rootFolder.GetPath())
 	rootFolder.Add(projectFolder)
 
 	// GENERATE FOLDER STRUCTURE

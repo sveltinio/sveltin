@@ -11,7 +11,6 @@ package common
 import (
 	"bytes"
 	"embed"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -23,10 +22,7 @@ import (
 // MkDir is a wrapper for afero MkdirAll to create folder structure on the file system.
 func MkDir(fs afero.Fs, x ...string) error {
 	p := filepath.Join(x...)
-	fmt.Println(p)
-
 	if err := fs.MkdirAll(p, os.ModePerm); err != nil {
-		fmt.Println(err.Error())
 		return err
 	}
 	return nil

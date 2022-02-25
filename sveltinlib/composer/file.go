@@ -10,7 +10,6 @@ package composer
 
 import (
 	"errors"
-	"fmt"
 	"path/filepath"
 
 	"github.com/sveltinio/sveltin/config"
@@ -60,7 +59,6 @@ func (f *File) GetTemplateData() *config.TemplateData {
 // Create is resposibile to execute the file template providing the info needed by the builder
 // get the content and save the newly creted file on the file system.
 func (f *File) Create(sf *factory.Artifact) error {
-	fmt.Println(filepath.Join(f.GetPath(), f.GetName()))
 	preparedContent := helpers.PrepareContent(sf.GetBuilder(), sf.GetResources(), f.GetTemplateId(), f.GetTemplateData())
 	fileContent := helpers.MakeFileContent(sf.GetEFS(), preparedContent)
 	saveAs := filepath.Join(f.GetPath(), f.GetName())

@@ -33,12 +33,6 @@ const (
 	SVELTEKIT_STARTER string = "starter"
 )
 
-// names for .env files.
-const (
-	DOTENV_DEV  string = ".env.development"
-	DOTENV_PROD string = ".env.production"
-)
-
 // folder and file names for a Sveltin project structure.
 const (
 	ROOT          string = "root"
@@ -52,6 +46,7 @@ const (
 	INDEX         string = "index"
 	SLUG          string = "slug"
 	SETTINGS_FILE string = ".sveltin-settings.yaml"
+	DOTENV_PROD   string = ".env.production"
 )
 
 var (
