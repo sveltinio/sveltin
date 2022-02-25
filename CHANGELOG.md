@@ -1,5 +1,14 @@
 # sveltin
 
+## 0.4.0
+
+### Minor Changes
+
+- feat: `deploy` over FTP command added. [docs](https://doc.sveltin.io/cli/deploy)
+- docs: overall code comments
+- chore: code cleansing
+- chore: better error handling
+
 ## 0.3.1
 
 ### Patch Changes
