@@ -66,14 +66,6 @@ func TouchFile(fs afero.Fs, x ...string) error {
 	return nil
 }
 
-/*
-func TouchFileSingle(fs afero.Fs, name string) error {
-	if err := WriteToDisk(fs, name, bytes.NewReader([]byte{})); err != nil {
-		return err
-	}
-	return nil
-}*/
-
 // CopyFileFromEmbeddedFS copy files from the embedded file system to the actual file system.
 func CopyFileFromEmbeddedFS(efs *embed.FS, fs afero.Fs, pathToFile string, saveTo string) error {
 	content, err := efs.ReadFile(pathToFile)
