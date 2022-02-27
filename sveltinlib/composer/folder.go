@@ -15,6 +15,7 @@ import (
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // Folder is the struct representing a folder on the file system.
@@ -59,7 +60,8 @@ func (f *Folder) GetComponents() []component {
 // Create is the function to create the entire folder structure on the file system.
 func (f *Folder) Create(sf *factory.Artifact) error {
 	if !common.DirExists(sf.GetFS(), f.GetPath()) {
-		common.MkDir(sf.GetFS(), f.GetPath())
+		err := common.MkDir(sf.GetFS(), f.GetPath())
+		utils.IsError(err, false)
 	}
 
 	for _, composite := range f.GetComponents() {
