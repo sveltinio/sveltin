@@ -72,7 +72,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	err = noOpAction.Run()
 	utils.CheckIfError(err)
 
-	// create a tar archive on the FTP remote folder as backup
+	// create a local tar archive as backup for the remote folder content
 	if isBackup {
 		err = ftpfs.BackupAction(&ftpConn, AppFs, "backup", isDryRun).Run()
 		utils.CheckIfError(err)
