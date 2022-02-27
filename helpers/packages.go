@@ -30,6 +30,6 @@ func RunPMCommand(pmName string, pmCmd string, mode string, packages []string, s
 	default:
 		err = sveltinerr.NewPackageManagerCommandNotValidError()
 	}
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 	return nil
 }

@@ -62,49 +62,49 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	ftpConn.SetRootFolder(projectConfig.FTPServerFolder)
 
 	err := ftpfs.DialAction(&ftpConn).Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	err = ftpfs.LoginAction(&ftpConn).Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// prevent the remote FTP server to close the idle connection
 	noOpAction := ftpfs.IdleAction(&ftpConn)
 	err = noOpAction.Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// create a local tar archive as backup for the remote folder content
 	if isBackup {
 		err = ftpfs.BackupAction(&ftpConn, AppFs, "backup", isDryRun).Run()
-		utils.CheckIfError(err)
+		utils.ExitIfError(err)
 	}
 
 	// delete content from the remote folder with exclude list
 	err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// Create the folders structure
 	jww.FEEDBACK.Println("* Creating remote folders structure")
 	foldersList := walkLocal(AppFs, EntryTypeFolder, projectConfig.SvelteKitBuildFolder)
 	err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// prevent the remote FTP server to close the idle connection
 	err = noOpAction.Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// upload files
 	jww.FEEDBACK.Println("* Uploading files to the remote folders")
 	filesList := walkLocal(AppFs, EntryTypeFile, projectConfig.SvelteKitBuildFolder)
 	err = ftpfs.UploadAction(&ftpConn, AppFs, projectConfig.SvelteKitBuildFolder, filesList, isDryRun).Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// prevent the remote FTP server to close the idle connection
 	err = noOpAction.Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// close the connection
 	err = ftpfs.LogoutAction(&ftpConn).Run()
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG SUMMARY TO THE STDOUT
 	jww.FEEDBACK.Println(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
@@ -144,6 +144,6 @@ func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 			}
 			return nil
 		})
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 	return fList
 }

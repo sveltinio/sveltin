@@ -54,7 +54,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	textLogger.SetTitle("New resource folder structure is going to be created:")
 
 	resourceName, err := promptResourceName(args)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// GET FOLDER: content folder
 	contentFolder := fsManager.GetFolder(CONTENT)
@@ -133,7 +133,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// CREATE FOLDER STRUCTURE
 	sfs := factory.NewResourceArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	textLogger.SetContent(listLogger.Render())

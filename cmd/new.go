@@ -80,10 +80,10 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	listLogger.Reset()
 
 	projectName, err := promptProjectName(args)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	cssLibName, err := promptCSSLibName(withCSSLib)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	themeName := getThemeName(projectName)
 
@@ -94,7 +94,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	starterTemplate := appTemplatesMap[SVELTEKIT_STARTER]
 	listLogger.AppendItem(`Cloning ` + starterTemplate.URL)
 	err = utils.GitClone(&starterTemplate, pathMaker.GetProjectRoot(projectName))
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
 	projectFolder := fsManager.GetFolder(projectName)
@@ -157,7 +157,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewProjectArtifact(&resources.SveltinFS, AppFs)
 	err = rootFolder.Create(sfs)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
 	listLogger.AppendItem("Setup the CSS Lib")
@@ -168,7 +168,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 		ThemeName:   themeName,
 	}
 	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, &tplData)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	textLogger.SetContent(listLogger.Render())
@@ -336,7 +336,7 @@ func getSelectedNPMClient() npmc.NPMClient {
 	installedNPMClients := utils.GetInstalledNPMClientList()
 	npmClientNames := utils.GetNPMClientNames(installedNPMClients)
 	client, err := promptNPMClient(npmClientNames)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 

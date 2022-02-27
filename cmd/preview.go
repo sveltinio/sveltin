@@ -37,13 +37,13 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	utils.PrettyPrinter(textLogger).Print()
 
 	err = helpers.RunPMCommand(npmClient.Name, "preview", "", nil, false)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 }
 
 func init() {

@@ -72,7 +72,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	textLogger.Reset()
 
 	contentData, err := getContentName(AppFs, args, &conf)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	textLogger.SetTitle(`New "` + contentData.Name + `" will be added to your Sveltin project`)
 
@@ -105,7 +105,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	utils.PrettyPrinter(textLogger).Print()
@@ -131,10 +131,10 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		}
 		contentName := common.PromptGetInput(contentNamePromptContent)
 		contentType, err := promptContentTemplateSelection(templateFlag)
-		utils.CheckIfError(err)
+		utils.ExitIfError(err)
 
 		contentResource, err := promptResourceList(fs, c)
-		utils.CheckIfError(err)
+		utils.ExitIfError(err)
 
 		return config.TemplateData{
 			Name:     utils.ToValidName(contentName),
@@ -147,10 +147,10 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		contentResource, contentName := path.Split(name)
 		contentResource = strings.ReplaceAll(contentResource, "/", "")
 		err := helpers.ResourceExists(fs, contentResource, &conf)
-		utils.CheckIfError(err)
+		utils.ExitIfError(err)
 
 		contentType, err := promptContentTemplateSelection(templateFlag)
-		utils.CheckIfError(err)
+		utils.ExitIfError(err)
 
 		return config.TemplateData{
 			Name:     utils.ToValidName(contentName),

@@ -77,7 +77,7 @@ func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 // RetrievePackageManagerFromPkgJson returns NPMClient struct parsing the package.json file.
 func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) (npmc.NPMClient, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
-	CheckIfError(err)
+	ExitIfError(err)
 	pkgParsed := npmc.Parse(pkgFileContent)
 	if pkgParsed.PackageManager != "" {
 		pmInfoString := npmc.NPMClientInfoStr(pkgParsed.PackageManager)

@@ -56,19 +56,19 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	listLogger.Reset()
 
 	pageName, err := getPageName(args)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	textLogger.SetTitle(`New "` + pageName + `" page added to your Sveltin project`)
 
 	pageType, err := getPageType(pageType)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// GET FOLDER: src/routes
 	routesFolder := fsManager.GetFolder(ROUTES)
 
 	// NEW FILE: src/routes/<page_name.svelte|svx>
 	pageFile := fsManager.NewPublicPage(pageName, pageType)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// ADD TO THE ROUTES FOLDER
 	routesFolder.Add(pageFile)
@@ -80,7 +80,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// GENERATE STRUCTURE
 	sfs := factory.NewPageArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	textLogger.SetContent(listLogger.Render())

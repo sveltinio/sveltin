@@ -58,13 +58,13 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	textLogger.SetTitle("New metadata folder structure is going to be created:")
 
 	mdName, err := promptMetadataName(args)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	mdResource, err := promptResource(AppFs, resourceName, &conf)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	mdType, err := promptMetadataType(metadataType)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// NEW FOLDER: <metadata_name>
 	resourceMetadataAPIFolder := composer.NewFolder(mdName)
@@ -147,7 +147,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewMetadataArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	textLogger.SetContent(listLogger.Render())

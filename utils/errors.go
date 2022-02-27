@@ -14,8 +14,8 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 )
 
-// CheckIfError panics on os.Exit(1) if error
-func CheckIfError(err error) {
+// ExitIfError panics on os.Exit(1) if error
+func ExitIfError(err error) {
 	if err == nil {
 		return
 	}

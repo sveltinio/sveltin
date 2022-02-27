@@ -75,7 +75,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	// GENERATE FOLDER STRUCTURE
 	sfs := factory.NewMenuArtifact(&resources.SveltinFS, AppFs)
 	err := projectFolder.Create(sfs)
-	utils.CheckIfError(err)
+	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
 	textLogger.SetContent(listLogger.Render())

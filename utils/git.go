@@ -23,7 +23,7 @@ func GitClone(sveltinTemplate *config.AppTemplate, inpath string) error {
 		Progress: nil,
 	})
 
-	CheckIfError(err)
+	ExitIfError(err)
 	if err := cleanGitRepository(inpath, []string{".git"}); err != nil {
 		return err
 	}
