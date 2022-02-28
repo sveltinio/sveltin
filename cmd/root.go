@@ -75,10 +75,20 @@ var rootCmd = &cobra.Command{
 	TraverseChildren: true,
 	Short:            "sveltin is the main command to work with SvelteKit powered static websites.",
 	Long: resources.GetAsciiArt() + `
-sveltin is the main command to work with SvelteKit powered static website.`,
+A powerful CLI for your SvelteKit powered static website!
+
+sveltin is the main command used to boost your productivity
+while creating a new production-ready project.
+
+Resources:
+  Documentation           -> https://docs.sveltin.io
+  A helpful quick-start   -> https://docs.sveltin.io/quick-start
+
+`,
 }
 
-// Execute executes the root command.
+// Execute adds all child commands to the root command and sets flags appropriately.
+// It is called by main.main().
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
