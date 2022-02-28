@@ -18,6 +18,21 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
+// PromptConfirm is used to ask for a yes or no ([Y/N]) question.
+func PromptConfirm(label string) string {
+	prompt := promptui.Prompt{
+		Label:     label,
+		IsConfirm: true,
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
+		os.Exit(1)
+	}
+	return result
+}
+
 // PromptGetInput is used to prompt an input the user and retrieve the value.
 func PromptGetInput(pc config.PromptContent) string {
 	validate := func(input string) error {
