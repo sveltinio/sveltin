@@ -54,17 +54,10 @@ func PromptGetSelect(items []string, pc config.PromptContent) string {
 	var result string
 	var err error
 
-	validate := func(input string) error {
-		if len(input) == 0 {
-			return errors.New("your selection is invalid")
-		}
-		return nil
-	}
-
-	prompt := promptui.SelectWithAdd{
-		Label:    pc.Label,
-		Items:    items,
-		Validate: validate,
+	prompt := promptui.Select{
+		Label: pc.Label,
+		Items: items,
+		Size:  len(items),
 	}
 
 	_, result, err = prompt.Run()
