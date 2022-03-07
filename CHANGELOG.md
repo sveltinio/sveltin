@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.5.1
+
+### Patch Changes
+
+- fix: set `config.kit.prerender.default` to `true`
+
 ## 0.5.0
 
 ### Minor Changes
