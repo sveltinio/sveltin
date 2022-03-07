@@ -9,6 +9,7 @@
 package common
 
 import (
+	"bufio"
 	"bytes"
 	"embed"
 	"io"
@@ -77,4 +78,20 @@ func CopyFileFromEmbeddedFS(efs *embed.FS, fs afero.Fs, pathToFile string, saveT
 		return sveltinerr.NewDefaultError(err)
 	}
 	return nil
+}
+
+// ReadFileLineByLine returns a slice of strings representing lines of the input file.
+func ReadFileLineByLine(appFs afero.Fs, filepath string) ([]string, error) {
+	file, err := appFs.Open(filepath)
+	if err != nil {
+		return nil, err
+	}
+	scanner := bufio.NewScanner(file)
+	lines := []string{}
+
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	file.Close()
+	return lines, nil
 }
