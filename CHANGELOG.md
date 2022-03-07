@@ -1,5 +1,15 @@
 # sveltin
 
+## 0.5.0
+
+### Minor Changes
+
+- fix: import type IWebPageMetadata for index.svelte
+- breaking: sveltin `prepare` command renamed as `install`. With [#4182](https://github.com/sveltejs/kit/pull/4182), SvelteKit added support for a new CLI command called `sync` wrapped as `prepare` script in `package.json` file.
+- feat: sveltin `prepare` command wraps the new SvelteKit `sync` command, [#4182](https://github.com/sveltejs/kit/pull/4182)
+- feat: sveltin `deploy` command places the TAR archive within the `backups` folder at project root level.
+- refactor: new underlying logging lib developed
+
 ## 0.4.0
 
 ### Minor Changes
