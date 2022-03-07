@@ -235,11 +235,11 @@ Alias: `u`
 
 Read more [here][update].
 
-### sveltin sync
+### sveltin prepare
 
-`sveltin synch` is used to wrap `svelte-kit sync` command.
+`sveltin prepare` is used to wrap `svelte-kit sync` command.
 
-Read more [here][sync].
+Read more [here][prepare].
 
 ### sveltin server
 
