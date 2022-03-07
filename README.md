@@ -76,7 +76,7 @@ sveltin new myBlog --css tailwindcss
 cd myBlog
 
 # Install all the dependencies
-sveltin prepare
+sveltin install
 
 # Create a public page as Svelte component
 # (http://localhost:3000/contact)
@@ -163,9 +163,10 @@ Available Commands:
   generate     Command to generate static files like sitemap, rss etc
   help         Help about any command
   new          Command to create projects, resources, contents, pages and metadata
-  prepare      Install all the dependencies from the package.json file
+  install      Install all the dependencies from the package.json file
   preview      Preview the production version locally
-  server       Run the server
+  server       Run the Vite server
+  prepare      Wrap SvelteKit sync command to ensure types are set up and correct before run typechecking
   update       Update all the dependencies from the package.json file
 
 Flags:
@@ -218,13 +219,13 @@ Alias: `g`, `gen`
 
 Read more [here][generate].
 
-### sveltin prepare
+### sveltin install
 
-`sveltin prepare` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
+`sveltin install` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
 
-Alias: `i`, `install`, `init`
+Alias: `i`, `init`
 
-Read more [here][prepare].
+Read more [here][install].
 
 ### sveltin update
 
@@ -233,6 +234,12 @@ Read more [here][prepare].
 Alias: `u`
 
 Read more [here][update].
+
+### sveltin sync
+
+`sveltin synch` is used to wrap `svelte-kit sync` command.
+
+Read more [here][sync].
 
 ### sveltin server
 
@@ -283,6 +290,7 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [rss]: https://docs.sveltin.io/cli/generate-rss/
 [server]: https://docs.sveltin.io/cli/server/
 [prepare]: https://docs.sveltin.io/cli/prepare/
+[install]: https://docs.sveltin.io/cli/install/
 [update]: https://docs.sveltin.io/cli/update/
 [build]: https://docs.sveltin.io/cli/build/
 [preview]: https://docs.sveltin.io/cli/preview/
