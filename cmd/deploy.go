@@ -9,8 +9,10 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
@@ -29,9 +31,10 @@ const (
 )
 
 var (
-	isDryRun    bool
-	isBackup    bool
-	withExclude []string
+	isDryRun        bool
+	isBackup        bool
+	withExclude     []string
+	withExcludeFile string
 )
 
 var deployCmd = &cobra.Command{
@@ -46,6 +49,14 @@ var deployCmd = &cobra.Command{
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
 	log.Info("Deploy your website to the FTP server")
+
+	// if --excludeFile is set, combines its lines with values from the --exclude flag.
+	if len(withExcludeFile) != 0 {
+		lines, err := common.ReadFileLineByLine(AppFs, withExcludeFile)
+		utils.ExitIfError(err)
+		withExclude = common.Union(withExclude, lines)
+
+	}
 
 	ftpConnectionConfig := &ftpfs.FTPConnectionConfig{
 		Host:     projectConfig.FTPHost,
@@ -87,6 +98,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		}
 
 		// delete content from the remote folder with exclude list
+		log.Important(fmt.Sprintf("The following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", ")))
 		err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
 		utils.ExitIfError(err)
 
@@ -117,7 +129,6 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		// LOG SUMMARY TO THE STDOUT
 		log.Info(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
 		log.Success("Done")
-
 	}
 
 }
@@ -126,6 +137,7 @@ func deployCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&isBackup, "backup", "b", true, "create a tar archive for the existing content on the remote FTP server")
 	cmd.Flags().BoolVarP(&isDryRun, "dryRun", "d", false, "dry run")
 	cmd.Flags().StringArrayVarP(&withExclude, "exclude", "e", []string{".htaccess"}, "list of files to not be deleted from the FTP server. Default: .htaccess")
+	cmd.Flags().StringVar(&withExcludeFile, "excludeFile", "", "path to the file containing the list of files to not be deleted from the FTP server.")
 }
 
 func init() {
