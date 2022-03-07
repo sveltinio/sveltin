@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
-	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
 	import Hero from '$themes/{{ .ThemeName }}/partials/Hero.svelte';
 	import { getFavicon } from '$lib/utils/strings.js';
