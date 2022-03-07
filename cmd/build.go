@@ -37,8 +37,7 @@ your production environment
 
 // RunBuildCmd is the actual work function.
 func RunBuildCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	textLogger.SetTitle("Building Sveltin project")
+	log.Info("Building the Sveltin project")
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
@@ -47,9 +46,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	os.Setenv("VITE_PUBLIC_BASE_PATH", projectConfig.BaseURL)
 	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
 	utils.ExitIfError(err)
-
-	// LOG TO STDOUT
-	utils.PrettyPrinter(textLogger).Print()
+	log.Success("Done")
 }
 
 func init() {

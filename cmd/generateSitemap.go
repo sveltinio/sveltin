@@ -13,6 +13,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -31,27 +32,25 @@ It makes use of the .env.production file to reflect the base url for your websit
 
 // RunGenerateSitemapCmd is the actual work function.
 func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	textLogger.SetTitle("A Sitemap will be created for your Sveltin project")
+	listLogger := log.WithList()
 
-	listLogger.Reset()
-	listLogger.AppendItem("Getting list of existing public pages")
+	listLogger.Append(logger.LevelInfo, "Getting list of existing public pages")
 	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	listLogger.AppendItem("Getting list of existing resources")
+	listLogger.Append(logger.LevelInfo, "Getting list of existing resources")
 	existingResources := helpers.GetAllResources(AppFs, conf.GetContentPath())
 
-	listLogger.AppendItem("Getting list of all contents for the resources")
+	listLogger.Append(logger.LevelInfo, "Getting list of all contents for the resources")
 	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
 
-	listLogger.AppendItem("Getting list of all metadata for the resources")
+	listLogger.Append(logger.LevelInfo, "Getting list of all metadata for the resources")
 	metadata := helpers.GetResourceMetadataMap(AppFs, existingResources, conf.GetRoutesPath())
 
 	// GET FOLDER: static
 	staticFolder := fsManager.GetFolder(STATIC)
 
 	// NEW FILE: static/rss.xml
-	listLogger.AppendItem("Generating the sitemap.xml file")
+	listLogger.Append(logger.LevelInfo, "Generating the sitemap.xml file")
 	sitemapFile := fsManager.NewNoPage("sitemap", &projectConfig, existingResources, contents, metadata, pages)
 	staticFolder.Add(sitemapFile)
 
@@ -65,8 +64,8 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
-	textLogger.SetContent(listLogger.Render())
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger.Info("The Sitemap file will be created")
+	log.Success("Done")
 }
 
 func init() {

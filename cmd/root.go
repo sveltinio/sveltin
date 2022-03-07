@@ -19,8 +19,8 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/fsm"
+	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
-	"github.com/sveltinio/sveltin/utils"
 	"gopkg.in/yaml.v2"
 )
 
@@ -57,8 +57,7 @@ var (
 )
 
 var (
-	textLogger      = utils.NewTextLogger()
-	listLogger      = utils.NewListWriter()
+	log             = logger.New()
 	npmClientName   string
 	appTemplatesMap map[string]config.AppTemplate
 	pathMaker       pathmaker.SveltinPathMaker
@@ -94,10 +93,28 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(loadSveltinConfig, initSveltin)
+	cobra.OnInitialize(setDefaultLoggerOptions, loadSveltinConfig, initSveltin)
 }
 
 //=============================================================================
+
+func setDefaultLoggerOptions() {
+	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
+		Timestamp: false,
+		Colors:    true,
+		Labels:    false,
+		Icons:     true,
+	})
+}
+
+func setListLoggerOptions() {
+	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
+		Timestamp: false,
+		Colors:    true,
+		Labels:    false,
+		Icons:     false,
+	})
+}
 
 func initSveltin() {
 	pathMaker = pathmaker.NewSveltinPathMaker(&conf)

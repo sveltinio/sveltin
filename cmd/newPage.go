@@ -10,6 +10,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
@@ -52,16 +53,13 @@ This command allows you to select between a svelte component page and a markdown
 
 // NewPageCmdRun is the actual work function.
 func NewPageCmdRun(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	listLogger.Reset()
-
 	pageName, err := getPageName(args)
 	utils.ExitIfError(err)
 
-	textLogger.SetTitle(`New "` + pageName + `" page added to your Sveltin project`)
-
 	pageType, err := getPageType(pageType)
 	utils.ExitIfError(err)
+
+	log.Info(fmt.Sprintf("New '%s' as page will be added", pageName))
 
 	// GET FOLDER: src/routes
 	routesFolder := fsManager.GetFolder(ROUTES)
@@ -81,10 +79,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	sfs := factory.NewPageArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-
-	// LOG TO STDOUT
-	textLogger.SetContent(listLogger.Render())
-	utils.PrettyPrinter(textLogger).Print()
+	log.Success("Done")
 }
 
 func pageCmdFlags(cmd *cobra.Command) {

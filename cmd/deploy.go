@@ -13,7 +13,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/sveltinlib/ftpfs"
 	"github.com/sveltinio/sveltin/utils"
@@ -45,10 +44,7 @@ var deployCmd = &cobra.Command{
 
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	textLogger.SetTitle("Deploy your website to the FTP server")
-	// LOG TO STDOUT
-	utils.PrettyPrinter(textLogger).Print()
+	log.Info("Deploy your website to the FTP server")
 
 	ftpConnectionConfig := &ftpfs.FTPConnectionConfig{
 		Host:     projectConfig.FTPHost,
@@ -72,47 +68,55 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	err = noOpAction.Run()
 	utils.ExitIfError(err)
 
-	// create a local tar archive as backup for the remote folder content
-	if isBackup {
-		err = ftpfs.BackupAction(&ftpConn, AppFs, "backup", isDryRun).Run()
+	common.ShowDeployCommandWarningMessages(log)
+	setDefaultLoggerOptions()
+
+	confirmStr := promptBackupConfirm()
+
+	if isConfirm(confirmStr) {
+		// create a local tar archive as backup for the remote folder content
+		if isBackup {
+			err = ftpfs.BackupAction(&ftpConn, AppFs, "backup", isDryRun).Run()
+			utils.ExitIfError(err)
+		}
+
+		// delete content from the remote folder with exclude list
+		err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
 		utils.ExitIfError(err)
+
+		// Create the folders structure
+		log.Info("Creating remote folders structure")
+		foldersList := walkLocal(AppFs, EntryTypeFolder, projectConfig.SvelteKitBuildFolder)
+		err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
+		utils.ExitIfError(err)
+
+		// prevent the remote FTP server to close the idle connection
+		err = noOpAction.Run()
+		utils.ExitIfError(err)
+
+		// upload files
+		log.Info("Uploading files to the remote folders")
+		filesList := walkLocal(AppFs, EntryTypeFile, projectConfig.SvelteKitBuildFolder)
+		err = ftpfs.UploadAction(&ftpConn, AppFs, projectConfig.SvelteKitBuildFolder, filesList, isDryRun).Run()
+		utils.ExitIfError(err)
+
+		// prevent the remote FTP server to close the idle connection
+		err = noOpAction.Run()
+		utils.ExitIfError(err)
+
+		// close the connection
+		err = ftpfs.LogoutAction(&ftpConn).Run()
+		utils.ExitIfError(err)
+
+		// LOG SUMMARY TO THE STDOUT
+		log.Info(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
+		log.Success("Done")
 	}
-
-	// delete content from the remote folder with exclude list
-	err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
-	utils.ExitIfError(err)
-
-	// Create the folders structure
-	jww.FEEDBACK.Println("* Creating remote folders structure")
-	foldersList := walkLocal(AppFs, EntryTypeFolder, projectConfig.SvelteKitBuildFolder)
-	err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
-	utils.ExitIfError(err)
-
-	// prevent the remote FTP server to close the idle connection
-	err = noOpAction.Run()
-	utils.ExitIfError(err)
-
-	// upload files
-	jww.FEEDBACK.Println("* Uploading files to the remote folders")
-	filesList := walkLocal(AppFs, EntryTypeFile, projectConfig.SvelteKitBuildFolder)
-	err = ftpfs.UploadAction(&ftpConn, AppFs, projectConfig.SvelteKitBuildFolder, filesList, isDryRun).Run()
-	utils.ExitIfError(err)
-
-	// prevent the remote FTP server to close the idle connection
-	err = noOpAction.Run()
-	utils.ExitIfError(err)
-
-	// close the connection
-	err = ftpfs.LogoutAction(&ftpConn).Run()
-	utils.ExitIfError(err)
-
-	// LOG SUMMARY TO THE STDOUT
-	jww.FEEDBACK.Println(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
 
 }
 
 func deployCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&isBackup, "backup", "b", false, "create a tar archive for the existing content on the remote FTP server")
+	cmd.Flags().BoolVarP(&isBackup, "backup", "b", true, "create a tar archive for the existing content on the remote FTP server")
 	cmd.Flags().BoolVarP(&isDryRun, "dryRun", "d", false, "dry run")
 	cmd.Flags().StringArrayVarP(&withExclude, "exclude", "e", []string{".htaccess"}, "list of files to not be deleted from the FTP server. Default: .htaccess")
 }
@@ -146,4 +150,16 @@ func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 		})
 	utils.ExitIfError(err)
 	return fList
+}
+
+func promptBackupConfirm() string {
+	return common.PromptConfirm("Do you wish to continue?")
+}
+
+func isConfirm(value string) bool {
+	if value == "y" {
+		return true
+	}
+
+	return false
 }

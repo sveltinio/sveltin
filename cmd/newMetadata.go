@@ -10,6 +10,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
@@ -19,6 +20,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
+	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -52,10 +54,7 @@ Types:
 
 // RunNewMetadataCmd is the actual work function.
 func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	listLogger.Reset()
-
-	textLogger.SetTitle("New metadata folder structure is going to be created:")
+	listLogger := log.WithList()
 
 	mdName, err := promptMetadataName(args)
 	utils.ExitIfError(err)
@@ -70,7 +69,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceMetadataAPIFolder := composer.NewFolder(mdName)
 
 	// NEW FILE: groupedBy.json.ts
-	listLogger.AppendItem("Creating an API endpoint for the metadata")
+	listLogger.Append(logger.LevelInfo, "Creating the API endpoint for the metadata")
 	resourceMetadataAPIFile := &composer.File{
 		Name:       conf.GetMetadataAPIFilename(),
 		TemplateId: API,
@@ -92,7 +91,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	apiFolder.Add(resourceAPIFolder)
 
 	// NEW FILE: <metadata_name>.js file into src/lib folder
-	listLogger.AppendItem("Creating a lib file for the metadata")
+	listLogger.Append(logger.LevelInfo, "Creating the lib file for the metadata")
 	libFile := &composer.File{
 		Name:       pathMaker.GetResourceLibFilename(mdName),
 		TemplateId: LIB,
@@ -115,7 +114,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceMedatadaRoutesFolder := composer.NewFolder(mdName)
 
 	// NEW FILE: <resource_name>/<metadata_name>/index.svelte
-	listLogger.AppendItem("Creating an index.svelte component for the metadata")
+	listLogger.Append(logger.LevelInfo, "Creating the index.svelte component for the metadata")
 	for _, item := range []string{INDEX, SLUG} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
@@ -150,14 +149,14 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
-	textLogger.SetContent(listLogger.Render())
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger.Info(fmt.Sprintf("New '%s' as metadata will be created", mdName))
+	log.Success("Done")
 
 	// NEXT STEPS
-	textLogger.Reset()
-	textLogger.SetTitle("Next Steps")
-	textLogger.SetContent(common.HelperTextNewMetadata(mdName))
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger = log.WithList()
+	listLogger.Append(logger.LevelSuccess, "Metadata ready to be used.")
+	listLogger.Append(logger.LevelImportant, "Ensure your markdown frontmatter consider it.")
+	listLogger.Info("Next Steps")
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {

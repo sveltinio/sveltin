@@ -11,7 +11,6 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
@@ -27,11 +26,7 @@ Used to generate static files through its own subcommands.
 Run 'sveltin generate -h' for further details.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		textLogger.Reset()
-		textLogger.SetTitle("generate command called")
-		textLogger.SetContent("Run 'sveltin generate -h'")
-		// LOG TO STDOUT
-		utils.PrettyPrinter(textLogger).Print()
+		log.Important("Run 'sveltin generate -h'")
 	},
 }
 

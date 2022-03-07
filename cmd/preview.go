@@ -32,15 +32,11 @@ It wraps sveltekit-preview command.`,
 
 // RunPreviewCmd is the actual work function.
 func RunPreviewCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	textLogger.SetTitle("Preview your Sveltin project")
+	log.Info("Preview your Sveltin project")
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
-
-	// LOG TO STDOUT
-	utils.PrettyPrinter(textLogger).Print()
 
 	err = helpers.RunPMCommand(npmClient.Name, "preview", "", nil, false)
 	utils.ExitIfError(err)

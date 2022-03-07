@@ -11,6 +11,7 @@ package cmd
 import (
 	"embed"
 	"errors"
+	"fmt"
 	"path"
 	"strings"
 
@@ -69,12 +70,10 @@ As result:
 
 // RunNewContentCmd is the actual work function.
 func RunNewContentCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-
 	contentData, err := getContentName(AppFs, args, &conf)
 	utils.ExitIfError(err)
 
-	textLogger.SetTitle(`New "` + contentData.Name + `" will be added to your Sveltin project`)
+	log.Info(fmt.Sprintf("'%s' content will be added", contentData.Name))
 
 	// GET FOLDER: content
 	contentFolder := fsManager.GetFolder(CONTENT)
@@ -106,9 +105,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, AppFs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-
-	// LOG TO STDOUT
-	utils.PrettyPrinter(textLogger).Print()
+	log.Success("Done")
 }
 
 func contentCmdFlags(cmd *cobra.Command) {

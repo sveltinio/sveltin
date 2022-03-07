@@ -22,6 +22,7 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
 	"github.com/sveltinio/sveltin/sveltinlib/css"
+	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/npmc"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
@@ -74,10 +75,7 @@ sveltin new resource posts`,
 
 // NewCmdRun is the actual work function.
 func NewCmdRun(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	textLogger.SetTitle("A new Sveltin based project will be created")
-
-	listLogger.Reset()
+	listLogger := log.WithList()
 
 	projectName, err := promptProjectName(args)
 	utils.ExitIfError(err)
@@ -92,7 +90,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// Clone starter template github repository
 	starterTemplate := appTemplatesMap[SVELTEKIT_STARTER]
-	listLogger.AppendItem(`Cloning ` + starterTemplate.URL)
+	listLogger.Append(logger.LevelInfo, fmt.Sprintf("Cloning %s", starterTemplate.URL))
 	err = utils.GitClone(&starterTemplate, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
@@ -102,19 +100,19 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	fmt.Println(projectFolder.GetPath())
 
 	// NEW FOLDER: config
-	listLogger.AppendItem("Creating 'config' folder")
+	listLogger.Append(logger.LevelInfo, "Creating 'config' folder")
 	configFolder := composer.NewFolder(CONFIG)
 	projectFolder.Add(configFolder)
 
 	// NEW FILE: config/<filename>.js
-	listLogger.AppendItem("Adding config files")
+	listLogger.Append(logger.LevelInfo, "Adding config files")
 	for _, elem := range []string{DEFAULTS, EXTERNALS, WEBSITE, MENU} {
 		f := fsManager.NewConfigFile(projectName, elem, CLI_VERSION)
 		configFolder.Add(f)
 	}
 
 	// NEW FOLDER: content
-	listLogger.AppendItem("Creating 'content' folder")
+	listLogger.Append(logger.LevelInfo, "Creating 'content' folder")
 	contentFolder := composer.NewFolder(CONTENT)
 	projectFolder.Add(contentFolder)
 
@@ -133,7 +131,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectFolder.Add(routesFolder)
 
 	// NEW FOLDER: themes
-	listLogger.AppendItem("Creating 'themes' folder")
+	listLogger.Append(logger.LevelInfo, "Creating 'themes' folder")
 	themesFolder := composer.NewFolder(THEMES)
 
 	newThemeFolder := makeThemeStructure(themeName)
@@ -142,7 +140,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectFolder.Add(themesFolder)
 
 	// NEW FILE: env.production
-	listLogger.AppendItem("Adding '.env.production' file")
+	listLogger.Append(logger.LevelInfo, "Adding '.env.production' file")
 	dotEnvTplData := &config.TemplateData{
 		Name:    DOTENV_PROD,
 		BaseURL: fmt.Sprintf("http://%s.com", projectName),
@@ -160,7 +158,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
-	listLogger.AppendItem("Setup the CSS Lib")
+	listLogger.Append(logger.LevelInfo, "Setting up the CSS Lib")
 	tplData := config.TemplateData{
 		ProjectName: projectName,
 		NPMClient:   npmClient.ToString(),
@@ -171,14 +169,15 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
-	textLogger.SetContent(listLogger.Render())
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger.Info("A new Sveltin project will be created")
+	log.Success("Done")
 
 	// NEXT STEPS
-	textLogger.Reset()
-	textLogger.SetTitle("Next Steps")
-	textLogger.SetContent(common.HelperTextNewProject(projectName))
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger = log.WithList()
+	setListLoggerOptions()
+
+	listLogger.Append(logger.LevelInfo, common.HelperTextNewProject(projectName))
+	listLogger.Info("Next Steps")
 }
 
 func newCmdFlags(cmd *cobra.Command) {

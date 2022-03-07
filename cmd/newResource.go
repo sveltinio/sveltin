@@ -10,6 +10,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
@@ -17,6 +18,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
+	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 
@@ -48,10 +50,7 @@ This command:
 
 // RunNewResourceCmd is the actual work function.
 func RunNewResourceCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	listLogger.Reset()
-
-	textLogger.SetTitle("New resource folder structure is going to be created:")
+	listLogger := log.WithList()
 
 	resourceName, err := promptResourceName(args)
 	utils.ExitIfError(err)
@@ -60,7 +59,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	contentFolder := fsManager.GetFolder(CONTENT)
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
-	listLogger.AppendItem("Creating the content folder for your resource")
+	listLogger.Append(logger.LevelInfo, "Creating the content folder for your resource")
 	resourceContentFolder := composer.NewFolder(resourceName)
 	contentFolder.Add(resourceContentFolder)
 
@@ -71,7 +70,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	resourceAPIFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/routes/api/<resource_name>/published.json.ts
-	listLogger.AppendItem("Creating the API endpoint for the resource")
+	listLogger.Append(logger.LevelInfo, "Creating the API endpoint for the resource")
 	apiFile := &composer.File{
 		Name:       conf.GetAPIFilename(),
 		TemplateId: API,
@@ -90,7 +89,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	resourceLibFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/lib/<resource_name>/get<resource_name>.js
-	listLogger.AppendItem("Creating the lib file for the resource")
+	listLogger.Append(logger.LevelInfo, "Creating the lib file for the resource")
 	libFile := &composer.File{
 		Name:       utils.ToLibFilename(resourceName),
 		TemplateId: LIB,
@@ -110,7 +109,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: <resource_name>/index.svelte and [slug].svelte
 	for _, item := range []string{INDEX, SLUG} {
-		listLogger.AppendItem(`Creating ` + item + ` file for the resource`)
+		listLogger.Append(logger.LevelInfo, fmt.Sprintf("Creating the %s component for the resource", item))
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
 			TemplateId: item,
@@ -136,14 +135,14 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// LOG TO STDOUT
-	textLogger.SetContent(listLogger.Render())
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger.Info(fmt.Sprintf("New '%s' as resource will be created", resourceName))
+	log.Success("Done")
 
 	// NEXT STEPS
-	textLogger.Reset()
-	textLogger.SetTitle("Next Steps")
-	textLogger.SetContent(common.HelperTextNewResource(resourceName))
-	utils.PrettyPrinter(textLogger).Print()
+	listLogger = log.WithList()
+	listLogger.Append(logger.LevelSuccess, "Resource ready to be used. Start by adding content to it.")
+	listLogger.Append(logger.LevelImportant, fmt.Sprintf("Eg: sveltin new content %s/getting-started", resourceName))
+	listLogger.Info("Next Steps")
 }
 
 func init() {
