@@ -27,7 +27,7 @@ func PromptConfirm(label string) string {
 
 	result, err := prompt.Run()
 	if err != nil {
-		jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
+		jww.CRITICAL.Fatalf("Exit %v\n", err)
 		os.Exit(1)
 	}
 	return result
