@@ -11,38 +11,20 @@ package common
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/sveltinio/sveltin/sveltinlib/logger"
 )
 
 // HelperTextNewProject returns a 'next step' text used after the project creation.
 func HelperTextNewProject(projectName string) string {
-	placeHolderText := `
-   1. cd %s
-   2. sveltin prepare (or sveltin init, etc)
-   3. sveltin server
+	placeHolderText := `1. cd %s
+  2. sveltin prepare (or sveltin init, etc)
+  3. sveltin server
 
-To close the dev server, hit Ctrl-C
+To stop the dev server, hit Ctrl-C
 
-Visit the Quick Start guide at https://docs.sveltin.io/quick-start
-`
+Visit the Quick Start guide at https://docs.sveltin.io/quick-start`
 	return fmt.Sprintf(placeHolderText, projectName)
-}
-
-// HelperTextNewResource returns a 'next step' text used after the resource creation.
-func HelperTextNewResource(resourceName string) string {
-	placeHolderText := `Your resource is ready to be used. Start by adding content to it.
-
-Eg: sveltin new content %s/getting-started
-`
-	return fmt.Sprintf(placeHolderText, resourceName)
-}
-
-// HelperTextNewMetadata returns a 'next step' text used after the resource creation.
-func HelperTextNewMetadata(metadataName string) string {
-	placeHolderText := `Your metadata %s is ready to be used.
-
-Ensure your markdown frontmatter consider it.
-`
-	return fmt.Sprintf(placeHolderText, metadataName)
 }
 
 // HelperTextDryRunFlag returns a text used when running an action in dry-run mode.
@@ -64,4 +46,20 @@ SUMMARY:
 	filesCounter := strconv.Itoa(numOfFiles)
 
 	return fmt.Sprintf(placeHolderText, folderCounter, filesCounter)
+}
+
+// ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
+func ShowDeployCommandWarningMessages(log *logger.Logger) {
+	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
+		Timestamp: false,
+		Colors:    true,
+		Labels:    true,
+		Icons:     true,
+	})
+	listLogger := log.WithList()
+	listLogger.Append(logger.LevelWarning, "Create a backup of the existing content on the remote folder")
+	listLogger.Append(logger.LevelWarning, "Delete existing content except what specified with --exclude flag")
+	listLogger.Append(logger.LevelWarning, "Upload content to the remote folder")
+	listLogger.Info("Be aware! The deploy command will perform the following actions")
+
 }
