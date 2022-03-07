@@ -152,6 +152,6 @@ func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
 // GetSveltinCommands returns an array of pointers to the implemented cobra.Command
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
-		newCmd, generateCmd, prepareCmd, updateCmd, serverCmd, buildCmd, previewCmd,
+		newCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd,
 	}
 }
