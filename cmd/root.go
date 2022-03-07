@@ -36,6 +36,7 @@ const (
 // folder and file names for a Sveltin project structure.
 const (
 	ROOT          string = "root"
+	BACKUPS       string = "backups"
 	CONFIG        string = "config"
 	CONTENT       string = "content"
 	ROUTES        string = "routes"

@@ -10,6 +10,7 @@ package cmd
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
@@ -76,7 +77,12 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	if isConfirm(confirmStr) {
 		// create a local tar archive as backup for the remote folder content
 		if isBackup {
-			err = ftpfs.BackupAction(&ftpConn, AppFs, "backup", isDryRun).Run()
+			backupsFolderPath := filepath.Join(pathMaker.GetRootFolder(), BACKUPS)
+			common.MkDir(AppFs)
+			pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
+			projectName, err := utils.RetrieveProjectName(AppFs, pathToPkgFile)
+			utils.ExitIfError(err)
+			err = ftpfs.BackupAction(&ftpConn, AppFs, filepath.Join(backupsFolderPath, projectName), isDryRun).Run()
 			utils.ExitIfError(err)
 		}
 
@@ -111,6 +117,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		// LOG SUMMARY TO THE STDOUT
 		log.Info(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
 		log.Success("Done")
+
 	}
 
 }
@@ -157,9 +164,5 @@ func promptBackupConfirm() string {
 }
 
 func isConfirm(value string) bool {
-	if value == "y" {
-		return true
-	}
-
-	return false
+	return value == "y"
 }
