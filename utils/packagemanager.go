@@ -74,6 +74,7 @@ func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return filter(in, name)
 }
 
+// RetrieveProjectName returns the project name as string parsing the package.json file.
 func RetrieveProjectName(appFS afero.Fs, pathToPkgJson string) (string, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
 	ExitIfError(err)
