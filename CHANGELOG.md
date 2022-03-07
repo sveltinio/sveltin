@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.5.2
+
+### Patch Changes
+
+- feat: `--withExcludeFile` flag added, to specify a file containing the list of files to not be deleted from the FTP server
+
 ## 0.5.1
 
 ### Patch Changes
