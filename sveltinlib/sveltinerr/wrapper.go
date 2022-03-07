@@ -134,3 +134,9 @@ did not find the "packageManager" key in your package.json file
 [HINT]: add "packageManager": "<your_npm_client>@<version>" to it and run the command again`)
 	return newSveltinError(83, errN, "SVELTIN PackageManagerCommandNotValidError")
 }
+
+// NewProjectNameNotFoundError ...
+func NewProjectNameNotFoundError() error {
+	errN := errors.New(`cannot find property "name" in your package.json file`)
+	return newSveltinError(84, errN, "SVELTIN ProjectNameNotFoundError")
+}

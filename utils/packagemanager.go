@@ -74,6 +74,17 @@ func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return filter(in, name)
 }
 
+func RetrieveProjectName(appFS afero.Fs, pathToPkgJson string) (string, error) {
+	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
+	ExitIfError(err)
+	pkgParsed := npmc.Parse(pkgFileContent)
+	if pkgParsed.Name != "" {
+		return pkgParsed.Name, nil
+	}
+
+	return "", sveltinerr.NewProjectNameNotFoundError()
+}
+
 // RetrievePackageManagerFromPkgJson returns NPMClient struct parsing the package.json file.
 func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) (npmc.NPMClient, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
