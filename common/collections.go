@@ -22,8 +22,38 @@ func Contains(s []string, str string) bool {
 			return true
 		}
 	}
-
 	return false
+}
+
+// Unique removes duplicated entries from a slice of strings.
+func Unique(s []string) []string {
+	inResult := make(map[string]bool)
+	uniqueValues := []string{}
+	for _, elem := range s {
+		if len(elem) != 0 {
+			if _, value := inResult[elem]; !value {
+
+				inResult[elem] = true
+				uniqueValues = append(uniqueValues, elem)
+			}
+		}
+	}
+	return uniqueValues
+}
+
+// Union returns a slice containing the unique values of the input slices.
+func Union(a, b []string) []string {
+	m := make(map[string]bool)
+	for _, item := range a {
+		m[item] = true
+	}
+
+	for _, item := range b {
+		if _, ok := m[item]; !ok {
+			a = append(a, item)
+		}
+	}
+	return Unique(a)
 }
 
 // CheckMinMaxArgs returns an error if the number of args is not within the expected range.
