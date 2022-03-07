@@ -23,7 +23,7 @@ func RunPMCommand(pmName string, pmCmd string, mode string, packages []string, s
 		err = nodePM.RunInstall(pmName, pmCmd, silentMode)
 	case "update":
 		err = nodePM.RunUpdate(pmName, pmCmd, silentMode)
-	case "dev", "build", "preview":
+	case "dev", "build", "preview", "prepare":
 		err = nodePM.RunSvelteKitCommand(pmName, pmCmd, silentMode)
 	case "addPackages":
 		err = nodePM.RunAddPackages(pmName, pmCmd, mode, packages, silentMode)

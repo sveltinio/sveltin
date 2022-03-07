@@ -20,32 +20,24 @@ import (
 //=============================================================================
 
 var prepareCmd = &cobra.Command{
-	Use:     "prepare",
-	Aliases: []string{"i", "install", "init"},
-	Short:   "Get all the dependencies from the `package.json` file",
+	Use:   "prepare",
+	Short: "It wraps svelte-kit sync command.",
 	Long: resources.GetAsciiArt() + `
-Initialize the Sveltin project getting all dependencies from the package.json file.
-
-It wraps (npm|pnpm|yarn) install.
-`,
+It wraps svelte-kit sync command to ensure types are set up and correct before run typechecking.`,
 	Run: RunPrepareCmd,
 }
 
 // RunPrepareCmd is the actual work function.
 func RunPrepareCmd(cmd *cobra.Command, args []string) {
-	textLogger.Reset()
-	textLogger.SetTitle("Prepare Sveltin project")
-	textLogger.SetContent("* Getting dependencies")
+	log.Info("Running svelte-kit sync command")
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
-	// LOG TO STDOUT
-	utils.PrettyPrinter(textLogger).Print()
-
-	err = helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
+	err = helpers.RunPMCommand(npmClient.Name, "prepare", "", nil, false)
 	utils.ExitIfError(err)
+	log.Success("Done")
 }
 
 func init() {
