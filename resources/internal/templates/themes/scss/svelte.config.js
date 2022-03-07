@@ -28,6 +28,7 @@ const config = {
 			fallback: null,
 		}),
 		prerender: {
+			default: true,
 			entries: ['*'],
 		},
 		vite: {
