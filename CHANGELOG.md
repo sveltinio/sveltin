@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.5.3
+
+### Patch Changes
+
+- fix: favicons with multiple formats and webmanifest file
+
 ## 0.5.2
 
 ### Patch Changes
