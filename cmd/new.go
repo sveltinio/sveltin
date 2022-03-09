@@ -96,8 +96,6 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// GET FOLDER: <project_name>
 	projectFolder := fsManager.GetFolder(projectName)
-	fmt.Println(projectFolder.Name)
-	fmt.Println(projectFolder.GetPath())
 
 	// NEW FOLDER: config
 	listLogger.Append(logger.LevelInfo, "Creating 'config' folder")
