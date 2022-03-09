@@ -18,7 +18,7 @@ import (
 // HelperTextNewProject returns a 'next step' text used after the project creation.
 func HelperTextNewProject(projectName string) string {
 	placeHolderText := `1. cd %s
-  2. sveltin prepare (or sveltin init, etc)
+  2. sveltin install
   3. sveltin server
 
 To stop the dev server, hit Ctrl-C
