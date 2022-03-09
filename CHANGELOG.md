@@ -1,5 +1,14 @@
 # sveltin
 
+## 0.5.4
+
+### Patch Changes
+
+- fix: [#1](https://github.com/sveltinio/sveltin/issues/1) - it is now possible to use readable name when running command in interactive way
+- fix: pages templates still used a wrong import for IWebPageMetadata from @sveltinio/seo
+- fix: [#2](https://github.com/sveltinio/sveltin/issues/2) - EndpointOutput import removed from api template files
+- refactor: string utilities methods
+
 ## 0.5.3
 
 ### Patch Changes
