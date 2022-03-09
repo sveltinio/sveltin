@@ -1,10 +1,12 @@
+{{ $pageName := .Name | ToVariableName}}
 <script lang="ts">
 	import { website } from '$config/website.js';
-	import { IWebPageMetadata, OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
-	const {{ .Name | ToPageVariableName }}Page: IWebPageMetadata = {
+	const {{ $pageName }}Page: IWebPageMetadata = {
 		url: getPageUrl('{{ .Name }}', website),
 		title: '{{ .Name | ToTitle }}',
 		description: website.seoDescription,
@@ -19,9 +21,9 @@
 	};
 </script>
 
-<PageMetaTags data={ {{ .Name | ToPageVariableName }}Page } />
-<JsonLdWebPage data={ {{ .Name | ToPageVariableName }}Page } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ {{ .Name | ToPageVariableName }}Page.title} />
+<PageMetaTags data={ {{ $pageName }}Page } />
+<JsonLdWebPage data={ {{ $pageName }}Page } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ {{ $pageName }}Page.title} />
 
 <!-- Page markup-->
 <section class="page">

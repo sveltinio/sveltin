@@ -78,8 +78,8 @@ func (b *publicPageContentBuilder) setFuncs() {
 		"ToTitle": func(text string) string {
 			return utils.ToTitle(text)
 		},
-		"ToPageVariableName": func(text string) string {
-			return utils.ToPageVariableName(text)
+		"ToVariableName": func(text string) string {
+			return utils.ToVariableName(text)
 		},
 	}
 }

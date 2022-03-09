@@ -133,7 +133,7 @@ func (maker *SveltinPathMaker) GetPathToExistingResources() string {
 // GetResourceLibFilename returns a string representing the path to the resource lib file
 // for a sveltin project relative to the current working directory.
 func (maker *SveltinPathMaker) GetResourceLibFilename(artifact string) string {
-	return utils.ToLibFilename(artifact)
+	return utils.ToLibFile(artifact)
 }
 
 // GetResourceContentFilename returns a string representing the filename

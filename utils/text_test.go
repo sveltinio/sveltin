@@ -16,6 +16,10 @@ func TestTextUtils(t *testing.T) {
 	is.Equal("2022", CurrentYear())
 	is.Equal(2, PlusOne(1))
 	is.Equal(3, Sum(1, 2))
-	is.Equal("quick-start", ToValidName("quick_start"))
-	is.Equal("quickStartPage", ToPageVariableName("quick-start-page"))
+	is.Equal("quick-start", ToSlug("quick_start"))
+	is.Equal("resource-name", ToSlug("Resource Name"))
+	is.Equal("resource-name", ToSlug("Resource_Name"))
+	is.Equal("resource-name", ToSlug("Resource name"))
+	is.Equal("quickStartPage", ToVariableName("quick-start-page"))
+	is.Equal("resourceName", ToVariableName("Resource name"))
 }

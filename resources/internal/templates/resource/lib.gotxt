@@ -1,12 +1,12 @@
 import filter from 'lodash-es/filter.js';
-
-const {{ .Name }} = import.meta.globEager('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{md,svx}');
-const {{ .Name }}List = Object.entries({{ .Name }})
+{{ $varName := .Name | ToVariableName}}
+const {{ $varName }} = import.meta.globEager('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{md,svx}');
+const {{ $varName }}List = Object.entries({{ $varName }})
    .map(([_, item]) => ({
       ...item.metadata,
       ...item.default.render()
    }))
    .sort((a, b) => (a.date < b.date ? 1 : -1));
 
-const published = filter({{ .Name }}List, ['draft', false]);
-export default published;
+const published = filter({{ $varName }}List, ['draft', false]);
+export { published };

@@ -34,7 +34,7 @@
 		};
 	}
 </script>
-
+{{ $varName := .Name | ToVariableName}}
 <script lang="ts">
 	import { website } from '$config/website.js';
 	import { Card } from '@sveltinio/widgets';
@@ -42,14 +42,14 @@
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let resourceName: string;
 	export let itemsList: Array<ResourceContent>;
 
 	const sortedItemsList = orderBy(itemsList, (item) => item.metadata.created_at, ['desc']);
 
-	const {{ .Name }}IndexPage: IWebPageMetadata = {
+	const {{ $varName }}IndexPage: IWebPageMetadata = {
 		url: getPageUrl(resourceName, website),
 		title: website.name,
 		description: 'Here you can find the list of all available {{ .Name }}.',
@@ -64,14 +64,14 @@
 	};
 </script>
 
-<PageMetaTags data={ {{ .Name }}IndexPage } />
-<JsonLdWebPage data={ {{ .Name }}IndexPage } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent={resourceName} currentTitle={ {{ .Name }}IndexPage.title} />
+<PageMetaTags data={ {{ $varName }}IndexPage } />
+<JsonLdWebPage data={ {{ $varName }}IndexPage } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent={resourceName} currentTitle={ {{ $varName }}IndexPage.title} />
 
 <section class="artifact-container">
 	<div class="content">
 		{#if sortedItemsList.length != 0 }
-		<h1>All {resourceName}</h1>
+		<h1>{ToTitle(resourceName)}</h1>
 		<div class="cards">
 		{#each sortedItemsList as item }
 			<Card {item} />
@@ -80,7 +80,7 @@
 		{:else}
 		<h2 class="message warning">
 			Nothing to show here! Create some content first and reload the page:
-			<span><pre><code class="text-default">sveltin new content {{ .Name }}/getting-started</code></pre></span>
+			<span><pre><code class="text-default">sveltin new content {{ $varName }}/getting-started</code></pre></span>
 		</h2>
 		{/if}
 	</div>

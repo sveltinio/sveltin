@@ -81,6 +81,9 @@ func (b *resContentBuilder) setFuncs() {
 		"Today": func() string {
 			return utils.Today()
 		},
+		"ToVariableName": func(txt string) string {
+			return utils.ToVariableName(txt)
+		},
 	}
 }
 

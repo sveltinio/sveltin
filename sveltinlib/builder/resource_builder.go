@@ -10,11 +10,11 @@ package builder
 
 import (
 	"errors"
-	"strings"
 	"text/template"
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 const (
@@ -83,7 +83,12 @@ func (b *resourceContentBuilder) SetTemplateData(artifactData *config.TemplateDa
 
 func (b *resourceContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
-		"Capitalize": strings.Title,
+		"ToVariableName": func(txt string) string {
+			return utils.ToVariableName(txt)
+		},
+		"ToLibFile": func(txt string) string {
+			return utils.ToLibFile(txt)
+		},
 	}
 }
 

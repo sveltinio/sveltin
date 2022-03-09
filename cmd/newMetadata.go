@@ -204,10 +204,10 @@ func promptMetadataName(inputs []string) (string, error) {
 			Label:    "What's the metadata name?",
 		}
 		name = common.PromptGetInput(metadataNamePromptContent)
-		return name, nil
+		return utils.ToSlug(name), nil
 	case numOfArgs == 1:
 		name = inputs[0]
-		return name, nil
+		return utils.ToSlug(name), nil
 	default:
 		err := errors.New("something went wrong: name not valid")
 		return "", sveltinerr.NewDefaultError(err)

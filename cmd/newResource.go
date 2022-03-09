@@ -91,7 +91,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// NEW FILE: src/lib/<resource_name>/get<resource_name>.js
 	listLogger.Append(logger.LevelInfo, "Creating the lib file for the resource")
 	libFile := &composer.File{
-		Name:       utils.ToLibFilename(resourceName),
+		Name:       utils.ToLibFile(resourceName),
 		TemplateId: LIB,
 		TemplateData: &config.TemplateData{
 			Name:   resourceName,
@@ -160,10 +160,10 @@ func promptResourceName(inputs []string) (string, error) {
 			Label:    "What's the resource name? (e.g. posts, portfolio ...)",
 		}
 		name = common.PromptGetInput(resourceNamePromptContent)
-		return name, nil
+		return utils.ToSlug(name), nil
 	case numOfArgs == 1:
 		name = inputs[0]
-		return name, nil
+		return utils.ToSlug(name), nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)

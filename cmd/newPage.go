@@ -102,10 +102,10 @@ func getPageName(inputs []string) (string, error) {
 			Label:    "What's the page name?",
 		}
 		name = common.PromptGetInput(pageNamePromptContent)
-		return utils.ToValidName(name), nil
+		return utils.ToSlug(name), nil
 	case numOfArgs == 1:
 		name = inputs[0]
-		return utils.ToValidName(name), nil
+		return utils.ToSlug(name), nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)

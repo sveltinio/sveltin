@@ -15,14 +15,15 @@ import (
 
 // ToMDFile returns a string with .md suffix
 // example: ToMDFile("welcome") returns 'welcome.md'.
-func ToMDFile(text string) string {
-	return strings.ToUpper(text) + ".md"
+func ToMDFile(txt string) string {
+	return strings.ToUpper(txt) + ".md"
 }
 
-// ToLibFilename returns a string a valid lib filename
+// ToLibFile returns a string a valid lib filename
 // example: ToLibFilename("category") returns 'getCategory.js'.
-func ToLibFilename(txt string) string {
-	return `get` + strings.Title(txt) + `.js`
+func ToLibFile(txt string) string {
+	vName := ToVariableName(txt)
+	return `get` + strings.Title(vName) + `.js`
 }
 
 // ToTitle replace all '-' char with a white space and
@@ -43,10 +44,14 @@ func Trimmed(txt string) string {
 	return strings.Trim(txt, "\"")
 }
 
-// ToValidName returns a copy of string replacing '_' with '-'
-// example: ToValidName("getting_started") returns 'getting-started'.
-func ToValidName(txt string) string {
-	return strings.ReplaceAll(txt, "_", "-")
+// ToSlug returns a copy of string with lowercase
+// replacing "_" and whitespaces with "-"
+// example: ToSlug("New Resource") returns new-resource.
+func ToSlug(txt string) string {
+	cleanString := strings.ToLower(txt)
+	cleanString = strings.ReplaceAll(cleanString, " ", "-")
+	cleanString = strings.ReplaceAll(cleanString, "_", "-")
+	return cleanString
 }
 
 // ToBasePath returns a copy of string replacing all occurrences
@@ -55,11 +60,10 @@ func ToBasePath(fullpath string, replace string) string {
 	return strings.ReplaceAll(fullpath, replace+"/", "")
 }
 
-// ToPageVariableName returns a human readable string
-// replacing '-' with white space and capitalizing
-// first letters of each word.
-func ToPageVariableName(txt string) string {
-	var frags = strings.Split(txt, "-")
+// ToVariableName returns a copy of string to be used as variable name.
+func ToVariableName(txt string) string {
+	slug := ToSlug(txt)
+	var frags = strings.Split(slug, "-")
 	for i := range frags {
 		if i != 0 {
 			frags[i] = strings.Title(frags[i])
