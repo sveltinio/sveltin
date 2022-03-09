@@ -1,10 +1,9 @@
-import {{ .Name }} from '$lib/{{ .Name }}/get{{ .Name | Capitalize }}.js';
-import type { EndpointOutput } from '@sveltejs/kit';
+import { published } from '$lib/{{ .Name }}/{{ .Name | ToLibFile }}';
 
-export async function get(): Promise<EndpointOutput> {
-   const body = Object.keys({{ .Name }}).map((slug) => ({
+export async function get() {
+   const body = Object.keys(published).map((slug) => ({
       slug,
-      ...{{ .Name }}[slug]
+      ...published[slug]
    }));
    return {
       status: 200,

@@ -123,8 +123,8 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		contentNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for the content.",
-			Label:    "What's the content name? (it will be the slug to the page)",
+			ErrorMsg: "Please, provide a title for the content.",
+			Label:    "What's the content title? (it will be the slug to the page)",
 		}
 		contentName := common.PromptGetInput(contentNamePromptContent)
 		contentType, err := promptContentTemplateSelection(templateFlag)
@@ -134,7 +134,7 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		utils.ExitIfError(err)
 
 		return config.TemplateData{
-			Name:     utils.ToValidName(contentName),
+			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
 			Resource: contentResource,
 		}, nil
@@ -150,7 +150,7 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 		utils.ExitIfError(err)
 
 		return config.TemplateData{
-			Name:     utils.ToValidName(contentName),
+			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
 			Resource: contentResource,
 		}, nil

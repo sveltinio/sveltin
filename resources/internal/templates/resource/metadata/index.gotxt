@@ -1,15 +1,15 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
-
+	{{ $varName := .Name | ToVariableName}}
 	export const load: Load = async ({ fetch }) => {
 		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
 		const res = await fetch(_url);
 		if (res.ok) {
 			const data = await res.json();
-			const {{ .Name }} = data as unknown as Array<Metadata>;
+			const {{ $varName }} = data as unknown as Array<Metadata>;
 
 			return {
-				props: { {{ .Name }} }
+				props: { {{ $varName }} }
 			};
 		}
 		return {
@@ -23,14 +23,14 @@
 	import { base } from '$app/paths';
 	import type { Metadata } from '$lib/interfaces';
 
-	export let {{ .Name }}: Array<Metadata>;
+	export let {{ $varName }}: Array<Metadata>;
 </script>
 
 <div class="artifact-container">
 	<div class="content">
 		<h1>Grouped by {{ .Name | Capitalize }}</h1>
-		{#if {{ .Name }}.length != 0}
-			{#each {{ .Name }} as metadata}
+		{#if {{ $varName }}.length != 0}
+			{#each {{ $varName}} as metadata}
 			<h2>
 				<a sveltekit:prefetch href="{base}/{{.Resource}}/{{ .Name }}/{metadata.name}">{metadata.name}</a>
 			</h2>
@@ -42,7 +42,7 @@
 			{/each}
 		{:else}
 			<h2 class="message warning">
-			Please, check all your content ensuring the YAML frontmatter contains "<i>{{ .Name }}</i>".
+			Please, check all your content ensuring the YAML frontmatter contains "<i>{{ .Name | ToVariableName}}</i>".
 			</h2>
 		{/if}
 	</div>
