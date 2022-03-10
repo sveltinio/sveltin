@@ -1,5 +1,11 @@
 # sveltin
 
+## 0.5.5
+
+### Patch Changes
+
+- fix: the lib template file for metadata (list) had a mistyped variable name causing runtime error
+
 ## 0.5.4
 
 ### Patch Changes
