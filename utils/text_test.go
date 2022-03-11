@@ -22,4 +22,10 @@ func TestTextUtils(t *testing.T) {
 	is.Equal("resource-name", ToSlug("Resource name"))
 	is.Equal("quickStartPage", ToVariableName("quick-start-page"))
 	is.Equal("resourceName", ToVariableName("Resource name"))
+
+	underlineText := `
+Sample Text
+------------
+`
+	is.Equal(underlineText, Underline("Sample Text"))
 }
