@@ -1,3 +1,4 @@
 const sveltinVersion: string = '{{ .Misc }}'
-
-export { sveltinVersion };
+const sveltekitVersion: string = process.env.VITE_SVELTEKIT_VERSION
+const buildTime: string = process.env.VITE_BUILD_TIME;
+export { sveltinVersion, sveltekitVersion, buildTime };
