@@ -1,53 +1,15 @@
-<script lang="ts" context="module">
-	import type { Load } from '@sveltejs/kit';
-	import {
-		ContentMetadata,
-		ResourceContent,
-		ResourceContentMaker
-	} from '@sveltinio/widgets/types';
-
-	export const load: Load = async ({ url, fetch }) => {
-		const resourceName = '{{ .Name }}';
-		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}'
-		const res = await fetch(_url);
-
-		if (res.ok) {
-			const data = await res.json();
-			const itemsList: Array<ResourceContent> = [];
-
-			data.forEach((element) => {
-				const item = ResourceContentMaker.createWithValues(
-					resourceName,
-					<ContentMetadata>element,
-					''
-				);
-				itemsList.push(item);
-			});
-
-			return {
-				props: { resourceName, itemsList },
-			};
-		}
-		return {
-			status: res.status,
-			error: new Error(`Ops! Something went wrong loading ${url}`)
-		};
-	}
-</script>
 {{ $varName := .Name | ToVariableName}}
 <script lang="ts">
+	import type { ResourceContent } from '@sveltinio/widgets/types';
 	import { website } from '$config/website.js';
 	import { Card } from '@sveltinio/widgets';
-	import orderBy from 'lodash-es/orderBy.js';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let resourceName: string;
-	export let itemsList: Array<ResourceContent>;
-
-	const sortedItemsList = orderBy(itemsList, (item) => item.metadata.created_at, ['desc']);
+	export let items: Array<ResourceContent>;
 
 	const {{ $varName }}IndexPage: IWebPageMetadata = {
 		url: getPageUrl(resourceName, website),
@@ -66,17 +28,21 @@
 
 <PageMetaTags data={ {{ $varName }}IndexPage } />
 <JsonLdWebPage data={ {{ $varName }}IndexPage } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent={resourceName} currentTitle={ {{ $varName }}IndexPage.title} />
+<JsonLdBreadcrumbs
+	baseURL={website.baseURL}
+	parent={resourceName}
+	currentTitle={ {{ $varName }}IndexPage.title}
+/>
 
 <section class="artifact-container">
 	<div class="content">
-		{#if sortedItemsList.length != 0 }
-		<h1>{ToTitle(resourceName)}</h1>
-		<div class="cards">
-		{#each sortedItemsList as item }
-			<Card {item} />
-		{/each}
-		</div>
+		{#if items.length != 0}
+			<h1>{ToTitle(resourceName)}</h1>
+			<div class="cards">
+				{#each items as item}
+					<Card {item} />
+				{/each}
+			</div>
 		{:else}
 		<h2 class="message warning">
 			Nothing to show here! Create some content first and reload the page:

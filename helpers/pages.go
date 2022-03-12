@@ -41,11 +41,16 @@ func GetAllPublicPages(fs afero.Fs, path string) []string {
 
 // GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
 func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
-	if txt == "index" {
+	switch txt {
+	case "index":
 		return c.GetIndexPageFilename()
-	} else if txt == "slug" {
+	case "indexendpoint":
+		return c.GetIndexEndpointFilename()
+	case "slug":
 		return c.GetSlugPageFilename()
-	} else {
+	case "slugendpoint":
+		return c.GetSlugEndpointFilename()
+	default:
 		return ""
 	}
 }

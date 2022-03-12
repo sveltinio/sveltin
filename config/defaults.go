@@ -158,10 +158,22 @@ func (c *SveltinConfig) GetIndexPageFilename() string {
 	return c.Pages.Index
 }
 
+// GetIndexEndpointFilename returns a string representing the path to the 'index'
+// file relative to the current working directory.
+func (c *SveltinConfig) GetIndexEndpointFilename() string {
+	return c.Pages.IndexEndpoint
+}
+
 // GetSlugPageFilename returns a string representing the path to the 'slug'
 // file relative to the current working directory.
 func (c *SveltinConfig) GetSlugPageFilename() string {
 	return c.Pages.Slug
+}
+
+// GetSlugEndpointFilename returns a string representing the path to the 'slug'
+// file relative to the current working directory.
+func (c *SveltinConfig) GetSlugEndpointFilename() string {
+	return c.Pages.SlugEndpoint
 }
 
 // GetContentPageFilename returns a string representing the path to the 'content' folder

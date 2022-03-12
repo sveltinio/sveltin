@@ -35,19 +35,21 @@ const (
 
 // folder and file names for a Sveltin project structure.
 const (
-	ROOT          string = "root"
-	BACKUPS       string = "backups"
-	CONFIG        string = "config"
-	CONTENT       string = "content"
-	ROUTES        string = "routes"
-	API           string = "api"
-	LIB           string = "lib"
-	STATIC        string = "static"
-	THEMES        string = "themes"
-	INDEX         string = "index"
-	SLUG          string = "slug"
-	SETTINGS_FILE string = ".sveltin-settings.yaml"
-	DOTENV_PROD   string = ".env.production"
+	ROOT           string = "root"
+	BACKUPS        string = "backups"
+	CONFIG         string = "config"
+	CONTENT        string = "content"
+	ROUTES         string = "routes"
+	API            string = "api"
+	LIB            string = "lib"
+	STATIC         string = "static"
+	THEMES         string = "themes"
+	INDEX          string = "index"
+	INDEX_ENDPOINT string = "indexendpoint"
+	SLUG           string = "slug"
+	SLUG_ENDPOINT  string = "slugendpoint"
+	SETTINGS_FILE  string = ".sveltin-settings.yaml"
+	DOTENV_PROD    string = ".env.production"
 )
 
 var (

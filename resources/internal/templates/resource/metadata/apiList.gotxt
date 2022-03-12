@@ -1,9 +1,0 @@
-import { groupedBy } from '$lib/{{ .Resource }}/{{ .Name | ToLibFile }}';
-import first from 'lodash-es/first.js';
-
-export async function get() {
-   return {
-      status: 200,
-      body: JSON.stringify(first(groupedBy))
-   };
-}

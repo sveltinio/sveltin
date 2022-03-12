@@ -65,31 +65,6 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	mdType, err := promptMetadataType(metadataType)
 	utils.ExitIfError(err)
 
-	// NEW FOLDER: <metadata_name>
-	resourceMetadataAPIFolder := composer.NewFolder(mdName)
-
-	// NEW FILE: groupedBy.json.ts
-	listLogger.Append(logger.LevelInfo, "Creating the API endpoint for the metadata")
-	resourceMetadataAPIFile := &composer.File{
-		Name:       conf.GetMetadataAPIFilename(),
-		TemplateId: API,
-		TemplateData: &config.TemplateData{
-			Name:     mdName,
-			Resource: mdResource,
-			Type:     mdType,
-			Config:   &conf,
-		},
-	}
-	resourceMetadataAPIFolder.Add(resourceMetadataAPIFile)
-
-	// NEW FOLDER: <metadata_name>
-	resourceAPIFolder := composer.NewFolder(mdResource)
-	resourceAPIFolder.Add(resourceMetadataAPIFolder)
-
-	// GET FOLDER: src/routes/api/<api_version> folder
-	apiFolder := fsManager.GetFolder(API)
-	apiFolder.Add(resourceAPIFolder)
-
 	// NEW FILE: <metadata_name>.js file into src/lib folder
 	listLogger.Append(logger.LevelInfo, "Creating the lib file for the metadata")
 	libFile := &composer.File{
@@ -113,9 +88,9 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	// NEW FOLDER: <metadata_name>
 	resourceMedatadaRoutesFolder := composer.NewFolder(mdName)
 
-	// NEW FILE: <resource_name>/<metadata_name>/index.svelte
-	listLogger.Append(logger.LevelInfo, "Creating the index.svelte component for the metadata")
-	for _, item := range []string{INDEX, SLUG} {
+	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
+	listLogger.Append(logger.LevelInfo, "Creating the components and endpoints for the metadata")
+	for _, item := range []string{INDEX, INDEX_ENDPOINT, SLUG, SLUG_ENDPOINT} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
 			TemplateId: item,
@@ -139,7 +114,6 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 
 	// SET FOLDER STRUCTURE
 	projectFolder := fsManager.GetFolder(ROOT)
-	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 
@@ -173,7 +147,6 @@ func init() {
 
 func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig) (string, error) {
 	var resource string
-
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
 	switch nameLenght := len(mdResourceFlag); {
@@ -183,13 +156,13 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 			Label:    "What's the existing resource to be used?",
 		}
 		resource = common.PromptGetSelect(availableResources, resourcePromptContent)
-		return resource, nil
+		return utils.ToSlug(resource), nil
 	case nameLenght != 0:
 		resource = mdResourceFlag
 		if !common.Contains(availableResources, resource) {
 			return "", sveltinerr.NewResourceNotFoundError()
 		}
-		return resource, nil
+		return utils.ToSlug(resource), nil
 	default:
 		return "", sveltinerr.NewResourceNotFoundError()
 	}
