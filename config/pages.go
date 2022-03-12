@@ -14,7 +14,7 @@ type Pages struct {
 	Index         string `mapstructure:"index"`
 	IndexEndpoint string `mapstructure:"indexendpoint"`
 	Slug          string `mapstructure:"slug"`
-	SlugEndpoint  string `mapstructure:"slugEndpoint"`
+	SlugEndpoint  string `mapstructure:"slugendpoint"`
 }
 
 // NoPage is the struct representing a no-public page (sitemap and rss) for a sveltin project.
