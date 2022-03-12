@@ -1,5 +1,12 @@
 # sveltin
 
+## 0.6.1
+
+### Patch Changes
+
+- fix: no more possible run sveltin commands from a not valid project directory
+- fix: set html scroll-behavior to smooth
+
 ## 0.6.0
 
 ### Minor Changes
