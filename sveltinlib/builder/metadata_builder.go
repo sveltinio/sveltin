@@ -19,17 +19,11 @@ import (
 )
 
 const (
-	// API_SINGLE is a string representing the api template file
-	// to be used when creating a metadata of type 'single'.
-	API_SINGLE string = "api_single"
-	// API_LIST is a string representing the api template file
-	// to be used when creating a metadata of type 'list'.
-	API_LIST string = "api_list"
-	// LIB_SINGLE is a string representing the lib template file
-	// to be used when creating a metadata of type 'single'.
+	// LIB_SINGLE is a string representing the template id used
+	// for the lib file when metadata's type is single.
 	LIB_SINGLE string = "lib_single"
-	// LIB_LIST is a string representing the libe template file
-	//  to be used when creating a metadata of type 'single'.
+	// LIB_LIST is a string representing the template id used
+	// for the lib file when metadata's type is list.
 	LIB_LIST string = "lib_list"
 )
 
@@ -58,18 +52,17 @@ func (b *metadataContentBuilder) SetEmbeddedResources(res map[string]string) {
 
 func (b *metadataContentBuilder) setPathToTplFile() error {
 	switch b.TemplateId {
-	case API:
-		if b.TemplateData.Type == "single" {
-			b.PathToTplFile = b.EmbeddedResources[API_SINGLE]
-		} else if b.TemplateData.Type == "list" {
-			b.PathToTplFile = b.EmbeddedResources[API_LIST]
-		}
-		return nil
 	case INDEX:
 		b.PathToTplFile = b.EmbeddedResources[INDEX]
 		return nil
+	case INDEX_ENDPOINT:
+		b.PathToTplFile = b.EmbeddedResources[INDEX_ENDPOINT]
+		return nil
 	case SLUG:
 		b.PathToTplFile = b.EmbeddedResources[SLUG]
+		return nil
+	case SLUG_ENDPOINT:
+		b.PathToTplFile = b.EmbeddedResources[SLUG_ENDPOINT]
 		return nil
 	case LIB:
 		if b.TemplateData.Type == "single" {
@@ -79,7 +72,7 @@ func (b *metadataContentBuilder) setPathToTplFile() error {
 		}
 		return nil
 	default:
-		errN := errors.New("FileNotFound on EmbeddedFS")
+		errN := errors.New("FileNotFound on the EmbeddedFS")
 		return sveltinerr.NewDefaultError(errN)
 	}
 }

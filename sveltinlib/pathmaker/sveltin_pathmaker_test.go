@@ -26,5 +26,5 @@ func TestPages(t *testing.T) {
 
 	artifact := "posts"
 	is.Equal(filepath.Join("index.svx"), pathMaker.GetResourceContentFilename())
-	is.Equal("getPosts.js", pathMaker.GetResourceLibFilename(artifact))
+	is.Equal("apiPosts.ts", pathMaker.GetResourceLibFilename(artifact))
 }

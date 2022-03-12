@@ -1,13 +1,38 @@
-import { groupedByOne } from '$lib/utils/collections.js';
-import filter from 'lodash-es/filter.js';
-{{ $resourceName := .Resource | ToVariableName}}
-const {{ $resourceName }} = import.meta.globEager('/{{ .Config.Paths.Content }}/{{ .Resource }}/**/*.{md,svx}');
-const {{ $resourceName }}List = Object.entries({{ $resourceName }})
-   .map(([, item]) => item.metadata)
-   .sort((a, b) => (a.date < b.date ? 1 : -1));
+{{ $resourceName := .Resource | ToVariableName | Capitalize }}
+{{ $mdName := .Name | ToVariableName }}
+import type { Metadata, MetadataItem } from '$lib/interfaces';
+import { groupedByOne } from '$lib/utils/collections';
+import { list } from './api{{ $resourceName }}';
 
-const published = filter({{ $resourceName }}List, ['draft', false])
-const values = ['title', 'slug', 'headline'];
+export const all = async (): Promise<Metadata[]> => {
+	const mdName = '{{ $mdName }}';
+	const data = await list();
+	const values = ['title', 'slug', 'headline'];
+	const grouped = groupedByOne(mdName, data, values);
 
-const groupedBy = groupedByOne('{{ .Name | ToVariableName }}', published, values);
-export { groupedBy }
+	const mList: Array<Metadata> = [];
+	grouped.map((elem) => {
+		const metadata: Metadata = {
+			name: elem['name'],
+			items: []
+		};
+		elem['items'].forEach((e: MetadataItem) => {
+			metadata.items.push(e);
+		});
+		mList.push(metadata);
+	});
+	return mList;
+};
+
+export const groupedBy = async (slug: string): Promise<Metadata> => {
+	const data = await all();
+	const metadata = data.find((item) => {
+		return item.name === slug;
+	});
+
+	if (metadata) {
+		return metadata;
+	}
+
+	return undefined;
+};

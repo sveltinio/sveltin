@@ -1,12 +1,69 @@
-import filter from 'lodash-es/filter.js';
-{{ $varName := .Name | ToVariableName}}
-const {{ $varName }} = import.meta.globEager('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{md,svx}');
-const {{ $varName }}List = Object.entries({{ $varName }})
-   .map(([_, item]) => ({
-      ...item.metadata,
-      ...item.default.render()
-   }))
-   .sort((a, b) => (a.date < b.date ? 1 : -1));
+import type { DynamicObject } from '$lib/interfaces';
+import { ContentMetadata, ResourceContent, ResourceContentMaker } from '@sveltinio/widgets/types';
 
-const published = filter({{ $varName }}List, ['draft', false]);
-export { published };
+export const list = async (withMarkup = false) => {
+	const contentFiles = import.meta.glob('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{svelte.md,md,svx}');
+	const contentFilesArray = Object.entries(contentFiles);
+	const contents = await Promise.all(
+		contentFilesArray.map(async ([path, resolver]) => {
+			const data = await resolver();
+			const result: DynamicObject = {
+				meta: data.metadata,
+				path: path
+			};
+			if (withMarkup) {
+				result.markup = data.default.render();
+			}
+			return result;
+		})
+	);
+	const publishedByDate = contents
+		.filter((elem) => !elem.meta.draft)
+		.sort((a, b) => (a.meta.created_at < b.meta.created_at ? 1 : -1));
+
+	return publishedByDate;
+};
+
+{{ $varName := .Name | ToVariableName}}
+export const getSingle = async (slug: string) => {
+	const resourceName = '{{ $varName }}';
+	const publishedByDate = await list(true);
+
+	const selected = publishedByDate.filter((item) => {
+		return item.meta.slug == slug;
+	});
+
+	if (selected.length != 0) {
+		const selectedItemIndex = publishedByDate.findIndex((elem) => slug === elem.meta.slug);
+		const selectedItem = publishedByDate[selectedItemIndex];
+		const current = ResourceContentMaker.createWithValues(
+			resourceName,
+			selectedItem.meta,
+			selectedItem.markup.html
+		);
+		const previous: ResourceContent = {
+			resource: resourceName,
+			metadata: <ContentMetadata>{
+				title: publishedByDate[selectedItemIndex + 1]?.meta.title,
+				slug: publishedByDate[selectedItemIndex + 1]?.meta.slug
+			}
+		};
+		const next: ResourceContent = {
+			resource: resourceName,
+			metadata: <ContentMetadata>{
+				title: publishedByDate[selectedItemIndex - 1]?.meta.title,
+				slug: publishedByDate[selectedItemIndex - 1]?.meta.slug
+			}
+		};
+
+		return {
+			status: 200,
+			current,
+			previous,
+			next
+		};
+	}
+	return {
+		status: 404
+	};
+};

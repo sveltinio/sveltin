@@ -40,10 +40,9 @@ A resource is a way to group, serve and expose your content.
 This command:
 
 - Create a <resource_name> folder within "content" folder, so that you can add new content for the resource
-- Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name> so that you resource is ready to be consumed by the REST endpoint
 - Add the resource as route within the "src/routes" folder, creating its own folder
-- Scaffold index.svelte component to list all the content belongs to a resource
-- Scaffold [slug].svelte component
+- Scaffold index.svelte component and index.ts endpoint to list all the content belongs to a resource
+- Scaffold [slug].svelte component and [slug].ts endpoint to get access to a specific content page
 	`,
 	Run: RunNewResourceCmd,
 }
@@ -63,32 +62,13 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	resourceContentFolder := composer.NewFolder(resourceName)
 	contentFolder.Add(resourceContentFolder)
 
-	// GET FOLDER: src/routes/api/<api_version> folder
-	apiFolder := fsManager.GetFolder(API)
-
-	// NEW FOLDER: src/routes/api/<version>/<resource_name>
-	resourceAPIFolder := composer.NewFolder(resourceName)
-
-	// NEW FILE: src/routes/api/<resource_name>/published.json.ts
-	listLogger.Append(logger.LevelInfo, "Creating the API endpoint for the resource")
-	apiFile := &composer.File{
-		Name:       conf.GetAPIFilename(),
-		TemplateId: API,
-		TemplateData: &config.TemplateData{
-			Name:   resourceName,
-			Config: &conf,
-		},
-	}
-	resourceAPIFolder.Add(apiFile)
-	apiFolder.Add(resourceAPIFolder)
-
 	// GET FOLDER: src/lib folder
 	libFolder := fsManager.GetFolder(LIB)
 
 	// NEW FOLDER: /src/lib/<resource_name>
 	resourceLibFolder := composer.NewFolder(resourceName)
 
-	// NEW FILE: src/lib/<resource_name>/get<resource_name>.js
+	// NEW FILE: src/lib/<resource_name>/api<resource_name>.ts
 	listLogger.Append(logger.LevelInfo, "Creating the lib file for the resource")
 	libFile := &composer.File{
 		Name:       utils.ToLibFile(resourceName),
@@ -107,9 +87,9 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceName)
 
-	// NEW FILE: <resource_name>/index.svelte and [slug].svelte
-	for _, item := range []string{INDEX, SLUG} {
-		listLogger.Append(logger.LevelInfo, fmt.Sprintf("Creating the %s component for the resource", item))
+	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
+	listLogger.Append(logger.LevelInfo, "Creating the components and endpoints for the resource")
+	for _, item := range []string{INDEX, INDEX_ENDPOINT, SLUG, SLUG_ENDPOINT} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
 			TemplateId: item,
@@ -125,7 +105,6 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// SET FOLDER STRUCTURE
 	projectFolder := fsManager.GetFolder(ROOT)
 	projectFolder.Add(contentFolder)
-	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 

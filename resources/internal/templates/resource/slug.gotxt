@@ -1,65 +1,7 @@
-<script lang="ts" context="module">
-	import type { Load } from '@sveltejs/kit';
-	import { ResourceContent, ResourceContentMaker } from '@sveltinio/widgets/types';
-	import type { ContentMetadata } from '@sveltinio/widgets/types';
-
-	export const load: Load = async ({ params, fetch }) => {
-		const resourceName = '{{ .Name }}';
-		const { slug } = params;
-		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Name }}/{{ .Config.GetPublicAPIFilename }}';
-
-		const res = await fetch(_url);
-		if (res.ok) {
-			const data = await res.json();
-			const selectedItemIndex = data.findIndex((elem) => slug === elem.slug);
-			const selectedItem = data[selectedItemIndex];
-
-			if (selectedItem) {
-				const current = ResourceContentMaker.createWithValues(
-					resourceName,
-					<ContentMetadata>selectedItem,
-					selectedItem.html
-				);
-				const previous: ResourceContent = {
-					resource: resourceName,
-					metadata: <ContentMetadata>{
-						title: data[selectedItemIndex + 1]?.title,
-						slug: data[selectedItemIndex + 1]?.slug
-					}
-				};
-				const next: ResourceContent = {
-					resource: resourceName,
-					metadata: <ContentMetadata>{
-						title: data[selectedItemIndex - 1]?.title,
-						slug: data[selectedItemIndex - 1]?.slug
-					}
-				};
-
-				return {
-					props: {
-						current,
-						previous,
-						next
-					}
-				};
-			}
-
-			return {
-				status: 404,
-				error: new Error(`Ops! What you are looking for does not exists`)
-			};
-		}
-
-		return {
-			status: res.status,
-			error: new Error(`Ops! Something went wrong loading ${_url}`)
-		};
-	};
-</script>
-
 <script lang="ts">
 	import { website } from '$config/website.js';
-	import { TOC, PrevNextButtons} from '@sveltinio/widgets';
+	import { TOC, PrevNextButtons } from '@sveltinio/widgets';
+	import type { ResourceContent } from '@sveltinio/widgets/types';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
@@ -91,8 +33,11 @@
 
 <PageMetaTags data={slugPageData} />
 <JsonLdWebPage data={slugPageData} />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent={current.resource} currentTitle={slugPageData.title} />
-
+<JsonLdBreadcrumbs
+	baseURL={website.baseURL}
+	parent={current.resource}
+	currentTitle={slugPageData.title}
+/>
 <article class="artifact-container">
 	<div class="content">
 		<h1>{current.metadata.title}</h1>

@@ -1,41 +1,20 @@
-<script lang="ts" context="module">
-	import type { Load } from '@sveltejs/kit';
-	{{ $varName := .Name | ToVariableName}}
-	export const load: Load = async ({ fetch }) => {
-		const _url = '/api/{{ .Config.GetAPIVersion }}/{{ .Resource }}/{{ .Name }}/{{ .Config.GetPublicMetadataAPIFilename }}'
-		const res = await fetch(_url);
-		if (res.ok) {
-			const data = await res.json();
-			const {{ $varName }} = data as unknown as Array<Metadata>;
-
-			return {
-				props: { {{ $varName }} }
-			};
-		}
-		return {
-			status: res.status,
-			error: new Error(`Something went wrong loading ${_url}`)
-		};
-	}
-</script>
-
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { Metadata } from '$lib/interfaces';
 
-	export let {{ $varName }}: Array<Metadata>;
+	export let metadata: Array<Metadata>;
 </script>
-
+{{ $mdName := .Name | ToVariableName}}
 <div class="artifact-container">
 	<div class="content">
 		<h1>Grouped by {{ .Name | Capitalize }}</h1>
-		{#if {{ $varName }}.length != 0}
-			{#each {{ $varName}} as metadata}
+		{#if metadata.length != 0}
+			{#each metadata as {{ $mdName}} }
 			<h2>
-				<a sveltekit:prefetch href="{base}/{{.Resource}}/{{ .Name }}/{metadata.name}">{metadata.name}</a>
+				<a sveltekit:prefetch href="{base}/{{.Resource}}/{{ .Name }}/{ {{ $mdName }}.name}">{ {{ $mdName }}.name}</a>
 			</h2>
 			<ul>
-				{#each metadata.items as item}
+				{#each {{ $mdName }}.items as item}
 					<li><a sveltekit:prefetch href="{base}/{{.Resource}}/{item.slug}">{item.title}</a></li>
 				{/each}
 			</ul>

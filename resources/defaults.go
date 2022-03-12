@@ -45,20 +45,21 @@ var SveltinProjectFS = map[string]string{
 
 // SveltinResourceFS is a map for the resource template files.
 var SveltinResourceFS = map[string]string{
-	"api":   "internal/templates/resource/api.gotxt",
-	"lib":   "internal/templates/resource/lib.gotxt",
-	"index": "internal/templates/resource/index.gotxt",
-	"slug":  "internal/templates/resource/slug.gotxt",
+	"lib":           "internal/templates/resource/lib.gotxt",
+	"index":         "internal/templates/resource/index.gotxt",
+	"indexendpoint": "internal/templates/resource/index.ts.gotxt",
+	"slug":          "internal/templates/resource/slug.gotxt",
+	"slugendpoint":  "internal/templates/resource/slug.ts.gotxt",
 }
 
 // SveltinMetadataFS is a map for the metadata template files.
 var SveltinMetadataFS = map[string]string{
-	"api_single": "internal/templates/resource/metadata/apiSingle.gotxt",
-	"api_list":   "internal/templates/resource/metadata/apiList.gotxt",
-	"lib_single": "internal/templates/resource/metadata/libSingle.gotxt",
-	"lib_list":   "internal/templates/resource/metadata/libList.gotxt",
-	"index":      "internal/templates/resource/metadata/index.gotxt",
-	"slug":       "internal/templates/resource/metadata/slug.gotxt",
+	"lib_single":    "internal/templates/resource/metadata/libSingle.gotxt",
+	"lib_list":      "internal/templates/resource/metadata/libList.gotxt",
+	"index":         "internal/templates/resource/metadata/index.gotxt",
+	"indexendpoint": "internal/templates/resource/metadata/index.ts.gotxt",
+	"slug":          "internal/templates/resource/metadata/slug.gotxt",
+	"slugendpoint":  "internal/templates/resource/metadata/slug.ts.gotxt",
 }
 
 // SveltinPageFS is a map for the page template files.

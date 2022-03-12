@@ -10,6 +10,7 @@ package builder
 
 import (
 	"errors"
+	"strings"
 	"text/template"
 
 	"github.com/sveltinio/sveltin/config"
@@ -22,8 +23,12 @@ const (
 	API string = "api"
 	// INDEX is a string for the 'index' file.
 	INDEX string = "index"
+	// INDEX_ENDPOINT is a string for the 'index.ts' file.
+	INDEX_ENDPOINT string = "indexendpoint"
 	// SLUG is a string for the 'slug' file.
 	SLUG string = "slug"
+	// SLUG_ENDPOINT is a string for the 'slug' file.
+	SLUG_ENDPOINT string = "slugendpoint"
 	// LIB is a string for the 'lib' folder.
 	LIB string = "lib"
 )
@@ -59,8 +64,14 @@ func (b *resourceContentBuilder) setPathToTplFile() error {
 	case INDEX:
 		b.PathToTplFile = b.EmbeddedResources[INDEX]
 		return nil
+	case INDEX_ENDPOINT:
+		b.PathToTplFile = b.EmbeddedResources[INDEX_ENDPOINT]
+		return nil
 	case SLUG:
 		b.PathToTplFile = b.EmbeddedResources[SLUG]
+		return nil
+	case SLUG_ENDPOINT:
+		b.PathToTplFile = b.EmbeddedResources[SLUG_ENDPOINT]
 		return nil
 	case LIB:
 		b.PathToTplFile = b.EmbeddedResources[LIB]
@@ -83,6 +94,7 @@ func (b *resourceContentBuilder) SetTemplateData(artifactData *config.TemplateDa
 
 func (b *resourceContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
+		"Capitalize": strings.Title,
 		"ToVariableName": func(txt string) string {
 			return utils.ToVariableName(txt)
 		},

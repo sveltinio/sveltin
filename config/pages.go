@@ -10,9 +10,11 @@ package config
 
 // Pages is the struct representing a public page and its content for a sveltin project.
 type Pages struct {
-	Content string `mapstructure:"content"`
-	Index   string `mapstructure:"index"`
-	Slug    string `mapstructure:"slug"`
+	Content       string `mapstructure:"content"`
+	Index         string `mapstructure:"index"`
+	IndexEndpoint string `mapstructure:"indexendpoint"`
+	Slug          string `mapstructure:"slug"`
+	SlugEndpoint  string `mapstructure:"slugEndpoint"`
 }
 
 // NoPage is the struct representing a no-public page (sitemap and rss) for a sveltin project.
