@@ -110,15 +110,6 @@ func setDefaultLoggerOptions() {
 	})
 }
 
-func setListLoggerOptions() {
-	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
-		Timestamp: false,
-		Colors:    true,
-		Labels:    false,
-		Icons:     false,
-	})
-}
-
 func initSveltin() {
 	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
 	fsManager = fsm.NewSveltinFSManager(&pathMaker)
