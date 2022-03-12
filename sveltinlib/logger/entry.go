@@ -91,6 +91,13 @@ func (item *LogEntry) Unindent() {
 	item.Indent()
 }
 
+// Plain level message.
+func (item *LogEntry) Plain(msg string) {
+	item.Level = LevelDefault
+	item.Message = msg
+	item.Logger.log(item)
+}
+
 // Debug level message.
 func (item *LogEntry) Debug(msg string) {
 	item.Level = LevelDebug

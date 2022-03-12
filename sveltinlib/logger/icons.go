@@ -17,6 +17,7 @@ import (
 type icon string
 
 const (
+	iconDefault   icon = ""
 	iconDebug     icon = "\u2734" // ✴
 	iconFatal     icon = "\u2718"
 	iconError     icon = "\u2718" // ✘
@@ -28,6 +29,7 @@ const (
 
 func makeLogLevelIconMap() map[LogLevel]icon {
 	return map[LogLevel]icon{
+		LevelDefault:   iconDefault,
 		LevelDebug:     iconDebug,
 		LevelFatal:     iconError,
 		LevelError:     iconError,

@@ -49,6 +49,11 @@ func (l *Logger) WithList() *LogEntry {
 	return NewLogEntry(l).WithList()
 }
 
+// Plain level message.
+func (l *Logger) Plain(msg string) {
+	NewLogEntry(l).Plain(msg)
+}
+
 // Debug level message.
 func (l *Logger) Debug(msg string) {
 	NewLogEntry(l).Debug(msg)
