@@ -23,7 +23,8 @@ func HelperTextNewProject(projectName string) string {
 
 To stop the dev server, hit Ctrl-C
 
-Visit the Quick Start guide at https://docs.sveltin.io/quick-start`
+Visit the Quick Start guide at https://docs.sveltin.io/quick-start
+`
 	return fmt.Sprintf(placeHolderText, projectName)
 }
 
