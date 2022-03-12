@@ -15,17 +15,22 @@ import (
 	"time"
 )
 
-// ToMDFile returns a string with .md suffix
-// example: ToMDFile("welcome") returns 'welcome.md'.
-func ToMDFile(txt string) string {
-	return strings.ToUpper(txt) + ".md"
+// ToMDFile returns a string with .md extension
+// example: ToMDFile("getting started", false) returns 'getting-started.md'.
+// example: ToMDFile("getting started", true) returns 'GETTING-STARTED.md'.
+func ToMDFile(txt string, uppercase bool) string {
+	slug := ToSlug(txt)
+	if uppercase {
+		slug = strings.ToUpper(slug)
+	}
+	return fmt.Sprintf("%s.md", slug)
 }
 
 // ToLibFile returns a string a valid lib filename
-// example: ToLibFilename("category") returns 'getCategory.js'.
+// example: ToLibFile("category") returns 'apiCategory.ts'.
 func ToLibFile(txt string) string {
 	vName := ToVariableName(txt)
-	return `get` + strings.Title(vName) + `.js`
+	return fmt.Sprintf("api%s.ts", strings.Title(vName))
 }
 
 // ToTitle replace all '-' char with a white space and

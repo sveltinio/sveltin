@@ -18,6 +18,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
@@ -118,8 +119,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	routesFolder := fsManager.GetFolder(ROUTES)
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       "index.svelte",
-		TemplateId: "index",
+		Name:       helpers.GetResourceRouteFilename(INDEX, &conf),
+		TemplateId: INDEX,
 		TemplateData: &config.TemplateData{
 			ThemeName: themeName,
 		},
@@ -303,7 +304,7 @@ func makeThemeStructure(themeName string) *composer.Folder {
 
 	// ADD FILE themes/<theme_name>/README.md
 	readMeFile := &composer.File{
-		Name:       "README.md",
+		Name:       utils.ToMDFile("readme", true),
 		TemplateId: "readme",
 		TemplateData: &config.TemplateData{
 			Name: themeName,
