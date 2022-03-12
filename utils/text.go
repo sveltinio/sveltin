@@ -44,8 +44,8 @@ func ToTitle(txt string) string {
 // Underline returns a string underlined
 func Underline(txt string) string {
 	var buffer bytes.Buffer
-	fmt.Fprintf(&buffer, "\n%s\n", txt)
-	buffer.WriteString(strings.Repeat("-", len(txt)+1))
+	fmt.Fprintf(&buffer, "\n %s\n", txt)
+	buffer.WriteString(strings.Repeat("-", len(txt)+2))
 	buffer.WriteString("\n")
 	return buffer.String()
 }
