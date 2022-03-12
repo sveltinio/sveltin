@@ -13,7 +13,6 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -32,22 +31,22 @@ It makes use of the .env.production file to reflect the base url for your websit
 
 // RunGenerateRSSCmd is the actual work function.
 func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
-	listLogger := log.WithList()
+	log.Plain(utils.Underline("The rss.xml feed file will be created"))
 
-	listLogger.Append(logger.LevelInfo, "Getting all existing public pages")
+	log.Info("Getting all existing public pages")
 	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	listLogger.Append(logger.LevelInfo, "Getting all existing resources")
+	log.Info("Getting all existing resources")
 	existingResources := helpers.GetAllResources(AppFs, pathMaker.GetPathToExistingResources())
 
-	listLogger.Append(logger.LevelInfo, "Getting all contents for the resources")
+	log.Info("Getting all contents for the resources")
 	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
 
 	// GET FOLDER: static
 	staticFolder := fsManager.GetFolder(STATIC)
 
 	// NEW FILE: static/rss.xml
-	listLogger.Append(logger.LevelInfo, "Generating the rss.xml file")
+	log.Info("Generating the rss.xml file")
 	rssFile := fsManager.NewNoPage("rss", &projectConfig, existingResources, contents, nil, pages)
 	staticFolder.Add(rssFile)
 
@@ -60,8 +59,6 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	// LOG TO STDOUT
-	listLogger.Info("The RSS feed file will be created")
 	log.Success("Done")
 }
 

@@ -15,7 +15,6 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -40,21 +39,21 @@ The --full flag will also includes content names for all resources.
 
 // RunGenerateMenuCmd is the actual work function.
 func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
-	listLogger := log.WithList()
+	log.Plain(utils.Underline("The menu structure will be created"))
 
 	projectFolder := fsManager.GetFolder(ROOT)
 
-	listLogger.Append(logger.LevelInfo, "Getting list of existing public pages")
+	log.Info("Getting list of existing public pages")
 	publicPages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	listLogger.Append(logger.LevelInfo, "Getting list of existing resources")
+	log.Info("Getting list of existing resources")
 	availableResources := helpers.GetAllResourcesWithContentName(AppFs, pathMaker.GetPathToExistingResources(), withContentFlag)
 
 	// GET FOLDER: config
 	configFolder := fsManager.GetFolder(CONFIG)
 
 	// ADD FILE: config/menu.js
-	listLogger.Append(logger.LevelInfo, "Generating menu.js.ts file")
+	log.Info("Generating menu.js.ts file")
 	menuFile := &composer.File{
 		Name:       "menu.js.ts",
 		TemplateId: "menu",
@@ -76,8 +75,6 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	// LOG TO STDOUT
-	listLogger.Info("The menu structure will be created")
 	log.Success("Done")
 }
 

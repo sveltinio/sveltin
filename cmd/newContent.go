@@ -73,7 +73,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	contentData, err := getContentName(AppFs, args, &conf)
 	utils.ExitIfError(err)
 
-	log.Info(fmt.Sprintf("'%s' content will be added", contentData.Name))
+	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
 
 	// GET FOLDER: content
 	contentFolder := fsManager.GetFolder(CONTENT)

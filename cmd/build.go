@@ -37,7 +37,7 @@ your production environment
 
 // RunBuildCmd is the actual work function.
 func RunBuildCmd(cmd *cobra.Command, args []string) {
-	log.Info("Building the Sveltin project")
+	log.Plain(utils.Underline("Building the Sveltin project"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)

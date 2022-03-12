@@ -20,7 +20,6 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -54,8 +53,6 @@ Types:
 
 // RunNewMetadataCmd is the actual work function.
 func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
-	listLogger := log.WithList()
-
 	mdName, err := promptMetadataName(args)
 	utils.ExitIfError(err)
 
@@ -65,8 +62,10 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	mdType, err := promptMetadataType(metadataType)
 	utils.ExitIfError(err)
 
+	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", mdName, mdResource)))
+
 	// NEW FILE: <metadata_name>.js file into src/lib folder
-	listLogger.Append(logger.LevelInfo, "Creating the lib file for the metadata")
+	log.Info("Creating the lib file for the metadata")
 	libFile := &composer.File{
 		Name:       pathMaker.GetResourceLibFilename(mdName),
 		TemplateId: LIB,
@@ -89,7 +88,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceMedatadaRoutesFolder := composer.NewFolder(mdName)
 
 	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	listLogger.Append(logger.LevelInfo, "Creating the components and endpoints for the metadata")
+	log.Info("Creating the components and endpoints for the metadata")
 	for _, item := range []string{INDEX, INDEX_ENDPOINT, SLUG, SLUG_ENDPOINT} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
@@ -122,15 +121,13 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	// LOG TO STDOUT
-	listLogger.Info(fmt.Sprintf("New '%s' as metadata will be created", mdName))
 	log.Success("Done")
 
 	// NEXT STEPS
-	listLogger = log.WithList()
-	listLogger.Append(logger.LevelSuccess, "Metadata ready to be used.")
-	listLogger.Append(logger.LevelImportant, "Ensure your markdown frontmatter consider it.")
-	listLogger.Info("Next Steps")
+	log.Plain(utils.Underline("Next Steps"))
+	log.Success("Metadata ready to be used.")
+	log.Important("Ensure your markdown frontmatter consider it.")
+
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {

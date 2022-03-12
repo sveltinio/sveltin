@@ -13,7 +13,6 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -32,25 +31,25 @@ It makes use of the .env.production file to reflect the base url for your websit
 
 // RunGenerateSitemapCmd is the actual work function.
 func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
-	listLogger := log.WithList()
+	log.Plain(utils.Underline("The sitemap.xml file will be created"))
 
-	listLogger.Append(logger.LevelInfo, "Getting list of existing public pages")
+	log.Info("Getting list of existing public pages")
 	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
 
-	listLogger.Append(logger.LevelInfo, "Getting list of existing resources")
+	log.Info("Getting list of existing resources")
 	existingResources := helpers.GetAllResources(AppFs, conf.GetContentPath())
 
-	listLogger.Append(logger.LevelInfo, "Getting list of all contents for the resources")
+	log.Info("Getting list of all contents for the resources")
 	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
 
-	listLogger.Append(logger.LevelInfo, "Getting list of all metadata for the resources")
+	log.Info("Getting list of all metadata for the resources")
 	metadata := helpers.GetResourceMetadataMap(AppFs, existingResources, conf.GetRoutesPath())
 
 	// GET FOLDER: static
 	staticFolder := fsManager.GetFolder(STATIC)
 
 	// NEW FILE: static/rss.xml
-	listLogger.Append(logger.LevelInfo, "Generating the sitemap.xml file")
+	log.Info("Generating the sitemap.xml file")
 	sitemapFile := fsManager.NewNoPage("sitemap", &projectConfig, existingResources, contents, metadata, pages)
 	staticFolder.Add(sitemapFile)
 
@@ -63,8 +62,6 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	// LOG TO STDOUT
-	listLogger.Info("The Sitemap file will be created")
 	log.Success("Done")
 }
 

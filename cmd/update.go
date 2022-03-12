@@ -14,7 +14,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -34,9 +33,7 @@ It wraps (npm|pnpm|yarn) update.
 
 // RunUpdateCmd is the actual work function.
 func RunUpdateCmd(cmd *cobra.Command, args []string) {
-	listLogger := log.WithList()
-	listLogger.Append(logger.LevelInfo, "Updating dependencies")
-	listLogger.Info("Update Sveltin project")
+	log.Plain(utils.Underline("Updating all dependencies"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)

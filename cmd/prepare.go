@@ -29,7 +29,7 @@ It wraps svelte-kit sync command to ensure types are set up and correct before r
 
 // RunPrepareCmd is the actual work function.
 func RunPrepareCmd(cmd *cobra.Command, args []string) {
-	log.Info("Running svelte-kit sync command")
+	log.Plain(utils.Underline("Running svelte-kit sync command"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)

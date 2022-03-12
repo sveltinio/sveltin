@@ -14,7 +14,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -34,9 +33,7 @@ It wraps (npm|pnpm|yarn) install.
 
 // RunInstallCmd is the actual work function.
 func RunInstallCmd(cmd *cobra.Command, args []string) {
-	listLogger := log.WithList()
-	listLogger.Append(logger.LevelInfo, "Getting dependencies")
-	listLogger.Info("Prepare Sveltin project")
+	log.Plain(utils.Underline("Installing all dependencies"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
