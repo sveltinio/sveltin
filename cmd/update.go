@@ -33,6 +33,9 @@ It wraps (npm|pnpm|yarn) update.
 
 // RunUpdateCmd is the actual work function.
 func RunUpdateCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("Updating all dependencies"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")

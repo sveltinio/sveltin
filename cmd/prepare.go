@@ -29,6 +29,9 @@ It wraps svelte-kit sync command to ensure types are set up and correct before r
 
 // RunPrepareCmd is the actual work function.
 func RunPrepareCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("Running svelte-kit sync command"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")

@@ -26,6 +26,9 @@ Used to generate static files through its own subcommands.
 Run 'sveltin generate -h' for further details.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		// Exit if running sveltin commands from a not valid directory.
+		isValidProject()
+
 		log.Important("Run 'sveltin generate -h'")
 	},
 }

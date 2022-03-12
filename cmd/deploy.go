@@ -48,6 +48,9 @@ var deployCmd = &cobra.Command{
 
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("Deploy your website to the FTP server"))
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.

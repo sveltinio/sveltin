@@ -33,6 +33,9 @@ It wraps (npm|pnpm|yarn) install.
 
 // RunInstallCmd is the actual work function.
 func RunInstallCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("Installing all dependencies"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")

@@ -37,6 +37,9 @@ your production environment
 
 // RunBuildCmd is the actual work function.
 func RunBuildCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("Building the Sveltin project"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")

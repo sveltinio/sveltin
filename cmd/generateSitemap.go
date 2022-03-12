@@ -31,6 +31,9 @@ It makes use of the .env.production file to reflect the base url for your websit
 
 // RunGenerateSitemapCmd is the actual work function.
 func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("The sitemap.xml file will be created"))
 
 	log.Info("Getting list of existing public pages")

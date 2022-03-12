@@ -9,7 +9,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
@@ -21,6 +23,7 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/fsm"
 	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
+	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"gopkg.in/yaml.v2"
 )
 
@@ -139,6 +142,17 @@ func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
 
 	err = viper.Unmarshal(&config)
 	return
+}
+
+// isValidProject returns error if cannot find the package.json file within the current folder.
+func isValidProject() {
+	pwd, _ := os.Getwd()
+	pathToPkgJson := filepath.Join(pwd, "package.json")
+	exists, _ := afero.Exists(AppFs, pathToPkgJson)
+	if !exists {
+		err := sveltinerr.NewNotValidProjectError(pathToPkgJson)
+		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+	}
 }
 
 //=============================================================================

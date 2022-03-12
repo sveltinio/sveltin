@@ -39,6 +39,9 @@ The --full flag will also includes content names for all resources.
 
 // RunGenerateMenuCmd is the actual work function.
 func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("The menu structure will be created"))
 
 	projectFolder := fsManager.GetFolder(ROOT)

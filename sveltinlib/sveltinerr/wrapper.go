@@ -11,6 +11,7 @@ package sveltinerr
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 )
 
 // SveltinError is the struct representing the way Sveltin handles errors.
@@ -30,6 +31,20 @@ func newSveltinError(code int, err error, message string) error {
 		Err:     err,
 		Message: message,
 	}
+}
+
+// NewNotValidProjectError ...
+func NewNotValidProjectError(pathToFile string) error {
+	placeholderText := `
+
+This is related to sveltin not being able to find teh package.json file
+within the current directory (%s).
+
+Are you sure you are running the sveltin command from within a valid project directory?
+`
+
+	errN := fmt.Errorf(`no package.json file!%s `, fmt.Sprintf(placeholderText, filepath.Dir(pathToFile)))
+	return newSveltinError(1, errN, "SVELTIN NotValidProjectError")
 }
 
 // NewDefaultError ...

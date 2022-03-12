@@ -53,6 +53,9 @@ This command allows you to select between a svelte component page and a markdown
 
 // NewPageCmdRun is the actual work function.
 func NewPageCmdRun(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	pageName, err := getPageName(args)
 	utils.ExitIfError(err)
 

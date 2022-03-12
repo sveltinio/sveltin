@@ -48,6 +48,9 @@ This command:
 
 // RunNewResourceCmd is the actual work function.
 func RunNewResourceCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	resourceName, err := promptResourceName(args)
 	utils.ExitIfError(err)
 

@@ -70,6 +70,9 @@ As result:
 
 // RunNewContentCmd is the actual work function.
 func RunNewContentCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	contentData, err := getContentName(AppFs, args, &conf)
 	utils.ExitIfError(err)
 

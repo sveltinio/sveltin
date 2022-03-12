@@ -30,6 +30,9 @@ It wraps svelte-kit defined commands to run the server`,
 
 // RunServerCmd is the actual work function.
 func RunServerCmd(cmd *cobra.Command, args []string) {
+	// Exit if running sveltin commands from a not valid directory.
+	isValidProject()
+
 	log.Plain(utils.Underline("Running the Vite server"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
