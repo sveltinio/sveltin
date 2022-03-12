@@ -189,8 +189,8 @@ func promptProjectName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		projectNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for your website.",
-			Label:    "What's the name of your website?",
+			ErrorMsg: "Please, provide a name for your project.",
+			Label:    "What's the name of your project?",
 		}
 		name = common.PromptGetInput(projectNamePromptContent)
 		return name, nil
