@@ -165,7 +165,6 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 
 func promptContentTemplateSelection(templateType string) (string, error) {
 	validTemplates := []string{BLANK, SAMPLE}
-	var contentTemplate string
 
 	switch nameLenght := len(templateType); {
 	case nameLenght == 0:
@@ -173,14 +172,12 @@ func promptContentTemplateSelection(templateType string) (string, error) {
 			ErrorMsg: "Please, provide select a template for your content file.",
 			Label:    "Do you prefer a blank file or with some sample content in place?",
 		}
-		contentTemplate = common.PromptGetSelect(validTemplates, templatePromptContent)
-		return contentTemplate, nil
+		return common.PromptGetSelect(templatePromptContent, validTemplates, false), nil
 	case nameLenght != 0:
-		contentTemplate = templateType
-		if !common.Contains(validTemplates, contentTemplate) {
+		if !common.Contains(validTemplates, templateType) {
 			return "", sveltinerr.NewContentTemplateTypeNotValidError()
 		}
-		return contentTemplate, nil
+		return templateType, nil
 	default:
 		return "", sveltinerr.NewContentTemplateTypeNotValidError()
 	}
@@ -193,8 +190,7 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 		ErrorMsg: "Please, provide select an existing resource.",
 		Label:    "What's the existing resource to be used?",
 	}
-	resource := common.PromptGetSelect(availableResources, resourcePromptContent)
-	return resource, nil
+	return common.PromptGetSelect(resourcePromptContent, availableResources, false), nil
 }
 
 //=============================================================================

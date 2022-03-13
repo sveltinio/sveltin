@@ -42,14 +42,12 @@ func PromptGetInput(pc config.PromptContent) string {
 		}
 		return nil
 	}
-
 	templates := &promptui.PromptTemplates{
 		Prompt:  "{{ . }} ",
 		Valid:   "{{ . | green }} ",
 		Invalid: "{{ . | red }} ",
 		Success: "{{ . | bold }} ",
 	}
-
 	prompt := promptui.Prompt{
 		Label:     pc.Label,
 		Templates: templates,
@@ -65,21 +63,45 @@ func PromptGetInput(pc config.PromptContent) string {
 }
 
 // PromptGetSelect is used to prompt a list of available options to the user and retrieve the selection.
-func PromptGetSelect(items []string, pc config.PromptContent) string {
-	var result string
-	var err error
-
+func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates bool) string {
 	prompt := promptui.Select{
 		Label: pc.Label,
-		Items: items,
-		Size:  len(items),
+	}
+	if withTemplates {
+		prompt.Templates = &promptui.SelectTemplates{
+			Label:    "{{ . }}",
+			Active:   "\033[0;34m\u25B6 {{ .Name | cyan }}",
+			Inactive: "\033[0;37m\u2734 {{ .Name | white }}",
+			Selected: "\033[0;32m\u2714 {{ .Name | white | faint}}",
+		}
 	}
 
-	_, result, err = prompt.Run()
+	switch v := items.(type) {
+	case []string:
+		elements := []string{}
+		elements = append(elements, v...)
+		prompt.Items = elements
+		prompt.Size = len(elements)
 
-	if err != nil {
-		jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
-		os.Exit(1)
+		i, _, err := prompt.Run()
+		if err != nil {
+			jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
+			os.Exit(1)
+		}
+		return elements[i]
+	case []config.PromptObject:
+		elements := []config.PromptObject{}
+		elements = append(elements, v...)
+		prompt.Items = elements
+		prompt.Size = len(elements)
+
+		i, _, err := prompt.Run()
+		if err != nil {
+			jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
+			os.Exit(1)
+		}
+		return elements[i].Id
+	default:
+		return ""
 	}
-	return result
 }

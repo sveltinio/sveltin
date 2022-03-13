@@ -171,7 +171,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client")
+	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap, scss")
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The port to start the server on")
@@ -204,22 +204,27 @@ func promptProjectName(inputs []string) (string, error) {
 }
 
 func promptCSSLibName(cssLibName string) (string, error) {
-	var css string
-	valid := []string{VANILLACSS, SCSS, TAILWINDCSS, BULMA, BOOTSTRAP}
+	promptObjects := []config.PromptObject{
+		{Id: VANILLACSS, Name: "Plain CSS"},
+		{Id: SCSS, Name: "Scss/Sass"},
+		{Id: TAILWINDCSS, Name: "Tailwind CSS"},
+		{Id: BULMA, Name: "Bulma"},
+		{Id: BOOTSTRAP, Name: "Bootstrap"},
+	}
+
 	switch nameLenght := len(cssLibName); {
 	case nameLenght == 0:
 		cssPromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide the CSS Lib name.",
 			Label:    "Which CSS lib do you want to use?",
 		}
-		css = common.PromptGetSelect(valid, cssPromptContent)
-		return css, nil
+		return common.PromptGetSelect(cssPromptContent, promptObjects, true), nil
 	case nameLenght != 0:
+		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, cssLibName) {
 			return "", sveltinerr.NewOptionNotValidError()
 		}
-		css = cssLibName
-		return css, nil
+		return cssLibName, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -238,31 +243,24 @@ func promptNPMClient(items []string) (string, error) {
 		err := errors.New("it seems there is no package manager on your machine")
 		return "", sveltinerr.NewDefaultError(err)
 	}
-	var client string
+
 	switch nameLenght := len(npmClientName); {
 	case nameLenght == 0:
 		if len(items) == 1 {
-			client = items[0]
+			return items[0], nil
 		} else {
 			pmPromptContent := config.PromptContent{
 				ErrorMsg: "Please, provide the name of the package manager.",
 				Label:    "Which package manager do you want to use?",
 			}
-			_pm := common.PromptGetSelect(items, pmPromptContent)
-			if common.Contains(items, _pm) {
-				client = _pm
-			} else {
-				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
-				return "", sveltinerr.NewDefaultError(errN)
-			}
+			return common.PromptGetSelect(pmPromptContent, items, false), nil
 		}
-		return client, nil
 	case nameLenght != 0:
 		if !common.Contains(items, npmClientName) {
-			return "", sveltinerr.NewOptionNotValidError()
+			errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
+			return "", sveltinerr.NewDefaultError(errN)
 		}
-		client = npmClientName
-		return client, nil
+		return npmClientName, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)

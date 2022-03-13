@@ -146,7 +146,6 @@ func init() {
 //=============================================================================
 
 func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig) (string, error) {
-	var resource string
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
 	switch nameLenght := len(mdResourceFlag); {
@@ -155,32 +154,27 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 			ErrorMsg: "Please, provide select an existing resource.",
 			Label:    "What's the existing resource to be used?",
 		}
-		resource = common.PromptGetSelect(availableResources, resourcePromptContent)
-		return utils.ToSlug(resource), nil
+		return utils.ToSlug(common.PromptGetSelect(resourcePromptContent, availableResources, false)), nil
 	case nameLenght != 0:
-		resource = mdResourceFlag
-		if !common.Contains(availableResources, resource) {
+		if !common.Contains(availableResources, mdResourceFlag) {
 			return "", sveltinerr.NewResourceNotFoundError()
 		}
-		return utils.ToSlug(resource), nil
+		return utils.ToSlug(mdResourceFlag), nil
 	default:
 		return "", sveltinerr.NewResourceNotFoundError()
 	}
 }
 
 func promptMetadataName(inputs []string) (string, error) {
-	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		metadataNamePromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide a name for the metadata.",
 			Label:    "What's the metadata name?",
 		}
-		name = common.PromptGetInput(metadataNamePromptContent)
-		return utils.ToSlug(name), nil
+		return utils.ToSlug(common.PromptGetInput(metadataNamePromptContent)), nil
 	case numOfArgs == 1:
-		name = inputs[0]
-		return utils.ToSlug(name), nil
+		return utils.ToSlug(inputs[0]), nil
 	default:
 		err := errors.New("something went wrong: name not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -189,7 +183,6 @@ func promptMetadataName(inputs []string) (string, error) {
 }
 
 func promptMetadataType(mdTypeFlag string) (string, error) {
-	var metadataType string
 	valid := []string{"single", "list"}
 
 	switch nameLenght := len(mdTypeFlag); {
@@ -198,14 +191,12 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 			ErrorMsg: "Please, provide select a metadata type.",
 			Label:    "What's the metadata type?",
 		}
-		metadataType = common.PromptGetSelect(valid, metadataTypePromptContent)
-		return metadataType, nil
+		return common.PromptGetSelect(metadataTypePromptContent, valid, false), nil
 	case nameLenght != 0:
-		metadataType = mdTypeFlag
-		if !common.Contains(valid, metadataType) {
+		if !common.Contains(valid, mdTypeFlag) {
 			return "", sveltinerr.NewMetadataTypeNotValidError()
 		}
-		return metadataType, nil
+		return mdTypeFlag, nil
 	default:
 		return "", sveltinerr.NewMetadataTypeNotValidError()
 	}

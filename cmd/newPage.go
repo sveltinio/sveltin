@@ -117,21 +117,19 @@ func getPageName(inputs []string) (string, error) {
 
 func getPageType(pageTypeFlag string) (string, error) {
 	valid := []string{SVELTE, MARKDOWN}
-	var page string
+
 	switch nameLenght := len(pageTypeFlag); {
 	case nameLenght == 0:
 		pagePromptContent := config.PromptContent{
 			ErrorMsg: "Please, select a type for your page",
 			Label:    "What's the page type?",
 		}
-		page = common.PromptGetSelect(valid, pagePromptContent)
-		return page, nil
+		return common.PromptGetSelect(pagePromptContent, valid, false), nil
 	case nameLenght != 0:
-		page = pageTypeFlag
-		if !common.Contains(valid, page) {
+		if !common.Contains(valid, pageTypeFlag) {
 			return "", sveltinerr.NewPageTypeNotValidError()
 		}
-		return page, nil
+		return pageTypeFlag, nil
 	default:
 		return "", sveltinerr.NewPageTypeNotValidError()
 	}

@@ -130,18 +130,15 @@ func init() {
 //=============================================================================
 
 func promptResourceName(inputs []string) (string, error) {
-	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		resourceNamePromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide a name for the resource.",
 			Label:    "What's the resource name? (e.g. posts, portfolio ...)",
 		}
-		name = common.PromptGetInput(resourceNamePromptContent)
-		return utils.ToSlug(name), nil
+		return utils.ToSlug(common.PromptGetInput(resourceNamePromptContent)), nil
 	case numOfArgs == 1:
-		name = inputs[0]
-		return utils.ToSlug(name), nil
+		return utils.ToSlug(inputs[0]), nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)
