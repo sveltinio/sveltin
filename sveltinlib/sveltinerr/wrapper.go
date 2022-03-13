@@ -37,7 +37,7 @@ func newSveltinError(code int, err error, message string) error {
 func NewNotValidProjectError(pathToFile string) error {
 	placeholderText := `
 
-This is related to sveltin not being able to find teh package.json file
+This is related to sveltin not being able to find the package.json file
 within the current directory (%s).
 
 Are you sure you are running the sveltin command from within a valid project directory?
