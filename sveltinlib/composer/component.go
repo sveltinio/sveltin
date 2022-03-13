@@ -12,7 +12,8 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 )
 
-type component interface {
+// Component describes operations common to elements of the tree.
+type Component interface {
 	GetName() string
 	SetName(string)
 	SetPath(string)

@@ -35,10 +35,10 @@ func IsValidFileForContent(f fs.FileInfo) bool {
 }
 
 // PrepareContent returns a builder.Content struct used by the builder director.
-func PrepareContent(name string, resources map[string]string, templateId string, data *config.TemplateData) builder.Content {
+func PrepareContent(name string, resources map[string]string, templateID string, data *config.TemplateData) builder.Content {
 	contentBuilder := builder.GetContentBuilder(name)
 	contentBuilder.SetEmbeddedResources(resources)
-	contentBuilder.SetTemplateId(templateId)
+	contentBuilder.SetTemplateID(templateID)
 	contentBuilder.SetTemplateData(data)
 
 	director := builder.NewDirector(contentBuilder)

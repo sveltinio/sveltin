@@ -100,7 +100,7 @@ func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates b
 			jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
 			os.Exit(1)
 		}
-		return elements[i].Id
+		return elements[i].ID
 	default:
 		return ""
 	}

@@ -8,7 +8,7 @@ import (
 
 func TestGetAsciiArt(t *testing.T) {
 	is := is.New(t)
-	sveltinAsciiArt := `
+	sveltinASCIIArt := `
                 _ _   _
                | | | (_)
   _____   _____| | |_ _ _ __
@@ -17,7 +17,7 @@ func TestGetAsciiArt(t *testing.T) {
  |___/ \_/ \___|_|\__|_|_| |_|
 
 `
-	is.Equal(sveltinAsciiArt, GetAsciiArt())
+	is.Equal(sveltinASCIIArt, GetASCIIArt())
 }
 
 func TestSveltinSiteFS(t *testing.T) {

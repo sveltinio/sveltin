@@ -75,8 +75,8 @@ func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 }
 
 // RetrieveProjectName returns the project name as string parsing the package.json file.
-func RetrieveProjectName(appFS afero.Fs, pathToPkgJson string) (string, error) {
-	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
+func RetrieveProjectName(appFS afero.Fs, pathToPkgJSON string) (string, error) {
+	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJSON)
 	ExitIfError(err)
 	pkgParsed := npmc.Parse(pkgFileContent)
 	if pkgParsed.Name != "" {
@@ -86,9 +86,9 @@ func RetrieveProjectName(appFS afero.Fs, pathToPkgJson string) (string, error) {
 	return "", sveltinerr.NewProjectNameNotFoundError()
 }
 
-// RetrievePackageManagerFromPkgJson returns NPMClient struct parsing the package.json file.
-func RetrievePackageManagerFromPkgJson(appFS afero.Fs, pathToPkgJson string) (npmc.NPMClient, error) {
-	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJson)
+// RetrievePackageManagerFromPkgJSON returns NPMClient struct parsing the package.json file.
+func RetrievePackageManagerFromPkgJSON(appFS afero.Fs, pathToPkgJSON string) (npmc.NPMClient, error) {
+	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJSON)
 	ExitIfError(err)
 	pkgParsed := npmc.Parse(pkgFileContent)
 	if pkgParsed.PackageManager != "" {

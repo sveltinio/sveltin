@@ -16,7 +16,7 @@ import (
 )
 
 // WriteToFile saves a json string to a file on the file system
-func WriteToFile(appFS afero.Fs, pkg *PackageJson, saveAs string, prefix string, indent string) error {
+func WriteToFile(appFS afero.Fs, pkg *PackageJSON, saveAs string, prefix string, indent string) error {
 	file, _ := jsonMarshalIndent(pkg, prefix, indent)
 	return afero.WriteFile(appFS, saveAs, file, 0644)
 }

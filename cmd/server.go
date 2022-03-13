@@ -23,7 +23,7 @@ var serverCmd = &cobra.Command{
 	Use:     "server",
 	Aliases: []string{"s", "serve"},
 	Short:   "Run the server",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 It wraps svelte-kit defined commands to run the server`,
 	Run: RunServerCmd,
 }
@@ -36,7 +36,7 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("Running the Vite server"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)

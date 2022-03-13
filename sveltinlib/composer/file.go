@@ -22,7 +22,7 @@ import (
 type File struct {
 	Name         string
 	path         string
-	TemplateId   string
+	TemplateID   string
 	TemplateData *config.TemplateData
 }
 
@@ -46,9 +46,9 @@ func (f *File) SetPath(path string) {
 	f.path = path
 }
 
-// GetTemplateId returns a string representing the template id for the file.
-func (f *File) GetTemplateId() string {
-	return f.TemplateId
+// GetTemplateID returns a string representing the template id for the file.
+func (f *File) GetTemplateID() string {
+	return f.TemplateID
 }
 
 // GetTemplateData returns a TemplateData struct the file.
@@ -59,7 +59,7 @@ func (f *File) GetTemplateData() *config.TemplateData {
 // Create is resposibile to execute the file template providing the info needed by the builder
 // get the content and save the newly creted file on the file system.
 func (f *File) Create(sf *factory.Artifact) error {
-	preparedContent := helpers.PrepareContent(sf.GetBuilder(), sf.GetResources(), f.GetTemplateId(), f.GetTemplateData())
+	preparedContent := helpers.PrepareContent(sf.GetBuilder(), sf.GetResources(), f.GetTemplateID(), f.GetTemplateData())
 	fileContent := helpers.MakeFileContent(sf.GetEFS(), preparedContent)
 	saveAs := filepath.Join(f.GetPath(), f.GetName())
 

@@ -30,7 +30,7 @@ var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Aliases: []string{"r"},
 	Short:   "Command to create new resources",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Command to create new resources.
 
 What is a "resource" for Sveltin?
@@ -55,7 +55,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// GET FOLDER: content folder
-	contentFolder := fsManager.GetFolder(CONTENT)
+	contentFolder := fsManager.GetFolder(Content)
 
 	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as resource", resourceName)))
 
@@ -65,7 +65,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	contentFolder.Add(resourceContentFolder)
 
 	// GET FOLDER: src/lib folder
-	libFolder := fsManager.GetFolder(LIB)
+	libFolder := fsManager.GetFolder(Lib)
 
 	// NEW FOLDER: /src/lib/<resource_name>
 	resourceLibFolder := composer.NewFolder(resourceName)
@@ -74,7 +74,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	log.Info("Creating the lib file for the resource")
 	libFile := &composer.File{
 		Name:       utils.ToLibFile(resourceName),
-		TemplateId: LIB,
+		TemplateID: Lib,
 		TemplateData: &config.TemplateData{
 			Name:   resourceName,
 			Config: &conf,
@@ -84,17 +84,17 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	libFolder.Add(resourceLibFolder)
 
 	// GET FOLDER: src/routes folder
-	routesFolder := fsManager.GetFolder(ROUTES)
+	routesFolder := fsManager.GetFolder(Routes)
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
 	log.Info("Creating the components and endpoints for the resource")
-	for _, item := range []string{INDEX, INDEX_ENDPOINT, SLUG, SLUG_ENDPOINT} {
+	for _, item := range []string{Index, IndexEndpoint, Slug, SlugEndpoint} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
-			TemplateId: item,
+			TemplateID: item,
 			TemplateData: &config.TemplateData{
 				Name:   resourceName,
 				Config: &conf,
@@ -105,7 +105,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	routesFolder.Add(resourceRoutesFolder)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(contentFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)

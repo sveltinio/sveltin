@@ -17,31 +17,32 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-type themeContentBuilder struct {
+// ThemeContentBuilder represents the builder for the theme artefact.
+type ThemeContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
-	TemplateId        string
+	TemplateID        string
 	TemplateData      *config.TemplateData
 	Funcs             template.FuncMap
 }
 
-// NewThemeContentBuilder create a themeContentBuilder struct.
-func NewThemeContentBuilder() *themeContentBuilder {
-	return &themeContentBuilder{}
+// NewThemeContentBuilder create a ThemeContentBuilder struct.
+func NewThemeContentBuilder() *ThemeContentBuilder {
+	return &ThemeContentBuilder{}
 }
 
-func (b *themeContentBuilder) setContentType() {
+func (b *ThemeContentBuilder) setContentType() {
 	b.ContentType = "theme"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *themeContentBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *ThemeContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *themeContentBuilder) setPathToTplFile() error {
-	switch b.TemplateId {
+func (b *ThemeContentBuilder) setPathToTplFile() error {
+	switch b.TemplateID {
 	case "readme":
 		b.PathToTplFile = b.EmbeddedResources["readme"]
 		return nil
@@ -57,17 +58,17 @@ func (b *themeContentBuilder) setPathToTplFile() error {
 	}
 }
 
-// SetTemplateId set the id for the template to be used.
-func (b *themeContentBuilder) SetTemplateId(id string) {
-	b.TemplateId = id
+// SetTemplateID set the id for the template to be used.
+func (b *ThemeContentBuilder) SetTemplateID(id string) {
+	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *themeContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *ThemeContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *themeContentBuilder) setFuncs() {
+func (b *ThemeContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"CurrentYear": func() string {
 			return utils.CurrentYear()
@@ -76,11 +77,11 @@ func (b *themeContentBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *themeContentBuilder) GetContent() Content {
+func (b *ThemeContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,
-		TemplateId:    b.TemplateId,
+		TemplateID:    b.TemplateID,
 		TemplateData:  b.TemplateData,
 		Funcs:         b.Funcs,
 	}

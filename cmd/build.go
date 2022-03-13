@@ -24,7 +24,7 @@ var buildCmd = &cobra.Command{
 	Use:     "build",
 	Aliases: []string{"b"},
 	Short:   "Builds a production version of your static website",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Builds a production version of your static website.
 
 It wraps sveltekit-build command.
@@ -43,7 +43,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("Building the Sveltin project"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	os.Setenv("VITE_PUBLIC_BASE_PATH", projectConfig.BaseURL)

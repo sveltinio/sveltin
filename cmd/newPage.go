@@ -28,10 +28,10 @@ var (
 )
 
 const (
-	// SVELTE set svelte as the language used to scaffold a new page
-	SVELTE string = "svelte"
-	// MARKDOWN set markdown as the language used to scaffold a new page
-	MARKDOWN string = "markdown"
+	// Svelte set svelte as the language used to scaffold a new page
+	Svelte string = "svelte"
+	// Markdown set markdown as the language used to scaffold a new page
+	Markdown string = "markdown"
 )
 
 //=============================================================================
@@ -40,7 +40,7 @@ var newPageCmd = &cobra.Command{
 	Use:     "page [name]",
 	Aliases: []string{"p"},
 	Short:   "Create a new public page",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Create a new "public" page.
 
 Pages are Svelte components written in .svelte files. The filename determines the route.
@@ -65,7 +65,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as page", pageName)))
 
 	// GET FOLDER: src/routes
-	routesFolder := fsManager.GetFolder(ROUTES)
+	routesFolder := fsManager.GetFolder(Routes)
 
 	// NEW FILE: src/routes/<page_name.svelte|svx>
 	pageFile := fsManager.NewPublicPage(pageName, pageType)
@@ -75,7 +75,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	routesFolder.Add(pageFile)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(routesFolder)
 
 	// GENERATE STRUCTURE
@@ -116,7 +116,7 @@ func getPageName(inputs []string) (string, error) {
 }
 
 func getPageType(pageTypeFlag string) (string, error) {
-	valid := []string{SVELTE, MARKDOWN}
+	valid := []string{Svelte, Markdown}
 
 	switch nameLenght := len(pageTypeFlag); {
 	case nameLenght == 0:

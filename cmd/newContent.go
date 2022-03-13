@@ -34,10 +34,10 @@ var (
 )
 
 const (
-	// BLANK represents the fontmatter-only template id used when generating the content file.
-	BLANK string = "blank"
-	// SAMPLE represents the sample-content template id used when generating the content file.
-	SAMPLE string = "sample"
+	// Blank represents the fontmatter-only template id used when generating the content file.
+	Blank string = "blank"
+	// Sample represents the sample-content template id used when generating the content file.
+	Sample string = "sample"
 )
 
 //=============================================================================
@@ -46,7 +46,7 @@ var newContentCmd = &cobra.Command{
 	Use:     "content [name]",
 	Aliases: []string{"c"},
 	Short:   "Create a new content for existing resource",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Create a new markdown file for your content and a folder to store the statics used by the content itself.
 
 New file can contain just the frontmatter or a sample content.
@@ -79,7 +79,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
 
 	// GET FOLDER: content
-	contentFolder := fsManager.GetFolder(CONTENT)
+	contentFolder := fsManager.GetFolder(Content)
 
 	// NEW FOLDER content/<resource_name>/<content_name>
 	resourceContentFolder := fsManager.NewResourceContentFolder(contentData.Name, contentData.Resource)
@@ -87,7 +87,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	// NEW FILE: content/<resource_name>/<content_name>/index.svx
 	contentFile := &composer.File{
 		Name:       pathMaker.GetResourceContentFilename(),
-		TemplateId: contentData.Type,
+		TemplateID: contentData.Type,
 		TemplateData: &config.TemplateData{
 			Name: contentData.Name,
 		},
@@ -100,7 +100,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	staticFolder := makeStaticFolderStructure(&resources.SveltinFS, AppFs, contentData)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(staticFolder)
 	projectFolder.Add(contentFolder)
 
@@ -164,7 +164,7 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 }
 
 func promptContentTemplateSelection(templateType string) (string, error) {
-	validTemplates := []string{BLANK, SAMPLE}
+	validTemplates := []string{Blank, Sample}
 
 	switch nameLenght := len(templateType); {
 	case nameLenght == 0:
@@ -197,7 +197,7 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 
 func makeStaticFolderStructure(efs *embed.FS, fs afero.Fs, contentData config.TemplateData) *composer.Folder {
 	// GET FOLDER: static
-	staticFolder := fsManager.GetFolder(STATIC)
+	staticFolder := fsManager.GetFolder(Static)
 	// NEW FOLDER static/resources
 	imagesFolder := composer.NewFolder("resources")
 	// NEW FOLDER static/resources/<resource_name>

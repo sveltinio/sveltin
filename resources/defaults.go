@@ -10,7 +10,7 @@ package resources
 
 import "embed"
 
-const sveltinAsciiArt = `
+const sveltinASCIIArt = `
                 _ _   _
                | | | (_)
   _____   _____| | |_ _ _ __
@@ -20,9 +20,9 @@ const sveltinAsciiArt = `
 
 `
 
-// GetAsciiArt returns the ascii art string.
-func GetAsciiArt() string {
-	return sveltinAsciiArt
+// GetASCIIArt returns the ascii art string.
+func GetASCIIArt() string {
+	return sveltinASCIIArt
 }
 
 // SveltinFS is the name for the embedded FS used by Sveltin.

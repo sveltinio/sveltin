@@ -98,6 +98,7 @@ Please check the help: sveltin [command] -h`
 	}
 }
 
+// GetPromptObjectKeys returns a slice of string with Ids.
 func GetPromptObjectKeys(po []config.PromptObject) []string {
 	res := []string{}
 	for _, v := range po {

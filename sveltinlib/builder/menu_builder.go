@@ -16,45 +16,46 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-type menuContentBuilder struct {
+// MenuContentBuilder represents the builder for the menu.
+type MenuContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
-	TemplateId        string
+	TemplateID        string
 	TemplateData      *config.TemplateData
 	Funcs             template.FuncMap
 }
 
 // NewMenuContentBuilder create a menuContentBuilder struct.
-func NewMenuContentBuilder() *menuContentBuilder {
-	return &menuContentBuilder{}
+func NewMenuContentBuilder() *MenuContentBuilder {
+	return &MenuContentBuilder{}
 }
 
-func (b *menuContentBuilder) setContentType() {
+func (b *MenuContentBuilder) setContentType() {
 	b.ContentType = "menu"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *menuContentBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *MenuContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *menuContentBuilder) setPathToTplFile() error {
-	b.PathToTplFile = b.EmbeddedResources[b.TemplateId]
+func (b *MenuContentBuilder) setPathToTplFile() error {
+	b.PathToTplFile = b.EmbeddedResources[b.TemplateID]
 	return nil
 }
 
-// SetTemplateId set the id for the template to be used.
-func (b *menuContentBuilder) SetTemplateId(id string) {
-	b.TemplateId = id
+// SetTemplateID set the id for the template to be used.
+func (b *MenuContentBuilder) SetTemplateID(id string) {
+	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *menuContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *MenuContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *menuContentBuilder) setFuncs() {
+func (b *MenuContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"Capitalize":  strings.Title,
 		"StringsJoin": strings.Join,
@@ -71,11 +72,11 @@ func (b *menuContentBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *menuContentBuilder) GetContent() Content {
+func (b *MenuContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,
-		TemplateId:    b.TemplateId,
+		TemplateID:    b.TemplateID,
 		TemplateData:  b.TemplateData,
 		Funcs:         b.Funcs,
 	}

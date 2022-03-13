@@ -23,7 +23,7 @@ var installCmd = &cobra.Command{
 	Use:     "install",
 	Aliases: []string{"i", "init"},
 	Short:   "Get all the dependencies from the `package.json` file",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Initialize the Sveltin project getting all dependencies from the package.json file.
 
 It wraps (npm|pnpm|yarn) install.
@@ -39,7 +39,7 @@ func RunInstallCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("Installing all dependencies"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)

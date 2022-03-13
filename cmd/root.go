@@ -30,29 +30,28 @@ import (
 //=============================================================================
 
 const (
-	// CLI_VERSION is the current sveltin clie version number.
-	CLI_VERSION string = "0.6.1"
-	// SVELTEKIT_STARTER a string rapresenting the project template id.
-	SVELTEKIT_STARTER string = "starter"
+	// CliVersion is the current sveltin clie version number.
+	CliVersion string = "0.6.1"
+	// SvelteKitStarter a string rapresenting the project template id.
+	SvelteKitStarter string = "starter"
 )
 
 // folder and file names for a Sveltin project structure.
 const (
-	ROOT           string = "root"
-	BACKUPS        string = "backups"
-	CONFIG         string = "config"
-	CONTENT        string = "content"
-	ROUTES         string = "routes"
-	API            string = "api"
-	LIB            string = "lib"
-	STATIC         string = "static"
-	THEMES         string = "themes"
-	INDEX          string = "index"
-	INDEX_ENDPOINT string = "indexendpoint"
-	SLUG           string = "slug"
-	SLUG_ENDPOINT  string = "slugendpoint"
-	SETTINGS_FILE  string = ".sveltin-settings.yaml"
-	DOTENV_PROD    string = ".env.production"
+	Root          string = "root"
+	Backups       string = "backups"
+	Config        string = "config"
+	Content       string = "content"
+	Routes        string = "routes"
+	Lib           string = "lib"
+	Static        string = "static"
+	Themes        string = "themes"
+	Index         string = "index"
+	IndexEndpoint string = "indexendpoint"
+	Slug          string = "slug"
+	SlugEndpoint  string = "slugendpoint"
+	SettingsFile  string = ".sveltin-settings.yaml"
+	DotEnvProd    string = ".env.production"
 )
 
 var (
@@ -76,10 +75,10 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:              "sveltin",
-	Version:          CLI_VERSION,
+	Version:          CliVersion,
 	TraverseChildren: true,
 	Short:            "sveltin is the main command to work with SvelteKit powered static websites.",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 A powerful CLI for your SvelteKit powered static website!
 
 sveltin is the main command used to boost your productivity
@@ -117,7 +116,7 @@ func initSveltin() {
 	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
 	fsManager = fsm.NewSveltinFSManager(&pathMaker)
 	appTemplatesMap = helpers.InitAppTemplatesMap()
-	projectConfig, _ = loadEnvFile(DOTENV_PROD)
+	projectConfig, _ = loadEnvFile(DotEnvProd)
 }
 
 func loadSveltinConfig() {
@@ -147,10 +146,10 @@ func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
 // isValidProject returns error if cannot find the package.json file within the current folder.
 func isValidProject() {
 	pwd, _ := os.Getwd()
-	pathToPkgJson := filepath.Join(pwd, "package.json")
-	exists, _ := afero.Exists(AppFs, pathToPkgJson)
+	pathToPkgJSON := filepath.Join(pwd, "package.json")
+	exists, _ := afero.Exists(AppFs, pathToPkgJSON)
 	if !exists {
-		err := sveltinerr.NewNotValidProjectError(pathToPkgJson)
+		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
 		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
 	}
 }

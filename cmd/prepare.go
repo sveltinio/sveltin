@@ -22,7 +22,7 @@ import (
 var prepareCmd = &cobra.Command{
 	Use:   "prepare",
 	Short: "It wraps svelte-kit sync command.",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 It wraps svelte-kit sync command to ensure types are set up and correct before run typechecking.`,
 	Run: RunPrepareCmd,
 }
@@ -35,7 +35,7 @@ func RunPrepareCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("Running svelte-kit sync command"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "prepare", "", nil, false)

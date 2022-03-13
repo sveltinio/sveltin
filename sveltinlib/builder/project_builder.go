@@ -17,71 +17,58 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// constants representing different file names.
-const (
-	DEFAULTS     string = "defaults"
-	EXTERNALS    string = "externals"
-	WEBSITE      string = "website"
-	MENU         string = "menu"
-	INIT_MENU    string = "init_menu"
-	DOTENV       string = "dotenv"
-	README       string = "readme"
-	LICENSE      string = "license"
-	THEME_CONFIG string = "theme_config"
-	INDEXPAGE    string = "index"
-)
-
-type projectBuilder struct {
+// ProjectBuilder represents the builder for the project.
+type ProjectBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
-	TemplateId        string
+	TemplateID        string
 	TemplateData      *config.TemplateData
 	Funcs             template.FuncMap
 }
 
-// NewProjectBuilder create a projectBuilder struct.
-func NewProjectBuilder() *projectBuilder {
-	return &projectBuilder{}
+// NewProjectBuilder create a ProjectBuilder struct.
+func NewProjectBuilder() *ProjectBuilder {
+	return &ProjectBuilder{}
 }
 
-func (b *projectBuilder) setContentType() {
+func (b *ProjectBuilder) setContentType() {
 	b.ContentType = "project"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *projectBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *ProjectBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *projectBuilder) setPathToTplFile() error {
-	switch b.TemplateId {
-	case DEFAULTS:
-		b.PathToTplFile = b.EmbeddedResources[DEFAULTS]
+func (b *ProjectBuilder) setPathToTplFile() error {
+	switch b.TemplateID {
+	case Defaults:
+		b.PathToTplFile = b.EmbeddedResources[Defaults]
 		return nil
-	case EXTERNALS:
-		b.PathToTplFile = b.EmbeddedResources[EXTERNALS]
+	case Externals:
+		b.PathToTplFile = b.EmbeddedResources[Externals]
 		return nil
-	case WEBSITE:
-		b.PathToTplFile = b.EmbeddedResources[WEBSITE]
+	case Website:
+		b.PathToTplFile = b.EmbeddedResources[Website]
 		return nil
-	case MENU:
-		b.PathToTplFile = b.EmbeddedResources[INIT_MENU]
+	case Menu:
+		b.PathToTplFile = b.EmbeddedResources[InitMenu]
 		return nil
-	case DOTENV:
-		b.PathToTplFile = b.EmbeddedResources[DOTENV]
+	case DotEnv:
+		b.PathToTplFile = b.EmbeddedResources[DotEnv]
 		return nil
-	case README:
-		b.PathToTplFile = b.EmbeddedResources[README]
+	case Readme:
+		b.PathToTplFile = b.EmbeddedResources[Readme]
 		return nil
-	case LICENSE:
-		b.PathToTplFile = b.EmbeddedResources[LICENSE]
+	case License:
+		b.PathToTplFile = b.EmbeddedResources[License]
 		return nil
-	case THEME_CONFIG:
-		b.PathToTplFile = b.EmbeddedResources[THEME_CONFIG]
+	case ThemeConfig:
+		b.PathToTplFile = b.EmbeddedResources[ThemeConfig]
 		return nil
-	case INDEXPAGE:
-		b.PathToTplFile = b.EmbeddedResources[INDEXPAGE]
+	case IndexPage:
+		b.PathToTplFile = b.EmbeddedResources[IndexPage]
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
@@ -89,17 +76,17 @@ func (b *projectBuilder) setPathToTplFile() error {
 	}
 }
 
-// SetTemplateId set the id for the template to be used.
-func (b *projectBuilder) SetTemplateId(id string) {
-	b.TemplateId = id
+// SetTemplateID set the id for the template to be used.
+func (b *ProjectBuilder) SetTemplateID(id string) {
+	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *projectBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *ProjectBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *projectBuilder) setFuncs() {
+func (b *ProjectBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"CurrentYear": func() string {
 			return utils.CurrentYear()
@@ -108,11 +95,11 @@ func (b *projectBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *projectBuilder) GetContent() Content {
+func (b *ProjectBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,
-		TemplateId:    b.TemplateId,
+		TemplateID:    b.TemplateID,
 		TemplateData:  b.TemplateData,
 		Funcs:         b.Funcs,
 	}
