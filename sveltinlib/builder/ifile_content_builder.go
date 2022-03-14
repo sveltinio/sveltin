@@ -38,8 +38,6 @@ func GetContentBuilder(contentType string) IFileContentBuilder {
 		return NewMenuContentBuilder()
 	case "nopage":
 		return NewNoPageContentBuilder()
-	case "theme":
-		return NewThemeContentBuilder()
 	default:
 		return nil
 	}
