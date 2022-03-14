@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- feature:
+- feature: Allow unstyled projects creation by @indaco in https://github.com/sveltinio/sveltin/pull/7
 - fix: cards grid styles
 - fix: mispelled word
 - chore: `sync` added as alias to the `prepare` command
