@@ -12,9 +12,11 @@ import (
 	"bufio"
 	"bytes"
 	"embed"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
@@ -63,6 +65,27 @@ func TouchFile(fs afero.Fs, x ...string) error {
 	}
 	if err := WriteToDisk(fs, inpath, bytes.NewReader([]byte{})); err != nil {
 		return err
+	}
+	return nil
+}
+
+// MoveFile copy files from the embedded file system to the actual file system and can backups them.
+func MoveFile(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, backup bool) error {
+	if backup {
+		destFileExists, err := FileExists(fs, saveTo)
+		if destFileExists && err == nil {
+			if err := fs.Rename(saveTo, saveTo+`_backup_`+time.Now().Format("2006-01-02_15:04:05")); err != nil {
+				return err
+			}
+			if err := fs.Remove(saveTo); err != nil {
+				return err
+			}
+		}
+	}
+	err := CopyFileFromEmbeddedFS(efs, fs, sourceFile, saveTo)
+	if err != nil {
+		nErr := errors.New("something went wrong running MoveFile: " + err.Error())
+		return sveltinerr.NewDefaultError(nErr)
 	}
 	return nil
 }
