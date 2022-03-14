@@ -38,7 +38,7 @@ func TestErrors(t *testing.T) {
 	is.Equal(20, re.Code)
 	is.Equal("SVELTIN NotImplementYetError", re.Message)
 
-	errVar = NewOptionNotValidError()
+	errVar = NewOptionNotValidError("test", []string{"default", "none"})
 	re = errVar.(*SveltinError)
 	is.Equal(30, re.Code)
 	is.Equal("SVELTIN OptionNotValidError", re.Message)
