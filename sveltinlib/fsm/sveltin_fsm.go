@@ -63,7 +63,7 @@ func (s *SveltinFSManager) NewResourceContentFolder(name string, resource string
 func (s *SveltinFSManager) NewResourceContentFile(name string, template string) *composer.File {
 	return &composer.File{
 		Name:       s.maker.GetResourceContentFilename(),
-		TemplateId: template,
+		TemplateID: template,
 		TemplateData: &config.TemplateData{
 			Name: name,
 		},
@@ -74,7 +74,7 @@ func (s *SveltinFSManager) NewResourceContentFile(name string, template string) 
 func (s *SveltinFSManager) NewPublicPage(name string, language string) *composer.File {
 	return &composer.File{
 		Name:       helpers.PublicPageFilename(name, language),
-		TemplateId: language,
+		TemplateID: language,
 		TemplateData: &config.TemplateData{
 			Name: name,
 		},
@@ -85,7 +85,7 @@ func (s *SveltinFSManager) NewPublicPage(name string, language string) *composer
 func (s *SveltinFSManager) NewNoPage(name string, projectConfig *config.ProjectConfig, resources []string, contents map[string][]string, metadata map[string][]string, pages []string) *composer.File {
 	return &composer.File{
 		Name:       name + ".xml",
-		TemplateId: name,
+		TemplateID: name,
 		TemplateData: &config.TemplateData{
 			NoPage: &config.NoPage{
 				Config: projectConfig,
@@ -100,7 +100,7 @@ func (s *SveltinFSManager) NewConfigFile(projectName string, name string, cliVer
 	filename := strings.ToLower(name) + ".js.ts"
 	return &composer.File{
 		Name:       filename,
-		TemplateId: name,
+		TemplateID: name,
 		TemplateData: &config.TemplateData{
 			ProjectName: projectName,
 			Name:        filename,
@@ -113,7 +113,7 @@ func (s *SveltinFSManager) NewConfigFile(projectName string, name string, cliVer
 func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.TemplateData) *composer.File {
 	return &composer.File{
 		Name:         tplData.Name,
-		TemplateId:   "dotenv",
+		TemplateID:   "dotenv",
 		TemplateData: tplData,
 	}
 }
@@ -122,7 +122,7 @@ func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.Tem
 func (s *SveltinFSManager) NewContentFile(name string, template string, resource string) *composer.File {
 	return &composer.File{
 		Name:       s.maker.GetResourceContentFilename(),
-		TemplateId: template,
+		TemplateID: template,
 		TemplateData: &config.TemplateData{
 			Name: name,
 		},

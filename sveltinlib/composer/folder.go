@@ -22,7 +22,7 @@ import (
 type Folder struct {
 	Name       string
 	path       string
-	components []component
+	components []Component
 }
 
 // NewFolder returns a pointer to a Folder struct.
@@ -53,7 +53,7 @@ func (f *Folder) SetPath(path string) {
 }
 
 // GetComponents returns the slice of component for a Folder struct.
-func (f *Folder) GetComponents() []component {
+func (f *Folder) GetComponents() []Component {
 	return f.components
 }
 
@@ -82,6 +82,6 @@ func (f *Folder) Create(sf *factory.Artifact) error {
 }
 
 // Add append an item to the Folder's components list.
-func (f *Folder) Add(c component) {
+func (f *Folder) Add(c Component) {
 	f.components = append(f.components, c)
 }

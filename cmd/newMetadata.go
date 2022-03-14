@@ -37,7 +37,7 @@ var newMetadataCmd = &cobra.Command{
 	Use:     "metadata [name] --resource [resource] --type [single|list]",
 	Aliases: []string{"m, groupedBy"},
 	Short:   "Command to add new metadata to an existing resource",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Command to add new metadata from your content to an existing resource.
 
 What is a "metadata" for Sveltin?
@@ -71,7 +71,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	log.Info("Creating the lib file for the metadata")
 	libFile := &composer.File{
 		Name:       pathMaker.GetResourceLibFilename(mdName),
-		TemplateId: LIB,
+		TemplateID: Lib,
 		TemplateData: &config.TemplateData{
 			Name:     mdName,
 			Resource: mdResource,
@@ -84,7 +84,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceLibFolder.Add(libFile)
 
 	// GET FOLDER: src/lib folder
-	libFolder := fsManager.GetFolder(LIB)
+	libFolder := fsManager.GetFolder(Lib)
 	libFolder.Add(resourceLibFolder)
 
 	// NEW FOLDER: <metadata_name>
@@ -92,10 +92,10 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
 	log.Info("Creating the components and endpoints for the metadata")
-	for _, item := range []string{INDEX, INDEX_ENDPOINT, SLUG, SLUG_ENDPOINT} {
+	for _, item := range []string{Index, IndexEndpoint, Slug, SlugEndpoint} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, &conf),
-			TemplateId: item,
+			TemplateID: item,
 			TemplateData: &config.TemplateData{
 				Name:     mdName,
 				Resource: mdResource,
@@ -111,11 +111,11 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceRoutesFolder.Add(resourceMedatadaRoutesFolder)
 
 	// GET FOLDER: src/routes folder
-	routesFolder := fsManager.GetFolder(ROUTES)
+	routesFolder := fsManager.GetFolder(Routes)
 	routesFolder.Add(resourceRoutesFolder)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 
@@ -146,7 +146,6 @@ func init() {
 //=============================================================================
 
 func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig) (string, error) {
-	var resource string
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
 	switch nameLenght := len(mdResourceFlag); {
@@ -155,32 +154,27 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 			ErrorMsg: "Please, provide select an existing resource.",
 			Label:    "What's the existing resource to be used?",
 		}
-		resource = common.PromptGetSelect(availableResources, resourcePromptContent)
-		return utils.ToSlug(resource), nil
+		return utils.ToSlug(common.PromptGetSelect(resourcePromptContent, availableResources, false)), nil
 	case nameLenght != 0:
-		resource = mdResourceFlag
-		if !common.Contains(availableResources, resource) {
+		if !common.Contains(availableResources, mdResourceFlag) {
 			return "", sveltinerr.NewResourceNotFoundError()
 		}
-		return utils.ToSlug(resource), nil
+		return utils.ToSlug(mdResourceFlag), nil
 	default:
 		return "", sveltinerr.NewResourceNotFoundError()
 	}
 }
 
 func promptMetadataName(inputs []string) (string, error) {
-	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		metadataNamePromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide a name for the metadata.",
 			Label:    "What's the metadata name?",
 		}
-		name = common.PromptGetInput(metadataNamePromptContent)
-		return utils.ToSlug(name), nil
+		return utils.ToSlug(common.PromptGetInput(metadataNamePromptContent)), nil
 	case numOfArgs == 1:
-		name = inputs[0]
-		return utils.ToSlug(name), nil
+		return utils.ToSlug(inputs[0]), nil
 	default:
 		err := errors.New("something went wrong: name not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -189,7 +183,6 @@ func promptMetadataName(inputs []string) (string, error) {
 }
 
 func promptMetadataType(mdTypeFlag string) (string, error) {
-	var metadataType string
 	valid := []string{"single", "list"}
 
 	switch nameLenght := len(mdTypeFlag); {
@@ -198,14 +191,12 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 			ErrorMsg: "Please, provide select a metadata type.",
 			Label:    "What's the metadata type?",
 		}
-		metadataType = common.PromptGetSelect(valid, metadataTypePromptContent)
-		return metadataType, nil
+		return common.PromptGetSelect(metadataTypePromptContent, valid, false), nil
 	case nameLenght != 0:
-		metadataType = mdTypeFlag
-		if !common.Contains(valid, metadataType) {
+		if !common.Contains(valid, mdTypeFlag) {
 			return "", sveltinerr.NewMetadataTypeNotValidError()
 		}
-		return metadataType, nil
+		return mdTypeFlag, nil
 	default:
 		return "", sveltinerr.NewMetadataTypeNotValidError()
 	}

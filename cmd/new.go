@@ -31,27 +31,34 @@ import (
 //=============================================================================
 
 var (
+	withStyle      string
 	withCSSLib     string
 	withThemeName  string
 	withPortNumber string
 )
 
+// names for the available style options
+const (
+	StyleDefault string = "default"
+	StyleNone    string = "none"
+)
+
 // names for the available CSS Lib options
 const (
-	VANILLACSS  string = "vanillacss"
-	TAILWINDCSS string = "tailwindcss"
-	BULMA       string = "bulma"
-	BOOTSTRAP   string = "bootstrap"
-	SCSS        string = "scss"
+	VanillaCSS  string = "vanillacss"
+	TailwindCSS string = "tailwindcss"
+	Bulma       string = "bulma"
+	Bootstrap   string = "bootstrap"
+	Scss        string = "scss"
 )
 
 // names for config files
 const (
-	DEFAULTS  string = "defaults"
-	EXTERNALS string = "externals"
-	WEBSITE   string = "website"
-	MENU      string = "menu"
-	DOTENV    string = "dotenv"
+	Defaults  string = "defaults"
+	Externals string = "externals"
+	Website   string = "website"
+	Menu      string = "menu"
+	DotEnv    string = "dotenv"
 )
 
 //=============================================================================
@@ -61,7 +68,7 @@ var newCmd = &cobra.Command{
 	Aliases: []string{"create"},
 	Args:    cobra.RangeArgs(0, 3),
 	Short:   "Command to create projects, resources, contents, pages, metadata, theme",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 This command creates projects, resources (e.g. blog posts), pagee, content, metadata etc. depending on the subcommand used with it.
 
 Examples:
@@ -78,6 +85,9 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectName, err := promptProjectName(args)
 	utils.ExitIfError(err)
 
+	projectStyles, err := promptProjectStyle(withStyle)
+	utils.ExitIfError(err)
+
 	cssLibName, err := promptCSSLibName(withCSSLib)
 	utils.ExitIfError(err)
 
@@ -89,7 +99,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("A new Sveltin project will be created"))
 
 	// Clone starter template github repository
-	starterTemplate := appTemplatesMap[SVELTEKIT_STARTER]
+	starterTemplate := appTemplatesMap[SvelteKitStarter]
 	log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
 	err = utils.GitClone(&starterTemplate, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
@@ -100,25 +110,25 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	log.Info("Creating the project folder structure")
 
 	// NEW FOLDER: config
-	configFolder := composer.NewFolder(CONFIG)
+	configFolder := composer.NewFolder(Config)
 	projectFolder.Add(configFolder)
 
 	// NEW FILE: config/<filename>.js
-	for _, elem := range []string{DEFAULTS, EXTERNALS, WEBSITE, MENU} {
-		f := fsManager.NewConfigFile(projectName, elem, CLI_VERSION)
+	for _, elem := range []string{Defaults, Externals, Website, Menu} {
+		f := fsManager.NewConfigFile(projectName, elem, CliVersion)
 		configFolder.Add(f)
 	}
 
 	// NEW FOLDER: content
-	contentFolder := composer.NewFolder(CONTENT)
+	contentFolder := composer.NewFolder(Content)
 	projectFolder.Add(contentFolder)
 
 	// GET FOLDER: src/routes folder
-	routesFolder := fsManager.GetFolder(ROUTES)
+	routesFolder := fsManager.GetFolder(Routes)
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       helpers.GetResourceRouteFilename(INDEX, &conf),
-		TemplateId: INDEX,
+		Name:       helpers.GetResourceRouteFilename(Index, &conf),
+		TemplateID: Index,
 		TemplateData: &config.TemplateData{
 			ThemeName: themeName,
 		},
@@ -128,7 +138,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectFolder.Add(routesFolder)
 
 	// NEW FOLDER: themes
-	themesFolder := composer.NewFolder(THEMES)
+	themesFolder := composer.NewFolder(Themes)
 
 	newThemeFolder := makeThemeStructure(themeName)
 	themesFolder.Add(newThemeFolder)
@@ -137,14 +147,14 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: env.production
 	dotEnvTplData := &config.TemplateData{
-		Name:    DOTENV_PROD,
+		Name:    DotEnvProd,
 		BaseURL: fmt.Sprintf("http://%s.com", projectName),
 	}
 	f := fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 	projectFolder.Add(f)
 
 	// SET FOLDER STRUCTURE
-	rootFolder := fsManager.GetFolder(ROOT)
+	rootFolder := fsManager.GetFolder(Root)
 	rootFolder.Add(projectFolder)
 
 	// GENERATE FOLDER STRUCTURE
@@ -160,7 +170,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 		PortNumber:  withPortNumber,
 		ThemeName:   themeName,
 	}
-	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, &tplData)
+	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, isSveltinStyles(projectStyles), &conf, &tplData)
 	utils.ExitIfError(err)
 
 	log.Success("Done")
@@ -171,7 +181,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of the your preferred npm client")
+	cmd.Flags().StringVarP(&withStyle, "style", "s", "", "Default styles or unstyled. Possible values: default, none")
+	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap, scss")
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The port to start the server on")
@@ -203,23 +214,53 @@ func promptProjectName(inputs []string) (string, error) {
 	}
 }
 
+func promptProjectStyle(stylesName string) (string, error) {
+	promptObjects := []config.PromptObject{
+		{ID: StyleDefault, Name: "Sveltin default styles"},
+		{ID: StyleNone, Name: "None"},
+	}
+
+	switch nameLenght := len(stylesName); {
+	case nameLenght == 0:
+		stylesPromptContent := config.PromptContent{
+			ErrorMsg: "Please, provide the style name",
+			Label:    "Which style for your Sveltin app?",
+		}
+		return common.PromptGetSelect(stylesPromptContent, promptObjects, true), nil
+	case nameLenght != 0:
+		valid := common.GetPromptObjectKeys(promptObjects)
+		if !common.Contains(valid, stylesName) {
+			return "", sveltinerr.NewOptionNotValidError(stylesName, valid)
+		}
+		return stylesName, nil
+	default:
+		err := fmt.Errorf("something went wrong: value not valid! You used: %s", stylesName)
+		return "", sveltinerr.NewDefaultError(err)
+	}
+}
+
 func promptCSSLibName(cssLibName string) (string, error) {
-	var css string
-	valid := []string{VANILLACSS, SCSS, TAILWINDCSS, BULMA, BOOTSTRAP}
+	promptObjects := []config.PromptObject{
+		{ID: VanillaCSS, Name: "Plain CSS"},
+		{ID: Scss, Name: "Scss/Sass"},
+		{ID: TailwindCSS, Name: "Tailwind CSS"},
+		{ID: Bulma, Name: "Bulma"},
+		{ID: Bootstrap, Name: "Bootstrap"},
+	}
+
 	switch nameLenght := len(cssLibName); {
 	case nameLenght == 0:
 		cssPromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide the CSS Lib name.",
 			Label:    "Which CSS lib do you want to use?",
 		}
-		css = common.PromptGetSelect(valid, cssPromptContent)
-		return css, nil
+		return common.PromptGetSelect(cssPromptContent, promptObjects, true), nil
 	case nameLenght != 0:
+		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, cssLibName) {
-			return "", sveltinerr.NewOptionNotValidError()
+			return "", sveltinerr.NewOptionNotValidError(cssLibName, valid)
 		}
-		css = cssLibName
-		return css, nil
+		return cssLibName, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -238,31 +279,22 @@ func promptNPMClient(items []string) (string, error) {
 		err := errors.New("it seems there is no package manager on your machine")
 		return "", sveltinerr.NewDefaultError(err)
 	}
-	var client string
+
 	switch nameLenght := len(npmClientName); {
 	case nameLenght == 0:
 		if len(items) == 1 {
-			client = items[0]
-		} else {
-			pmPromptContent := config.PromptContent{
-				ErrorMsg: "Please, provide the name of the package manager.",
-				Label:    "Which package manager do you want to use?",
-			}
-			_pm := common.PromptGetSelect(items, pmPromptContent)
-			if common.Contains(items, _pm) {
-				client = _pm
-			} else {
-				errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
-				return "", sveltinerr.NewDefaultError(errN)
-			}
+			return items[0], nil
 		}
-		return client, nil
+		pmPromptContent := config.PromptContent{
+			ErrorMsg: "Please, provide the name of the package manager.",
+			Label:    "Which package manager do you want to use?",
+		}
+		return common.PromptGetSelect(pmPromptContent, items, false), nil
 	case nameLenght != 0:
 		if !common.Contains(items, npmClientName) {
-			return "", sveltinerr.NewOptionNotValidError()
+			return "", sveltinerr.NewOptionNotValidError(npmClientName, items)
 		}
-		client = npmClientName
-		return client, nil
+		return npmClientName, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -286,7 +318,7 @@ func makeThemeStructure(themeName string) *composer.Folder {
 	// ADD FILE themes/<theme_name>/theme.config.js
 	configFile := &composer.File{
 		Name:       conf.GetThemeConfigFilename(),
-		TemplateId: "theme_config",
+		TemplateID: "theme_config",
 		TemplateData: &config.TemplateData{
 			Name: themeName,
 		},
@@ -296,7 +328,7 @@ func makeThemeStructure(themeName string) *composer.Folder {
 	// ADD FILE themes/<theme_name>/README.md
 	readMeFile := &composer.File{
 		Name:       utils.ToMDFile("readme", true),
-		TemplateId: "readme",
+		TemplateID: "readme",
 		TemplateData: &config.TemplateData{
 			Name: themeName,
 		},
@@ -306,7 +338,7 @@ func makeThemeStructure(themeName string) *composer.Folder {
 	// ADD FILE themes/<theme_name>/LICENSE
 	licenseFile := &composer.File{
 		Name:       "LICENSE",
-		TemplateId: "license",
+		TemplateID: "license",
 		TemplateData: &config.TemplateData{
 			Name: themeName,
 		},
@@ -329,39 +361,24 @@ func getSelectedNPMClient() npmc.NPMClient {
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, isStyled bool, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	switch cssLibName {
-	case VANILLACSS:
-		vanillaCSS := &css.VanillaCSS{}
-		c := css.CSSLib{
-			ICSSLib: vanillaCSS,
-		}
-		return c.Setup(efs, fs, conf, tplData)
-	case SCSS:
-		scss := &css.Scss{}
-		c := css.CSSLib{
-			ICSSLib: scss,
-		}
-		return c.Setup(efs, fs, conf, tplData)
-	case TAILWINDCSS:
-		tailwind := &css.TailwindCSS{}
-		c := css.CSSLib{
-			ICSSLib: tailwind,
-		}
-		return c.Setup(efs, fs, conf, tplData)
-	case BULMA:
-		bulma := &css.Bulma{}
-		c := css.CSSLib{
-			ICSSLib: bulma,
-		}
-		return c.Setup(efs, fs, conf, tplData)
-	case BOOTSTRAP:
-		boostrap := &css.Bootstrap{}
-		c := css.CSSLib{
-			ICSSLib: boostrap,
-		}
-		return c.Setup(efs, fs, conf, tplData)
+	case VanillaCSS:
+		vanillaCSS := css.NewVanillaCSS(isStyled, efs, fs, conf, tplData)
+		return vanillaCSS.Setup()
+	case Scss:
+		scss := css.NewScss(isStyled, efs, fs, conf, tplData)
+		return scss.Setup()
+	case TailwindCSS:
+		tailwind := css.NewTailwindCSS(isStyled, efs, fs, conf, tplData)
+		return tailwind.Setup()
+	case Bulma:
+		bulma := css.NewBulma(isStyled, efs, fs, conf, tplData)
+		return bulma.Setup()
+	case Bootstrap:
+		boostrap := css.NewBootstrap(isStyled, efs, fs, conf, tplData)
+		return boostrap.Setup()
 	default:
-		return sveltinerr.NewOptionNotValidError()
+		return sveltinerr.NewOptionNotValidError(cssLibName, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
 	}
 }

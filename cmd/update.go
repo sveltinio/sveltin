@@ -23,7 +23,7 @@ var updateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"u"},
 	Short:   "Update the dependencies from the `package.json` file",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 Update all dependencies from the package.json file.
 
 It wraps (npm|pnpm|yarn) update.
@@ -39,7 +39,7 @@ func RunUpdateCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("Updating all dependencies"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "update", "", nil, false)

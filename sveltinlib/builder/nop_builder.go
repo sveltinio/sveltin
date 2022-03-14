@@ -18,31 +18,32 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-type nopContentBuilder struct {
+// NoPContentBuilder represents the builder for the no-page artefacts (sitemap and rss).
+type NoPContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
-	TemplateId        string
+	TemplateID        string
 	TemplateData      *config.TemplateData
 	Funcs             template.FuncMap
 }
 
-// NewNoPageContentBuilder create a nopContentBuilder struct.
-func NewNoPageContentBuilder() *nopContentBuilder {
-	return &nopContentBuilder{}
+// NewNoPageContentBuilder create a NoPContentBuilder struct.
+func NewNoPageContentBuilder() *NoPContentBuilder {
+	return &NoPContentBuilder{}
 }
 
-func (b *nopContentBuilder) setContentType() {
+func (b *NoPContentBuilder) setContentType() {
 	b.ContentType = "nopage"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *nopContentBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *NoPContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *nopContentBuilder) setPathToTplFile() error {
-	switch b.TemplateId {
+func (b *NoPContentBuilder) setPathToTplFile() error {
+	switch b.TemplateID {
 	case "rss":
 		b.PathToTplFile = b.EmbeddedResources["rss_static"]
 		return nil
@@ -55,17 +56,17 @@ func (b *nopContentBuilder) setPathToTplFile() error {
 	}
 }
 
-// SetTemplateId set the id for the template to be used.
-func (b *nopContentBuilder) SetTemplateId(id string) {
-	b.TemplateId = id
+// SetTemplateID set the id for the template to be used.
+func (b *NoPContentBuilder) SetTemplateID(id string) {
+	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *nopContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *NoPContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *nopContentBuilder) setFuncs() {
+func (b *NoPContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"Capitalize":  strings.Title,
 		"StringsJoin": strings.Join,
@@ -76,11 +77,11 @@ func (b *nopContentBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *nopContentBuilder) GetContent() Content {
+func (b *NoPContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,
-		TemplateId:    b.TemplateId,
+		TemplateID:    b.TemplateID,
 		TemplateData:  b.TemplateData,
 		Funcs:         b.Funcs,
 	}

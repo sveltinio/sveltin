@@ -18,63 +18,49 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-const (
-	// API is a string for the 'api' folder.
-	API string = "api"
-	// INDEX is a string for the 'index' file.
-	INDEX string = "index"
-	// INDEX_ENDPOINT is a string for the 'index.ts' file.
-	INDEX_ENDPOINT string = "indexendpoint"
-	// SLUG is a string for the 'slug' file.
-	SLUG string = "slug"
-	// SLUG_ENDPOINT is a string for the 'slug' file.
-	SLUG_ENDPOINT string = "slugendpoint"
-	// LIB is a string for the 'lib' folder.
-	LIB string = "lib"
-)
-
-type resourceContentBuilder struct {
+// ResourceContentBuilder represents the builder for the resource artefact.
+type ResourceContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
-	TemplateId        string
+	TemplateID        string
 	TemplateData      *config.TemplateData
 	Funcs             template.FuncMap
 }
 
-// NewResourceContentBuilder create a resourceContentBuilder struct.
-func NewResourceContentBuilder() *resourceContentBuilder {
-	return &resourceContentBuilder{}
+// NewResourceContentBuilder create a ResourceContentBuilder struct.
+func NewResourceContentBuilder() *ResourceContentBuilder {
+	return &ResourceContentBuilder{}
 }
 
-func (b *resourceContentBuilder) setContentType() {
+func (b *ResourceContentBuilder) setContentType() {
 	b.ContentType = "resource"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *resourceContentBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *ResourceContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *resourceContentBuilder) setPathToTplFile() error {
-	switch b.TemplateId {
+func (b *ResourceContentBuilder) setPathToTplFile() error {
+	switch b.TemplateID {
 	case API:
 		b.PathToTplFile = b.EmbeddedResources[API]
 		return nil
-	case INDEX:
-		b.PathToTplFile = b.EmbeddedResources[INDEX]
+	case Index:
+		b.PathToTplFile = b.EmbeddedResources[Index]
 		return nil
-	case INDEX_ENDPOINT:
-		b.PathToTplFile = b.EmbeddedResources[INDEX_ENDPOINT]
+	case IndexEndpoint:
+		b.PathToTplFile = b.EmbeddedResources[IndexEndpoint]
 		return nil
-	case SLUG:
-		b.PathToTplFile = b.EmbeddedResources[SLUG]
+	case Slug:
+		b.PathToTplFile = b.EmbeddedResources[Slug]
 		return nil
-	case SLUG_ENDPOINT:
-		b.PathToTplFile = b.EmbeddedResources[SLUG_ENDPOINT]
+	case SlugEndpoint:
+		b.PathToTplFile = b.EmbeddedResources[SlugEndpoint]
 		return nil
-	case LIB:
-		b.PathToTplFile = b.EmbeddedResources[LIB]
+	case Lib:
+		b.PathToTplFile = b.EmbeddedResources[Lib]
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
@@ -82,17 +68,17 @@ func (b *resourceContentBuilder) setPathToTplFile() error {
 	}
 }
 
-// SetTemplateId set the id for the template to be used.
-func (b *resourceContentBuilder) SetTemplateId(id string) {
-	b.TemplateId = id
+// SetTemplateID set the id for the template to be used.
+func (b *ResourceContentBuilder) SetTemplateID(id string) {
+	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *resourceContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *ResourceContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *resourceContentBuilder) setFuncs() {
+func (b *ResourceContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"Capitalize": strings.Title,
 		"ToVariableName": func(txt string) string {
@@ -105,11 +91,11 @@ func (b *resourceContentBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *resourceContentBuilder) GetContent() Content {
+func (b *ResourceContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,
-		TemplateId:    b.TemplateId,
+		TemplateID:    b.TemplateID,
 		TemplateData:  b.TemplateData,
 		Funcs:         b.Funcs,
 	}

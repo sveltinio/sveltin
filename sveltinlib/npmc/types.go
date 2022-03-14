@@ -59,8 +59,8 @@ type Bugs struct {
 	URL string `json:"url"`
 }
 
-// PackageJson is a struct representing a package.json file
-type PackageJson struct {
+// PackageJSON is a struct representing a package.json file
+type PackageJSON struct {
 	Name            string        `json:"name"`
 	Version         string        `json:"version"`
 	Description     string        `json:"description"`

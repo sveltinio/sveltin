@@ -21,7 +21,7 @@ import (
 var generateSitemapCmd = &cobra.Command{
 	Use:   "sitemap",
 	Short: "Generate a sitemap.xml file for your Sveltin project",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 It creates a sitemap file for your website.
 
 It makes use of the .env.production file to reflect the base url for your website.
@@ -49,7 +49,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	metadata := helpers.GetResourceMetadataMap(AppFs, existingResources, conf.GetRoutesPath())
 
 	// GET FOLDER: static
-	staticFolder := fsManager.GetFolder(STATIC)
+	staticFolder := fsManager.GetFolder(Static)
 
 	// NEW FILE: static/rss.xml
 	log.Info("Generating the sitemap.xml file")
@@ -57,7 +57,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	staticFolder.Add(sitemapFile)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(staticFolder)
 
 	// GENERATE FOLDER STRUCTURE

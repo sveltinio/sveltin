@@ -27,7 +27,7 @@ var (
 var generateMenuCmd = &cobra.Command{
 	Use:   "menu",
 	Short: "Generate the menu config file for your Sveltin project",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 It creates a 'menu.json' file into the 'config' folder to be used by Svelte components.
 
 By default it list all resources and public pages.
@@ -44,7 +44,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 
 	log.Plain(utils.Underline("The menu structure will be created"))
 
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 
 	log.Info("Getting list of existing public pages")
 	publicPages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
@@ -53,13 +53,13 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	availableResources := helpers.GetAllResourcesWithContentName(AppFs, pathMaker.GetPathToExistingResources(), withContentFlag)
 
 	// GET FOLDER: config
-	configFolder := fsManager.GetFolder(CONFIG)
+	configFolder := fsManager.GetFolder(Config)
 
 	// ADD FILE: config/menu.js
 	log.Info("Generating menu.js.ts file")
 	menuFile := &composer.File{
 		Name:       "menu.js.ts",
-		TemplateId: "menu",
+		TemplateID: "menu",
 		TemplateData: &config.TemplateData{
 			Menu: &config.MenuConfig{
 				Resources:   availableResources,

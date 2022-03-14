@@ -18,43 +18,37 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-const (
-	// SVELTE set svelte as the language used to scaffold a new page
-	SVELTE string = "svelte"
-	// MARKDOWN set markdown as the language used to scaffold a new page
-	MARKDOWN string = "markdown"
-)
-
-type publicPageContentBuilder struct {
+// PublicPageContentBuilder represents the builder for the public page artefact.
+type PublicPageContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
-	TemplateId        string
+	TemplateID        string
 	TemplateData      *config.TemplateData
 	Funcs             template.FuncMap
 }
 
-// NewPageContentBuilder create a publicPageContentBuilder struct.
-func NewPageContentBuilder() *publicPageContentBuilder {
-	return &publicPageContentBuilder{}
+// NewPageContentBuilder create a PublicPageContentBuilder struct.
+func NewPageContentBuilder() *PublicPageContentBuilder {
+	return &PublicPageContentBuilder{}
 }
 
-func (b *publicPageContentBuilder) setContentType() {
+func (b *PublicPageContentBuilder) setContentType() {
 	b.ContentType = "page"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *publicPageContentBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *PublicPageContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *publicPageContentBuilder) setPathToTplFile() error {
-	switch b.TemplateId {
-	case SVELTE:
-		b.PathToTplFile = b.EmbeddedResources[SVELTE]
+func (b *PublicPageContentBuilder) setPathToTplFile() error {
+	switch b.TemplateID {
+	case Svelte:
+		b.PathToTplFile = b.EmbeddedResources[Svelte]
 		return nil
-	case MARKDOWN:
-		b.PathToTplFile = b.EmbeddedResources[MARKDOWN]
+	case Markdown:
+		b.PathToTplFile = b.EmbeddedResources[Markdown]
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
@@ -62,17 +56,17 @@ func (b *publicPageContentBuilder) setPathToTplFile() error {
 	}
 }
 
-// SetTemplateId set the id for the template to be used.
-func (b *publicPageContentBuilder) SetTemplateId(id string) {
-	b.TemplateId = id
+// SetTemplateID set the id for the template to be used.
+func (b *PublicPageContentBuilder) SetTemplateID(id string) {
+	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *publicPageContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *PublicPageContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *publicPageContentBuilder) setFuncs() {
+func (b *PublicPageContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"Capitalize": strings.Title,
 		"ToTitle": func(text string) string {
@@ -85,11 +79,11 @@ func (b *publicPageContentBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *publicPageContentBuilder) GetContent() Content {
+func (b *PublicPageContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,
-		TemplateId:    b.TemplateId,
+		TemplateID:    b.TemplateID,
 		TemplateData:  b.TemplateData,
 		Funcs:         b.Funcs,
 	}

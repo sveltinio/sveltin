@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"strings"
 )
 
 // SveltinError is the struct representing the way Sveltin handles errors.
@@ -37,7 +38,7 @@ func newSveltinError(code int, err error, message string) error {
 func NewNotValidProjectError(pathToFile string) error {
 	placeholderText := `
 
-This is related to sveltin not being able to find teh package.json file
+This is related to sveltin not being able to find the package.json file
 within the current directory (%s).
 
 Are you sure you are running the sveltin command from within a valid project directory?
@@ -77,14 +78,14 @@ func NewNotImplementYetError() error {
 }
 
 // NewOptionNotValidError ...
-func NewOptionNotValidError() error {
-	err := errors.New("it seems you used an invalid option")
+func NewOptionNotValidError(value string, options []string) error {
+	err := fmt.Errorf("it seems a not valid option has been used! Your choice was '%s'. Valid ones are: %s", value, strings.Join(options, ", "))
 	return newSveltinError(30, err, "SVELTIN OptionNotValidError")
 }
 
 // NewNumOfArgsNotValidError ...
 func NewNumOfArgsNotValidError() error {
-	err := errors.New("it seems you used a wrong number of arguments")
+	err := errors.New("it seems a wrong number of arguments have been used")
 	return newSveltinError(31, err, "SVELTIN NumOfArgsNotValidError")
 }
 
@@ -95,25 +96,25 @@ func NewNumOfArgsNotValidErrorWithMessage(err error) error {
 
 // NewResourceNotFoundError ...
 func NewResourceNotFoundError() error {
-	err := errors.New("it seems you used an invalid resource")
+	err := errors.New("it seems a not exisiting resource has been used")
 	return newSveltinError(40, err, "SVELTIN ResourceNotFoundError")
 }
 
 // NewContentTemplateTypeNotValidError ...
 func NewContentTemplateTypeNotValidError() error {
-	err := errors.New("it seems you used an invalid type for content template")
+	err := errors.New("it seems a not valid type has been used as content template")
 	return newSveltinError(50, err, "SVELTIN ContentTemplateTypeNotValidError")
 }
 
 // NewPageTypeNotValidError ...
 func NewPageTypeNotValidError() error {
-	err := errors.New("it seems you used an invalid type for page")
+	err := errors.New("it seems a not valid type has been used as page")
 	return newSveltinError(60, err, "SVELTIN PageTypeNotValidError")
 }
 
 // NewMetadataTypeNotValidError ...
 func NewMetadataTypeNotValidError() error {
-	err := errors.New("it seems you used an invalid type for metadata")
+	err := errors.New("it seems a not valid type has been used as metadata")
 	return newSveltinError(70, err, "SVELTIN MetadataTypeNotValidError")
 }
 
@@ -124,7 +125,7 @@ func NewPackageManagerCommandError(err error) error {
 
 // NewPackageManagerCommandNotValidError ...
 func NewPackageManagerCommandNotValidError() error {
-	err := errors.New("it seems the operation on the package manager is not a valid one")
+	err := errors.New("it seems the operation is not a valid one for the package manager")
 	return newSveltinError(81, err, "SVELTIN PackageManagerCommandNotValidError")
 }
 

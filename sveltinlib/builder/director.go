@@ -8,24 +8,25 @@
 // Package builder ...
 package builder
 
-type director struct {
-	builder iFileContentBuilder
+// Director defines the order in which to execute the building steps.
+type Director struct {
+	builder IFileContentBuilder
 }
 
 // NewDirector create a director.
-func NewDirector(b iFileContentBuilder) *director {
-	return &director{
+func NewDirector(b IFileContentBuilder) *Director {
+	return &Director{
 		builder: b,
 	}
 }
 
 // SetBuilder set the Builder to be used.
-func (d *director) SetBuilder(b iFileContentBuilder) {
+func (d *Director) SetBuilder(b IFileContentBuilder) {
 	d.builder = b
 }
 
 // GetContent returns the Content struct used by the Builder.
-func (d *director) GetContent() Content {
+func (d *Director) GetContent() Content {
 	d.builder.setContentType()
 	if err := d.builder.setPathToTplFile(); err != nil {
 		panic("something went wrong calling setPathToTplFile")

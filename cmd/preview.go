@@ -22,7 +22,7 @@ import (
 var previewCmd = &cobra.Command{
 	Use:   "preview",
 	Short: "Preview the production version locally",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 After you've built your app with sveltin build (or svelte-kit build),
 you can start the production version locally with sveltin preview.
 
@@ -38,7 +38,7 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	log.Plain(utils.Underline("Preview your Sveltin project"))
 
 	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJson(AppFs, pathToPkgFile)
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "preview", "", nil, false)

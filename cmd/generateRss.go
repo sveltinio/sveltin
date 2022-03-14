@@ -21,7 +21,7 @@ import (
 var generateRssCmd = &cobra.Command{
 	Use:   "rss",
 	Short: "Generate a rss.xml file for your Sveltin project",
-	Long: resources.GetAsciiArt() + `
+	Long: resources.GetASCIIArt() + `
 It creates an rss file for your website.
 
 It makes use of the .env.production file to reflect the base url for your website.
@@ -46,7 +46,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
 
 	// GET FOLDER: static
-	staticFolder := fsManager.GetFolder(STATIC)
+	staticFolder := fsManager.GetFolder(Static)
 
 	// NEW FILE: static/rss.xml
 	log.Info("Generating the rss.xml file")
@@ -54,7 +54,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	staticFolder.Add(rssFile)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(ROOT)
+	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(staticFolder)
 
 	// GENERATE FOLDER STRUCTURE

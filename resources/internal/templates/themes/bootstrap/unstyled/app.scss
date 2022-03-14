@@ -1,0 +1,60 @@
+/*
+ * Write your global styles here, in SCSS syntax.
+ * Variables and mixins from the src/variables.scss file are available here without importing
+ */
+
+/* Import only what you need from Bootstrap */
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/accordion';
+@import 'bootstrap/scss/alert';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/breadcrumb';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/button-group';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/carousel';
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/dropdown';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/list-group';
+@import 'bootstrap/scss/modal';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/offcanvas';
+@import 'bootstrap/scss/pagination';
+@import 'bootstrap/scss/popover';
+@import 'bootstrap/scss/progress';
+@import 'bootstrap/scss/spinners';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/toasts';
+@import 'bootstrap/scss/tooltip';
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/utilities/api';
+
+html {
+	height: 100%;
+	scroll-behavior: smooth;
+}
+
+.message {
+	padding: 0.5rem 1rem /* 8px 16px */;
+	border-radius: 0.375rem /* 6px */;
+}
+
+.warning {
+	background-color: rgb(254 215 170);
+}
+
+.markdown-body {
+	box-sizing: border-box;
+	min-width: 200px;
+	max-width: 980px;
+	margin: 0 auto;
+	padding: 45px;
+}

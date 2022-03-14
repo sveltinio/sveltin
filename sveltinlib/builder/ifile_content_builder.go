@@ -10,10 +10,11 @@ package builder
 
 import "github.com/sveltinio/sveltin/config"
 
-type iFileContentBuilder interface {
+// IFileContentBuilder declares building steps that are common to all types of builders.
+type IFileContentBuilder interface {
 	setContentType()
 	SetEmbeddedResources(res map[string]string)
-	SetTemplateId(string)
+	SetTemplateID(string)
 	SetTemplateData(artifact *config.TemplateData)
 	setPathToTplFile() error
 	setFuncs()
@@ -21,7 +22,7 @@ type iFileContentBuilder interface {
 }
 
 // GetContentBuilder returns an concrete implementation for iFileContentBuilder.
-func GetContentBuilder(contentType string) iFileContentBuilder {
+func GetContentBuilder(contentType string) IFileContentBuilder {
 	switch contentType {
 	case "project":
 		return NewProjectBuilder()
@@ -37,8 +38,6 @@ func GetContentBuilder(contentType string) iFileContentBuilder {
 		return NewMenuContentBuilder()
 	case "nopage":
 		return NewNoPageContentBuilder()
-	case "theme":
-		return NewThemeContentBuilder()
 	default:
 		return nil
 	}
