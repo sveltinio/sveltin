@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		height: 100%;
+		scroll-behavior: smooth;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+}
+
+@layer components {
+	.message {
+		@apply py-2 px-4 rounded-md;
+	}
+
+	.warning {
+		@apply bg-orange-200;
+	}
+
+	.text-default {
+		@apply text-base leading-6;
+	}
+}
+
+.markdown-body {
+	@apply mx-auto p-11 prose-base;
+}

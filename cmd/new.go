@@ -31,9 +31,16 @@ import (
 //=============================================================================
 
 var (
+	withStyle      string
 	withCSSLib     string
 	withThemeName  string
 	withPortNumber string
+)
+
+// names for the available style options
+const (
+	StyleDefault string = "default"
+	StyleNone    string = "none"
 )
 
 // names for the available CSS Lib options
@@ -76,6 +83,9 @@ sveltin new resource posts`,
 // NewCmdRun is the actual work function.
 func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectName, err := promptProjectName(args)
+	utils.ExitIfError(err)
+
+	projectStyles, err := promptProjectStyle(withStyle)
 	utils.ExitIfError(err)
 
 	cssLibName, err := promptCSSLibName(withCSSLib)
@@ -160,7 +170,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 		PortNumber:  withPortNumber,
 		ThemeName:   themeName,
 	}
-	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, &conf, &tplData)
+	err = setupCSSLib(&resources.SveltinFS, AppFs, cssLibName, isSveltinStyles(projectStyles), &conf, &tplData)
 	utils.ExitIfError(err)
 
 	log.Success("Done")
@@ -171,6 +181,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&withStyle, "style", "s", "", "Default styles or unstyled. Possible values: default, none")
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The name of the theme you are going to create")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap, scss")
@@ -203,6 +214,31 @@ func promptProjectName(inputs []string) (string, error) {
 	}
 }
 
+func promptProjectStyle(stylesName string) (string, error) {
+	promptObjects := []config.PromptObject{
+		{ID: StyleDefault, Name: "Sveltin default styles"},
+		{ID: StyleNone, Name: "None"},
+	}
+
+	switch nameLenght := len(stylesName); {
+	case nameLenght == 0:
+		stylesPromptContent := config.PromptContent{
+			ErrorMsg: "Please, provide the style name",
+			Label:    "Which style for your Sveltin app?",
+		}
+		return common.PromptGetSelect(stylesPromptContent, promptObjects, true), nil
+	case nameLenght != 0:
+		valid := common.GetPromptObjectKeys(promptObjects)
+		if !common.Contains(valid, stylesName) {
+			return "", sveltinerr.NewOptionNotValidError(stylesName, valid)
+		}
+		return stylesName, nil
+	default:
+		err := fmt.Errorf("something went wrong: value not valid! You used: %s", stylesName)
+		return "", sveltinerr.NewDefaultError(err)
+	}
+}
+
 func promptCSSLibName(cssLibName string) (string, error) {
 	promptObjects := []config.PromptObject{
 		{ID: VanillaCSS, Name: "Plain CSS"},
@@ -222,7 +258,7 @@ func promptCSSLibName(cssLibName string) (string, error) {
 	case nameLenght != 0:
 		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, cssLibName) {
-			return "", sveltinerr.NewOptionNotValidError()
+			return "", sveltinerr.NewOptionNotValidError(cssLibName, valid)
 		}
 		return cssLibName, nil
 	default:
@@ -256,8 +292,7 @@ func promptNPMClient(items []string) (string, error) {
 		return common.PromptGetSelect(pmPromptContent, items, false), nil
 	case nameLenght != 0:
 		if !common.Contains(items, npmClientName) {
-			errN := errors.New("invalid selection. Valid options are " + strings.Join(items, ", "))
-			return "", sveltinerr.NewDefaultError(errN)
+			return "", sveltinerr.NewOptionNotValidError(npmClientName, items)
 		}
 		return npmClientName, nil
 	default:
@@ -326,39 +361,24 @@ func getSelectedNPMClient() npmc.NPMClient {
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+func setupCSSLib(efs *embed.FS, fs afero.Fs, cssLibName string, isStyled bool, conf *config.SveltinConfig, tplData *config.TemplateData) error {
 	switch cssLibName {
 	case VanillaCSS:
-		vanillaCSS := &css.VanillaCSS{}
-		c := css.CSSLib{
-			ICSSLib: vanillaCSS,
-		}
-		return c.Setup(efs, fs, conf, tplData)
+		vanillaCSS := css.NewVanillaCSS(isStyled, efs, fs, conf, tplData)
+		return vanillaCSS.Setup()
 	case Scss:
-		scss := &css.Scss{}
-		c := css.CSSLib{
-			ICSSLib: scss,
-		}
-		return c.Setup(efs, fs, conf, tplData)
+		scss := css.NewScss(isStyled, efs, fs, conf, tplData)
+		return scss.Setup()
 	case TailwindCSS:
-		tailwind := &css.TailwindCSS{}
-		c := css.CSSLib{
-			ICSSLib: tailwind,
-		}
-		return c.Setup(efs, fs, conf, tplData)
+		tailwind := css.NewTailwindCSS(isStyled, efs, fs, conf, tplData)
+		return tailwind.Setup()
 	case Bulma:
-		bulma := &css.Bulma{}
-		c := css.CSSLib{
-			ICSSLib: bulma,
-		}
-		return c.Setup(efs, fs, conf, tplData)
+		bulma := css.NewBulma(isStyled, efs, fs, conf, tplData)
+		return bulma.Setup()
 	case Bootstrap:
-		boostrap := &css.Bootstrap{}
-		c := css.CSSLib{
-			ICSSLib: boostrap,
-		}
-		return c.Setup(efs, fs, conf, tplData)
+		boostrap := css.NewBootstrap(isStyled, efs, fs, conf, tplData)
+		return boostrap.Setup()
 	default:
-		return sveltinerr.NewOptionNotValidError()
+		return sveltinerr.NewOptionNotValidError(cssLibName, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
 	}
 }

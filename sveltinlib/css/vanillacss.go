@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/resources"
@@ -20,55 +21,136 @@ import (
 
 // VanillaCSS identifies the CSS lib to be used.
 type VanillaCSS struct {
-	CSSLib
+	EFS      *embed.FS
+	FS       afero.Fs
+	Config   *config.SveltinConfig
+	Data     *config.TemplateData
+	IsStyled bool
 }
 
-func (f *VanillaCSS) init(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+// NewVanillaCSS returns a pointer to a Bootstrap struct.
+func NewVanillaCSS(IsStyled bool, efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) *VanillaCSS {
+	return &VanillaCSS{
+		EFS:      efs,
+		FS:       fs,
+		Config:   conf,
+		Data:     tplData,
+		IsStyled: IsStyled,
+	}
+}
+
+// Setup is responsible to create the files to setup the CSS Lib.
+func (cssLib *VanillaCSS) Setup() error {
+	if cssLib.IsStyled {
+		return cssLib.makeStyled(cssLib.EFS, cssLib.FS, cssLib.Config, cssLib.Data)
+	}
+	return cssLib.makeUnstyled(cssLib.EFS, cssLib.FS, cssLib.Config, cssLib.Data)
+}
+
+func (cssLib *VanillaCSS) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+	vanillaFS := common.UnionMap(resources.SveltinVanillaFS, resources.SveltinVanillaStyledFS)
+
 	// Copying the package.json config file
-	sourceFile := resources.SveltinVanillaCSSThemeFS["package_json"]
+	sourceFile := vanillaFS["package_json"]
 	template := helpers.BuildTemplate(sourceFile, nil, tplData)
 	content := template.Run(efs)
 	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
+
+	// Copying svelte.config.js file
+	sourceFile = vanillaFS[SvelteConfigFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+
+	// Copying app.html file
+	sourceFile = vanillaFS[AppHTMLFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copying app.css file
+	sourceFile = vanillaFS[AppCSSFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.css")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+
 	// Copying __layout.svelte. file
-	sourceFile = resources.SveltinVanillaCSSThemeFS["layout"]
+	sourceFile = vanillaFS["layout"]
 	template = helpers.BuildTemplate(sourceFile, nil, tplData)
 	content = template.Run(efs)
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
 	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
 		return err
 	}
-	// Copying app.html file
-	sourceFile = resources.SveltinVanillaCSSThemeFS["app_html"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
-		return err
-	}
-	// Copying app.css file
-	sourceFile = resources.SveltinVanillaCSSThemeFS["app_css"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.css")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
-		return err
-	}
-	// Copying svelte.config.js file
-	sourceFile = resources.SveltinVanillaCSSThemeFS["svelte_config"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
-		return err
-	}
+
 	// Copying Hero.svelte component
-	sourceFile = resources.SveltinVanillaCSSThemeFS["hero"]
+	sourceFile = vanillaFS[HeroFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Hero.svelte")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying Footer.svelte component
-	sourceFile = resources.SveltinVanillaCSSThemeFS["footer"]
+	sourceFile = vanillaFS[FooterFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Footer.svelte")
-	if err := f.copyConfigFiles(efs, fs, sourceFile, saveAs, true); err != nil {
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (cssLib *VanillaCSS) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+	vanillaFS := common.UnionMap(resources.SveltinVanillaFS, resources.SveltinVanillaUnstyledFS)
+
+	// Copying the package.json config file
+	sourceFile := vanillaFS["package_json"]
+	template := helpers.BuildTemplate(sourceFile, nil, tplData)
+	content := template.Run(efs)
+	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
+	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
+		return err
+	}
+
+	// Copying svelte.config.js file
+	sourceFile = vanillaFS[SvelteConfigFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+
+	// Copying app.html file
+	sourceFile = vanillaFS[AppHTMLFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+	// Copying app.css file
+	sourceFile = vanillaFS[AppCSSFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.css")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+
+	// Copying __layout.svelte. file
+	sourceFile = vanillaFS["layout"]
+	template = helpers.BuildTemplate(sourceFile, nil, tplData)
+	content = template.Run(efs)
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
+	if err := helpers.WriteContentToDisk(fs, saveAs, content); err != nil {
+		return err
+	}
+
+	// Copying Hero.svelte component
+	sourceFile = vanillaFS[HeroFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Hero.svelte")
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
+		return err
+	}
+
 	return nil
 }

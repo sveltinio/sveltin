@@ -154,6 +154,10 @@ func isValidProject() {
 	}
 }
 
+func isSveltinStyles(style string) bool {
+	return style == StyleDefault
+}
+
 //=============================================================================
 
 // GetSveltinCommands returns an array of pointers to the implemented cobra.Command

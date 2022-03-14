@@ -69,7 +69,7 @@ func TestSveltinXMLFS(t *testing.T) {
 
 func TestSveltinThemeFS(t *testing.T) {
 	is := is.New(t)
-	is.Equal("internal/templates/themes/tailwindcss/tailwind.config.cjs", SveltinTailwindCSSThemeFS["tailwind_css_config"])
-	is.Equal("internal/templates/themes/tailwindcss/app.css", SveltinTailwindCSSThemeFS["app_css"])
-	is.Equal("internal/templates/themes/tailwindcss/postcss.config.cjs", SveltinTailwindCSSThemeFS["postcss"])
+	is.Equal("internal/templates/themes/tailwindcss/postcss.config.cjs", SveltinTailwindLibFS["postcss"])
+	is.Equal("internal/templates/themes/tailwindcss/styled/app.css", SveltinTailwindLibStyledFS["app_css"])
+	is.Equal("internal/templates/themes/tailwindcss/unstyled/tailwind.config.cjs", SveltinTailwindLibUnstyledFS["tailwind_css_config"])
 }
