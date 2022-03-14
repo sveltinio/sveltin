@@ -20,8 +20,9 @@ import (
 //=============================================================================
 
 var prepareCmd = &cobra.Command{
-	Use:   "prepare",
-	Short: "It wraps svelte-kit sync command.",
+	Use:     "prepare",
+	Aliases: []string{"sync"},
+	Short:   "It wraps svelte-kit sync command.",
 	Long: resources.GetASCIIArt() + `
 It wraps svelte-kit sync command to ensure types are set up and correct before run typechecking.`,
 	Run: RunPrepareCmd,
