@@ -1,5 +1,17 @@
 # sveltin
 
+## 0.7.0
+
+### Minor Changes
+
+- feature:
+- fix: cards grid styles
+- fix: mispelled word
+- chore: `sync` added as alias to the `prepare` command
+- chore: overall linting
+- refactor: simplifing the `sveltinlib/css` implementation and allow styled and not-styled project creation
+- ci: more checks added (staticcheck, lint, tests)
+
 ## 0.6.1
 
 ### Patch Changes
