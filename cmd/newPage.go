@@ -56,10 +56,10 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	pageName, err := getPageName(args)
+	pageName, err := promptPageName(args)
 	utils.ExitIfError(err)
 
-	pageType, err := getPageType(pageType)
+	pageType, err := promptPageType(pageType)
 	utils.ExitIfError(err)
 
 	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as page", pageName)))
@@ -96,7 +96,7 @@ func init() {
 
 //=============================================================================
 
-func getPageName(inputs []string) (string, error) {
+func promptPageName(inputs []string) (string, error) {
 	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
@@ -115,17 +115,21 @@ func getPageName(inputs []string) (string, error) {
 	}
 }
 
-func getPageType(pageTypeFlag string) (string, error) {
-	valid := []string{Svelte, Markdown}
+func promptPageType(pageTypeFlag string) (string, error) {
+	promptObjects := []config.PromptObject{
+		{ID: Svelte, Name: "Svelte"},
+		{ID: Markdown, Name: "Markdown in Svelte"},
+	}
 
 	switch nameLenght := len(pageTypeFlag); {
 	case nameLenght == 0:
 		pagePromptContent := config.PromptContent{
-			ErrorMsg: "Please, select a type for your page",
+			ErrorMsg: "Please, provide a page type",
 			Label:    "What's the page type?",
 		}
-		return common.PromptGetSelect(pagePromptContent, valid, false), nil
+		return common.PromptGetSelect(pagePromptContent, promptObjects, true), nil
 	case nameLenght != 0:
+		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, pageTypeFlag) {
 			return "", sveltinerr.NewPageTypeNotValidError()
 		}

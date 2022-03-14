@@ -151,8 +151,8 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 	switch nameLenght := len(mdResourceFlag); {
 	case nameLenght == 0:
 		resourcePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide select an existing resource.",
-			Label:    "What's the existing resource to be used?",
+			ErrorMsg: "Please, provide an existing resource name.",
+			Label:    "Which existing resource?",
 		}
 		return utils.ToSlug(common.PromptGetSelect(resourcePromptContent, availableResources, false)), nil
 	case nameLenght != 0:
@@ -183,16 +183,20 @@ func promptMetadataName(inputs []string) (string, error) {
 }
 
 func promptMetadataType(mdTypeFlag string) (string, error) {
-	valid := []string{"single", "list"}
+	promptObjects := []config.PromptObject{
+		{ID: "single", Name: "(1:1) One-to-One"},
+		{ID: "list", Name: "(1:m) One-to-Many"},
+	}
 
 	switch nameLenght := len(mdTypeFlag); {
 	case nameLenght == 0:
 		metadataTypePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide select a metadata type.",
-			Label:    "What's the metadata type?",
+			ErrorMsg: "Please, provide a metadata type.",
+			Label:    "Which relationship between your content and the metadata?",
 		}
-		return common.PromptGetSelect(metadataTypePromptContent, valid, false), nil
+		return common.PromptGetSelect(metadataTypePromptContent, promptObjects, true), nil
 	case nameLenght != 0:
+		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, mdTypeFlag) {
 			return "", sveltinerr.NewMetadataTypeNotValidError()
 		}

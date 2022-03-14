@@ -73,7 +73,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	contentData, err := getContentName(AppFs, args, &conf)
+	contentData, err := promptContentName(AppFs, args, &conf)
 	utils.ExitIfError(err)
 
 	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
@@ -122,7 +122,7 @@ func init() {
 
 //=============================================================================
 
-func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (config.TemplateData, error) {
+func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (config.TemplateData, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		contentNamePromptContent := config.PromptContent{
@@ -164,17 +164,21 @@ func getContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (conf
 }
 
 func promptContentTemplateSelection(templateType string) (string, error) {
-	validTemplates := []string{Blank, Sample}
+	promptObjects := []config.PromptObject{
+		{ID: Blank, Name: "Frontmatter only"},
+		{ID: Sample, Name: "Full sample content"},
+	}
 
 	switch nameLenght := len(templateType); {
 	case nameLenght == 0:
 		templatePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide select a template for your content file.",
-			Label:    "Do you prefer a blank file or with some sample content in place?",
+			ErrorMsg: "Please, provide a template name for the content file.",
+			Label:    "Which template for your content?",
 		}
-		return common.PromptGetSelect(templatePromptContent, validTemplates, false), nil
+		return common.PromptGetSelect(templatePromptContent, promptObjects, true), nil
 	case nameLenght != 0:
-		if !common.Contains(validTemplates, templateType) {
+		valid := common.GetPromptObjectKeys(promptObjects)
+		if !common.Contains(valid, templateType) {
 			return "", sveltinerr.NewContentTemplateTypeNotValidError()
 		}
 		return templateType, nil
@@ -187,8 +191,8 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
 	resourcePromptContent := config.PromptContent{
-		ErrorMsg: "Please, provide select an existing resource.",
-		Label:    "What's the existing resource to be used?",
+		ErrorMsg: "Please, provide an existing resource name.",
+		Label:    "Which existing resource?",
 	}
 	return common.PromptGetSelect(resourcePromptContent, availableResources, false), nil
 }
