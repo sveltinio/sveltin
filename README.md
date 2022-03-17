@@ -39,6 +39,10 @@ The Smartest Way to Build SvelteKit powered static websites.
     <a href="https://github.com/sveltinio/sveltin/blob/main/LICENSE" target="_blank">
         <img src="https://img.shields.io/badge/license-apache_2.0-blue?style=flat-square&logo=none" alt="license" />
     </a>
+    &nbsp;
+    <a href="https://madewithsvelte.com/p/sveltin/shield-link" target="_blank">
+        <img src="https://madewithsvelte.com/storage/repo-shields/3613-shield.svg" alt="made with svelte shield" />
+    </a>
 </p>
 
 # Sveltin
