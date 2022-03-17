@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
+@tailwind utilities;
 
 @layer base {
 	:root {
@@ -20,53 +21,49 @@
 	}
 }
 
-@layer components {
-	.main-container {
-		@apply relative min-h-screen w-full flex flex-col justify-center;
-	}
-
-	.btn {
-		@apply relative inline-flex items-center pl-2 pr-2 pt-2 pb-2 text-sm font-medium border-2;
-	}
-
-	.btn-accent {
-		@apply relative inline-flex items-center px-2 py-2 text-sm font-medium text-white bg-river border-2 border-river rounded-l-lg hover:bg-haiti focus:z-10 focus:outline-none focus:ring-1 focus:ring-river focus:border-white lg:px-8;
-	}
-
-	.btn-base {
-		@apply relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium border-2 border-river rounded-r-lg focus:z-10 focus:outline-none focus:ring-1 focus:ring-auburn focus:border-auburn lg:px-8;
-	}
-
-	.artifact-container {
-		@apply text-skin-dark flex flex-col justify-center;
-	}
-
-	.artifact-container > .content {
-		@apply max-w-4xl mx-auto my-7 p-10 text-gray-800 leading-6;
-	}
-
-	.artifact-container > .content h1 {
-		@apply text-left leading-8 text-2xl font-medium mx-auto break-words;
-	}
-
-	.artifact-container > .content h2 {
-		@apply text-left text-xl font-normal leading-7 my-2 mx-0;
-	}
-
-	.artifact-container > .content > .message {
-		@apply py-2 px-4 rounded-md;
-	}
-
-	.artifact-container > .content > .warning {
-		@apply bg-orange-200;
-	}
-
-	.text-default {
-		@apply text-base leading-6;
-	}
+.main-container {
+	@apply relative min-h-screen w-full flex flex-col justify-center;
 }
 
-@tailwind utilities;
+.btn {
+	@apply relative inline-flex items-center pl-2 pr-2 pt-2 pb-2 text-sm font-medium border-2;
+}
+
+.btn-accent {
+	@apply relative inline-flex items-center px-2 py-2 text-sm font-medium text-white bg-river border-2 border-river rounded-l-lg hover:bg-haiti focus:z-10 focus:outline-none focus:ring-1 focus:ring-river focus:border-white lg:px-8;
+}
+
+.btn-base {
+	@apply relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium border-2 border-river rounded-r-lg focus:z-10 focus:outline-none focus:ring-1 focus:ring-auburn focus:border-auburn lg:px-8;
+}
+
+.artifact-container {
+	@apply text-skin-dark flex flex-col justify-center;
+}
+
+.content {
+	@apply max-w-4xl mx-auto my-7 p-10 text-gray-800 leading-6;
+}
+
+.content h1 {
+	@apply text-left leading-8 text-2xl font-medium mx-auto break-words;
+}
+
+.content h2 {
+	@apply text-left text-xl font-normal leading-7 my-2 mx-0;
+}
+
+.message {
+	@apply py-2 px-4 rounded-md;
+}
+
+.warning {
+	@apply bg-orange-200;
+}
+
+.text-default {
+	@apply text-base leading-6;
+}
 
 .markdown-body {
 	@apply mx-auto p-11 prose-base;
