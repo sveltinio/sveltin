@@ -1,0 +1,57 @@
+#!/bin/sh
+
+echo ""
+echo '----------------------'
+echo ' Run: go vet'
+echo '----------------------'
+go vet ./...
+
+echo ""
+echo '----------------------'
+echo ' Install: staticcheck'
+echo '----------------------'
+go install honnef.co/go/tools/cmd/staticcheck@latest
+
+echo ""
+echo '----------------------'
+echo ' Run: staticcheck'
+echo '----------------------'
+staticcheck ./...
+
+echo ""
+echo '----------------------'
+echo ' Install: golint'
+echo '----------------------'
+go install golang.org/x/lint/golint@latest
+
+echo ""
+echo '----------------------'
+echo ' Run: golint'
+echo '----------------------'
+golint ./...
+
+echo ""
+echo '----------------------'
+echo ' Run: go test'
+echo '----------------------'
+go test -race -covermode=atomic ./...
+
+echo ""
+echo '----------------------'
+echo ' Run: goreportcard'
+echo '----------------------'
+goreportcard-cli -v
+
+echo ""
+echo '----------------------'
+echo ' Install locally'
+echo '----------------------'
+go install github.com/sveltinio/sveltin
+
+echo ""
+echo '----------------------'
+echo ' Check Installation'
+echo '----------------------'
+sveltin -v
+
+echo ""
