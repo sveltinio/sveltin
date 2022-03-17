@@ -8,9 +8,14 @@
 
 - PostCSS and Tailwind CSS [#10](https://github.com/sveltinio/sveltin/issues/10)
 
+**Merged pull requests:**
+
+- postcss for tailwind based projects [#11](https://github.com/sveltinio/sveltin/pull/11) (@indaco)
+
 **Miscellaneous chores:**
 
 - Index page for resources now use a flexbox instead of a grid, both on styled and unstyled projects. This gives a better and more controlled result.
+- [CI] githooks added and simplified release workflow
 
 ## [v0.7.0](https://github.com/sveltinio/sveltin/releases/tag/v0.7.0) (2022-03-14)
 
@@ -19,10 +24,6 @@
 **Closed issues:**
 
 - not-styled project [#6](https://github.com/sveltinio/sveltin/issues/6)
-
-**Merged pull requests:**
-
-- Allow unstyled projects creation by @indaco in https://github.com/sveltinio/sveltin/pull/7
 
 **Miscellaneous chores:**
 
@@ -54,12 +55,14 @@
 
 - remove type annotation, trivially inferred from a string literal on `default.js.ts`
 
+**Merged pull requests:**
+
+- Move to page endpoints [#4](https://github.com/sveltinio/sveltin/pull/4) (@indaco)
+- Go libs update [#5](https://github.com/sveltinio/sveltin/pull/5) (@indaco)
+
 **Miscellaneous chores:**
 
-- moving from standalone endpoints to the [page endpoints](https://kit.svelte.dev/docs/routing#endpoints-page-endpoints) for resources and metadata
 - new sveltin project will always use the latest **tested** version for sveltekit instead of the latest **released** one
-- golang libraries (`cobra` and `afero`) updated the the lastest versions
-- `go-pretty` library removed as dependency
 
 ## [v0.5.5](https://github.com/sveltinio/sveltin/releases/tag/v0.5.5) (2022-03-10)
 
@@ -75,9 +78,12 @@
 
 **Closed issues:**
 
-- [#1](https://github.com/sveltinio/sveltin/issues/1) - it is now possible to use readable name when running command in interactive way
-- pages templates still used a wrong import for IWebPageMetadata from @sveltinio/seo
-- [#2](https://github.com/sveltinio/sveltin/issues/2) - EndpointOutput import removed from api template files
+- Human readable names when interactive commands [#1](https://github.com/sveltinio/sveltin/issues/1)
+- EndpointOutput is no longer an exported member from @sveltejs/kit [#2](https://github.com/sveltinio/sveltin/issues/2)
+
+**Merged pull requests:**
+
+- fix: artifacts names in human readable way support added [#3](https://github.com/sveltinio/sveltin/pull/3) (@indaco)
 
 **Miscellaneous chores:**
 
@@ -103,7 +109,7 @@
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.0...v0.5.1)
 
-- fix: set `config.kit.prerender.default` to `true`
+- set `config.kit.prerender.default` to `true`
 
 ## [v0.5.0](https://github.com/sveltinio/sveltin/releases/tag/v0.5.0) (2022-03-07)
 
@@ -111,7 +117,7 @@
 
 **Breaking changes:**
 
-- breaking: sveltin `prepare` command renamed as `install`. With [#4182](https://github.com/sveltejs/kit/pull/4182), SvelteKit added support for a new CLI command called `sync` wrapped as `prepare` script in `package.json` file.
+- sveltin `prepare` command renamed as `install`. With [#4182](https://github.com/sveltejs/kit/pull/4182), SvelteKit added support for a new CLI command called `sync` wrapped as `prepare` script in `package.json` file.
 
 **Fixed bugs:**
 
@@ -124,7 +130,7 @@
 
 **Miscellaneous chores:**
 
-- refactor: new underlying logging lib developed
+- new underlying logging lib developed
 
 ## [v0.4.0](https://github.com/sveltinio/sveltin/releases/tag/v0.4.0) (2022-02-26)
 
@@ -172,9 +178,9 @@
 
 **Miscellaneous chores:**
 
-- chore: **next steps** texts added to some commands
-- refactor: go templates execution functions
-- refactor: logger and pretty printer
+- **next steps** texts added to some commands
+- go templates execution functions
+- logger and pretty printer
 
 ## [v0.2.14](https://github.com/sveltinio/sveltin/releases/tag/v0.2.14) (2022-02-04)
 
