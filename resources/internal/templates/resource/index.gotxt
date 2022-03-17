@@ -54,15 +54,21 @@
 
 <style>
 	.cards {
-		display: grid;
-		grid-template-columns: 1fr;
+		padding: 4px;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+		align-content: center;
 		column-gap: 2rem;
 		row-gap: 2rem;
 	}
 
-	@media screen and (min-width: 640px) {
+	@media screen and (min-width: 1024px) {
 		.cards {
-			grid-template-columns: repeat(2, 1fr);
+			flex-direction: row;
+			justify-content: flex-start;
 		}
 	}
 </style>
