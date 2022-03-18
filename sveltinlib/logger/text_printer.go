@@ -9,12 +9,13 @@
 package logger
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"strings"
 	"time"
 
-	jww "github.com/spf13/jwalterweatherman"
+	"github.com/mattn/go-colorable"
 )
 
 // TextPrinter sets stdout as printer.
@@ -29,7 +30,10 @@ func (tp *TextPrinter) SetPrinterOptions(options *PrinterOptions) {
 
 // Print send the message string to the stdout.
 func (tp *TextPrinter) Print(msg string) {
-	jww.FEEDBACK.Println(msg)
+	stdOut := bufio.NewWriter(colorable.NewColorableStdout())
+	stdOut.WriteString(msg)
+	stdOut.WriteString("\n")
+	stdOut.Flush()
 }
 
 // Format defines how a single log entry will be formatted by the TextLogger printer.

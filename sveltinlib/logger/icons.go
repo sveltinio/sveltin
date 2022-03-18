@@ -10,6 +10,7 @@ package logger
 
 import (
 	"fmt"
+	"runtime"
 
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
@@ -49,8 +50,16 @@ func getIconByLogLevel(level LogLevel) (icon, error) {
 }
 
 func getIcon(level LogLevel) string {
+	if isWindows() {
+		return ">"
+	}
 	if icon, err := getIconByLogLevel(level); err == nil {
 		return string(icon)
 	}
 	return "undefined"
+}
+
+// IsWindows returns true if the OS is MS Windows.
+func isWindows() bool {
+	return runtime.GOOS == "windows"
 }
