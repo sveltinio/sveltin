@@ -1,272 +1,392 @@
-# Changelog
+# CHANGELOG
 
 ## [v0.7.1](https://github.com/sveltinio/sveltin/releases/tag/v0.7.1) (2022-03-17)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.0...v0.7.1)
 
-**Closed issues:**
+### Fixed Bugs
 
-- PostCSS and Tailwind CSS [#10](https://github.com/sveltinio/sveltin/issues/10)
+- postcss for tailwind based projects
 
-**Merged pull requests:**
+### CI
 
-- postcss for tailwind based projects [#11](https://github.com/sveltinio/sveltin/pull/11) (@indaco)
+- githooks added and simplified release workflow
 
-**Miscellaneous chores:**
+### Docs
 
-- Index page for resources now use a flexbox instead of a grid, both on styled and unstyled projects. This gives a better and more controlled result.
-- [CI] githooks added and simplified release workflow
+- made with svelte shield added
+- **CHANGELOG:** updated
+- **CHANGELOG:** updated
+- **README:** project status section updated
+
+### Chores
+
+- set scroll behaviour to smooth
+- bump CLI version to 0.7.1
+- update pre-push
+- update pre-push hook
+- **index.svelte:** use flexbox instead of grid
+
+### Pull Requests
+
+- Merge pull request [#11](https://github.com/sveltinio/sveltin/issues/11) from sveltinio/10-postcss-and-tailwind-css
 
 ## [v0.7.0](https://github.com/sveltinio/sveltin/releases/tag/v0.7.0) (2022-03-14)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.6.1...v0.7.0)
 
-**Closed issues:**
-
-- not-styled project [#6](https://github.com/sveltinio/sveltin/issues/6)
-
-**Miscellaneous chores:**
+### Fixed Bugs
 
 - cards grid styles
-- mispelled word
-- `sync` added as alias to the `prepare` command
-- overall linting
-- simplifing the `sveltinlib/css` implementation and allow styled and not-styled project creation
-- more checks added (staticcheck, lint, tests)
+- mispelled fixed
+
+### New Features
+
+- support for not styled project creation added
+
+### Code Refactoring
+
+- make PromptGetSelect working with slice of strings and PromptObject
+
+### Chores
+
+- bump CLI version to 0.7.0
+- sync added as alias to the prepare command
+- human readable messages for prompts
+- .gitignore updated
+- error messages updated. NewOptionNotValidError now takes the used value and the corrects ones as args
+- overall liting
+
+### Pull Requests
+
+- Merge pull request [#7](https://github.com/sveltinio/sveltin/issues/7) from sveltinio/skeleton-project
 
 ## [v0.6.1](https://github.com/sveltinio/sveltin/releases/tag/v0.6.1) (2022-03-12)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.6.0...v0.6.1)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- running sveltin commands from a not valid project directory
 - set html scroll-behavior to smooth
+- exit if running sveltin commands from a not valid directory
+
+### Chores
+
+- bump CLI version to 0.6.1
 
 ## [v0.6.0](https://github.com/sveltinio/sveltin/releases/tag/v0.6.0) (2022-03-12)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.5...v0.6.0)
 
-**Breaking changes:**
+### Fixed Bugs
 
-- `/api/v1/sveltin/version.json` endpoint renamed as `/api/v1/sveltin/info.json`, sveltekit version and build time exposed to it
+- remove type annotation, trivially inferred from a string literal
 
-**Fixed bugs:**
+### New Features
 
-- remove type annotation, trivially inferred from a string literal on `default.js.ts`
+- page endpoints support added
+- **logger:** log.Plain added
 
-**Merged pull requests:**
+### Chores
 
-- Move to page endpoints [#4](https://github.com/sveltinio/sveltin/pull/4) (@indaco)
-- Go libs update [#5](https://github.com/sveltinio/sveltin/pull/5) (@indaco)
+- bump CLI version to 0.6.0
+- replacing listLogger with direct log calls
+- utility function to get underline text added
+- use the last sveltekit and static-adapter tested versions
+- **root.go:** unused function removed
 
-**Miscellaneous chores:**
+### Pull Requests
 
-- new sveltin project will always use the latest **tested** version for sveltekit instead of the latest **released** one
+- Merge pull request [#5](https://github.com/sveltinio/sveltin/issues/5) from sveltinio/deps-update
+- Merge pull request [#4](https://github.com/sveltinio/sveltin/issues/4) from sveltinio/shadows
 
 ## [v0.5.5](https://github.com/sveltinio/sveltin/releases/tag/v0.5.5) (2022-03-10)
 
-[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.5...v0.5.5)
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.4...v0.5.5)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- the lib template file for metadata (list) had a mistyped variable name causing runtime error
+- **libList.gotxt:** resource name variable
+
+### Chores
+
+- bump CLI version to 0.5.5
 
 ## [v0.5.4](https://github.com/sveltinio/sveltin/releases/tag/v0.5.4) (2022-03-09)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.3...v0.5.4)
 
-**Closed issues:**
+### Fixed Bugs
 
-- Human readable names when interactive commands [#1](https://github.com/sveltinio/sveltin/issues/1)
-- EndpointOutput is no longer an exported member from @sveltejs/kit [#2](https://github.com/sveltinio/sveltin/issues/2)
+- artifacts names in human readable way support added
 
-**Merged pull requests:**
+### Chores
 
-- fix: artifacts names in human readable way support added [#3](https://github.com/sveltinio/sveltin/pull/3) (@indaco)
+- bump CLI version to 0.5.4
 
-**Miscellaneous chores:**
+### Pull Requests
 
-- string utilities methods refactored
+- Merge pull request [#3](https://github.com/sveltinio/sveltin/issues/3) from sveltinio/fix/human-readable-names
 
 ## [v0.5.3](https://github.com/sveltinio/sveltin/releases/tag/v0.5.3) (2022-03-08)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.2...v0.5.3)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- favicons with multiple formats and webmanifest file
+- favicons
+
+### Chores
+
+- bump CLI version to 0.5.3
 
 ## [v0.5.2](https://github.com/sveltinio/sveltin/releases/tag/v0.5.2) (2022-03-07)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.1...v0.5.2)
 
-**Implemented enhancements:**
+### Fixed Bugs
 
-- `--withExcludeFile` flag added, to specify a file containing the list of files to not be deleted from the FTP server
+- **deploy.go:** --excludeFile flag renamed as --withExcludeFile
+
+### New Features
+
+- **deploy.go:** --excludeFile flag added
+
+### Chores
+
+- bump CLI version to 0.5.2
+- **collections.go:** unique and union methods added
+- **fs.go:** method ReadFileLineByLine added
 
 ## [v0.5.1](https://github.com/sveltinio/sveltin/releases/tag/v0.5.1) (2022-03-07)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.0...v0.5.1)
 
-- set `config.kit.prerender.default` to `true`
+### Fixed Bugs
+
+- **svelte.config.js:** set `config.kit.prerender.default` to `true`
+
+### Chores
+
+- bump CLI version to 0.5.1
 
 ## [v0.5.0](https://github.com/sveltinio/sveltin/releases/tag/v0.5.0) (2022-03-07)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.4.0...v0.5.0)
 
-**Breaking changes:**
+### Fixed Bugs
 
-- sveltin `prepare` command renamed as `install`. With [#4182](https://github.com/sveltejs/kit/pull/4182), SvelteKit added support for a new CLI command called `sync` wrapped as `prepare` script in `package.json` file.
+- **CHANGELOG:** typo
 
-**Fixed bugs:**
+### New Features
 
-- import type IWebPageMetadata for index.svelte
+- sveltin `prepare` command
 
-**Implemented enhancements:**
+### Code Refactoring
 
-- sveltin `prepare` command wraps the new SvelteKit `sync` command, [#4182](https://github.com/sveltejs/kit/pull/4182)
-- sveltin `deploy` command places the TAR archive within the `backups` folder at project root level.
-
-**Miscellaneous chores:**
-
+- nest_steps.go renamed as help_messages.go
 - new underlying logging lib developed
+- CheckIfError renamed as ExitIfError to reflect what it does
+
+### Docs
+
+- sveltin root command documentation updated
+
+### Chores
+
+- bump CLI version to 0.5.0
+- deploy command places the backup file within backups folder
+- retrieve project name from package.json file
+- golang deps updated
+- dependencies updated
+- fatalf string updated
+- using the new logging library
+- add PromptConfirm util function for asking a yes or no question
+- new IsError method added.
+- commented code block deleted
+- **prompt.go:** Select instead of SelectAdd
 
 ## [v0.4.0](https://github.com/sveltinio/sveltin/releases/tag/v0.4.0) (2022-02-26)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.3.1...v0.4.0)
 
-**Implemented enhancements:**
+### Fixed Bugs
 
-- `deploy` over FTP command added. [docs](https://docs.sveltin.io/cli/deploy)
+- errors handling
+- **newContent.go:** template strings
+- **next_steps.go:** typo
 
-**Miscellaneous chores:**
+### New Features
 
+- deploy over FTP command added
+
+### Code Refactoring
+
+- **next_steps.go:** interpolate multiline strings
+
+### Docs
+
+- code comments
 - overall code comments
+- typos fixed
+- cmd descriptions updated
+- **README:** updated
+- **generateSitemap:** typo
+
+### Chores
+
+- cli version bumped to 0.4.0
 - code cleansing
-- better error handling
+- delete newPage_test file
+- struct SiteConfig renamed as ProjectConfig and moved to a specific file
+- **pages.go:** lint
+- **text.go:** method ToBasePath added
 
 ## [v0.3.1](https://github.com/sveltinio/sveltin/releases/tag/v0.3.1) (2022-02-17)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.3.0...v0.3.1)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- Routing in app built by adapter-static and next.265 [#3801](https://github.com/sveltejs/kit/pull/3801)
-- `.env` file templates with server port number
+- env file templates with server port number
+- trailingSlash to always
+
+### Docs
+
+- typo
+- scss added to the list of css libs
+
+### Chores
+
+- bump cli version to 0.3.1
 
 ## [v0.3.0](https://github.com/sveltinio/sveltin/releases/tag/v0.3.0) (2022-02-15)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.14...v0.3.0)
 
-**Breaking changes:**
+### Fixed Bugs
 
-- `--update` flag on `prepare` cmd removed. `prepare` now install the dependencies from `package.json` file only
-- npmClient handling. It is now project specific and make uses of the packageManager key from `package.json`.
+- typos
+- pages styles fixed to have center text
 
-**Implemented enhancements:**
+### New Features
 
-- `update` cmd added to update all the dependecies from `package.json` file
-- `--port` flag added to `new` cmd to set the port to start the server on
-- Bootstrap 5 support implemented
 - SCSS support added
 
-**Fixed bugs:**
+### Code Refactoring
 
-- public page styles to have centered text for page title
-- theme name on the `index.svelte` not replaced correctly. it now uses the new _ThemeName_ variable on the template data structure.
+- template execution
+- logger and printer
+- package.json file and npmclient handling
+- package manager handling
 
-**Miscellaneous chores:**
+### Docs
 
-- **next steps** texts added to some commands
-- go templates execution functions
-- logger and pretty printer
+- updated
+
+### Chores
+
+- cli version bumped to 0.3.0
 
 ## [v0.2.14](https://github.com/sveltinio/sveltin/releases/tag/v0.2.14) (2022-02-04)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.13...v0.2.14)
 
-**Implemented enhancements:**
+### New Features
 
-- Bulma support implemented
+- bulma support implemented
 
-**Miscellaneous chores:**
+### Code Refactoring
 
-- dependencies updated
-- tailwind css and vanilla css themes updated
-- each CSS supported lib has its own `__layout.svelte` file
+- tailwind css and vanilla css themes
+
+### Chores
+
+- cli version bumped to 0.2.14
+- editorconfig updated
+- dependencies update
 
 ## [v0.2.13](https://github.com/sveltinio/sveltin/releases/tag/v0.2.13) (2022-02-02)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.12...v0.2.13)
 
-**Miscellaneous chores:**
+### Chores
 
-- This version adheres to the changes introduced by `@sveltejs/kit 1.0.0-next.257` where the target option has been removed [#3674](https://github.com/sveltejs/kit/pull/3674)
+- cli version bumped to 0.2.13
+- Remove target option
 
 ## [v0.2.12](https://github.com/sveltinio/sveltin/releases/tag/v0.2.12) (2022-02-01)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.11...v0.2.12)
 
-**Implemented enhancements:**
-
-- json-ld breadcrumbs added to the public and resources pages
-
 ## [v0.2.11](https://github.com/sveltinio/sveltin/releases/tag/v0.2.11) (2022-01-27)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.10...v0.2.11)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- paths to favicon, prism theme and script file
+- **app.html:** path to favicon, prism theme and script file
+
+### Chores
+
+- cli version bumped to 0.2.11
 
 ## [v0.2.10](https://github.com/sveltinio/sveltin/releases/tag/v0.2.10) (2022-01-27)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.9...v0.2.10)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- `generate menu` command used `js` instead of `ts` as file extension causing errors on loading
-- with tailwindcss used as css lib, the typography plugin's prose class was not rendered correctly
-- postcss and its config file provided for tailwindcss only
-- with vanillacss a github markdown theme added as default to render markdown content
+- generate menu command used js instead of ts as file extension causing errors on loading
 
 ## [v0.2.9](https://github.com/sveltinio/sveltin/releases/tag/v0.2.9) (2022-01-27)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.8...v0.2.9)
 
-**Fixed bugs:**
+### Code Refactoring
 
-- SvelteKit 1.0.0-next.244 fixed [#3473](https://github.com/sveltejs/kit/issues/3473) and [#3521](https://github.com/sveltejs/kit/pull/3521). `clone()` on fetch response as workaround to avoid '_body used already_' error when building the project removed
+- clone()` on fetch response workaround to avoid '_body used already_' error building the project removed
+
+### Docs
+
+- readme updated
 
 ## [v0.2.8](https://github.com/sveltinio/sveltin/releases/tag/v0.2.8) (2022-01-26)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.7...v0.2.8)
 
-**Fixed bugs:**
+### Fixed Bugs
 
-- valid page names and contents names
-- variable names on page templates
+- pages templates and variables names
+- image path on seo components
+
+### Docs
+
+- readme updated
+
+### Chores
+
+- changelog file added
+- cli version bumped to 0.2.7
 
 ## [v0.2.7](https://github.com/sveltinio/sveltin/releases/tag/v0.2.7) (2022-01-25)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.6...v0.2.7)
 
-**Fixed bugs:**
-
-- image path on seo components
-- seo components added to pages
-
 ## [v0.2.6](https://github.com/sveltinio/sveltin/releases/tag/v0.2.6) (2022-01-25)
 
-[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.6...v0.2.7)
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.5...v0.2.6)
 
-**Fixed bugs:**
+### Fixed Bugs
 
 - seo for pages
-- typescript interface names to match the new ones exposed from the components packages
+- interfaces names to match the new ones from the packages
 
-**Miscellaneous chores:**
+### Docs
 
-- dependencies updated
-- command aliases added
+- **README:** aliases added
+
+### Chores
+
+- cli version bumped to 0.2.6
+- dependencies update
