@@ -1,0 +1,42 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://github.com/sveltinio/sveltin
+options:
+  commits:
+    filters:
+      Type:
+        - feat
+        - fix
+        - perf
+        - refactor
+        - chore
+        - docs
+        - ci
+  commit_groups:
+    sort_by: Custom
+    title_order:
+      - fix
+      - feat
+      - refactor
+      - perf
+      - ci
+      - docs
+      - chore	  
+    title_maps:
+      feat: New Features
+      fix: Fixed Bugs
+      perf: Performance Improvements
+      refactor: Code Refactoring
+      chore: Chores
+      ci: CI
+  header:
+    pattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - Scope
+      - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGE
