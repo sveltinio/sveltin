@@ -70,9 +70,9 @@ func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates b
 	if withTemplates {
 		prompt.Templates = &promptui.SelectTemplates{
 			Label:    "{{ . }}",
-			Active:   "\033[0;34m\u25B6 {{ .Name | cyan }}",
-			Inactive: "\033[0;37m\u2734 {{ .Name | white }}",
-			Selected: "\033[0;32m\u2714 {{ .Name | white | faint}}",
+			Active:   "\033[0;34m\u25B8 {{ .Name | cyan }}",         // ▸
+			Inactive: "\033[0;37m\u25B8 {{ .Name | white }}",        // ▸
+			Selected: "\033[0;32m\u2714 {{ .Name | white | faint}}", // ✔
 		}
 	}
 

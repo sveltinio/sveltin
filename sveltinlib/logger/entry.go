@@ -148,6 +148,11 @@ func (item *LogEntry) Fatal(msg string) {
 	os.Exit(1)
 }
 
+// Plainf level formatted message.
+func (item *LogEntry) Plainf(msg string, v ...interface{}) {
+	item.Plain(fmt.Sprintf(msg, v...))
+}
+
 // Debugf level formatted message.
 func (item *LogEntry) Debugf(msg string, v ...interface{}) {
 	item.Debug(fmt.Sprintf(msg, v...))

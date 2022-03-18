@@ -19,8 +19,8 @@ type icon string
 
 const (
 	iconDefault   icon = ""
-	iconDebug     icon = "\u2734" // ✴
-	iconFatal     icon = "\u2718"
+	iconDebug     icon = "\u25B8" // ▸
+	iconFatal     icon = "\u2718" // ✘
 	iconError     icon = "\u2718" // ✘
 	iconSuccess   icon = "\u2714" // ✔
 	iconWarning   icon = "\u26A0" // esclamation mark
@@ -59,7 +59,7 @@ func getIcon(level LogLevel) string {
 	return "undefined"
 }
 
-// IsWindows returns true if the OS is MS Windows.
+// isWindows returns true if the OS is MS Windows.
 func isWindows() bool {
 	return runtime.GOOS == "windows"
 }
