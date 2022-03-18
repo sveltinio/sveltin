@@ -51,7 +51,7 @@ func (cssLib *VanillaCSS) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.Sv
 	vanillaFS := common.UnionMap(resources.SveltinVanillaFS, resources.SveltinVanillaStyledFS)
 
 	// Copying the package.json config file
-	sourceFile := vanillaFS["package_json"]
+	sourceFile := vanillaFS[PackageJSONFileID]
 	template := helpers.BuildTemplate(sourceFile, nil, tplData)
 	content := template.Run(efs)
 	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
@@ -80,7 +80,7 @@ func (cssLib *VanillaCSS) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.Sv
 	}
 
 	// Copying __layout.svelte. file
-	sourceFile = vanillaFS["layout"]
+	sourceFile = vanillaFS[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, tplData)
 	content = template.Run(efs)
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
@@ -108,7 +108,7 @@ func (cssLib *VanillaCSS) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.
 	vanillaFS := common.UnionMap(resources.SveltinVanillaFS, resources.SveltinVanillaUnstyledFS)
 
 	// Copying the package.json config file
-	sourceFile := vanillaFS["package_json"]
+	sourceFile := vanillaFS[PackageJSONFileID]
 	template := helpers.BuildTemplate(sourceFile, nil, tplData)
 	content := template.Run(efs)
 	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
@@ -137,7 +137,7 @@ func (cssLib *VanillaCSS) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.
 	}
 
 	// Copying __layout.svelte. file
-	sourceFile = vanillaFS["layout"]
+	sourceFile = vanillaFS[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, tplData)
 	content = template.Run(efs)
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")

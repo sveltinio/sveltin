@@ -80,7 +80,7 @@ func (cssLib *Scss) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.SveltinC
 	}
 	// Copying variables.scss file
 	sourceFile = scssFS[VariablesFileID]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "_variables.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
@@ -143,7 +143,7 @@ func (cssLib *Scss) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.Svelti
 	}
 	// Copying variables.scss file
 	sourceFile = scssFS[VariablesFileID]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "_variables.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}

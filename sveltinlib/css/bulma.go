@@ -51,7 +51,7 @@ func (cssLib *Bulma) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.Sveltin
 	bulmaFS := common.UnionMap(resources.SveltinBootstrabLibFS, resources.SveltinBootstrabLibStyledFS)
 
 	// Copying the package.json config file
-	sourceFile := bulmaFS["package_json"]
+	sourceFile := bulmaFS[PackageJSONFileID]
 	template := helpers.BuildTemplate(sourceFile, nil, tplData)
 	content := template.Run(efs) //helpers.ExecSveltinTpl(efs, tplConfig)
 	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
@@ -60,33 +60,33 @@ func (cssLib *Bulma) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.Sveltin
 	}
 
 	// Copying svelte.config.js file
-	sourceFile = bulmaFS["svelte_config"]
+	sourceFile = bulmaFS[SvelteConfigFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 
 	// Copying app.html file
-	sourceFile = bulmaFS["app_html"]
+	sourceFile = bulmaFS[AppHTMLFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying app.scss file
-	sourceFile = bulmaFS["app_css"]
+	sourceFile = bulmaFS[AppCSSFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying variables.scss file
-	sourceFile = bulmaFS["variables_scss"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
+	sourceFile = bulmaFS[VariablesFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "_variables.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 
 	// Copying __layout.svelte. file
-	sourceFile = bulmaFS["layout"]
+	sourceFile = bulmaFS[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, tplData)
 	content = template.Run(efs)
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
@@ -95,13 +95,13 @@ func (cssLib *Bulma) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.Sveltin
 	}
 
 	// Copying Hero.svelte component
-	sourceFile = bulmaFS["hero"]
+	sourceFile = bulmaFS[HeroFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Hero.svelte")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying Footer.svelte component
-	sourceFile = bulmaFS["footer"]
+	sourceFile = bulmaFS[FooterFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Footer.svelte")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
@@ -114,7 +114,7 @@ func (cssLib *Bulma) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.Svelt
 	bulmaFS := common.UnionMap(resources.SveltinBulmaLibFS, resources.SveltinBulmaLibUnstyledFS)
 
 	// Copying the package.json config file
-	sourceFile := bulmaFS["package_json"]
+	sourceFile := bulmaFS[PackageJSONFileID]
 	template := helpers.BuildTemplate(sourceFile, nil, tplData)
 	content := template.Run(efs) //helpers.ExecSveltinTpl(efs, tplConfig)
 	saveAs := filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "package.json")
@@ -123,33 +123,33 @@ func (cssLib *Bulma) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.Svelt
 	}
 
 	// Copying svelte.config.js file
-	sourceFile = bulmaFS["svelte_config"]
+	sourceFile = bulmaFS[SvelteConfigFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 
 	// Copying app.html file
-	sourceFile = bulmaFS["app_html"]
+	sourceFile = bulmaFS[AppHTMLFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.html")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying app.scss file
-	sourceFile = bulmaFS["app_css"]
+	sourceFile = bulmaFS[AppCSSFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "app.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 	// Copying variables.scss file
-	sourceFile = bulmaFS["variables_scss"]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
+	sourceFile = bulmaFS[VariablesFileID]
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "_variables.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
 
 	// Copying __layout.svelte. file
-	sourceFile = bulmaFS["layout"]
+	sourceFile = bulmaFS[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, tplData)
 	content = template.Run(efs)
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "routes", "__layout.svelte")
@@ -158,7 +158,7 @@ func (cssLib *Bulma) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.Svelt
 	}
 
 	// Copying Hero.svelte component
-	sourceFile = bulmaFS["hero"]
+	sourceFile = bulmaFS[HeroFileID]
 	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "themes", tplData.ThemeName, "partials", "Hero.svelte")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err

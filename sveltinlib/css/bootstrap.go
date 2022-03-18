@@ -80,7 +80,7 @@ func (cssLib *Bootstrap) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.Sve
 	}
 	// Copying variables.scss file
 	sourceFile = bootstrapFS[VariablesFileID]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "_variables.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
@@ -143,7 +143,7 @@ func (cssLib *Bootstrap) makeUnstyled(efs *embed.FS, fs afero.Fs, conf *config.S
 	}
 	// Copying variables.scss file
 	sourceFile = bootstrapFS[VariablesFileID]
-	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "variables.scss")
+	saveAs = filepath.Join(conf.GetProjectRoot(), tplData.ProjectName, "src", "_variables.scss")
 	if err := common.MoveFile(efs, fs, sourceFile, saveAs, true); err != nil {
 		return err
 	}
