@@ -3,11 +3,11 @@
 # https://github.com/leoroese/blog-tube/blob/main/.husky/commit-msg
 if ! head -1 "$1" | grep -qE "^(feat|fix|ci|chore|docs|test|style|refactor|perf|build|revert)(\(.+?\))?: .{1,}$"; then
     echo ""
-    echo "Aborting commit. Your commit message is invalid." >&2
+    echo "\n\x1b[31;1m✘ Aborting commit! Your commit message is not valid.\x1b[0m\n" >&2
     exit 1
 fi
 if ! head -1 "$1" | grep -qE "^.{1,88}$"; then
     echo ""
-    echo "Aborting commit. Your commit message is too long." >&2
+    echo "\x1b[31;1m✘ Aborting commit! Your commit message is too long.\x1b[0m\n" >&2
     exit 1
 fi
