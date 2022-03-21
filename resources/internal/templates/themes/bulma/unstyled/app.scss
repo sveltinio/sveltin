@@ -6,60 +6,15 @@
 /* Import only what you need from Bulma */
 @import 'bulma/sass/utilities/_all';
 @import 'bulma/sass/base/_all';
-@import 'bulma/sass/elements/_all';
-@import 'bulma/sass/form/_all';
-@import 'bulma/sass/components/_all';
-@import 'bulma/sass/grid/_all';
-@import 'bulma/sass/helpers/_all';
-@import 'bulma/sass/layout/_all';
-
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-* {
-	margin: 0;
-}
-html,
-body {
-	height: 100%;
-}
-body {
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
-}
-img,
-picture,
-video,
-canvas,
-svg {
-	display: block;
-	max-width: 100%;
-}
-input,
-button,
-textarea,
-select {
-	font: inherit;
-}
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	overflow-wrap: break-word;
-}
-#root,
-#__next {
-	isolation: isolate;
-}
-
-/* END OF CSS RESET by */
+//@import 'bulma/sass/elements/_all';
+//@import 'bulma/sass/form/_all';
+//@import 'bulma/sass/components/_all';
+//@import 'bulma/sass/grid/_all';
+//@import 'bulma/sass/helpers/_all';
+//@import 'bulma/sass/layout/_all';
 
 html {
+	height: 100%;
 	scroll-behavior: smooth;
 }
 
