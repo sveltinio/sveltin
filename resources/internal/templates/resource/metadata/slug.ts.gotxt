@@ -13,5 +13,12 @@ export async function get({ params }) {
 		};
 	}
 
-	return { fallthrough: true };
+	// return errors
+	const errors: Record<string, Error> = {};
+	return {
+		status: 404,
+		body: {
+			errors
+		}
+	};
 }
