@@ -48,7 +48,7 @@ func (cssLib *Bulma) Setup() error {
 }
 
 func (cssLib *Bulma) makeStyled(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
-	bulmaFS := common.UnionMap(resources.SveltinBootstrabLibFS, resources.SveltinBootstrabLibStyledFS)
+	bulmaFS := common.UnionMap(resources.SveltinBulmaLibFS, resources.SveltinBulmaLibStyledFS)
 
 	// Copying the package.json config file
 	sourceFile := bulmaFS[PackageJSONFileID]
