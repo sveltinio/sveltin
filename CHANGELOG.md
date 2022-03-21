@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## [v0.7.2](https://github.com/sveltinio/sveltin/releases/tag/v0.7.2) (2022-03-21)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.1...v0.7.2)
+
+### Fixed Bugs
+
+- speed up bulma & bootstrap loadings
+- colours and icons on windows
+
+### CI
+
+- lint-test workflow added
+
+### Docs
+
+- **CHANGELOG:** updated
+
+### Chores
+
+- linting
+- use golangci-lint
+- reference to variable.scss file replaced as \_variable.scss for svelte.config.js
+- logger and prompt select icons updated
+- **.chglog:** git-chglog CHANGELOG generator config added
+- **commit-msg:** colour and icon added to the error messages
+
+### Pull Requests
+
+- Merge pull request [#16](https://github.com/sveltinio/sveltin/issues/16) from sveltinio/14-speed-up-bulma-bootstrap-loadings
+- Merge pull request [#13](https://github.com/sveltinio/sveltin/issues/13) from sveltinio/windows-colors
+
 ## [v0.7.1](https://github.com/sveltinio/sveltin/releases/tag/v0.7.1) (2022-03-17)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.0...v0.7.1)
