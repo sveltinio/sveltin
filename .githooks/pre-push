@@ -14,33 +14,15 @@ go build -v ./...
 
 echo ""
 echo '----------------------'
-echo ' Run: go vet'
+echo ' Install: golangci-lint'
 echo '----------------------'
-go vet ./...
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45.0
 
 echo ""
 echo '----------------------'
-echo ' Install: staticcheck'
+echo ' Run: golangci'
 echo '----------------------'
-go install honnef.co/go/tools/cmd/staticcheck@latest
-
-echo ""
-echo '----------------------'
-echo ' Run: staticcheck'
-echo '----------------------'
-staticcheck ./...
-
-echo ""
-echo '----------------------'
-echo ' Install: golint'
-echo '----------------------'
-go install golang.org/x/lint/golint@latest
-
-echo ""
-echo '----------------------'
-echo ' Run: golint'
-echo '----------------------'
-golint ./...
+golangci-lint run ./...
 
 echo ""
 echo '----------------------'

@@ -2,33 +2,27 @@
 
 echo ""
 echo '----------------------'
-echo ' Run: go vet'
+echo ' Verify dependencies'
 echo '----------------------'
-go vet ./...
+go mod verify
 
 echo ""
 echo '----------------------'
-echo ' Install: staticcheck'
+echo ' Run: go build'
 echo '----------------------'
-go install honnef.co/go/tools/cmd/staticcheck@latest
+go build -v ./...
 
 echo ""
 echo '----------------------'
-echo ' Run: staticcheck'
+echo ' Install: golangci-lint'
 echo '----------------------'
-staticcheck ./...
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45.0
 
 echo ""
 echo '----------------------'
-echo ' Install: golint'
+echo ' Run: golangci'
 echo '----------------------'
-go install golang.org/x/lint/golint@latest
-
-echo ""
-echo '----------------------'
-echo ' Run: golint'
-echo '----------------------'
-golint ./...
+golangci-lint run ./...
 
 echo ""
 echo '----------------------'
