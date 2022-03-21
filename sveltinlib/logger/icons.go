@@ -32,7 +32,7 @@ func makeLogLevelIconMap() map[LogLevel]icon {
 	return map[LogLevel]icon{
 		LevelDefault:   iconDefault,
 		LevelDebug:     iconDebug,
-		LevelFatal:     iconError,
+		LevelFatal:     iconFatal,
 		LevelError:     iconError,
 		LevelWarning:   iconWarning,
 		LevelSuccess:   iconSuccess,

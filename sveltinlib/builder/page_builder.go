@@ -10,7 +10,6 @@ package builder
 
 import (
 	"errors"
-	"strings"
 	"text/template"
 
 	"github.com/sveltinio/sveltin/config"
@@ -68,7 +67,9 @@ func (b *PublicPageContentBuilder) SetTemplateData(artifactData *config.Template
 
 func (b *PublicPageContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
-		"Capitalize": strings.Title,
+		"Capitalize": func(txt string) string {
+			return utils.ToTitle(txt)
+		},
 		"ToTitle": func(text string) string {
 			return utils.ToTitle(text)
 		},

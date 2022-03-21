@@ -68,7 +68,9 @@ func (b *NoPContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 
 func (b *NoPContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
-		"Capitalize":  strings.Title,
+		"Capitalize": func(txt string) string {
+			return utils.ToTitle(txt)
+		},
 		"StringsJoin": strings.Join,
 		"Trimmed": func(txt string) string {
 			return utils.Trimmed(txt)
