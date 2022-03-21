@@ -57,7 +57,9 @@ func (b *MenuContentBuilder) SetTemplateData(artifactData *config.TemplateData) 
 
 func (b *MenuContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
-		"Capitalize":  strings.Title,
+		"Capitalize": func(txt string) string {
+			return utils.ToTitle(txt)
+		},
 		"StringsJoin": strings.Join,
 		"ToURL": func(txt string) string {
 			return utils.ToURL(txt)

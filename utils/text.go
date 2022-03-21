@@ -13,6 +13,9 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // ToMDFile returns a string with .md extension
@@ -30,7 +33,7 @@ func ToMDFile(txt string, uppercase bool) string {
 // example: ToLibFile("category") returns 'apiCategory.ts'.
 func ToLibFile(txt string) string {
 	vName := ToVariableName(txt)
-	return fmt.Sprintf("api%s.ts", strings.Title(vName))
+	return fmt.Sprintf("api%s.ts", ToTitle(vName))
 }
 
 // ToTitle replace all '-' char with a white space and
@@ -38,7 +41,8 @@ func ToLibFile(txt string) string {
 // of string whose begin words mapped to their title case.
 func ToTitle(txt string) string {
 	cleanTitle := strings.ReplaceAll(txt, "-", " ")
-	return strings.Title(cleanTitle)
+	c := cases.Title(language.Und, cases.NoLower)
+	return c.String(cleanTitle)
 }
 
 // Underline returns a string underlined
@@ -82,7 +86,7 @@ func ToVariableName(txt string) string {
 	var frags = strings.Split(slug, "-")
 	for i := range frags {
 		if i != 0 {
-			frags[i] = strings.Title(frags[i])
+			frags[i] = ToTitle(frags[i])
 		}
 	}
 	return strings.Join(frags, "")

@@ -92,7 +92,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		// create a local tar archive as backup for the remote folder content
 		if isBackup {
 			backupsFolderPath := filepath.Join(pathMaker.GetRootFolder(), Backups)
-			common.MkDir(AppFs)
+			utils.ExitIfError(common.MkDir(AppFs))
 			pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
 			projectName, err := utils.RetrieveProjectName(AppFs, pathToPkgFile)
 			utils.ExitIfError(err)
