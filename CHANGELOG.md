@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## [v0.7.3](https://github.com/sveltinio/sveltin/releases/tag/v0.7.3) (2022-04-04)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.2...v0.7.3)
+
+### Fixed
+
+- interfaces names to match the new ones from the packages (essentials, services)
+
+### Chores
+
+- sveltekit updated to 1.0.0-next.302
+
+### CI
+
+- Create codeql-analysis.yml by @indaco in [18](https://github.com/sveltinio/sveltin/pull/18)
+
 ## [v0.7.2](https://github.com/sveltinio/sveltin/releases/tag/v0.7.2) (2022-03-21)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.1...v0.7.2)
