@@ -31,7 +31,7 @@ import (
 
 const (
 	// CliVersion is the current sveltin clie version number.
-	CliVersion string = "0.7.2"
+	CliVersion string = "0.7.3"
 	// SvelteKitStarter a string rapresenting the project template id.
 	SvelteKitStarter string = "starter"
 )
