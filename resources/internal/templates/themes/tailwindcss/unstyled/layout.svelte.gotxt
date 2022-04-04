@@ -1,28 +1,20 @@
 <script lang="ts">
 	import '../app.css';
 	import { website } from '$config/website.js';
-	//import { userSettings } from '$config/externals.js';
+	//import { googleFonts } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
 	import orderBy from 'lodash-es/orderBy.js';
 	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
-	//import { GoogleFonts, GoogleAnalytics } from '@sveltinio/services';
+	//import { GoogleFonts } from '@sveltinio/services';
 
 	const sortedMenu = orderBy(menu, 'weight');
-	//const gaPropertyID = userSettings.googleAnalytics.propertyID;
 </script>
 
 <JsonLdWebSite websiteData={website} />
 <JsonLdSiteNavigationElements websiteData={website} menuData={sortedMenu} />
 
-<!--
-<svelte:head>
-	<GoogleFonts fonts={userSettings.googleFonts} />
-</svelte:head>
+<!-- <GoogleFonts fonts={googleFonts} /> -->
 
-{#if gaPropertyID != ''}
-	<GoogleAnalytics enabled={true} trackingId={gaPropertyID} />
-{/if}
--->
 <main>
 	<slot />
 </main>
