@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { Metadata } from '$lib/interfaces';
 
-	export let metadata: Array<Metadata>;
+	export let metadata: Array<Sveltin.ContentMetadata>;
 </script>
 {{ $mdName := .Name | ToVariableName}}
 <div class="artifact-container">

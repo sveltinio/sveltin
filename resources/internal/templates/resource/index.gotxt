@@ -1,6 +1,5 @@
 {{ $varName := .Name | ToVariableName}}
 <script lang="ts">
-	import type { ResourceContent } from '@sveltinio/widgets/types';
 	import { website } from '$config/website.js';
 	import { Card } from '@sveltinio/widgets';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
@@ -9,7 +8,7 @@
 	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let resourceName: string;
-	export let items: Array<ResourceContent>;
+	export let items: Array<Sveltin.ContentEntry>;
 
 	const {{ $varName }}IndexPage: IWebPageMetadata = {
 		url: getPageUrl(resourceName, website),
