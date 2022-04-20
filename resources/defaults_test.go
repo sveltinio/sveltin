@@ -31,6 +31,7 @@ func TestSveltinSiteFS(t *testing.T) {
 
 func TestSveltinResourceFS(t *testing.T) {
 	is := is.New(t)
+	is.Equal("internal/templates/resource/api.gotxt", SveltinResourceFS["api"])
 	is.Equal("internal/templates/resource/lib.gotxt", SveltinResourceFS["lib"])
 	is.Equal("internal/templates/resource/index.gotxt", SveltinResourceFS["index"])
 	is.Equal("internal/templates/resource/index.ts.gotxt", SveltinResourceFS["indexendpoint"])
@@ -40,7 +41,10 @@ func TestSveltinResourceFS(t *testing.T) {
 
 func TestSveltinMetadataFS(t *testing.T) {
 	is := is.New(t)
+	is.Equal("internal/templates/resource/metadata/apiSingle.gotxt", SveltinMetadataFS["api_single"])
 	is.Equal("internal/templates/resource/metadata/libSingle.gotxt", SveltinMetadataFS["lib_single"])
+	is.Equal("internal/templates/resource/metadata/apiList.gotxt", SveltinMetadataFS["api_list"])
+	is.Equal("internal/templates/resource/metadata/libList.gotxt", SveltinMetadataFS["lib_list"])
 	is.Equal("internal/templates/resource/metadata/index.gotxt", SveltinMetadataFS["index"])
 	is.Equal("internal/templates/resource/metadata/index.ts.gotxt", SveltinMetadataFS["indexendpoint"])
 	is.Equal("internal/templates/resource/metadata/slug.gotxt", SveltinMetadataFS["slug"])

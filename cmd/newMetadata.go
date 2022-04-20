@@ -67,7 +67,28 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 
 	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", mdName, mdResource)))
 
-	// NEW FILE: <metadata_name>.js file into src/lib folder
+	// NEW FILE: <metadata_name>.json.ts
+	log.Info("Creating the API endpoint for the metadata")
+	resourceMetadataAPIFile := &composer.File{
+		Name:       conf.GetMetadataAPIFilename(mdName),
+		TemplateID: Api,
+		TemplateData: &config.TemplateData{
+			Name:     mdName,
+			Resource: mdResource,
+			Type:     mdType,
+			Config:   &conf,
+		},
+	}
+
+	// NEW FOLDER: src/routes/api/<api_version>/<resource_name>
+	resourceAPIFolder := composer.NewFolder(mdResource)
+	resourceAPIFolder.Add(resourceMetadataAPIFile)
+
+	// GET FOLDER: src/routes/api/<api_version> folder
+	apiFolder := fsManager.GetFolder(Api)
+	apiFolder.Add(resourceAPIFolder)
+
+	// NEW FILE: api<metadata_name>.ts file into src/lib/<resource_name> folder
 	log.Info("Creating the lib file for the metadata")
 	libFile := &composer.File{
 		Name:       pathMaker.GetResourceLibFilename(mdName),
@@ -116,6 +137,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 
 	// SET FOLDER STRUCTURE
 	projectFolder := fsManager.GetFolder(Root)
+	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 

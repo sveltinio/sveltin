@@ -74,6 +74,5 @@ func TestAPIs(t *testing.T) {
 	is.Equal("v1", conf.GetAPIVersion())
 	is.Equal("published.json.ts", conf.GetAPIFilename())
 	is.Equal("published.json", conf.GetPublicAPIFilename())
-	is.Equal("groupedBy.json.ts", conf.GetMetadataAPIFilename())
-	is.Equal("groupedBy.json", conf.GetPublicMetadataAPIFilename())
+	is.Equal("category.json.ts", conf.GetMetadataAPIFilename("category"))
 }

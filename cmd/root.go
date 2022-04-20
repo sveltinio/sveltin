@@ -43,6 +43,7 @@ const (
 	Config        string = "config"
 	Content       string = "content"
 	Routes        string = "routes"
+	Api           string = "api"
 	Lib           string = "lib"
 	Static        string = "static"
 	Themes        string = "themes"

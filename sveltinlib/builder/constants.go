@@ -35,6 +35,13 @@ const (
 
 	// API is a string for the 'api' folder.
 	API string = "api"
+	// APISingle is a string representing the api template file
+	// to be used when creating a metadata of type 'single'.
+	APISingle string = "api_single"
+	// APIList is a string representing the api template file
+	// to be used when creating a metadata of type 'list'.
+	APIList string = "api_list"
+
 	// Index is a string for the 'index' file.
 	Index string = "index"
 	// IndexEndpoint is a string for the 'index.ts' file.
