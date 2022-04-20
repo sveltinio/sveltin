@@ -47,11 +47,11 @@
 }
 
 .artifact-container {
-	@apply text-skin-dark flex flex-col justify-center;
+	@apply text-skin-dark flex flex-col justify-center p-11 mx-auto my-7 max-w-4xl;
 }
 
 .content {
-	@apply max-w-4xl mx-auto my-7 p-10 text-gray-800 leading-6;
+	@apply w-full mx-auto text-gray-800 leading-6;
 }
 
 .content h1 {
