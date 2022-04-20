@@ -40,6 +40,7 @@ This command:
 
 - Create a <resource_name> folder within "content" folder, so that you can add new content for the resource
 - Add the resource as route within the "src/routes" folder, creating its own folder
+- Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name>
 - Scaffold index.svelte component and index.ts endpoint to list all the content belongs to a resource
 - Scaffold [slug].svelte component and [slug].ts endpoint to get access to a specific content page
 	`,
@@ -63,6 +64,25 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	log.Info("Creating the content folder for your resource")
 	resourceContentFolder := composer.NewFolder(resourceName)
 	contentFolder.Add(resourceContentFolder)
+
+	// GET FOLDER: src/routes/api/<api_version> folder
+	apiFolder := fsManager.GetFolder(Api)
+
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>
+	resourceAPIFolder := composer.NewFolder(resourceName)
+
+	// NEW FILE: src/routes/api/<resource_name>/published.json.ts
+	log.Info("Creating the API endpoint for the resource")
+	apiFile := &composer.File{
+		Name:       conf.GetAPIFilename(),
+		TemplateID: Api,
+		TemplateData: &config.TemplateData{
+			Name:   resourceName,
+			Config: &conf,
+		},
+	}
+	resourceAPIFolder.Add(apiFile)
+	apiFolder.Add(resourceAPIFolder)
 
 	// GET FOLDER: src/lib folder
 	libFolder := fsManager.GetFolder(Lib)
@@ -107,6 +127,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// SET FOLDER STRUCTURE
 	projectFolder := fsManager.GetFolder(Root)
 	projectFolder.Add(contentFolder)
+	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 

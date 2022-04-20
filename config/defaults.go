@@ -118,14 +118,8 @@ func (c *SveltinConfig) GetPublicAPIFilename() string {
 
 // GetMetadataAPIFilename returns a string representing the path to the 'src/routes/api/v1/<metadata>'
 // folder relative to the current working directory.
-func (c *SveltinConfig) GetMetadataAPIFilename() string {
-	return c.API.Metadata.Filename
-}
-
-// GetPublicMetadataAPIFilename returns a string representing the path to the
-// 'src/routes/api/v1/<metadata>/published.js' file relative to the current working directory.
-func (c *SveltinConfig) GetPublicMetadataAPIFilename() string {
-	return c.API.Metadata.Public
+func (c *SveltinConfig) GetMetadataAPIFilename(mdName string) string {
+	return mdName + ".json.ts"
 }
 
 // GetThemesPath returns a string representing the path to the 'themes' folder

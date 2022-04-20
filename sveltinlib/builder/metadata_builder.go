@@ -43,6 +43,13 @@ func (b *MetadataContentBuilder) SetEmbeddedResources(res map[string]string) {
 
 func (b *MetadataContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
+	case API:
+		if b.TemplateData.Type == "single" {
+			b.PathToTplFile = b.EmbeddedResources[APISingle]
+		} else if b.TemplateData.Type == "list" {
+			b.PathToTplFile = b.EmbeddedResources[APIList]
+		}
+		return nil
 	case Index:
 		b.PathToTplFile = b.EmbeddedResources[Index]
 		return nil
