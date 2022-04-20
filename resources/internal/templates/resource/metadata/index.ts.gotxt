@@ -1,11 +1,10 @@
 {{ $mdName := .Name | ToVariableName | Capitalize}}
-import type { Metadata } from '$lib/interfaces';
 import { all } from '$lib/{{ .Resource }}/api{{ $mdName }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get() {
 	const data = await all();
-	const metadata = data as unknown as Array<Metadata>;
+	const metadata = data as unknown as Array<Sveltin.ContentMetadata>;
 	return {
 		status: 200,
 		body: { metadata }

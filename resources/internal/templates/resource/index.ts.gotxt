@@ -1,18 +1,17 @@
 import { list } from '$lib/{{ .Name }}/api{{ .Name | ToVariableName | Capitalize }}';
-import { ContentMetadata, ResourceContent, ResourceContentMaker } from '@sveltinio/widgets/types';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get() {
 	const resourceName = '{{ .Name }}';
 	const data = await list();
 
-	const items: Array<ResourceContent> = [];
+	const items: Array<Sveltin.ContentEntry> = [];
 	data.forEach((elem) => {
-		const item = ResourceContentMaker.createWithValues(
-			resourceName,
-			<ContentMetadata>elem.meta,
-			''
-		);
+		const item: Sveltin.ContentEntry = {
+			resource: resourceName,
+			metadata: <Sveltin.YAMLFrontmatter>elem.meta,
+			html: ''
+		};
 		items.push(item);
 	});
 	return {

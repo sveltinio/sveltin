@@ -1,22 +1,21 @@
 {{ $resourceName := .Resource | ToVariableName | Capitalize }}
 {{ $mdName := .Name | ToVariableName }}
-import type { Metadata, MetadataItem } from '$lib/interfaces';
 import { groupedByOne } from '$lib/utils/collections';
 import { list } from './api{{ $resourceName }}';
 
-export const all = async (): Promise<Metadata[]> => {
+export const all = async (): Promise<Sveltin.ContentMetadata[]> => {
 	const mdName = '{{ $mdName }}';
 	const data = await list();
 	const values = ['title', 'slug', 'headline'];
 	const grouped = groupedByOne(mdName, data, values);
 
-	const mList: Array<Metadata> = [];
+	const mList: Array<Sveltin.ContentMetadata> = [];
 	grouped.map((elem) => {
-		const metadata: Metadata = {
+		const metadata: Sveltin.ContentMetadata = {
 			name: elem['name'],
 			items: []
 		};
-		elem['items'].forEach((e: MetadataItem) => {
+		elem['items'].forEach((e: Sveltin.YAMLFrontmatter) => {
 			metadata.items.push(e);
 		});
 		mList.push(metadata);
@@ -24,7 +23,7 @@ export const all = async (): Promise<Metadata[]> => {
 	return mList;
 };
 
-export const groupedBy = async (slug: string): Promise<Metadata> => {
+export const groupedBy = async (slug: string): Promise<Sveltin.ContentMetadata> => {
 	const data = await all();
 	const metadata = data.find((item) => {
 		return item.name === slug;

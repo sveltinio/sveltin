@@ -1,13 +1,10 @@
-import type { DynamicObject } from '$lib/interfaces';
-import { ContentMetadata, ResourceContent, ResourceContentMaker } from '@sveltinio/widgets/types';
-
 export const list = async (withMarkup = false) => {
 	const contentFiles = import.meta.glob('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
 	const contents = await Promise.all(
 		contentFilesArray.map(async ([path, resolver]) => {
 			const data = await resolver();
-			const result: DynamicObject = {
+			const result: Sveltin.DynamicObject = {
 				meta: data.metadata,
 				path: path
 			};
@@ -36,21 +33,21 @@ export const getSingle = async (slug: string) => {
 	if (selected.length != 0) {
 		const selectedItemIndex = publishedByDate.findIndex((elem) => slug === elem.meta.slug);
 		const selectedItem = publishedByDate[selectedItemIndex];
-		const current = ResourceContentMaker.createWithValues(
-			resourceName,
-			selectedItem.meta,
-			selectedItem.markup.html
-		);
-		const previous: ResourceContent = {
+		const current: Sveltin.ContentEntry = {
 			resource: resourceName,
-			metadata: <ContentMetadata>{
+			metadata: selectedItem.meta,
+			html: selectedItem.markup.html
+		};
+		const previous: Sveltin.ContentEntry = {
+			resource: resourceName,
+			metadata: <Sveltin.YAMLFrontmatter>{
 				title: publishedByDate[selectedItemIndex + 1]?.meta.title,
 				slug: publishedByDate[selectedItemIndex + 1]?.meta.slug
 			}
 		};
-		const next: ResourceContent = {
+		const next: Sveltin.ContentEntry = {
 			resource: resourceName,
-			metadata: <ContentMetadata>{
+			metadata: <Sveltin.YAMLFrontmatter>{
 				title: publishedByDate[selectedItemIndex - 1]?.meta.title,
 				slug: publishedByDate[selectedItemIndex - 1]?.meta.slug
 			}

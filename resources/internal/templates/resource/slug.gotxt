@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
 	import { TOC, PrevNextButtons } from '@sveltinio/widgets';
-	import type { ResourceContent } from '@sveltinio/widgets/types';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
 
-	export let current: ResourceContent;
-	export let previous: ResourceContent;
-	export let next: ResourceContent;
+	export let current: Sveltin.ContentEntry;
+	export let previous: Sveltin.ContentEntry;
+	export let next: Sveltin.ContentEntry;
 
 	const slugPageData: IWebPageMetadata = {
 		url: getSlugPageUrl(current, website),

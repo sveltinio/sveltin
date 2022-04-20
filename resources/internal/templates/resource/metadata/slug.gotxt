@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { Metadata } from '$lib/interfaces';
 
 	export let slug: string;
-	export let metadata: Metadata;
+	export let metadata: Sveltin.ContentMetadata;
 	export let itemsCounter = metadata.items.length;
 </script>
 
