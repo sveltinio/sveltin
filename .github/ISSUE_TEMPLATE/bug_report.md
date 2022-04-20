@@ -22,7 +22,7 @@ If applicable, add screenshots to help explain your problem.
 
 - OS: [e.g. iOS]
 - Go Version
-- SvelteKit version
+- Sveltin version
 
 **Additional context**
 Add any other context about the problem here.
