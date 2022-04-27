@@ -17,20 +17,20 @@ import (
 
 // SveltinError is the struct representing the way Sveltin handles errors.
 type SveltinError struct {
-	Code    int
-	Err     error
-	Message string
+	Code int
+	Name string
+	Err  error
 }
 
 func (e *SveltinError) Error() string {
-	return fmt.Sprintf("[%s] %v", e.Message, e.Err)
+	return fmt.Sprintf("[Error Code %d: %s] %v", e.Code, e.Name, e.Err)
 }
 
 func newSveltinError(code int, err error, message string) error {
 	return &SveltinError{
-		Code:    code,
-		Err:     err,
-		Message: message,
+		Code: code,
+		Name: message,
+		Err:  err,
 	}
 }
 
@@ -46,6 +46,38 @@ Are you sure you are running the sveltin command from within a valid project dir
 
 	errN := fmt.Errorf(`no package.json file!%s `, fmt.Sprintf(placeholderText, filepath.Dir(pathToFile)))
 	return newSveltinError(1, errN, "SVELTIN NotValidProjectError")
+}
+
+// NewNotEmptyProjectError ...
+func NewNotEmptyProjectError(pathToFile string) error {
+	placeholderText := `
+
+This is related to sveltin and an existing package.json file
+within the current directory (%s).
+
+Are you sure you are running the new theme command from within a not existing project directory?
+`
+
+	errN := fmt.Errorf(`no package.json file!%s `, fmt.Sprintf(placeholderText, filepath.Dir(pathToFile)))
+	return newSveltinError(2, errN, "SVELTIN NotValidProjectError")
+}
+
+// NewNotValidURL ...
+func NewNotValidURL(input string) error {
+	errN := fmt.Errorf("'%s' seems to be a not valid url", input)
+	return newSveltinError(3, errN, "NotValidURL")
+}
+
+// NewNotValidGitHubURL ...
+func NewNotValidGitHubURL(input string) error {
+	errN := fmt.Errorf("'%s' seems to be a not valid github url", input)
+	return newSveltinError(4, errN, "NotValidGitHubURL")
+}
+
+// NewNotValidGitHubRepoURL ...
+func NewNotValidGitHubRepoURL(input string) error {
+	errN := fmt.Errorf("<user>/<repo> not in url path, received: '%s'", input)
+	return newSveltinError(5, errN, "NotValidGitHubRepo")
 }
 
 // NewDefaultError ...
