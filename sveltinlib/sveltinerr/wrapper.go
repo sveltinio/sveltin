@@ -23,7 +23,7 @@ type SveltinError struct {
 }
 
 func (e *SveltinError) Error() string {
-	return fmt.Sprintf("[Error Code %d: %s] %v", e.Code, e.Name, e.Err)
+	return fmt.Sprintf("[SveltinError: %s (Code=%d)] %v", e.Name, e.Code, e.Err)
 }
 
 func newSveltinError(code int, err error, message string) error {
@@ -45,7 +45,7 @@ Are you sure you are running the sveltin command from within a valid project dir
 `
 
 	errN := fmt.Errorf(`no package.json file!%s `, fmt.Sprintf(placeholderText, filepath.Dir(pathToFile)))
-	return newSveltinError(1, errN, "SVELTIN NotValidProjectError")
+	return newSveltinError(1, errN, "NotValidProjectError")
 }
 
 // NewNotEmptyProjectError ...
@@ -59,7 +59,7 @@ Are you sure you are running the new theme command from within a not existing pr
 `
 
 	errN := fmt.Errorf(`no package.json file!%s `, fmt.Sprintf(placeholderText, filepath.Dir(pathToFile)))
-	return newSveltinError(2, errN, "SVELTIN NotValidProjectError")
+	return newSveltinError(2, errN, "NotValidProjectError")
 }
 
 // NewNotValidURL ...
@@ -82,95 +82,95 @@ func NewNotValidGitHubRepoURL(input string) error {
 
 // NewDefaultError ...
 func NewDefaultError(err error) error {
-	return newSveltinError(10, err, "SVELTIN Error")
+	return newSveltinError(10, err, "Error")
 }
 
 // NewFileNotFoundError ...
 func NewFileNotFoundError() error {
 	err := errors.New("please, check the file path")
-	return newSveltinError(11, err, "SVELTIN FileNotFoundError")
+	return newSveltinError(11, err, "FileNotFoundError")
 }
 
 // NewDirInsteadOfFileError ...
 func NewDirInsteadOfFileError() error {
 	err := errors.New("please, check the file path. It seems to be a directory, not a file")
-	return newSveltinError(12, err, "SVELTIN DirInsteadOfFileError")
+	return newSveltinError(12, err, "DirInsteadOfFileError")
 }
 
 // NewDirNotFoundError ...
 func NewDirNotFoundError() error {
 	err := errors.New("please, check the directory path")
-	return newSveltinError(13, err, "SVELTIN DirNotFoundError")
+	return newSveltinError(13, err, "DirNotFoundError")
 }
 
 // NewNotImplementYetError ...
 func NewNotImplementYetError() error {
 	err := errors.New("not implemented yet. Pure CSS and Tailwindcss are the only available options so far")
-	return newSveltinError(20, err, "SVELTIN NotImplementYetError")
+	return newSveltinError(20, err, "NotImplementYetError")
 }
 
 // NewOptionNotValidError ...
 func NewOptionNotValidError(value string, options []string) error {
 	err := fmt.Errorf("it seems a not valid option has been used! Your choice was '%s'. Valid ones are: %s", value, strings.Join(options, ", "))
-	return newSveltinError(30, err, "SVELTIN OptionNotValidError")
+	return newSveltinError(30, err, "OptionNotValidError")
 }
 
 // NewNumOfArgsNotValidError ...
 func NewNumOfArgsNotValidError() error {
 	err := errors.New("it seems a wrong number of arguments have been used")
-	return newSveltinError(31, err, "SVELTIN NumOfArgsNotValidError")
+	return newSveltinError(31, err, "NumOfArgsNotValidError")
 }
 
 // NewNumOfArgsNotValidErrorWithMessage ...
 func NewNumOfArgsNotValidErrorWithMessage(err error) error {
-	return newSveltinError(32, err, "SVELTIN NumOfArgsNotValidErrorWithMessage")
+	return newSveltinError(32, err, "NumOfArgsNotValidErrorWithMessage")
 }
 
 // NewResourceNotFoundError ...
 func NewResourceNotFoundError() error {
 	err := errors.New("it seems a not exisiting resource has been used")
-	return newSveltinError(40, err, "SVELTIN ResourceNotFoundError")
+	return newSveltinError(40, err, "ResourceNotFoundError")
 }
 
 // NewContentTemplateTypeNotValidError ...
 func NewContentTemplateTypeNotValidError() error {
 	err := errors.New("it seems a not valid type has been used as content template")
-	return newSveltinError(50, err, "SVELTIN ContentTemplateTypeNotValidError")
+	return newSveltinError(50, err, "ContentTemplateTypeNotValidError")
 }
 
 // NewPageTypeNotValidError ...
 func NewPageTypeNotValidError() error {
 	err := errors.New("it seems a not valid type has been used as page")
-	return newSveltinError(60, err, "SVELTIN PageTypeNotValidError")
+	return newSveltinError(60, err, "PageTypeNotValidError")
 }
 
 // NewMetadataTypeNotValidError ...
 func NewMetadataTypeNotValidError() error {
 	err := errors.New("it seems a not valid type has been used as metadata")
-	return newSveltinError(70, err, "SVELTIN MetadataTypeNotValidError")
+	return newSveltinError(70, err, "MetadataTypeNotValidError")
 }
 
 // NewPackageManagerCommandError ...
 func NewPackageManagerCommandError(err error) error {
-	return newSveltinError(80, err, "SVELTIN PackageManagerCommandError")
+	return newSveltinError(80, err, "PackageManagerCommandError")
 }
 
 // NewPackageManagerCommandNotValidError ...
 func NewPackageManagerCommandNotValidError() error {
 	err := errors.New("it seems the operation is not a valid one for the package manager")
-	return newSveltinError(81, err, "SVELTIN PackageManagerCommandNotValidError")
+	return newSveltinError(81, err, "PackageManagerCommandNotValidError")
 }
 
 // NewExecSystemCommandError ...
 func NewExecSystemCommandError() error {
 	err := errors.New("cannot exec the system command. please, check it and its arguments")
-	return newSveltinError(82, err, "SVELTIN ExecSystemCommandError")
+	return newSveltinError(82, err, "ExecSystemCommandError")
 }
 
 // NewExecSystemCommandErrorWithMsg ...
 func NewExecSystemCommandErrorWithMsg(err error) error {
 	errN := errors.New("cannot exec the system command. please, check it and its arguments: " + err.Error())
-	return newSveltinError(82, errN, "SVELTIN ExecSystemCommandError")
+	return newSveltinError(82, errN, "ExecSystemCommandError")
 }
 
 // NewPackageManagerKeyNotFoundOnPackageJSONFile ...
@@ -180,11 +180,11 @@ func NewPackageManagerKeyNotFoundOnPackageJSONFile() error {
 did not find the "packageManager" key in your package.json file
 
 [HINT]: add "packageManager": "<your_npm_client>@<version>" to it and run the command again`)
-	return newSveltinError(83, errN, "SVELTIN PackageManagerCommandNotValidError")
+	return newSveltinError(83, errN, "PackageManagerCommandNotValidError")
 }
 
 // NewProjectNameNotFoundError ...
 func NewProjectNameNotFoundError() error {
 	errN := errors.New(`cannot find property "name" in your package.json file`)
-	return newSveltinError(84, errN, "SVELTIN ProjectNameNotFoundError")
+	return newSveltinError(84, errN, "ProjectNameNotFoundError")
 }

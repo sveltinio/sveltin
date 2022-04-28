@@ -73,8 +73,8 @@ func TestCheckMinMaxArgsBoundaries(t *testing.T) {
 		err := CheckMinMaxArgs(tc.items, tc.min, tc.max)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
-		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[Error Code 32: SVELTIN NumOfArgsNotValidErrorWithMessage] This command expects at least `+strconv.Itoa(tc.min)+` argument.
+		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
+		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects at least `+strconv.Itoa(tc.min)+` argument.
 Please check the help: sveltin [command] -h`, re.Error())
 	}
 }
@@ -94,8 +94,8 @@ func TestNotValidCheckMinMaxArgs(t *testing.T) {
 		err := CheckMinMaxArgs(tc.items, tc.min, tc.max)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
-		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[Error Code 32: SVELTIN NumOfArgsNotValidErrorWithMessage] This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
+		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
+		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
 Please check the help: sveltin [command] -h`, re.Error())
 	}
 
@@ -133,8 +133,8 @@ func TestCheckMinMaxArgsWithMaxEqualsZero(t *testing.T) {
 		err := CheckMaxArgs(tc.items, tc.max)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
-		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[Error Code 32: SVELTIN NumOfArgsNotValidErrorWithMessage] This command expects no arguments. Please check the help: sveltin [command] -h`, re.Error())
+		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
+		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects no arguments. Please check the help: sveltin [command] -h`, re.Error())
 	}
 }
 
@@ -152,8 +152,8 @@ func TestCheckMinMaxArgsWithNumOfArgsGreaterThanMax(t *testing.T) {
 		err := CheckMaxArgs(tc.items, tc.max)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
-		is.Equal("SVELTIN NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[Error Code 32: SVELTIN NumOfArgsNotValidErrorWithMessage] This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
+		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
+		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
 Please check the help: sveltin [command] -h`, re.Error())
 	}
 }
