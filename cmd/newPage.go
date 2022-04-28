@@ -104,7 +104,10 @@ func promptPageName(inputs []string) (string, error) {
 			ErrorMsg: "Please, provide a name for the page.",
 			Label:    "What's the page name?",
 		}
-		name = common.PromptGetInput(pageNamePromptContent)
+		name, err := common.PromptGetInput(pageNamePromptContent, nil, "")
+		if err != nil {
+			return "", err
+		}
 		return utils.ToSlug(name), nil
 	case numOfArgs == 1:
 		name = inputs[0]
@@ -127,7 +130,11 @@ func promptPageType(pageTypeFlag string) (string, error) {
 			ErrorMsg: "Please, provide a page type",
 			Label:    "What's the page type?",
 		}
-		return common.PromptGetSelect(pagePromptContent, promptObjects, true), nil
+		result, err := common.PromptGetSelect(pagePromptContent, promptObjects, true)
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case nameLenght != 0:
 		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, pageTypeFlag) {

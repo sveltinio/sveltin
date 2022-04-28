@@ -157,7 +157,11 @@ func promptResourceName(inputs []string) (string, error) {
 			ErrorMsg: "Please, provide a name for the resource.",
 			Label:    "What's the resource name? (e.g. posts, portfolio ...)",
 		}
-		return utils.ToSlug(common.PromptGetInput(resourceNamePromptContent)), nil
+		result, err := common.PromptGetInput(resourceNamePromptContent, nil, "")
+		if err != nil {
+			return "", err
+		}
+		return utils.ToSlug(result), nil
 	case numOfArgs == 1:
 		return utils.ToSlug(inputs[0]), nil
 	default:

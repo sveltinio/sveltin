@@ -101,7 +101,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// Clone starter template github repository
 	starterTemplate := appTemplatesMap[SvelteKitStarter]
 	log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
-	err = utils.GitClone(&starterTemplate, pathMaker.GetProjectRoot(projectName))
+	err = utils.GitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
@@ -196,18 +196,19 @@ func init() {
 //=============================================================================
 
 func promptProjectName(inputs []string) (string, error) {
-	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		projectNamePromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide a name for your project.",
 			Label:    "What's the name of your project?",
 		}
-		name = common.PromptGetInput(projectNamePromptContent)
-		return name, nil
+		result, err := common.PromptGetInput(projectNamePromptContent, nil, "")
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case numOfArgs == 1:
-		name = inputs[0]
-		return name, nil
+		return inputs[0], nil
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return "", sveltinerr.NewDefaultError(err)
@@ -226,7 +227,11 @@ func promptProjectStyle(stylesName string) (string, error) {
 			ErrorMsg: "Please, provide the style name",
 			Label:    "Which style for your Sveltin app?",
 		}
-		return common.PromptGetSelect(stylesPromptContent, promptObjects, true), nil
+		result, err := common.PromptGetSelect(stylesPromptContent, promptObjects, true)
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case nameLenght != 0:
 		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, stylesName) {
@@ -254,7 +259,11 @@ func promptCSSLibName(cssLibName string) (string, error) {
 			ErrorMsg: "Please, provide the CSS Lib name.",
 			Label:    "Which CSS lib do you want to use?",
 		}
-		return common.PromptGetSelect(cssPromptContent, promptObjects, true), nil
+		result, err := common.PromptGetSelect(cssPromptContent, promptObjects, true)
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case nameLenght != 0:
 		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, cssLibName) {
@@ -289,7 +298,12 @@ func promptNPMClient(items []string) (string, error) {
 			ErrorMsg: "Please, provide the name of the package manager.",
 			Label:    "Which package manager do you want to use?",
 		}
-		return common.PromptGetSelect(pmPromptContent, items, false), nil
+
+		result, err := common.PromptGetSelect(pmPromptContent, items, false)
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case nameLenght != 0:
 		if !common.Contains(items, npmClientName) {
 			return "", sveltinerr.NewOptionNotValidError(npmClientName, items)

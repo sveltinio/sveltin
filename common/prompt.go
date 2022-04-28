@@ -34,8 +34,8 @@ func PromptConfirm(label string) string {
 }
 
 // PromptGetInput is used to prompt an input the user and retrieve the value.
-func PromptGetInput(pc config.PromptContent) string {
-	validate := func(input string) error {
+func PromptGetInput(pc config.PromptContent, validate func(string) error, defaultValue string) (string, error) {
+	defaultInputValidator := func(input string) error {
 		if len(input) <= 0 {
 			errA := errors.New(pc.ErrorMsg)
 			return sveltinerr.NewDefaultError(errA)
@@ -48,22 +48,31 @@ func PromptGetInput(pc config.PromptContent) string {
 		Invalid: "{{ . | red }} ",
 		Success: "{{ . | bold }} ",
 	}
+
 	prompt := promptui.Prompt{
 		Label:     pc.Label,
 		Templates: templates,
-		Validate:  validate,
+	}
+	if validate != nil {
+		prompt.Validate = validate
+	} else {
+		prompt.Validate = defaultInputValidator
+	}
+
+	if defaultValue != "" {
+		prompt.Default = defaultValue
 	}
 
 	result, err := prompt.Run()
 	if err != nil {
-		jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
-		os.Exit(1)
+		errA := errors.New(pc.ErrorMsg)
+		return "", sveltinerr.NewDefaultError(errA)
 	}
-	return result
+	return result, nil
 }
 
 // PromptGetSelect is used to prompt a list of available options to the user and retrieve the selection.
-func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates bool) string {
+func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates bool) (string, error) {
 	prompt := promptui.Select{
 		Label: pc.Label,
 	}
@@ -85,10 +94,10 @@ func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates b
 
 		i, _, err := prompt.Run()
 		if err != nil {
-			jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
-			os.Exit(1)
+			errA := errors.New(pc.ErrorMsg)
+			return "", sveltinerr.NewDefaultError(errA)
 		}
-		return elements[i]
+		return elements[i], nil
 	case []config.PromptObject:
 		elements := []config.PromptObject{}
 		elements = append(elements, v...)
@@ -100,8 +109,10 @@ func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates b
 			jww.CRITICAL.Fatalf("Prompt failed %v\n", err)
 			os.Exit(1)
 		}
-		return elements[i].ID
+		return elements[i].ID, nil
 	default:
-		return ""
+		errA := errors.New(pc.ErrorMsg)
+		return "", sveltinerr.NewDefaultError(errA)
+
 	}
 }
