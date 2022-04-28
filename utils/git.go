@@ -13,13 +13,12 @@ import (
 	"path/filepath"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/sveltinio/sveltin/config"
 )
 
 // GitClone clones the git repo to the specified path.
-func GitClone(sveltinTemplate *config.AppTemplate, inpath string) error {
+func GitClone(url, inpath string) error {
 	_, err := git.PlainClone(inpath, false, &git.CloneOptions{
-		URL:      sveltinTemplate.URL,
+		URL:      url,
 		Progress: nil,
 	})
 
