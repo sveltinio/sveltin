@@ -168,7 +168,7 @@ func NewPackageManagerCommandNotValidError() error {
 }
 
 // NewExecSystemCommandError ...
-func NewExecSystemCommandError() error {
+func NewExecSystemCommandError(name string) error {
 	err := errors.New("cannot exec the system command. please, check it and its arguments")
 	return newSveltinError(82, err, "ExecSystemCommandError")
 }
