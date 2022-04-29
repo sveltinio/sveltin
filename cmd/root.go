@@ -35,7 +35,7 @@ const (
 	// SvelteKitStarter is a string representing the project starter id.
 	SvelteKitStarter string = "starter"
 	// ThemeStarter is a string representing the project starter id for new themes.
-	ThemeStarter string = "theme-starter"
+	ThemeStarter string = "blog-theme-starter"
 )
 
 // folder and file names for a Sveltin project structure.

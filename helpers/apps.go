@@ -22,9 +22,9 @@ func InitAppTemplatesMap() map[string]config.AppTemplate {
 		URL:  "https://github.com/sveltinio/sveltekit-static-starter",
 	}
 
-	appTemplatesMap["theme-starter"] = config.AppTemplate{
-		Name: "theme-starter",
-		URL:  "https://github.com/sveltinio/theme-starter",
+	appTemplatesMap["blog-theme-starter"] = config.AppTemplate{
+		Name: "blog-theme-starter",
+		URL:  "https://github.com/sveltinio/blog-theme-starter",
 	}
 	return appTemplatesMap
 }
