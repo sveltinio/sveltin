@@ -45,7 +45,7 @@ const (
 var newContentCmd = &cobra.Command{
 	Use:     "content [name]",
 	Aliases: []string{"c"},
-	Short:   "Create a new content for existing resource",
+	Short:   "Command to create a new content for existing resource",
 	Long: resources.GetASCIIArt() + `
 Create a new markdown file for your content and a folder to store the statics used by the content itself.
 

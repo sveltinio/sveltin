@@ -29,7 +29,7 @@ import (
 var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Aliases: []string{"r"},
-	Short:   "Command to create new resources",
+	Short:   "Command to create a new resource",
 	Long: resources.GetASCIIArt() + `
 Command to create new resources.
 

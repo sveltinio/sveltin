@@ -39,7 +39,7 @@ const (
 var newPageCmd = &cobra.Command{
 	Use:     "page [name]",
 	Aliases: []string{"p"},
-	Short:   "Create a new public page",
+	Short:   "Command to create a new public page",
 	Long: resources.GetASCIIArt() + `
 Create a new "public" page.
 
