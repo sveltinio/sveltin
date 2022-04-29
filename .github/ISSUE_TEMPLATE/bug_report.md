@@ -1,15 +1,19 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+name: 🐞 Bug report
+about: File a bug/issue
+title: '[Bug]: '
+labels: ['Bug']
 assignees: ''
 ---
+
+<!--
+Note: Please search to see if an issue already exists for the bug you encountered.
+-->
 
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**Steps To Reproduce**
 Steps to reproduce the behavior:
 
 **Expected behavior**
