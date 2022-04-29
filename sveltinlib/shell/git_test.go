@@ -1,4 +1,4 @@
-package utils
+package shell
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/sveltinio/sveltin/config"
 )
 
-func TestGit(t *testing.T) {
+func TestGitClone(t *testing.T) {
 	is := is.New(t)
 	osFs := afero.NewOsFs()
 
@@ -19,7 +19,8 @@ func TestGit(t *testing.T) {
 	}
 
 	helloWorld := appTemplatesMap["hello-world"]
-	err := GitClone(helloWorld.URL, helloWorld.Name)
+	gitClient := NewGitClient()
+	err := gitClient.RunGitClone(helloWorld.URL, helloWorld.Name, true)
 	is.NoErr(err)
 
 	exists, err := afero.DirExists(osFs, helloWorld.Name)

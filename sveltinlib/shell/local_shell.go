@@ -22,12 +22,12 @@ import (
 type LocalShell struct {
 }
 
-// Execute runs an action on the npm client.
+// Execute runs command on the local system.
 func (s *LocalShell) Execute(cmdName string, cmdOptions string, silentMode bool) error {
 	var cmd *exec.Cmd
 
 	args := strings.Split(cmdOptions, " ")
-	if len(args) < 1 || len(args) > 2 {
+	if len(args) < 1 || len(args) > 4 {
 		return sveltinerr.NewNumOfArgsNotValidError()
 	}
 
@@ -36,6 +36,10 @@ func (s *LocalShell) Execute(cmdName string, cmdOptions string, silentMode bool)
 		cmd = exec.Command(cmdName, args[0])
 	case 2:
 		cmd = exec.Command(cmdName, args[0], args[1])
+	case 3:
+		cmd = exec.Command(cmdName, args[0], args[1], args[2])
+	case 4:
+		cmd = exec.Command(cmdName, args[0], args[1], args[2], args[3])
 	default:
 		err := errors.New("invalid number of arguments")
 		return sveltinerr.NewNumOfArgsNotValidErrorWithMessage(err)
