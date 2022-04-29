@@ -168,15 +168,15 @@ var SveltinBulmaLibUnstyledFS = SveltinFSItem{
 
 //=============================================================================
 
-// SveltinBootstrabLibFS is a map for the default templates file whe using bootstrap.
-var SveltinBootstrabLibFS = SveltinFSItem{
+// SveltinBootstrapLibFS is a map for the default templates file whe using bootstrap.
+var SveltinBootstrapLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/bootstrap/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/bootstrap/svelte.config.js",
 	"app_html":      "internal/templates/themes/bootstrap/app.html",
 }
 
-// SveltinBootstrabLibStyledFS is a map for the styled templates file whe using bootstrap.
-var SveltinBootstrabLibStyledFS = SveltinFSItem{
+// SveltinBootstrapLibStyledFS is a map for the styled templates file whe using bootstrap.
+var SveltinBootstrapLibStyledFS = SveltinFSItem{
 	"layout":         "internal/templates/themes/bootstrap/styled/layout.svelte.gotxt",
 	"app_css":        "internal/templates/themes/bootstrap/styled/app.scss",
 	"variables_scss": "internal/templates/themes/bootstrap/styled/variables.scss",
