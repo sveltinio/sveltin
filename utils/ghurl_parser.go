@@ -55,10 +55,13 @@ func NewGitHubURLParser(input string) (*GitHubRepo, error) {
 		return nil, sveltinerr.NewNotValidGitHubRepoURL(input)
 	}
 
+	repoUser := splittedURL[0]
+	repoName := strings.ReplaceAll(splittedURL[1], ".git", "")
+
 	return &GitHubRepo{
 		host: "github.com",
-		user: splittedURL[0],
-		repo: splittedURL[1],
+		user: repoUser,
+		repo: repoName,
 	}, nil
 }
 
