@@ -126,6 +126,12 @@ func NewNumOfArgsNotValidErrorWithMessage(err error) error {
 	return newSveltinError(32, err, "NumOfArgsNotValidErrorWithMessage")
 }
 
+// NewNotValidArgumentsError ...
+func NewNotValidArgumentsError() error {
+	err := errors.New("some of the provided arguments seem to be not a valid one")
+	return newSveltinError(33, err, "NumOfArgsNotValidErrorWithMessage")
+}
+
 // NewResourceNotFoundError ...
 func NewResourceNotFoundError() error {
 	err := errors.New("it seems a not exisiting resource has been used")
