@@ -40,13 +40,13 @@ func (s *GitShell) GetShell() Shell {
 // RunInit execute 'git init' command to initialize an empty git repository.
 func (s *GitShell) RunInit(localPath string, silentMode bool) error {
 	if localPath == "" {
-		return sveltinerr.NewExecSystemCommandError(GitBin)
+		return sveltinerr.NewExecSystemCommandError(GitBin, "")
 	}
 
 	gitOpt := strings.Join([]string{"init", localPath}, " ")
 	err := s.GetShell().Execute(GitBin, gitOpt, silentMode)
 	if err != nil {
-		return sveltinerr.NewExecSystemCommandError(GitBin)
+		return sveltinerr.NewExecSystemCommandError(GitBin, gitOpt)
 	}
 
 	return nil
@@ -65,7 +65,7 @@ func (s *GitShell) RunGitClone(repoURL, inpath string, silentMode bool) error {
 	gitOpt := strings.Join([]string{"clone", "-q", repoURL, inpath}, " ")
 	err = s.GetShell().Execute(GitBin, gitOpt, silentMode)
 	if err != nil {
-		return sveltinerr.NewExecSystemCommandError(GitBin)
+		return sveltinerr.NewExecSystemCommandError(GitBin, gitOpt)
 	}
 
 	if err := cleanGitRepository(inpath, []string{".git"}); err != nil {
@@ -88,7 +88,7 @@ func (s *GitShell) RunSubmodule(repoURL, inpath string, silentMode bool) error {
 	gitOpt := strings.Join([]string{"submodule", "add", repoURL, inpath}, " ")
 	err = s.GetShell().Execute(GitBin, gitOpt, silentMode)
 	if err != nil {
-		return sveltinerr.NewExecSystemCommandError(GitBin)
+		return sveltinerr.NewExecSystemCommandError(GitBin, gitOpt)
 	}
 
 	return nil

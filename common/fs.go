@@ -12,7 +12,6 @@ import (
 	"bufio"
 	"bytes"
 	"embed"
-	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -84,8 +83,7 @@ func MoveFile(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, back
 	}
 	err := CopyFileFromEmbeddedFS(efs, fs, sourceFile, saveTo)
 	if err != nil {
-		nErr := errors.New("something went wrong running MoveFile: " + err.Error())
-		return sveltinerr.NewDefaultError(nErr)
+		return sveltinerr.NewMoveFileError(sourceFile, saveTo)
 	}
 	return nil
 }

@@ -54,13 +54,13 @@ func (s *LocalShell) Execute(cmdName string, cmdOptions string, silentMode bool)
 }
 
 // BackgroundExecute runs an action on the npm client in background.
-func (s *LocalShell) BackgroundExecute(ctx context.Context, pmName string, pmCmd string, packageList string) ([]byte, error) {
-	args := strings.Split(pmCmd, " ")
+func (s *LocalShell) BackgroundExecute(ctx context.Context, cmdName string, cmdOptions string, packageList string) ([]byte, error) {
+	args := strings.Split(cmdOptions, " ")
 	if len(args) != 2 {
 		err := errors.New("invalid number of arguments")
 		return nil, sveltinerr.NewExecSystemCommandErrorWithMsg(err)
 	}
-	wrapperCmd := exec.CommandContext(ctx, pmName, args[0], args[1], packageList)
+	wrapperCmd := exec.CommandContext(ctx, cmdName, args[0], args[1], packageList)
 	output, error := wrapperCmd.CombinedOutput()
 	return output, error
 }

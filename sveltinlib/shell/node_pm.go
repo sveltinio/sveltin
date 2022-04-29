@@ -36,12 +36,12 @@ func (s *NodePackageManager) GetShell() Shell {
 // RunInstall execute the relative npmClient install command.
 func (s *NodePackageManager) RunInstall(pmName string, operation string, silentMode bool) error {
 	if pmName == "" || operation == "" {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, operation)
 	}
 	pmCmd := operation
 	err := s.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, pmCmd)
 	}
 
 	return nil
@@ -50,7 +50,7 @@ func (s *NodePackageManager) RunInstall(pmName string, operation string, silentM
 // RunUpdate execute the relative npmClient update command.
 func (s *NodePackageManager) RunUpdate(pmName string, operation string, silentMode bool) error {
 	if pmName == "" || operation == "" {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, operation)
 	}
 
 	var pmCmd string
@@ -62,7 +62,7 @@ func (s *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 
 	err := s.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, pmCmd)
 	}
 
 	return nil
@@ -71,7 +71,7 @@ func (s *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 // RunSvelteKitCommand execute the relative npmClient sveltekit script command as defined on the package.json file.
 func (s *NodePackageManager) RunSvelteKitCommand(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, operation)
 	}
 
 	var pmCmd string
@@ -83,7 +83,7 @@ func (s *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 
 	err = s.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, pmCmd)
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func (s *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 // RunAddPackages execute the relative npmClient install|add package command.
 func (s *NodePackageManager) RunAddPackages(pmName string, operation string, mode string, packages []string, silentMode bool) error {
 	if pmName == "" || operation == "" || mode == "" || packages == nil {
-		return sveltinerr.NewExecSystemCommandError(pmName)
+		return sveltinerr.NewExecSystemCommandError(pmName, "")
 	}
 
 	var pmCmd string
