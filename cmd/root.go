@@ -30,10 +30,12 @@ import (
 //=============================================================================
 
 const (
-	// CliVersion is the current sveltin clie version number.
+	// CliVersion is the current sveltin cli version number.
 	CliVersion string = "0.7.3"
-	// SvelteKitStarter a string rapresenting the project template id.
+	// SvelteKitStarter is a string representing the project starter id.
 	SvelteKitStarter string = "starter"
+	// ThemeStarter is a string representing the project starter id for new themes.
+	ThemeStarter string = "theme-starter"
 )
 
 // folder and file names for a Sveltin project structure.
@@ -153,10 +155,6 @@ func isValidProject() {
 		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
 		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
 	}
-}
-
-func isSveltinStyles(style string) bool {
-	return style == StyleDefault
 }
 
 //=============================================================================

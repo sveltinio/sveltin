@@ -19,7 +19,7 @@ func TestGit(t *testing.T) {
 	}
 
 	helloWorld := appTemplatesMap["hello-world"]
-	err := GitClone(&helloWorld, helloWorld.Name)
+	err := GitClone(helloWorld.URL, helloWorld.Name)
 	is.NoErr(err)
 
 	exists, err := afero.DirExists(osFs, helloWorld.Name)

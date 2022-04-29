@@ -23,22 +23,22 @@ type LocalShell struct {
 }
 
 // Execute runs an action on the npm client.
-func (s *LocalShell) Execute(pmName string, pmCmd string, silentMode bool) error {
+func (s *LocalShell) Execute(cmdName string, cmdOptions string, silentMode bool) error {
 	var cmd *exec.Cmd
 
-	args := strings.Split(pmCmd, " ")
+	args := strings.Split(cmdOptions, " ")
 	if len(args) < 1 || len(args) > 2 {
-		return sveltinerr.NewExecSystemCommandError()
+		return sveltinerr.NewNumOfArgsNotValidError()
 	}
 
 	switch len(args) {
 	case 1:
-		cmd = exec.Command(pmName, args[0])
+		cmd = exec.Command(cmdName, args[0])
 	case 2:
-		cmd = exec.Command(pmName, args[0], args[1])
+		cmd = exec.Command(cmdName, args[0], args[1])
 	default:
 		err := errors.New("invalid number of arguments")
-		return sveltinerr.NewExecSystemCommandErrorWithMsg(err)
+		return sveltinerr.NewNumOfArgsNotValidErrorWithMessage(err)
 	}
 
 	if !silentMode {

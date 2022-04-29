@@ -10,7 +10,7 @@ const website: IWebSite = {
 	seoDescription: '',
 	favicon: 'favicon.ico',
 	logo: 'logo.png',
-	copyright: '2021, {{ .ProjectName }}',
+	copyright: '2022, {{ .ProjectName }}',
 	keywords: '',
 	contactEmail: '',
 	sitemap: {

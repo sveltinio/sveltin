@@ -1,6 +1,6 @@
 // theme.config.js file for your sveltin theme
 const config = {
-   name: '{{ .ThemeName }}',
+   name: '{{ .Theme.Name }}',
    version: '0.1',
    license: 'MIT',
    licenselink: 'https://github.com/yourname/yourtheme/blob/master/LICENSE',

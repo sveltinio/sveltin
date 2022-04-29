@@ -42,7 +42,9 @@ func TestExecSveltinTpl(t *testing.T) {
 
 	pathToTplFile := resources.SveltinProjectFS["theme_config"]
 	data := config.TemplateData{
-		ThemeName: "white",
+		Theme: &config.ThemeData{
+			Name: "white",
+		},
 	}
 
 	tplConfig := BuildTemplate(pathToTplFile, nil, &data)

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2021 Mirco Veltri <github@mircoveltri.me>
+ * Copyright © 2021-present Mirco Veltri <github@mircoveltri.me>
  *
  * Use of this source code is governed by Apache 2.0 license
  * that can be found in the LICENSE file.
@@ -17,8 +17,8 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// ProjectBuilder represents the builder for the project.
-type ProjectBuilder struct {
+// ThemeBuilder represents the builder for the project.
+type ThemeBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
@@ -27,36 +27,24 @@ type ProjectBuilder struct {
 	Funcs             template.FuncMap
 }
 
-// NewProjectBuilder create a ProjectBuilder struct.
-func NewProjectBuilder() *ProjectBuilder {
-	return &ProjectBuilder{}
+// NewThemeBuilder create a ThemeBuilder struct.
+func NewThemeBuilder() *ThemeBuilder {
+	return &ThemeBuilder{}
 }
 
-func (b *ProjectBuilder) setContentType() {
-	b.ContentType = "project"
+func (b *ThemeBuilder) setContentType() {
+	b.ContentType = "theme"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *ProjectBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *ThemeBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *ProjectBuilder) setPathToTplFile() error {
+func (b *ThemeBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
 	case Defaults:
 		b.PathToTplFile = b.EmbeddedResources[Defaults]
-		return nil
-	case Externals:
-		b.PathToTplFile = b.EmbeddedResources[Externals]
-		return nil
-	case Website:
-		b.PathToTplFile = b.EmbeddedResources[Website]
-		return nil
-	case Menu:
-		b.PathToTplFile = b.EmbeddedResources[InitMenu]
-		return nil
-	case DotEnv:
-		b.PathToTplFile = b.EmbeddedResources[DotEnv]
 		return nil
 	case Readme:
 		b.PathToTplFile = b.EmbeddedResources[Readme]
@@ -67,13 +55,6 @@ func (b *ProjectBuilder) setPathToTplFile() error {
 	case ThemeConfig:
 		b.PathToTplFile = b.EmbeddedResources[ThemeConfig]
 		return nil
-	case IndexPage:
-		if b.TemplateData.Theme.ID == config.ExistingTheme {
-			b.PathToTplFile = b.EmbeddedResources[IndexNoThemePage]
-		} else {
-			b.PathToTplFile = b.EmbeddedResources[IndexPage]
-		}
-		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
 		return sveltinerr.NewDefaultError(errN)
@@ -81,16 +62,16 @@ func (b *ProjectBuilder) setPathToTplFile() error {
 }
 
 // SetTemplateID set the id for the template to be used.
-func (b *ProjectBuilder) SetTemplateID(id string) {
+func (b *ThemeBuilder) SetTemplateID(id string) {
 	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *ProjectBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *ThemeBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *ProjectBuilder) setFuncs() {
+func (b *ThemeBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"CurrentYear": func() string {
 			return utils.CurrentYear()
@@ -99,7 +80,7 @@ func (b *ProjectBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *ProjectBuilder) GetContent() Content {
+func (b *ThemeBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,

@@ -122,44 +122,55 @@ func init() {
 
 //=============================================================================
 
-func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (config.TemplateData, error) {
+func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*config.TemplateData, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		contentNamePromptContent := config.PromptContent{
 			ErrorMsg: "Please, provide a title for the content.",
 			Label:    "What's the content title? (it will be the slug to the page)",
 		}
-		contentName := common.PromptGetInput(contentNamePromptContent)
+		contentName, err := common.PromptGetInput(contentNamePromptContent, nil, "")
+		if err != nil {
+			return nil, err
+		}
 		contentType, err := promptContentTemplateSelection(templateFlag)
-		utils.ExitIfError(err)
+		if err != nil {
+			return nil, err
+		}
 
 		contentResource, err := promptResourceList(fs, c)
-		utils.ExitIfError(err)
+		if err != nil {
+			return nil, err
+		}
 
-		return config.TemplateData{
+		return &config.TemplateData{
 			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
 			Resource: contentResource,
 		}, nil
 	case numOfArgs == 1:
 		name := inputs[0]
-
 		contentResource, contentName := path.Split(name)
 		contentResource = strings.ReplaceAll(contentResource, "/", "")
+
 		err := helpers.ResourceExists(fs, contentResource, &conf)
-		utils.ExitIfError(err)
+		if err != nil {
+			return nil, err
+		}
 
 		contentType, err := promptContentTemplateSelection(templateFlag)
-		utils.ExitIfError(err)
+		if err != nil {
+			return nil, err
+		}
 
-		return config.TemplateData{
+		return &config.TemplateData{
 			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
 			Resource: contentResource,
 		}, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
-		return config.TemplateData{}, sveltinerr.NewDefaultError(err)
+		return nil, sveltinerr.NewDefaultError(err)
 	}
 }
 
@@ -175,7 +186,11 @@ func promptContentTemplateSelection(templateType string) (string, error) {
 			ErrorMsg: "Please, provide a template name for the content file.",
 			Label:    "Which template for your content?",
 		}
-		return common.PromptGetSelect(templatePromptContent, promptObjects, true), nil
+		result, err := common.PromptGetSelect(templatePromptContent, promptObjects, true)
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case nameLenght != 0:
 		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, templateType) {
@@ -194,12 +209,16 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 		ErrorMsg: "Please, provide an existing resource name.",
 		Label:    "Which existing resource?",
 	}
-	return common.PromptGetSelect(resourcePromptContent, availableResources, false), nil
+	result, err := common.PromptGetSelect(resourcePromptContent, availableResources, false)
+	if err != nil {
+		return "", err
+	}
+	return result, nil
 }
 
 //=============================================================================
 
-func makeStaticFolderStructure(efs *embed.FS, fs afero.Fs, contentData config.TemplateData) *composer.Folder {
+func makeStaticFolderStructure(efs *embed.FS, fs afero.Fs, contentData *config.TemplateData) *composer.Folder {
 	// GET FOLDER: static
 	staticFolder := fsManager.GetFolder(Static)
 	// NEW FOLDER static/resources

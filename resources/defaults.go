@@ -34,16 +34,17 @@ type SveltinFSItem map[string]string
 
 // SveltinProjectFS is map for the project template files.
 var SveltinProjectFS = map[string]string{
-	"defaults":     "internal/templates/site/defaults.js.ts.gotxt",
-	"externals":    "internal/templates/site/externals.js.ts.gotxt",
-	"website":      "internal/templates/site/website.js.ts.gotxt",
-	"init_menu":    "internal/templates/site/init_menu.js.ts.gotxt",
-	"menu":         "internal/templates/site/menu.js.ts.gotxt",
-	"dotenv":       "internal/templates/misc/env.gotxt",
-	"readme":       "internal/templates/misc/README.md.gotxt",
-	"license":      "internal/templates/misc/LICENSE.gotxt",
-	"index":        "internal/templates/themes/index.svelte.gotxt",
-	"theme_config": "internal/templates/themes/theme.config.js.gotxt",
+	"defaults":      "internal/templates/site/defaults.js.ts.gotxt",
+	"externals":     "internal/templates/site/externals.js.ts.gotxt",
+	"website":       "internal/templates/site/website.js.ts.gotxt",
+	"init_menu":     "internal/templates/site/init_menu.js.ts.gotxt",
+	"menu":          "internal/templates/site/menu.js.ts.gotxt",
+	"dotenv":        "internal/templates/misc/env.gotxt",
+	"readme":        "internal/templates/misc/README.md.gotxt",
+	"license":       "internal/templates/misc/LICENSE.gotxt",
+	"index":         "internal/templates/themes/index.svelte.gotxt",
+	"index_notheme": "internal/templates/themes/index.notheme.svelte.gotxt",
+	"theme_config":  "internal/templates/themes/theme.config.js.gotxt",
 }
 
 // SveltinResourceFS is a map for the resource template files.

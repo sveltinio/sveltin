@@ -176,7 +176,11 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 			ErrorMsg: "Please, provide an existing resource name.",
 			Label:    "Which existing resource?",
 		}
-		return utils.ToSlug(common.PromptGetSelect(resourcePromptContent, availableResources, false)), nil
+		result, err := common.PromptGetSelect(resourcePromptContent, availableResources, false)
+		if err != nil {
+			return "", err
+		}
+		return utils.ToSlug(result), nil
 	case nameLenght != 0:
 		if !common.Contains(availableResources, mdResourceFlag) {
 			return "", sveltinerr.NewResourceNotFoundError()
@@ -194,7 +198,13 @@ func promptMetadataName(inputs []string) (string, error) {
 			ErrorMsg: "Please, provide a name for the metadata.",
 			Label:    "What's the metadata name?",
 		}
-		return utils.ToSlug(common.PromptGetInput(metadataNamePromptContent)), nil
+
+		result, err := common.PromptGetInput(metadataNamePromptContent, nil, "")
+		if err != nil {
+			return "", err
+		}
+
+		return utils.ToSlug(result), nil
 	case numOfArgs == 1:
 		return utils.ToSlug(inputs[0]), nil
 	default:
@@ -216,7 +226,11 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 			ErrorMsg: "Please, provide a metadata type.",
 			Label:    "Which relationship between your content and the metadata?",
 		}
-		return common.PromptGetSelect(metadataTypePromptContent, promptObjects, true), nil
+		result, err := common.PromptGetSelect(metadataTypePromptContent, promptObjects, true)
+		if err != nil {
+			return "", err
+		}
+		return result, nil
 	case nameLenght != 0:
 		valid := common.GetPromptObjectKeys(promptObjects)
 		if !common.Contains(valid, mdTypeFlag) {

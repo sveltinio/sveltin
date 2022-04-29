@@ -29,17 +29,17 @@ func NewNodePackageManager() *NodePackageManager {
 }
 
 // GetShell returns a Shell.
-func (n *NodePackageManager) GetShell() Shell {
-	return n.shell
+func (s *NodePackageManager) GetShell() Shell {
+	return s.shell
 }
 
 // RunInstall execute the relative npmClient install command.
-func (n *NodePackageManager) RunInstall(pmName string, operation string, silentMode bool) (err error) {
+func (s *NodePackageManager) RunInstall(pmName string, operation string, silentMode bool) error {
 	if pmName == "" || operation == "" {
 		return sveltinerr.NewExecSystemCommandError()
 	}
 	pmCmd := operation
-	err = n.GetShell().Execute(pmName, pmCmd, silentMode)
+	err := s.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
 		return sveltinerr.NewExecSystemCommandError()
 	}
@@ -48,7 +48,7 @@ func (n *NodePackageManager) RunInstall(pmName string, operation string, silentM
 }
 
 // RunUpdate execute the relative npmClient update command.
-func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMode bool) (err error) {
+func (s *NodePackageManager) RunUpdate(pmName string, operation string, silentMode bool) error {
 	if pmName == "" || operation == "" {
 		return sveltinerr.NewExecSystemCommandError()
 	}
@@ -60,7 +60,7 @@ func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 		pmCmd = operation
 	}
 
-	err = n.GetShell().Execute(pmName, pmCmd, silentMode)
+	err := s.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
 		return sveltinerr.NewExecSystemCommandError()
 	}
@@ -69,7 +69,7 @@ func (n *NodePackageManager) RunUpdate(pmName string, operation string, silentMo
 }
 
 // RunSvelteKitCommand execute the relative npmClient sveltekit script command as defined on the package.json file.
-func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string, silentMode bool) (err error) {
+func (s *NodePackageManager) RunSvelteKitCommand(pmName string, operation string, silentMode bool) (err error) {
 	if pmName == "" || operation == "" {
 		return sveltinerr.NewExecSystemCommandError()
 	}
@@ -81,7 +81,7 @@ func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 		pmCmd = fmt.Sprintf("run %s", operation)
 	}
 
-	err = n.GetShell().Execute(pmName, pmCmd, silentMode)
+	err = s.GetShell().Execute(pmName, pmCmd, silentMode)
 	if err != nil {
 		return sveltinerr.NewExecSystemCommandError()
 	}
@@ -90,7 +90,7 @@ func (n *NodePackageManager) RunSvelteKitCommand(pmName string, operation string
 }
 
 // RunAddPackages execute the relative npmClient install|add package command.
-func (n *NodePackageManager) RunAddPackages(pmName string, operation string, mode string, packages []string, silentMode bool) error {
+func (s *NodePackageManager) RunAddPackages(pmName string, operation string, mode string, packages []string, silentMode bool) error {
 	if pmName == "" || operation == "" || mode == "" || packages == nil {
 		return sveltinerr.NewExecSystemCommandError()
 	}
@@ -104,7 +104,7 @@ func (n *NodePackageManager) RunAddPackages(pmName string, operation string, mod
 
 	for _, p := range packages {
 		jww.FEEDBACK.Printf("  * %s\n", p)
-		output, err := n.GetShell().BackgroundExecute(context.Background(), pmName, pmCmd, p)
+		output, err := s.GetShell().BackgroundExecute(context.Background(), pmName, pmCmd, p)
 		if err != nil {
 			return sveltinerr.NewExecSystemCommandErrorWithMsg(err)
 		}
