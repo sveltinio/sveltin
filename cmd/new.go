@@ -24,6 +24,7 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
 	"github.com/sveltinio/sveltin/sveltinlib/css"
 	"github.com/sveltinio/sveltin/sveltinlib/npmc"
+	"github.com/sveltinio/sveltin/sveltinlib/shell"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -34,6 +35,7 @@ var (
 	withCSSLib     string
 	withThemeName  string
 	withPortNumber string
+	withGit        bool
 )
 
 // names for the available style options
@@ -101,7 +103,9 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	// Clone starter template github repository
 	starterTemplate := appTemplatesMap[SvelteKitStarter]
 	log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
-	err = utils.GitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName))
+	gitClient := shell.NewGitClient()
+	err = gitClient.RunGitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName), true)
+	//err = utils.GitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
@@ -175,6 +179,13 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	err = setupCSSLib(&resources.SveltinFS, AppFs, &conf, &tplData)
 	utils.ExitIfError(err)
 
+	// INITIALIZE GIT REPO
+	if isInitGitRepo(withGit) {
+		log.Info("Initializing empty Git repository")
+		err = gitClient.RunInit(projectFolder.GetPath(), true)
+		utils.ExitIfError(err)
+	}
+
 	log.Success("Done")
 
 	// NEXT STEPS
@@ -192,6 +203,7 @@ func newCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The theme you are going to create or reuse")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The port to start the server on")
+	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
 }
 
 func init() {
@@ -457,4 +469,8 @@ func setupCSSLib(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData
 	default:
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
 	}
+}
+
+func isInitGitRepo(gitFlagValue bool) bool {
+	return gitFlagValue
 }

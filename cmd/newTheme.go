@@ -24,6 +24,7 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/sveltinlib/composer"
 	"github.com/sveltinio/sveltin/sveltinlib/css"
+	"github.com/sveltinio/sveltin/sveltinlib/shell"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -68,7 +69,9 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	// Clone starter template github repository
 	themeStarterTemplate := appTemplatesMap[ThemeStarter]
 	log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
-	err = utils.GitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName))
+	gitClient := shell.NewGitClient()
+	err = gitClient.RunGitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName), true)
+	//err = utils.GitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
