@@ -77,7 +77,10 @@ Examples:
 sveltin new blog
 sveltin new blog --css tailwindcss
 sveltin new blog --css vanillacss -t myTheme
+sveltin new portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git
+
 sveltin new resource posts
+
 sveltin new theme paper --css tailwindcss --npmClient pnpm`,
 	Run: NewCmdRun,
 }

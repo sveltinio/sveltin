@@ -36,7 +36,7 @@ var (
 var newMetadataCmd = &cobra.Command{
 	Use:     "metadata [name] --resource [resource] --type [single|list]",
 	Aliases: []string{"m, groupedBy"},
-	Short:   "Command to add new metadata to an existing resource",
+	Short:   "Command to add a new metadata to your content as a Sveltekit resource",
 	Long: resources.GetASCIIArt() + `
 Command to add new metadata from your content to an existing resource.
 
