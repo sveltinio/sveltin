@@ -20,6 +20,6 @@ type TemplateData struct {
 	Config      *SveltinConfig
 	Menu        *MenuConfig
 	NoPage      *NoPage
-	ThemeName   string
+	Theme       *ThemeData
 	Misc        string
 }

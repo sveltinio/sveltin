@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
+	import { ExternalLink } from '@sveltinio/essentials';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
-	import Hero from '$themes/{{ .Theme.Name }}/partials/Hero.svelte';
 	import { getFavicon } from '$lib/utils/strings.js';
 
 	const homePage: IWebPageMetadata = {
@@ -26,4 +26,20 @@
 <JsonLdWebPage data={homePage} />
 <!-- End of SEO Section -->
 
-<Hero />
+<h1>Your Sveltin project is up & running!</h1>
+
+<div>
+	<ExternalLink
+		id="learnMoreLink"
+		name="learnMore"
+		url="https://docs.sveltin.io/tutorials"
+		alt="link to the tutorial pages">Learn More</ExternalLink
+	>
+
+	<ExternalLink
+		id="documentationLink"
+		name="docs"
+		url="https://docs.sveltin.io"
+		alt="link to the documentation website">Read the Docs</ExternalLink
+	>
+</div>

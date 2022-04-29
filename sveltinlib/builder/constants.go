@@ -10,16 +10,17 @@ package builder
 
 // constants representing different file names.
 const (
-	Defaults    string = "defaults"
-	Externals   string = "externals"
-	Website     string = "website"
-	Menu        string = "menu"
-	InitMenu    string = "init_menu"
-	DotEnv      string = "dotenv"
-	Readme      string = "readme"
-	License     string = "license"
-	ThemeConfig string = "theme_config"
-	IndexPage   string = "index"
+	Defaults         string = "defaults"
+	Externals        string = "externals"
+	Website          string = "website"
+	Menu             string = "menu"
+	InitMenu         string = "init_menu"
+	DotEnv           string = "dotenv"
+	Readme           string = "readme"
+	License          string = "license"
+	ThemeConfig      string = "theme_config"
+	IndexPage        string = "index"
+	IndexNoThemePage string = "index_notheme"
 )
 
 const (

@@ -28,6 +28,36 @@ Visit the Quick Start guide at https://docs.sveltin.io/quick-start
 	return fmt.Sprintf(placeHolderText, projectName)
 }
 
+// HelperTextNewProjectWithExistingTheme returns a 'next step' text used after the project creation when using an existing theme.
+func HelperTextNewProjectWithExistingTheme(projectName string) string {
+	placeHolderText := `1. cd %s
+  2. sveltin install
+  3. git init
+  4. git submodule add <github_repu_url_for_the_theme> themes/<theme_name>
+  5. Follow the instructions on the README from the theme creator
+  6. sveltin server
+
+To stop the dev server, hit Ctrl-C
+
+Visit the Quick Start guide at https://docs.sveltin.io/theming
+`
+	return fmt.Sprintf(placeHolderText, projectName)
+}
+
+// HelperTextNewTheme returns a 'next step' text used after the theme creation.
+func HelperTextNewTheme(projectName string) string {
+	placeHolderText := `1. cd %s
+  2. sveltin install
+  3. Create your theme components and partials
+  4. sveltin server
+
+To stop the dev server, hit Ctrl-C
+
+Visit the Quick Start guide at https://docs.sveltin.io/theming
+`
+	return fmt.Sprintf(placeHolderText, projectName)
+}
+
 // HelperTextDryRunFlag returns a text used when running an action in dry-run mode.
 func HelperTextDryRunFlag() string {
 	return `  * *********************** *

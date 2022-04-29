@@ -17,7 +17,8 @@ import (
 
 // ILib ...
 type ILib interface {
-	Setup() error
-	makeStyled(*embed.FS, afero.Fs, *config.SveltinConfig, *config.TemplateData) error
+	Setup(bool) error
+	makeSveltinStyled(*embed.FS, afero.Fs, *config.SveltinConfig, *config.TemplateData) error
 	makeUnstyled(*embed.FS, afero.Fs, *config.SveltinConfig, *config.TemplateData) error
+	makeTheme(*embed.FS, afero.Fs, *config.SveltinConfig, *config.TemplateData) error
 }
