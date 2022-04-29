@@ -1,7 +1,7 @@
 # Earthfile
 FROM golang:1.17.2-alpine3.14
 
-LABEL maintainer="Mirco Veltri <github@mircoveltri.me>"
+LABEL maintainer="Sveltin contributors <github@sveltin.io>"
 
 WORKDIR /sveltin
 
