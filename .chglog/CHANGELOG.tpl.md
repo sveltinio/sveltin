@@ -1,5 +1,19 @@
 # CHANGELOG
 
+{{ if .Versions -}}
+## [Unreleased]({{ .Info.RepositoryURL }}/compare/{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}...HEAD)
+
+{{ if .Unreleased.CommitGroups -}}
+{{ range .Unreleased.CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+- {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}
+
 {{ range .Versions }}
 
 ## [{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/releases/tag/{{ .Tag.Name }}) ({{ datetime "2006-01-02" .Tag.Date }})
@@ -42,3 +56,4 @@
 {{ end -}}
 {{ end -}}
 {{ end -}}
+

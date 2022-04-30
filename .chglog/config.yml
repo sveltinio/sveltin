@@ -23,14 +23,15 @@ options:
       - perf
       - ci
       - docs
-      - chore	  
+      - chore
     title_maps:
-      feat: New Features
+      feat: 🚀  New Features
       fix: Fixed Bugs
-      perf: Performance Improvements
-      refactor: Code Refactoring
+      perf: 🚄  Performance Improvements
+      refactor: 🔧  Code Refactoring
+      docs: 📖  Documentation
       chore: Chores
-      ci: CI
+      ci: ⚙️  CI
   header:
     pattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
     pattern_maps:
