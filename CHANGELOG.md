@@ -1,20 +1,80 @@
 # CHANGELOG
 
+## [v0.8.0](https://github.com/sveltinio/sveltin/compare/v0.7.3...v0.8.0) (2022-04-30)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.3...v0.8.0)
+
+### Fixed Bugs
+
+- metadata index page layout styles
+
+### 🚀  New Features
+
+- new flag `--git` to init a git repo on project creation
+- make new theme and allow using existing themes
+- resource and metadata endpoints created
+- sveltin TS namespace created
+
+### 🔧  Code Refactoring
+
+- css lib setup
+
+### ⚙️  CI
+
+- bug report template updated to include the sveltin version number
+- lint-test workflows on PR not only against main branch
+
+### 📖  Documentation
+
+- license owner updated to sveltin contributors
+- **CHANGELOG:** updated
+- **README:** updated
+
+### Chores
+
+- repo name for theme starter updated
+- dependencies updated (now on sveltekit-next.321)
+- **ghurl_parser:** utility added to parse GitHub repository url
+- **website.js.ts:** current year updated
+
+### Pull Requests
+
+- Merge pull request [#30](https://github.com/sveltinio/sveltin/issues/30) from sveltinio/css-builder
+- Merge pull request [#29](https://github.com/sveltinio/sveltin/issues/29) from sveltinio/readme-cmds
+- Merge pull request [#28](https://github.com/sveltinio/sveltin/issues/28) from sveltinio/license-owner
+- Merge pull request [#27](https://github.com/sveltinio/sveltin/issues/27) from sveltinio/sk-next-321
+- Merge pull request [#26](https://github.com/sveltinio/sveltin/issues/26) from sveltinio/26-init-git-repo
+- Merge pull request [#25](https://github.com/sveltinio/sveltin/issues/25) from sveltinio/theme-maker
+- Merge pull request [#24](https://github.com/sveltinio/sveltin/issues/24) from sveltinio/api-endpoints
+- Merge pull request [#23](https://github.com/sveltinio/sveltin/issues/23) from sveltinio/22-metadata-index-wrong-styles-tailwindcss
+- Merge pull request [#22](https://github.com/sveltinio/sveltin/issues/22) from sveltinio/ci-bug-report-template
+- Merge pull request [#21](https://github.com/sveltinio/sveltin/issues/21) from sveltinio/sveltin-namespace
+- Merge pull request [#20](https://github.com/sveltinio/sveltin/issues/20) from sveltinio/codeql
+- Merge pull request [#19](https://github.com/sveltinio/sveltin/issues/19) from sveltinio/sveltekit-next-301
+
 ## [v0.7.3](https://github.com/sveltinio/sveltin/releases/tag/v0.7.3) (2022-04-04)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.2...v0.7.3)
 
-### Fixed
+### Fixed Bugs
 
-- interfaces names to match the new ones from the packages (essentials, services)
+- interfaces names to match the new ones from the packages
+
+### ⚙️  CI
+
+- Trigger Build
 
 ### Chores
 
+- bump CLI version to 0.7.3
+- sveltinio/services updated to v0.2.0
 - sveltekit updated to 1.0.0-next.302
+- sveltekit updated to next-301. fallthrough removed
 
-### CI
+### Pull Requests
 
-- Create codeql-analysis.yml by @indaco in [18](https://github.com/sveltinio/sveltin/pull/18)
+- Merge pull request [#18](https://github.com/sveltinio/sveltin/issues/18) from sveltinio/codeql
+- Merge pull request [#17](https://github.com/sveltinio/sveltin/issues/17) from sveltinio/sveltekit-next-301
 
 ## [v0.7.2](https://github.com/sveltinio/sveltin/releases/tag/v0.7.2) (2022-03-21)
 
@@ -25,11 +85,11 @@
 - speed up bulma & bootstrap loadings
 - colours and icons on windows
 
-### CI
+### ⚙️  CI
 
 - lint-test workflow added
 
-### Docs
+### 📖  Documentation
 
 - **CHANGELOG:** updated
 
@@ -37,7 +97,7 @@
 
 - linting
 - use golangci-lint
-- reference to variable.scss file replaced as \_variable.scss for svelte.config.js
+- reference to variable.scss file replaced as _variable.scss for svelte.config.js
 - logger and prompt select icons updated
 - **.chglog:** git-chglog CHANGELOG generator config added
 - **commit-msg:** colour and icon added to the error messages
@@ -55,11 +115,11 @@
 
 - postcss for tailwind based projects
 
-### CI
+### ⚙️  CI
 
 - githooks added and simplified release workflow
 
-### Docs
+### 📖  Documentation
 
 - made with svelte shield added
 - **CHANGELOG:** updated
@@ -87,11 +147,11 @@
 - cards grid styles
 - mispelled fixed
 
-### New Features
+### 🚀  New Features
 
 - support for not styled project creation added
 
-### Code Refactoring
+### 🔧  Code Refactoring
 
 - make PromptGetSelect working with slice of strings and PromptObject
 
@@ -129,7 +189,7 @@
 
 - remove type annotation, trivially inferred from a string literal
 
-### New Features
+### 🚀  New Features
 
 - page endpoints support added
 - **logger:** log.Plain added
@@ -195,7 +255,7 @@
 
 - **deploy.go:** --excludeFile flag renamed as --withExcludeFile
 
-### New Features
+### 🚀  New Features
 
 - **deploy.go:** --excludeFile flag added
 
@@ -225,17 +285,17 @@
 
 - **CHANGELOG:** typo
 
-### New Features
+### 🚀  New Features
 
 - sveltin `prepare` command
 
-### Code Refactoring
+### 🔧  Code Refactoring
 
 - nest_steps.go renamed as help_messages.go
 - new underlying logging lib developed
 - CheckIfError renamed as ExitIfError to reflect what it does
 
-### Docs
+### 📖  Documentation
 
 - sveltin root command documentation updated
 
@@ -263,15 +323,15 @@
 - **newContent.go:** template strings
 - **next_steps.go:** typo
 
-### New Features
+### 🚀  New Features
 
 - deploy over FTP command added
 
-### Code Refactoring
+### 🔧  Code Refactoring
 
 - **next_steps.go:** interpolate multiline strings
 
-### Docs
+### 📖  Documentation
 
 - code comments
 - overall code comments
@@ -298,7 +358,7 @@
 - env file templates with server port number
 - trailingSlash to always
 
-### Docs
+### 📖  Documentation
 
 - typo
 - scss added to the list of css libs
@@ -316,18 +376,18 @@
 - typos
 - pages styles fixed to have center text
 
-### New Features
+### 🚀  New Features
 
 - SCSS support added
 
-### Code Refactoring
+### 🔧  Code Refactoring
 
 - template execution
 - logger and printer
 - package.json file and npmclient handling
 - package manager handling
 
-### Docs
+### 📖  Documentation
 
 - updated
 
@@ -339,11 +399,11 @@
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.13...v0.2.14)
 
-### New Features
+### 🚀  New Features
 
 - bulma support implemented
 
-### Code Refactoring
+### 🔧  Code Refactoring
 
 - tailwind css and vanilla css themes
 
@@ -390,11 +450,11 @@
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.8...v0.2.9)
 
-### Code Refactoring
+### 🔧  Code Refactoring
 
 - clone()` on fetch response workaround to avoid '_body used already_' error building the project removed
 
-### Docs
+### 📖  Documentation
 
 - readme updated
 
@@ -407,7 +467,7 @@
 - pages templates and variables names
 - image path on seo components
 
-### Docs
+### 📖  Documentation
 
 - readme updated
 
@@ -429,7 +489,7 @@
 - seo for pages
 - interfaces names to match the new ones from the packages
 
-### Docs
+### 📖  Documentation
 
 - **README:** aliases added
 
