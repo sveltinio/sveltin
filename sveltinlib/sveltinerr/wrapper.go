@@ -103,6 +103,16 @@ func NewDirNotFoundError() error {
 	return newSveltinError(13, err, "DirNotFoundError")
 }
 
+// NewMoveFileError ...
+func NewMoveFileError(sourceFile, saveTo string) error {
+	placeholderText := `
+
+Something went wrong trying to save %s as %s
+`
+	err := fmt.Errorf("please, check the file path: %s", fmt.Sprintf(placeholderText, sourceFile, saveTo))
+	return newSveltinError(14, err, "FileNotFoundError")
+}
+
 // NewNotImplementYetError ...
 func NewNotImplementYetError() error {
 	err := errors.New("not implemented yet. Pure CSS and Tailwindcss are the only available options so far")
@@ -167,18 +177,6 @@ func NewPackageManagerCommandNotValidError() error {
 	return newSveltinError(81, err, "PackageManagerCommandNotValidError")
 }
 
-// NewExecSystemCommandError ...
-func NewExecSystemCommandError(name string) error {
-	err := errors.New("cannot exec the system command. please, check it and its arguments")
-	return newSveltinError(82, err, "ExecSystemCommandError")
-}
-
-// NewExecSystemCommandErrorWithMsg ...
-func NewExecSystemCommandErrorWithMsg(err error) error {
-	errN := errors.New("cannot exec the system command. please, check it and its arguments: " + err.Error())
-	return newSveltinError(82, errN, "ExecSystemCommandError")
-}
-
 // NewPackageManagerKeyNotFoundOnPackageJSONFile ...
 func NewPackageManagerKeyNotFoundOnPackageJSONFile() error {
 	errN := errors.New(`
@@ -186,11 +184,29 @@ func NewPackageManagerKeyNotFoundOnPackageJSONFile() error {
 did not find the "packageManager" key in your package.json file
 
 [HINT]: add "packageManager": "<your_npm_client>@<version>" to it and run the command again`)
-	return newSveltinError(83, errN, "PackageManagerCommandNotValidError")
+	return newSveltinError(82, errN, "PackageManagerCommandNotValidError")
 }
 
 // NewProjectNameNotFoundError ...
 func NewProjectNameNotFoundError() error {
 	errN := errors.New(`cannot find property "name" in your package.json file`)
-	return newSveltinError(84, errN, "ProjectNameNotFoundError")
+	return newSveltinError(83, errN, "ProjectNameNotFoundError")
+}
+
+// NewExecSystemCommandError ...
+func NewExecSystemCommandError(cmdName, opts string) error {
+	placeholderText := `
+
+Here is the string representing the command line to be executed:
+
+%s %s
+`
+	errN := fmt.Errorf("cannot exec the system command. please, check it and its arguments: %s", fmt.Sprintf(placeholderText, cmdName, opts))
+	return newSveltinError(90, errN, "ExecSystemCommandError")
+}
+
+// NewExecSystemCommandErrorWithMsg ...
+func NewExecSystemCommandErrorWithMsg(err error) error {
+	errN := errors.New("cannot exec the system command. please, check it and its arguments: " + err.Error())
+	return newSveltinError(91, errN, "ExecSystemCommandError")
 }

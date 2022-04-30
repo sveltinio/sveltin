@@ -15,8 +15,8 @@ const (
 	ExistingTheme string = "existing"
 )
 
-// AvailableThemes is an array literal representing the available theme options.
-var AvailableThemes = [3]string{BlankTheme, SveltinTheme, ExistingTheme}
+// AvailableThemes is the list of the available themes.
+var AvailableThemes = []string{BlankTheme, SveltinTheme, ExistingTheme}
 
 // Theme represents the theme folder structure in a Sveltin project.
 type Theme struct {

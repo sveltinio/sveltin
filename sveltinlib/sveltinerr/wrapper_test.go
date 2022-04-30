@@ -85,8 +85,8 @@ func TestErrors(t *testing.T) {
 	is.Equal(81, re.Code)
 	is.Equal("PackageManagerCommandNotValidError", re.Name)
 
-	errVar = NewExecSystemCommandError("git")
+	errVar = NewExecSystemCommandError("git", "init")
 	re = errVar.(*SveltinError)
-	is.Equal(82, re.Code)
+	is.Equal(90, re.Code)
 	is.Equal("ExecSystemCommandError", re.Name)
 }

@@ -8,6 +8,18 @@
 // Package css ...
 package css
 
+// CSS lib names
+const (
+	Bootstrap   string = "bootstrap"
+	Bulma       string = "bulma"
+	Scss        string = "scss"
+	TailwindCSS string = "tailwindcss"
+	VanillaCSS  string = "vanillacss"
+)
+
+// AvailableCSSLib is the list of the available css libs.
+var AvailableCSSLib = []string{Bootstrap, Bulma, Scss, TailwindCSS, VanillaCSS}
+
 // template file ids
 const (
 	PackageJSONFileID    string = "package_json"
