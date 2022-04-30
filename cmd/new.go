@@ -46,11 +46,11 @@ const (
 
 // names for the available CSS Lib options
 const (
-	VanillaCSS  string = "vanillacss"
-	TailwindCSS string = "tailwindcss"
-	Bulma       string = "bulma"
 	Bootstrap   string = "bootstrap"
+	Bulma       string = "bulma"
 	Scss        string = "scss"
+	TailwindCSS string = "tailwindcss"
+	VanillaCSS  string = "vanillacss"
 )
 
 // names for config files
