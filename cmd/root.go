@@ -24,8 +24,20 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
+
+//=============================================================================
+
+type appConfig struct {
+	log         *logger.Logger
+	sveltin     *config.SveltinConfig
+	project     config.ProjectConfig
+	pathMaker   *pathmaker.SveltinPathMaker
+	fsManager   *fsm.SveltinFSManager
+	startersMap map[string]config.StarterTemplate
+	fs          afero.Fs
+}
 
 //=============================================================================
 
@@ -40,38 +52,28 @@ const (
 
 // folder and file names for a Sveltin project structure.
 const (
-	Root          string = "root"
-	Backups       string = "backups"
-	Config        string = "config"
-	Content       string = "content"
-	Routes        string = "routes"
-	Api           string = "api"
-	Lib           string = "lib"
-	Static        string = "static"
-	Themes        string = "themes"
-	Index         string = "index"
-	IndexEndpoint string = "indexendpoint"
-	Slug          string = "slug"
-	SlugEndpoint  string = "slugendpoint"
-	SettingsFile  string = ".sveltin-settings.yaml"
-	DotEnvProd    string = ".env.production"
+	RootFolder        string = "root"
+	BackupsFolder     string = "backups"
+	ConfigFolder      string = "config"
+	ContentFolder     string = "content"
+	RoutesFolder      string = "routes"
+	ApiFolder         string = "api"
+	LibFolder         string = "lib"
+	StaticFolder      string = "static"
+	ThemesFolder      string = "themes"
+	IndexFile         string = "index"
+	IndexEndpointFile string = "indexendpoint"
+	SlugFile          string = "slug"
+	SlugEndpointFile  string = "slugendpoint"
+	SettingsFile      string = ".sveltin-settings.yaml"
+	DotEnvProdFile    string = ".env.production"
 )
 
 var (
-	// AppFs is the Afero wrapper around the native OS calls.
-	AppFs = afero.NewOsFs()
 	// YamlConfig is used by yaml.Unmarshal to decode the YAML file.
-	YamlConfig []byte
-)
-
-var (
-	log             = logger.New()
-	npmClientName   string
-	appTemplatesMap map[string]config.AppTemplate
-	pathMaker       pathmaker.SveltinPathMaker
-	conf            config.SveltinConfig
-	projectConfig   config.ProjectConfig
-	fsManager       *fsm.SveltinFSManager
+	YamlConfig    []byte
+	npmClientName string
+	cfg           appConfig
 )
 
 //=============================================================================
@@ -101,32 +103,31 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(setDefaultLoggerOptions, loadSveltinConfig, initSveltin)
+	cobra.OnInitialize(loadSveltinConfig, initAppConfig)
 }
 
 //=============================================================================
 
-func setDefaultLoggerOptions() {
-	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
+func loadSveltinConfig() {
+	err := yaml.Unmarshal(YamlConfig, &cfg.sveltin)
+	if err != nil {
+		jww.FATAL.Fatal(err)
+	}
+}
+
+func initAppConfig() {
+	cfg.log = logger.New()
+	cfg.log.Printer.SetPrinterOptions(&logger.PrinterOptions{
 		Timestamp: false,
 		Colors:    true,
 		Labels:    false,
 		Icons:     true,
 	})
-}
-
-func initSveltin() {
-	pathMaker = pathmaker.NewSveltinPathMaker(&conf)
-	fsManager = fsm.NewSveltinFSManager(&pathMaker)
-	appTemplatesMap = helpers.InitAppTemplatesMap()
-	projectConfig, _ = loadEnvFile(DotEnvProd)
-}
-
-func loadSveltinConfig() {
-	err := yaml.Unmarshal(YamlConfig, &conf)
-	if err != nil {
-		jww.FATAL.Fatal(err)
-	}
+	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.sveltin)
+	cfg.fsManager = fsm.NewSveltinFSManager(cfg.pathMaker)
+	cfg.startersMap = helpers.InitStartersTemplatesMap()
+	cfg.project, _ = loadEnvFile(DotEnvProdFile)
+	cfg.fs = afero.NewOsFs()
 }
 
 func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
@@ -150,7 +151,7 @@ func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
 func isValidProject() {
 	pwd, _ := os.Getwd()
 	pathToPkgJSON := filepath.Join(pwd, "package.json")
-	exists, _ := afero.Exists(AppFs, pathToPkgJSON)
+	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
 	if !exists {
 		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
 		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
@@ -162,6 +163,6 @@ func isValidProject() {
 // GetSveltinCommands returns an array of pointers to the implemented cobra.Command
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
-		newCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd,
+		newCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd, newThemeCmd,
 	}
 }

@@ -7,7 +7,7 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func TestPages(t *testing.T) {

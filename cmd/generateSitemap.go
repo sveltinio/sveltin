@@ -34,38 +34,38 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	log.Plain(utils.Underline("The sitemap.xml file will be created"))
+	cfg.log.Plain(utils.Underline("The sitemap.xml file will be created"))
 
-	log.Info("Getting list of existing public pages")
-	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
+	cfg.log.Info("Getting list of existing public pages")
+	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
 
-	log.Info("Getting list of existing resources")
-	existingResources := helpers.GetAllResources(AppFs, conf.GetContentPath())
+	cfg.log.Info("Getting list of existing resources")
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
 
-	log.Info("Getting list of all contents for the resources")
-	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
+	cfg.log.Info("Getting list of all contents for the resources")
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
 
-	log.Info("Getting list of all metadata for the resources")
-	metadata := helpers.GetResourceMetadataMap(AppFs, existingResources, conf.GetRoutesPath())
+	cfg.log.Info("Getting list of all metadata for the resources")
+	metadata := helpers.GetResourceMetadataMap(cfg.fs, existingResources, cfg.sveltin.GetRoutesPath())
 
 	// GET FOLDER: static
-	staticFolder := fsManager.GetFolder(Static)
+	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
-	log.Info("Generating the sitemap.xml file")
-	sitemapFile := fsManager.NewNoPage("sitemap", &projectConfig, existingResources, contents, metadata, pages)
+	cfg.log.Info("Generating the sitemap.xml file")
+	sitemapFile := cfg.fsManager.NewNoPage("sitemap", &cfg.project, existingResources, contents, metadata, pages)
 	staticFolder.Add(sitemapFile)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(staticFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewNoPageArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewNoPageArtifact(&resources.SveltinFS, cfg.fs)
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 }
 
 func init() {

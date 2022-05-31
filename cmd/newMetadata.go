@@ -59,24 +59,24 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	mdName, err := promptMetadataName(args)
 	utils.ExitIfError(err)
 
-	mdResource, err := promptResource(AppFs, resourceName, &conf)
+	mdResource, err := promptResource(cfg.fs, resourceName, cfg.sveltin)
 	utils.ExitIfError(err)
 
 	mdType, err := promptMetadataType(metadataType)
 	utils.ExitIfError(err)
 
-	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", mdName, mdResource)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", mdName, mdResource)))
 
 	// NEW FILE: <metadata_name>.json.ts
-	log.Info("Creating the API endpoint for the metadata")
+	cfg.log.Info("Creating the API endpoint for the metadata")
 	resourceMetadataAPIFile := &composer.File{
-		Name:       conf.GetMetadataAPIFilename(mdName),
-		TemplateID: Api,
+		Name:       cfg.sveltin.GetMetadataAPIFilename(mdName),
+		TemplateID: ApiFolder,
 		TemplateData: &config.TemplateData{
 			Name:     mdName,
 			Resource: mdResource,
 			Type:     mdType,
-			Config:   &conf,
+			Config:   cfg.sveltin,
 		},
 	}
 
@@ -85,19 +85,19 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceAPIFolder.Add(resourceMetadataAPIFile)
 
 	// GET FOLDER: src/routes/api/<api_version> folder
-	apiFolder := fsManager.GetFolder(Api)
+	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
 	apiFolder.Add(resourceAPIFolder)
 
 	// NEW FILE: api<metadata_name>.ts file into src/lib/<resource_name> folder
-	log.Info("Creating the lib file for the metadata")
+	cfg.log.Info("Creating the lib file for the metadata")
 	libFile := &composer.File{
-		Name:       pathMaker.GetResourceLibFilename(mdName),
-		TemplateID: Lib,
+		Name:       cfg.pathMaker.GetResourceLibFilename(mdName),
+		TemplateID: LibFolder,
 		TemplateData: &config.TemplateData{
 			Name:     mdName,
 			Resource: mdResource,
 			Type:     mdType,
-			Config:   &conf,
+			Config:   cfg.sveltin,
 		},
 	}
 	// NEW FOLDER: src/lib/<resource_name>
@@ -105,23 +105,23 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceLibFolder.Add(libFile)
 
 	// GET FOLDER: src/lib folder
-	libFolder := fsManager.GetFolder(Lib)
+	libFolder := cfg.fsManager.GetFolder(LibFolder)
 	libFolder.Add(resourceLibFolder)
 
 	// NEW FOLDER: <metadata_name>
 	resourceMedatadaRoutesFolder := composer.NewFolder(mdName)
 
 	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	log.Info("Creating the components and endpoints for the metadata")
-	for _, item := range []string{Index, IndexEndpoint, Slug, SlugEndpoint} {
+	cfg.log.Info("Creating the components and endpoints for the metadata")
+	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, &conf),
+			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
 				Name:     mdName,
 				Resource: mdResource,
 				Type:     mdType,
-				Config:   &conf,
+				Config:   cfg.sveltin,
 			},
 		}
 		resourceMedatadaRoutesFolder.Add(f)
@@ -132,26 +132,26 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	resourceRoutesFolder.Add(resourceMedatadaRoutesFolder)
 
 	// GET FOLDER: src/routes folder
-	routesFolder := fsManager.GetFolder(Routes)
+	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 	routesFolder.Add(resourceRoutesFolder)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewMetadataArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewMetadataArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	log.Plain(utils.Underline("Next Steps"))
-	log.Success("Metadata ready to be used.")
-	log.Important("Ensure your markdown frontmatter consider it.")
+	cfg.log.Plain(utils.Underline("Next Steps"))
+	cfg.log.Success("Metadata ready to be used.")
+	cfg.log.Important("Ensure your markdown frontmatter consider it.")
 
 }
 

@@ -51,26 +51,26 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	log.Plain(utils.Underline("Deploy your website to the FTP server"))
+	cfg.log.Plain(utils.Underline("Deploy your website to the FTP server"))
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
 	if len(withExcludeFile) != 0 {
-		lines, err := common.ReadFileLineByLine(AppFs, withExcludeFile)
+		lines, err := common.ReadFileLineByLine(cfg.fs, withExcludeFile)
 		utils.ExitIfError(err)
 		withExclude = common.Union(withExclude, lines)
 
 	}
 
 	ftpConnectionConfig := &ftpfs.FTPConnectionConfig{
-		Host:     projectConfig.FTPHost,
-		Port:     projectConfig.FTPPort,
-		User:     projectConfig.FTPUser,
-		Password: projectConfig.FTPPassword,
-		Timeout:  projectConfig.FTPDialTimeout,
-		IsEPSV:   projectConfig.FTPEPSVMode,
+		Host:     cfg.project.FTPHost,
+		Port:     cfg.project.FTPPort,
+		User:     cfg.project.FTPUser,
+		Password: cfg.project.FTPPassword,
+		Timeout:  cfg.project.FTPDialTimeout,
+		IsEPSV:   cfg.project.FTPEPSVMode,
 	}
 	ftpConn := ftpfs.NewFTPServerConnection(ftpConnectionConfig)
-	ftpConn.SetRootFolder(projectConfig.FTPServerFolder)
+	ftpConn.SetRootFolder(cfg.project.FTPServerFolder)
 
 	err := ftpfs.DialAction(&ftpConn).Run()
 	utils.ExitIfError(err)
@@ -83,31 +83,31 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	err = noOpAction.Run()
 	utils.ExitIfError(err)
 
-	common.ShowDeployCommandWarningMessages(log)
-	setDefaultLoggerOptions()
+	common.ShowDeployCommandWarningMessages(cfg.log)
+	//setDefaultLoggerOptions()
 
 	confirmStr := promptBackupConfirm()
 
 	if isConfirm(confirmStr) {
 		// create a local tar archive as backup for the remote folder content
 		if isBackup {
-			backupsFolderPath := filepath.Join(pathMaker.GetRootFolder(), Backups)
-			utils.ExitIfError(common.MkDir(AppFs))
-			pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-			projectName, err := utils.RetrieveProjectName(AppFs, pathToPkgFile)
+			backupsFolderPath := filepath.Join(cfg.pathMaker.GetRootFolder(), BackupsFolder)
+			utils.ExitIfError(common.MkDir(cfg.fs))
+			pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
+			projectName, err := utils.RetrieveProjectName(cfg.fs, pathToPkgFile)
 			utils.ExitIfError(err)
-			err = ftpfs.BackupAction(&ftpConn, AppFs, filepath.Join(backupsFolderPath, projectName), isDryRun).Run()
+			err = ftpfs.BackupAction(&ftpConn, cfg.fs, filepath.Join(backupsFolderPath, projectName), isDryRun).Run()
 			utils.ExitIfError(err)
 		}
 
 		// delete content from the remote folder with exclude list
-		log.Important(fmt.Sprintf("The following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", ")))
+		cfg.log.Important(fmt.Sprintf("The following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", ")))
 		err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
 		utils.ExitIfError(err)
 
 		// Create the folders structure
-		log.Info("Creating remote folders structure")
-		foldersList := walkLocal(AppFs, EntryTypeFolder, projectConfig.SvelteKitBuildFolder)
+		cfg.log.Info("Creating remote folders structure")
+		foldersList := walkLocal(cfg.fs, EntryTypeFolder, cfg.project.SvelteKitBuildFolder)
 		err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
 		utils.ExitIfError(err)
 
@@ -116,9 +116,9 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		utils.ExitIfError(err)
 
 		// upload files
-		log.Info("Uploading files to the remote folders")
-		filesList := walkLocal(AppFs, EntryTypeFile, projectConfig.SvelteKitBuildFolder)
-		err = ftpfs.UploadAction(&ftpConn, AppFs, projectConfig.SvelteKitBuildFolder, filesList, isDryRun).Run()
+		cfg.log.Info("Uploading files to the remote folders")
+		filesList := walkLocal(cfg.fs, EntryTypeFile, cfg.project.SvelteKitBuildFolder)
+		err = ftpfs.UploadAction(&ftpConn, cfg.fs, cfg.project.SvelteKitBuildFolder, filesList, isDryRun).Run()
 		utils.ExitIfError(err)
 
 		// prevent the remote FTP server to close the idle connection
@@ -130,8 +130,8 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		utils.ExitIfError(err)
 
 		// LOG SUMMARY TO THE STDOUT
-		log.Info(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
-		log.Success("Done")
+		cfg.log.Info(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
+		cfg.log.Success("Done")
 	}
 }
 
@@ -151,7 +151,7 @@ func init() {
 
 func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 	fList := []string{}
-	err := afero.Walk(AppFs, dirname,
+	err := afero.Walk(cfg.fs, dirname,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err

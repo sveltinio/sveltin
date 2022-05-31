@@ -14,7 +14,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
@@ -102,40 +101,40 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient()
 	npmClientName = npmClient.Name
 
-	log.Plain(utils.Underline("A new Sveltin project will be created"))
+	cfg.log.Plain(utils.Underline("A new Sveltin project will be created"))
 	// Clone starter template github repository
-	starterTemplate := appTemplatesMap[SvelteKitStarter]
-	log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
+	starterTemplate := cfg.startersMap[SvelteKitStarter]
+	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
 	gitClient := shell.NewGitClient()
-	err = gitClient.RunGitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName), true)
+	err = gitClient.RunGitClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
 	//err = utils.GitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
-	projectFolder := fsManager.GetFolder(projectName)
+	projectFolder := cfg.fsManager.GetFolder(projectName)
 
-	log.Info("Creating the project folder structure")
+	cfg.log.Info("Creating the project folder structure")
 
 	// NEW FOLDER: config
-	configFolder := composer.NewFolder(Config)
+	configFolder := composer.NewFolder(ConfigFolder)
 	projectFolder.Add(configFolder)
 
 	// NEW FILE: config/<filename>.js
 	for _, elem := range []string{Defaults, Externals, Website, Menu} {
-		f := fsManager.NewConfigFile(projectName, elem, CliVersion)
+		f := cfg.fsManager.NewConfigFile(projectName, elem, CliVersion)
 		configFolder.Add(f)
 	}
 
 	// NEW FOLDER: content
-	contentFolder := composer.NewFolder(Content)
+	contentFolder := composer.NewFolder(ContentFolder)
 	projectFolder.Add(contentFolder)
 
 	// GET FOLDER: src/routes folder
-	routesFolder := fsManager.GetFolder(Routes)
+	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       helpers.GetResourceRouteFilename(Index, &conf),
-		TemplateID: Index,
+		Name:       helpers.GetResourceRouteFilename(IndexFile, cfg.sveltin),
+		TemplateID: IndexFile,
 		TemplateData: &config.TemplateData{
 			Theme: themeData,
 		},
@@ -145,7 +144,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectFolder.Add(routesFolder)
 
 	// NEW FOLDER: themes
-	themesFolder := composer.NewFolder(Themes)
+	themesFolder := composer.NewFolder(ThemesFolder)
 
 	newThemeFolder := makeThemeFolderStructure(themeData)
 	if newThemeFolder != nil {
@@ -156,47 +155,47 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: env.production
 	dotEnvTplData := &config.TemplateData{
-		Name:    DotEnvProd,
+		Name:    DotEnvProdFile,
 		BaseURL: fmt.Sprintf("http://%s.com", projectName),
 	}
-	f := fsManager.NewDotEnvFile(projectName, dotEnvTplData)
+	f := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 	projectFolder.Add(f)
 
 	// SET FOLDER STRUCTURE
-	rootFolder := fsManager.GetFolder(Root)
+	rootFolder := cfg.fsManager.GetFolder(RootFolder)
 	rootFolder.Add(projectFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewProjectArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewProjectArtifact(&resources.SveltinFS, cfg.fs)
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
-	log.Info("Setting up the CSS Lib")
+	cfg.log.Info("Setting up the CSS Lib")
 	tplData := config.TemplateData{
 		ProjectName: projectName,
 		NPMClient:   npmClient.ToString(),
 		PortNumber:  withPortNumber,
 		Theme:       themeData,
 	}
-	err = setupCSSLib(&resources.SveltinFS, AppFs, &conf, &tplData)
+	err = setupCSSLib(&resources.SveltinFS, cfg, &tplData)
 	utils.ExitIfError(err)
 
 	// INITIALIZE GIT REPO
 	if isInitGitRepo(withGit) {
-		log.Info("Initializing empty Git repository")
+		cfg.log.Info("Initializing empty Git repository")
 		err = gitClient.RunInit(projectFolder.GetPath(), true)
 		utils.ExitIfError(err)
 	}
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	log.Plain(utils.Underline("Next Steps"))
+	cfg.log.Plain(utils.Underline("Next Steps"))
 	if themeData.ID != config.ExistingTheme {
-		log.Plain(common.HelperTextNewProject(projectName))
+		cfg.log.Plain(common.HelperTextNewProject(projectName))
 	} else {
-		log.Plain(common.HelperTextNewProjectWithExistingTheme(projectName))
+		cfg.log.Plain(common.HelperTextNewProjectWithExistingTheme(projectName))
 	}
 
 }
@@ -399,16 +398,16 @@ func createNewThemeLocalFolder(themeData *config.ThemeData) *composer.Folder {
 	newThemeFolder := composer.NewFolder(themeData.Name)
 
 	// NEW FOLDER: themes/<theme_name>/components
-	componentsFolder := composer.NewFolder(pathMaker.GetThemeComponentsFolder())
+	componentsFolder := composer.NewFolder(cfg.pathMaker.GetThemeComponentsFolder())
 	newThemeFolder.Add(componentsFolder)
 
 	// NEW FOLDER: themes/<theme_name>/partials
-	partialsFolder := composer.NewFolder(pathMaker.GetThemePartialsFolder())
+	partialsFolder := composer.NewFolder(cfg.pathMaker.GetThemePartialsFolder())
 	newThemeFolder.Add(partialsFolder)
 
 	// ADD FILE themes/<theme_name>/theme.config.js
 	configFile := &composer.File{
-		Name:       conf.GetThemeConfigFilename(),
+		Name:       cfg.sveltin.GetThemeConfigFilename(),
 		TemplateID: "theme_config",
 		TemplateData: &config.TemplateData{
 			Theme: themeData,
@@ -452,22 +451,22 @@ func getSelectedNPMClient() npmc.NPMClient {
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
 
-func setupCSSLib(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+func setupCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
 	case VanillaCSS:
-		vanillaCSS := css.NewVanillaCSS(efs, fs, conf, tplData)
+		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.sveltin, tplData)
 		return vanillaCSS.Setup(true)
 	case Scss:
-		scss := css.NewScss(efs, fs, conf, tplData)
+		scss := css.NewScss(efs, cfg.fs, cfg.sveltin, tplData)
 		return scss.Setup(true)
 	case TailwindCSS:
-		tailwind := css.NewTailwindCSS(efs, fs, conf, tplData)
+		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.sveltin, tplData)
 		return tailwind.Setup(true)
 	case Bulma:
-		bulma := css.NewBulma(efs, fs, conf, tplData)
+		bulma := css.NewBulma(efs, cfg.fs, cfg.sveltin, tplData)
 		return bulma.Setup(true)
 	case Bootstrap:
-		boostrap := css.NewBootstrap(efs, fs, conf, tplData)
+		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.sveltin, tplData)
 		return boostrap.Setup(true)
 	default:
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})

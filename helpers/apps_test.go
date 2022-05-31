@@ -7,11 +7,11 @@ import (
 	"github.com/matryer/is"
 )
 
-func TestInitAppTemplatesMap(t *testing.T) {
+func TestInitStartersTemplatesMap(t *testing.T) {
 	is := is.New(t)
 
-	appTemplatesMap := InitAppTemplatesMap()
-	static := appTemplatesMap["starter"]
+	startersTemplatesMap := InitStartersTemplatesMap()
+	static := startersTemplatesMap["starter"]
 
 	is.Equal("sveltekit-static-starter", static.Name)
 	is.Equal("https://github.com/sveltinio/sveltekit-static-starter", static.URL)

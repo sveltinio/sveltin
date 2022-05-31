@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func TestGetResources(t *testing.T) {

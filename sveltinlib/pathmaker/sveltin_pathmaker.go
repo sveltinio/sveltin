@@ -21,8 +21,8 @@ type SveltinPathMaker struct {
 }
 
 // NewSveltinPathMaker returns a SveltinPathMaker struct
-func NewSveltinPathMaker(conf *config.SveltinConfig) SveltinPathMaker {
-	return SveltinPathMaker{
+func NewSveltinPathMaker(conf *config.SveltinConfig) *SveltinPathMaker {
+	return &SveltinPathMaker{
 		c: conf,
 	}
 }

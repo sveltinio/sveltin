@@ -29,7 +29,7 @@ Run 'sveltin generate -h' for further details.
 		// Exit if running sveltin commands from a not valid directory.
 		isValidProject()
 
-		log.Important("Run 'sveltin generate -h'")
+		cfg.log.Important("Run 'sveltin generate -h'")
 	},
 }
 

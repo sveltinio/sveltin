@@ -62,27 +62,27 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageType, err := promptPageType(pageType)
 	utils.ExitIfError(err)
 
-	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as page", pageName)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as page", pageName)))
 
 	// GET FOLDER: src/routes
-	routesFolder := fsManager.GetFolder(Routes)
+	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
 	// NEW FILE: src/routes/<page_name.svelte|svx>
-	pageFile := fsManager.NewPublicPage(pageName, pageType)
+	pageFile := cfg.fsManager.NewPublicPage(pageName, pageType)
 	utils.ExitIfError(err)
 
 	// ADD TO THE ROUTES FOLDER
 	routesFolder.Add(pageFile)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(routesFolder)
 
 	// GENERATE STRUCTURE
-	sfs := factory.NewPageArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewPageArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-	log.Success("Done")
+	cfg.log.Success("Done")
 }
 
 func pageCmdFlags(cmd *cobra.Command) {
