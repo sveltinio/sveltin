@@ -13,7 +13,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
 // IsValidURL returns true if the input string is a well-structured url

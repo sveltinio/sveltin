@@ -13,12 +13,12 @@ import (
 	"text/template"
 
 	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// ResourceContentBuilder represents the builder for the resource artefact.
-type ResourceContentBuilder struct {
+// MetadataContentBuilder represents the builder for the metadata artefact.
+type MetadataContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
@@ -27,24 +27,28 @@ type ResourceContentBuilder struct {
 	Funcs             template.FuncMap
 }
 
-// NewResourceContentBuilder create a ResourceContentBuilder struct.
-func NewResourceContentBuilder() *ResourceContentBuilder {
-	return &ResourceContentBuilder{}
+// NewMetadataContentBuilder create a metadataContentBuilder struct.
+func NewMetadataContentBuilder() *MetadataContentBuilder {
+	return &MetadataContentBuilder{}
 }
 
-func (b *ResourceContentBuilder) setContentType() {
-	b.ContentType = "resource"
+func (b *MetadataContentBuilder) setContentType() {
+	b.ContentType = "metadata"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *ResourceContentBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *MetadataContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *ResourceContentBuilder) setPathToTplFile() error {
+func (b *MetadataContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
 	case API:
-		b.PathToTplFile = b.EmbeddedResources[API]
+		if b.TemplateData.Type == "single" {
+			b.PathToTplFile = b.EmbeddedResources[APISingle]
+		} else if b.TemplateData.Type == "list" {
+			b.PathToTplFile = b.EmbeddedResources[APIList]
+		}
 		return nil
 	case Index:
 		b.PathToTplFile = b.EmbeddedResources[Index]
@@ -59,25 +63,29 @@ func (b *ResourceContentBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[SlugEndpoint]
 		return nil
 	case Lib:
-		b.PathToTplFile = b.EmbeddedResources[Lib]
+		if b.TemplateData.Type == "single" {
+			b.PathToTplFile = b.EmbeddedResources[LibSingle]
+		} else if b.TemplateData.Type == "list" {
+			b.PathToTplFile = b.EmbeddedResources[LibList]
+		}
 		return nil
 	default:
-		errN := errors.New("FileNotFound on EmbeddedFS")
+		errN := errors.New("FileNotFound on the EmbeddedFS")
 		return sveltinerr.NewDefaultError(errN)
 	}
 }
 
 // SetTemplateID set the id for the template to be used.
-func (b *ResourceContentBuilder) SetTemplateID(id string) {
+func (b *MetadataContentBuilder) SetTemplateID(id string) {
 	b.TemplateID = id
 }
 
-// SetTemplateData set the data used by the template.
-func (b *ResourceContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
+// SetTemplateData set the data used by the template
+func (b *MetadataContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *ResourceContentBuilder) setFuncs() {
+func (b *MetadataContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
 		"Capitalize": func(txt string) string {
 			return utils.ToTitle(txt)
@@ -92,7 +100,7 @@ func (b *ResourceContentBuilder) setFuncs() {
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *ResourceContentBuilder) GetContent() Content {
+func (b *MetadataContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,

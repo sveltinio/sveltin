@@ -11,7 +11,7 @@ package logger
 import (
 	"fmt"
 
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
 type color int

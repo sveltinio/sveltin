@@ -13,7 +13,7 @@ import (
 	"fmt"
 
 	jww "github.com/spf13/jwalterweatherman"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
 // NodePackageManager is a Shell implementation used to interact with a npnClient.

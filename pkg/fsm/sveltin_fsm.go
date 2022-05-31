@@ -14,8 +14,8 @@ import (
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
-	"github.com/sveltinio/sveltin/sveltinlib/composer"
-	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
+	"github.com/sveltinio/sveltin/pkg/composer"
+	"github.com/sveltinio/sveltin/pkg/pathmaker"
 )
 
 // SveltinFSManager is the struct for a pathmaker.

@@ -12,13 +12,14 @@ import (
 	"errors"
 	"text/template"
 
+	"github.com/gosimple/slug"
 	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// ThemeBuilder represents the builder for the project.
-type ThemeBuilder struct {
+// ResContentBuilder represents the builder for the content artefact.
+type ResContentBuilder struct {
 	ContentType       string
 	EmbeddedResources map[string]string
 	PathToTplFile     string
@@ -27,33 +28,27 @@ type ThemeBuilder struct {
 	Funcs             template.FuncMap
 }
 
-// NewThemeBuilder create a ThemeBuilder struct.
-func NewThemeBuilder() *ThemeBuilder {
-	return &ThemeBuilder{}
+// NewResContentBuilder create a ResContentBuilder struct.
+func NewResContentBuilder() *ResContentBuilder {
+	return &ResContentBuilder{}
 }
 
-func (b *ThemeBuilder) setContentType() {
-	b.ContentType = "theme"
+func (b *ResContentBuilder) setContentType() {
+	b.ContentType = "resContent"
 }
 
 // SetEmbeddedResources set the map to relative embed FS.
-func (b *ThemeBuilder) SetEmbeddedResources(res map[string]string) {
+func (b *ResContentBuilder) SetEmbeddedResources(res map[string]string) {
 	b.EmbeddedResources = res
 }
 
-func (b *ThemeBuilder) setPathToTplFile() error {
+func (b *ResContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
-	case Defaults:
-		b.PathToTplFile = b.EmbeddedResources[Defaults]
+	case Blank:
+		b.PathToTplFile = b.EmbeddedResources[b.TemplateID]
 		return nil
-	case Readme:
-		b.PathToTplFile = b.EmbeddedResources[Readme]
-		return nil
-	case License:
-		b.PathToTplFile = b.EmbeddedResources[License]
-		return nil
-	case ThemeConfig:
-		b.PathToTplFile = b.EmbeddedResources[ThemeConfig]
+	case Sample:
+		b.PathToTplFile = b.EmbeddedResources[b.TemplateID]
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
@@ -62,25 +57,32 @@ func (b *ThemeBuilder) setPathToTplFile() error {
 }
 
 // SetTemplateID set the id for the template to be used.
-func (b *ThemeBuilder) SetTemplateID(id string) {
+func (b *ResContentBuilder) SetTemplateID(id string) {
 	b.TemplateID = id
 }
 
 // SetTemplateData set the data used by the template.
-func (b *ThemeBuilder) SetTemplateData(artifactData *config.TemplateData) {
+func (b *ResContentBuilder) SetTemplateData(artifactData *config.TemplateData) {
 	b.TemplateData = artifactData
 }
 
-func (b *ThemeBuilder) setFuncs() {
+func (b *ResContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
-		"CurrentYear": func() string {
-			return utils.CurrentYear()
+		"ToSlug": slug.Make,
+		"ToTitle": func(txt string) string {
+			return utils.ToTitle(txt)
+		},
+		"Today": func() string {
+			return utils.Today()
+		},
+		"ToVariableName": func(txt string) string {
+			return utils.ToVariableName(txt)
 		},
 	}
 }
 
 // GetContent returns the full Content config needed by the Builder.
-func (b *ThemeBuilder) GetContent() Content {
+func (b *ResContentBuilder) GetContent() Content {
 	return Content{
 		ContentType:   b.ContentType,
 		PathToTplFile: b.PathToTplFile,

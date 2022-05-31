@@ -15,7 +15,7 @@ import (
 	"github.com/manifoldco/promptui"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
 // PromptConfirm is used to ask for a yes or no ([Y/N]) question.

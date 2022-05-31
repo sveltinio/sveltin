@@ -9,7 +9,7 @@
 package composer
 
 import (
-	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
+	"github.com/sveltinio/sveltin/pkg/pathmaker"
 )
 
 // GetRootFolder create a Folder struct for the project root folder.

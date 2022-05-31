@@ -13,7 +13,7 @@ import (
 	"strconv"
 
 	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
 // Contains returns true if an element is in a slice.
