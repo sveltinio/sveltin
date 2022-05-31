@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 

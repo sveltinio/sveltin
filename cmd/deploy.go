@@ -17,7 +17,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/sveltinlib/ftpfs"
+	"github.com/sveltinio/sveltin/pkg/ftpfs"
 	"github.com/sveltinio/sveltin/utils"
 )
 

@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
+	"github.com/sveltinio/sveltin/pkg/logger"
 )
 
 // HelperTextNewProject returns a 'next step' text used after the project creation.

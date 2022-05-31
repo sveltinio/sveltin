@@ -9,8 +9,8 @@
 package helpers
 
 import (
-	"github.com/sveltinio/sveltin/sveltinlib/shell"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/shell"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 

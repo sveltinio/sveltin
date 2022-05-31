@@ -13,7 +13,7 @@ import (
 	"text/template"
 
 	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 

@@ -6,8 +6,8 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 )
 
 func TestMkDir(t *testing.T) {

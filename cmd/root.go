@@ -19,11 +19,11 @@ import (
 	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
+	"github.com/sveltinio/sveltin/pkg/fsm"
+	"github.com/sveltinio/sveltin/pkg/logger"
+	"github.com/sveltinio/sveltin/pkg/pathmaker"
+	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
-	"github.com/sveltinio/sveltin/sveltinlib/fsm"
-	"github.com/sveltinio/sveltin/sveltinlib/logger"
-	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
-	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
 	"gopkg.in/yaml.v3"
 )
 
