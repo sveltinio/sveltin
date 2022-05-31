@@ -8,7 +8,7 @@ import (
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/config"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func TestPages(t *testing.T) {

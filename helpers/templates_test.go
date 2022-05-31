@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/resources"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func TestTemplates(t *testing.T) {

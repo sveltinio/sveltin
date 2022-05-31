@@ -24,7 +24,7 @@ import (
 	"github.com/sveltinio/sveltin/sveltinlib/logger"
 	"github.com/sveltinio/sveltin/sveltinlib/pathmaker"
 	"github.com/sveltinio/sveltin/sveltinlib/sveltinerr"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 //=============================================================================
