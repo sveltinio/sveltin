@@ -35,10 +35,10 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	log.Plain(utils.Underline("Preview your Sveltin project"))
+	cfg.log.Plain(utils.Underline("Preview your Sveltin project"))
 
-	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
+	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "preview", "", nil, false)

@@ -73,20 +73,20 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	contentData, err := promptContentName(AppFs, args, &conf)
+	contentData, err := promptContentName(cfg.fs, args, cfg.sveltin)
 	utils.ExitIfError(err)
 
-	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
 
 	// GET FOLDER: content
-	contentFolder := fsManager.GetFolder(Content)
+	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
 
 	// NEW FOLDER content/<resource_name>/<content_name>
-	resourceContentFolder := fsManager.NewResourceContentFolder(contentData.Name, contentData.Resource)
+	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData.Name, contentData.Resource)
 
 	// NEW FILE: content/<resource_name>/<content_name>/index.svx
 	contentFile := &composer.File{
-		Name:       pathMaker.GetResourceContentFilename(),
+		Name:       cfg.pathMaker.GetResourceContentFilename(),
 		TemplateID: contentData.Type,
 		TemplateData: &config.TemplateData{
 			Name: contentData.Name,
@@ -97,18 +97,18 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	contentFolder.Add(resourceContentFolder)
 
 	// SET STATIC FOLDER STRUCTURE for resouce and content
-	staticFolder := makeStaticFolderStructure(&resources.SveltinFS, AppFs, contentData)
+	staticFolder := makeStaticFolderStructure(&resources.SveltinFS, cfg.fs, contentData)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(staticFolder)
 	projectFolder.Add(contentFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewContentArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewContentArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-	log.Success("Done")
+	cfg.log.Success("Done")
 }
 
 func contentCmdFlags(cmd *cobra.Command) {
@@ -153,7 +153,7 @@ func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*
 		contentResource, contentName := path.Split(name)
 		contentResource = strings.ReplaceAll(contentResource, "/", "")
 
-		err := helpers.ResourceExists(fs, contentResource, &conf)
+		err := helpers.ResourceExists(fs, contentResource, cfg.sveltin)
 		if err != nil {
 			return nil, err
 		}
@@ -220,7 +220,7 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 
 func makeStaticFolderStructure(efs *embed.FS, fs afero.Fs, contentData *config.TemplateData) *composer.Folder {
 	// GET FOLDER: static
-	staticFolder := fsManager.GetFolder(Static)
+	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 	// NEW FOLDER static/resources
 	imagesFolder := composer.NewFolder("resources")
 	// NEW FOLDER static/resources/<resource_name>

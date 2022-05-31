@@ -36,15 +36,15 @@ func RunInstallCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	log.Plain(utils.Underline("Installing all dependencies"))
+	cfg.log.Plain(utils.Underline("Installing all dependencies"))
 
-	pathToPkgFile := filepath.Join(pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(AppFs, pathToPkgFile)
+	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
+	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	err = helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
 	utils.ExitIfError(err)
-	log.Success("Done")
+	cfg.log.Success("Done")
 }
 
 func init() {

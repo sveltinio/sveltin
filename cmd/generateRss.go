@@ -34,35 +34,35 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	log.Plain(utils.Underline("The rss.xml feed file will be created"))
+	cfg.log.Plain(utils.Underline("The rss.xml feed file will be created"))
 
-	log.Info("Getting all existing public pages")
-	pages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
+	cfg.log.Info("Getting all existing public pages")
+	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
 
-	log.Info("Getting all existing resources")
-	existingResources := helpers.GetAllResources(AppFs, pathMaker.GetPathToExistingResources())
+	cfg.log.Info("Getting all existing resources")
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
 
-	log.Info("Getting all contents for the resources")
-	contents := helpers.GetResourceContentMap(AppFs, existingResources, conf.GetContentPath())
+	cfg.log.Info("Getting all contents for the resources")
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
 
 	// GET FOLDER: static
-	staticFolder := fsManager.GetFolder(Static)
+	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
-	log.Info("Generating the rss.xml file")
-	rssFile := fsManager.NewNoPage("rss", &projectConfig, existingResources, contents, nil, pages)
+	cfg.log.Info("Generating the rss.xml file")
+	rssFile := cfg.fsManager.NewNoPage("rss", &cfg.project, existingResources, contents, nil, pages)
 	staticFolder.Add(rssFile)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(staticFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewNoPageArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewNoPageArtifact(&resources.SveltinFS, cfg.fs)
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 }
 
 func init() {

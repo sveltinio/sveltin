@@ -53,39 +53,39 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 
 	themeName, err := promptThemeName(args)
 	utils.ExitIfError(err)
-	log.Info(themeName)
+	cfg.log.Info(themeName)
 
 	projectName := themeName + "_project"
 
 	cssLibName, err := promptCSSLibName(withCSSLib)
 	utils.ExitIfError(err)
-	log.Info(cssLibName)
+	cfg.log.Info(cssLibName)
 
 	npmClient := getSelectedNPMClient()
 	npmClientName = npmClient.Name
 
-	log.Plain(utils.Underline("A Starter project will be created"))
+	cfg.log.Plain(utils.Underline("A Starter project will be created"))
 
 	// Clone starter template github repository
-	themeStarterTemplate := appTemplatesMap[ThemeStarter]
-	log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
+	themeStarterTemplate := cfg.startersMap[ThemeStarter]
+	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
 	gitClient := shell.NewGitClient()
-	err = gitClient.RunGitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName), true)
+	err = gitClient.RunGitClone(themeStarterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
 	//err = utils.GitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
-	projectFolder := fsManager.GetFolder(projectName)
+	projectFolder := cfg.fsManager.GetFolder(projectName)
 
 	// NEW FILE: config/defaults.js
-	f := fsManager.NewConfigFile(projectName, Defaults, CliVersion)
+	f := cfg.fsManager.NewConfigFile(projectName, Defaults, CliVersion)
 	// NEW FOLDER: config
-	configFolder := composer.NewFolder(Config)
+	configFolder := composer.NewFolder(ConfigFolder)
 	configFolder.Add(f)
 	projectFolder.Add(configFolder)
 
 	// NEW FOLDER: themes
-	themesFolder := composer.NewFolder(Themes)
+	themesFolder := composer.NewFolder(ThemesFolder)
 
 	themeData := &config.ThemeData{
 		ID:     config.BlankTheme,
@@ -99,30 +99,30 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	projectFolder.Add(themesFolder)
 
 	// SET FOLDER STRUCTURE
-	rootFolder := fsManager.GetFolder(Root)
+	rootFolder := cfg.fsManager.GetFolder(RootFolder)
 	rootFolder.Add(projectFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewThemeArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewThemeArtifact(&resources.SveltinFS, cfg.fs)
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
-	log.Info("Setting up the CSS Lib")
+	cfg.log.Info("Setting up the CSS Lib")
 	tplData := config.TemplateData{
 		ProjectName: projectName,
 		NPMClient:   npmClient.ToString(),
 		PortNumber:  withPortNumber,
 		Theme:       themeData,
 	}
-	err = setupThemeCSSLib(&resources.SveltinFS, AppFs, &conf, &tplData)
+	err = setupThemeCSSLib(&resources.SveltinFS, cfg, &tplData)
 	utils.ExitIfError(err)
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	log.Plain(utils.Underline("Next Steps"))
-	log.Plain(common.HelperTextNewTheme(projectName))
+	cfg.log.Plain(utils.Underline("Next Steps"))
+	cfg.log.Plain(common.HelperTextNewTheme(projectName))
 }
 
 func newThemeCmdFlags(cmd *cobra.Command) {
@@ -141,7 +141,7 @@ func init() {
 func isValidForThemeMaker() {
 	pwd, _ := os.Getwd()
 	pathToPkgJSON := filepath.Join(pwd, "package.json")
-	exists, _ := afero.Exists(AppFs, pathToPkgJSON)
+	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
 	if exists {
 		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
 		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
@@ -168,22 +168,22 @@ func promptThemeName(inputs []string) (string, error) {
 	}
 }
 
-func setupThemeCSSLib(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) error {
+func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
 	case VanillaCSS:
-		vanillaCSS := css.NewVanillaCSS(efs, fs, conf, tplData)
+		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.sveltin, tplData)
 		return vanillaCSS.Setup(false)
 	case Scss:
-		scss := css.NewScss(efs, fs, conf, tplData)
+		scss := css.NewScss(efs, cfg.fs, cfg.sveltin, tplData)
 		return scss.Setup(false)
 	case TailwindCSS:
-		tailwind := css.NewTailwindCSS(efs, fs, conf, tplData)
+		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.sveltin, tplData)
 		return tailwind.Setup(false)
 	case Bulma:
-		bulma := css.NewBulma(efs, fs, conf, tplData)
+		bulma := css.NewBulma(efs, cfg.fs, cfg.sveltin, tplData)
 		return bulma.Setup(false)
 	case Bootstrap:
-		boostrap := css.NewBootstrap(efs, fs, conf, tplData)
+		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.sveltin, tplData)
 		return boostrap.Setup(false)
 	default:
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})

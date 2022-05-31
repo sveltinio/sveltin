@@ -42,21 +42,21 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	log.Plain(utils.Underline("The menu structure will be created"))
+	cfg.log.Plain(utils.Underline("The menu structure will be created"))
 
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 
-	log.Info("Getting list of existing public pages")
-	publicPages := helpers.GetAllPublicPages(AppFs, pathMaker.GetPathToPublicPages())
+	cfg.log.Info("Getting list of existing public pages")
+	publicPages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
 
-	log.Info("Getting list of existing resources")
-	availableResources := helpers.GetAllResourcesWithContentName(AppFs, pathMaker.GetPathToExistingResources(), withContentFlag)
+	cfg.log.Info("Getting list of existing resources")
+	availableResources := helpers.GetAllResourcesWithContentName(cfg.fs, cfg.pathMaker.GetPathToExistingResources(), withContentFlag)
 
 	// GET FOLDER: config
-	configFolder := fsManager.GetFolder(Config)
+	configFolder := cfg.fsManager.GetFolder(ConfigFolder)
 
 	// ADD FILE: config/menu.js
-	log.Info("Generating menu.js.ts file")
+	cfg.log.Info("Generating menu.js.ts file")
 	menuFile := &composer.File{
 		Name:       "menu.js.ts",
 		TemplateID: "menu",
@@ -74,11 +74,11 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	projectFolder.Add(configFolder)
 
 	// GENERATE FOLDER STRUCTURE
-	sfs := factory.NewMenuArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewMenuArtifact(&resources.SveltinFS, cfg.fs)
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 }
 
 func menuCmdFlags(cmd *cobra.Command) {

@@ -56,68 +56,68 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// GET FOLDER: content folder
-	contentFolder := fsManager.GetFolder(Content)
+	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
 
-	log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as resource", resourceName)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as resource", resourceName)))
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
-	log.Info("Creating the content folder for your resource")
+	cfg.log.Info("Creating the content folder for your resource")
 	resourceContentFolder := composer.NewFolder(resourceName)
 	contentFolder.Add(resourceContentFolder)
 
 	// GET FOLDER: src/routes/api/<api_version> folder
-	apiFolder := fsManager.GetFolder(Api)
+	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>
 	resourceAPIFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/routes/api/<resource_name>/published.json.ts
-	log.Info("Creating the API endpoint for the resource")
+	cfg.log.Info("Creating the API endpoint for the resource")
 	apiFile := &composer.File{
-		Name:       conf.GetAPIFilename(),
-		TemplateID: Api,
+		Name:       cfg.sveltin.GetAPIFilename(),
+		TemplateID: ApiFolder,
 		TemplateData: &config.TemplateData{
 			Name:   resourceName,
-			Config: &conf,
+			Config: cfg.sveltin,
 		},
 	}
 	resourceAPIFolder.Add(apiFile)
 	apiFolder.Add(resourceAPIFolder)
 
 	// GET FOLDER: src/lib folder
-	libFolder := fsManager.GetFolder(Lib)
+	libFolder := cfg.fsManager.GetFolder(LibFolder)
 
 	// NEW FOLDER: /src/lib/<resource_name>
 	resourceLibFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/lib/<resource_name>/api<resource_name>.ts
-	log.Info("Creating the lib file for the resource")
+	cfg.log.Info("Creating the lib file for the resource")
 	libFile := &composer.File{
 		Name:       utils.ToLibFile(resourceName),
-		TemplateID: Lib,
+		TemplateID: LibFolder,
 		TemplateData: &config.TemplateData{
 			Name:   resourceName,
-			Config: &conf,
+			Config: cfg.sveltin,
 		},
 	}
 	resourceLibFolder.Add(libFile)
 	libFolder.Add(resourceLibFolder)
 
 	// GET FOLDER: src/routes folder
-	routesFolder := fsManager.GetFolder(Routes)
+	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	log.Info("Creating the components and endpoints for the resource")
-	for _, item := range []string{Index, IndexEndpoint, Slug, SlugEndpoint} {
+	cfg.log.Info("Creating the components and endpoints for the resource")
+	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, &conf),
+			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
 				Name:   resourceName,
-				Config: &conf,
+				Config: cfg.sveltin,
 			},
 		}
 		resourceRoutesFolder.Add(f)
@@ -125,23 +125,23 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	routesFolder.Add(resourceRoutesFolder)
 
 	// SET FOLDER STRUCTURE
-	projectFolder := fsManager.GetFolder(Root)
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(contentFolder)
 	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
 	projectFolder.Add(routesFolder)
 
 	// CREATE FOLDER STRUCTURE
-	sfs := factory.NewResourceArtifact(&resources.SveltinFS, AppFs)
+	sfs := factory.NewResourceArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	log.Success("Done")
+	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	log.Plain(utils.Underline("Next Steps"))
-	log.Success("Resource ready to be used. Start by adding content to it.")
-	log.Important(fmt.Sprintf("Eg: sveltin new content %s/getting-started", resourceName))
+	cfg.log.Plain(utils.Underline("Next Steps"))
+	cfg.log.Success("Resource ready to be used. Start by adding content to it.")
+	cfg.log.Important(fmt.Sprintf("Eg: sveltin new content %s/getting-started", resourceName))
 }
 
 func init() {
