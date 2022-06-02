@@ -28,7 +28,7 @@ The Smartest Way to Build SvelteKit powered static websites.
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.8.1-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.8.2-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://goreportcard.com/report/github.com/sveltinio/sveltin/" target="_blank">
@@ -50,7 +50,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :warning: Project Status
 
-> Sveltin is under active development and some things may change before we hit version 1.0. At the same time, we try to follow the progress toward SvelteKit v1.0. Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Sveltin is under active development and some things may change before we hit version 1.0. At the same time, we try to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version if **1.0.0-next-247**). Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
 
 ## :mega: Overview
 

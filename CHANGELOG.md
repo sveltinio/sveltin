@@ -1,6 +1,19 @@
 # CHANGELOG
 
-## [v0.8.1](https://github.com/sveltinio/sveltin/releases/tag/v0.1.0) (2022-06-02)
+## [v0.8.2](https://github.com/sveltinio/sveltin/compare/v0.8.1...0.8.2)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.1...v0.8.2)
+
+### Fixed Bugs
+
+- remove dayjs as dependency from `package.json`
+- codeql action updated to v2
+
+### Pull Requests
+
+- Merge pull request [#37](https://github.com/sveltinio/sveltin/issues/37) from sveltinio/0.8.2
+
+## [v0.8.1](https://github.com/sveltinio/sveltin/compare/v0.8.0...0.8.1)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.0...v0.8.1)
 
@@ -501,9 +514,13 @@
 - changelog file added
 - cli version bumped to 0.2.7
 
+
+
 ## [v0.2.7](https://github.com/sveltinio/sveltin/releases/tag/v0.2.7) (2022-01-25)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.6...v0.2.7)
+
+
 
 ## [v0.2.6](https://github.com/sveltinio/sveltin/releases/tag/v0.2.6) (2022-01-25)
 
