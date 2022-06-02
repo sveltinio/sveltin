@@ -13,8 +13,7 @@ The Smartest Way to Build SvelteKit powered static websites.
     </a> |
     <a href="https://docs.sveltin.io/" target="_blank">
         Documentation
-    </a>
-    |
+    </a> |
     <a href="https://github.com/sveltinio/sveltin/blob/main/CONTRIBUTING.md" target="_blank">
         Contributing
     </a>
@@ -29,7 +28,7 @@ The Smartest Way to Build SvelteKit powered static websites.
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.8.0-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.8.1-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://goreportcard.com/report/github.com/sveltinio/sveltin/" target="_blank">

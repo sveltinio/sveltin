@@ -1,6 +1,31 @@
 # CHANGELOG
 
-## [v0.8.0](https://github.com/sveltinio/sveltin/compare/v0.7.3...v0.8.0) (2022-04-30)
+## [v0.8.1](https://github.com/sveltinio/sveltin/releases/tag/v0.1.0) (2022-06-02)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.0...v0.8.1)
+
+### 🔧  Code Refactoring
+
+- sveltinlib folder renamed as pkg
+- root vars to struct
+
+### Chores
+
+- sveltekit updated to next.347 with latest adapter static
+- upgrade to go yaml.v3
+- viper updated
+- golangci-lint updated
+- deps updated to the latest versions
+
+### Pull Requests
+
+- Merge pull request [#36](https://github.com/sveltinio/sveltin/issues/36) from sveltinio/release-0.8.1
+- Merge pull request [#35](https://github.com/sveltinio/sveltin/issues/35) from sveltinio/sveltekit-247
+- Merge pull request [#34](https://github.com/sveltinio/sveltin/issues/34) from sveltinio/sveltinlib-to-pkg
+- Merge pull request [#33](https://github.com/sveltinio/sveltin/issues/33) from sveltinio/application-struct
+- Merge pull request [#32](https://github.com/sveltinio/sveltin/issues/32) from sveltinio/deps-update
+
+## [v0.8.0](https://github.com/sveltinio/sveltin/releases/tag/v0.8.0) (2022-04-30)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.3...v0.8.0)
 
@@ -33,24 +58,24 @@
 ### Chores
 
 - repo name for theme starter updated
-- dependencies updated (now on sveltekit-next.321)
+- sveltekit updated to next.321
+- golang.org/x/text as direct dep
 - **ghurl_parser:** utility added to parse GitHub repository url
 - **website.js.ts:** current year updated
 
 ### Pull Requests
 
-- Merge pull request [#30](https://github.com/sveltinio/sveltin/issues/30) from sveltinio/css-builder
-- Merge pull request [#29](https://github.com/sveltinio/sveltin/issues/29) from sveltinio/readme-cmds
-- Merge pull request [#28](https://github.com/sveltinio/sveltin/issues/28) from sveltinio/license-owner
-- Merge pull request [#27](https://github.com/sveltinio/sveltin/issues/27) from sveltinio/sk-next-321
-- Merge pull request [#26](https://github.com/sveltinio/sveltin/issues/26) from sveltinio/26-init-git-repo
+- Merge pull request [#31](https://github.com/sveltinio/sveltin/issues/31) from sveltinio/csslib-builder
+- Merge pull request [#30](https://github.com/sveltinio/sveltin/issues/30) from sveltinio/readme-cmds
+- Merge pull request [#29](https://github.com/sveltinio/sveltin/issues/29) from sveltinio/license-owner
+- Merge pull request [#28](https://github.com/sveltinio/sveltin/issues/28) from sveltinio/sk-next-321
+- Merge pull request [#27](https://github.com/sveltinio/sveltin/issues/27) from sveltinio/26-init-git-repo
 - Merge pull request [#25](https://github.com/sveltinio/sveltin/issues/25) from sveltinio/theme-maker
 - Merge pull request [#24](https://github.com/sveltinio/sveltin/issues/24) from sveltinio/api-endpoints
 - Merge pull request [#23](https://github.com/sveltinio/sveltin/issues/23) from sveltinio/22-metadata-index-wrong-styles-tailwindcss
-- Merge pull request [#22](https://github.com/sveltinio/sveltin/issues/22) from sveltinio/ci-bug-report-template
-- Merge pull request [#21](https://github.com/sveltinio/sveltin/issues/21) from sveltinio/sveltin-namespace
-- Merge pull request [#20](https://github.com/sveltinio/sveltin/issues/20) from sveltinio/codeql
-- Merge pull request [#19](https://github.com/sveltinio/sveltin/issues/19) from sveltinio/sveltekit-next-301
+- Merge pull request [#21](https://github.com/sveltinio/sveltin/issues/21) from sveltinio/ci-bug-report-template
+- Merge pull request [#20](https://github.com/sveltinio/sveltin/issues/20) from sveltinio/sveltin-namespace
+- Merge pull request [#19](https://github.com/sveltinio/sveltin/issues/19) from sveltinio/deps-update
 
 ## [v0.7.3](https://github.com/sveltinio/sveltin/releases/tag/v0.7.3) (2022-04-04)
 
@@ -95,6 +120,7 @@
 
 ### Chores
 
+- bump CLI version to 0.7.2
 - linting
 - use golangci-lint
 - reference to variable.scss file replaced as _variable.scss for svelte.config.js
@@ -130,7 +156,6 @@
 
 - set scroll behaviour to smooth
 - bump CLI version to 0.7.1
-- update pre-push
 - update pre-push hook
 - **index.svelte:** use flexbox instead of grid
 
