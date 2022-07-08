@@ -59,7 +59,6 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	template := helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content := template.Run(cssLib.EFS)
 	saveAs := filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "package.json")
-
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -67,6 +66,14 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	sourceFile = embeddedResources[SvelteConfigFileID]
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+		return err
+	}
+	// Copying vite.config.js file
+	sourceFile = embeddedResources[ViteConfigFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.js")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
 
@@ -131,6 +138,14 @@ func makeUnstyled(cssLib *CSSLib) error {
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
+	// Copying vite.config.js file
+	sourceFile = embeddedResources[ViteConfigFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.js")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
 
 	err = copyAdditionalConfigFiles(embeddedResources, cssLib)
 	if err != nil {
@@ -184,6 +199,14 @@ func makeTheme(cssLib *CSSLib) error {
 	sourceFile = embeddedResources[SvelteConfigFileID]
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+		return err
+	}
+	// Copying vite.config.js file
+	sourceFile = embeddedResources[ViteConfigFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.js")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
 

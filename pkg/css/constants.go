@@ -28,6 +28,7 @@ const (
 	VariablesFileID      string = "variables_scss"
 	LayoutFileID         string = "layout"
 	SvelteConfigFileID   string = "svelte_config"
+	ViteConfigFileID     string = "vite_config"
 	HeroFileID           string = "hero"
 	FooterFileID         string = "footer"
 	TailwindConfigFileID string = "tailwind_css_config"
