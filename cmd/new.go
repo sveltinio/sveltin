@@ -241,7 +241,7 @@ func promptThemeSelection(themeFlag string) (string, error) {
 		promptObjects := []config.PromptObject{
 			{ID: config.BlankTheme, Name: "Create a new theme"},
 			{ID: config.SveltinTheme, Name: "Sveltin default theme"},
-			{ID: config.ExistingTheme, Name: "Use an existing theme"},
+			//{ID: config.ExistingTheme, Name: "Use an existing theme"},
 		}
 		themePromptContent := config.PromptContent{
 			ErrorMsg: "Please, select a theme option.",
