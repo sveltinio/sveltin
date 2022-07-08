@@ -1,5 +1,5 @@
 {{ $resourceName := .Resource | ToVariableName | Capitalize }}
-{{ $mdName := .Name | ToVariableName }}
+{{ $mdName := .Name | ToSnakeCase }}
 import { groupedByMany } from '$lib/utils/collections.js';
 import { list } from './api{{ $resourceName }}';
 

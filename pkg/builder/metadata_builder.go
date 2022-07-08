@@ -96,6 +96,9 @@ func (b *MetadataContentBuilder) setFuncs() {
 		"ToLibFile": func(txt string) string {
 			return utils.ToLibFile(txt)
 		},
+		"ToSnakeCase": func(txt string) string {
+			return utils.ToSnakeCase(txt)
+		},
 	}
 }
 
