@@ -38,6 +38,23 @@ options:
       - Type
       - Scope
       - Subject
+  issues:
+    prefix:
+      -  #
+  refs:
+    actions:
+      - Closes
+      - Fixes
+      - Pull Request
+  merges:
+    pattern: "^^Merge pull request #(\\d+) from (.*)$"
+    pattern_maps:
+      - Ref
+      - Source
+  reverts:
+    pattern: "^Revert \"([\\s\\S]*)\"$"
+    pattern_maps:
+      - Header
   notes:
     keywords:
       - BREAKING CHANGE
