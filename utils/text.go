@@ -74,6 +74,16 @@ func ToSlug(txt string) string {
 	return cleanString
 }
 
+// ToSnakeCase returns a copy of string with lowercase
+// replacing "_" and whitespaces with "_"
+// example: ToSnakeCase("New Resource") returns new_resource.
+func ToSnakeCase(txt string) string {
+	cleanString := strings.ToLower(txt)
+	cleanString = strings.ReplaceAll(cleanString, " ", "_")
+	cleanString = strings.ReplaceAll(cleanString, "-", "_")
+	return cleanString
+}
+
 // ToBasePath returns a copy of string replacing all occurrences
 // for a string with trailing slash.
 func ToBasePath(fullpath string, replace string) string {

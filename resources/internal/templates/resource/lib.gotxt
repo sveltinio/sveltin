@@ -21,9 +21,9 @@ export const list = async (withMarkup = false) => {
 	return publishedByDate;
 };
 
-{{ $varName := .Name | ToVariableName}}
+{{ $slugName := .Name | ToSlug}}
 export const getSingle = async (slug: string) => {
-	const resourceName = '{{ $varName }}';
+	const resourceName = '{{ $slugName }}';
 	const publishedByDate = await list(true);
 
 	const selected = publishedByDate.filter((item) => {

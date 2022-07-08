@@ -88,6 +88,9 @@ func (b *ResourceContentBuilder) setFuncs() {
 		"ToLibFile": func(txt string) string {
 			return utils.ToLibFile(txt)
 		},
+		"ToSlug": func(txt string) string {
+			return utils.ToSlug(txt)
+		},
 	}
 }
 
