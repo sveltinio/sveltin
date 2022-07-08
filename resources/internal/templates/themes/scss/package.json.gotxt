@@ -15,8 +15,8 @@
 	},
 	"devDependencies": {
 		"@indaco/svelte-iconoir": "^2.5.0",
-		"@sveltejs/adapter-static": "1.0.0-next.34",
-		"@sveltejs/kit": "1.0.0-next.361",
+		"@sveltejs/adapter-static": "1.0.0-next.35",
+		"@sveltejs/kit": "1.0.0-next.366",
 		"@sveltinio/essentials": "^0.2.1",
 		"@sveltinio/media-content": "^0.3.2",
 		"@sveltinio/seo": "^0.1.6",
