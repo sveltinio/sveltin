@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## [v0.8.4](https://github.com/sveltinio/sveltin/releases/tag/v0.8.4) (2022-07-08)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.3...v0.8.4)
+
+### Fixed Bugs
+
+- **vite.config.js:** aliases
+
+### 📖  Documentation
+
+- **CHANGELOG:** updated
+
+### Chores
+
+- release v0.8.4
+- upgrade to sveltekit next.366 and static-adapter next.35
+
+### Pull Requests
+
+- Merge pull request [#47](https://github.com/sveltinio/sveltin/issues/47) from sveltinio/release-0.8.4
+- Merge pull request [#46](https://github.com/sveltinio/sveltin/issues/46) from sveltinio/vite-aliases
+- Merge pull request [#45](https://github.com/sveltinio/sveltin/issues/45) from sveltinio/sk-next.366
+
 ## [v0.8.3](https://github.com/sveltinio/sveltin/releases/tag/v0.8.3) (2022-07-08)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.2...v0.8.3)
