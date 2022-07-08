@@ -1,19 +1,54 @@
 # CHANGELOG
 
-## [v0.8.2](https://github.com/sveltinio/sveltin/compare/v0.8.1...0.8.2)
+## [v0.8.3](https://github.com/sveltinio/sveltin/releases/tag/v0.8.3) (2022-07-08)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.2...v0.8.3)
+
+### Fixed Bugs
+
+- resource and metadata names to kebab case string
+- **new:** temporarily hide the possibility to reuse an existing theme
+
+### Chores
+
+- release v0.8.3
+- setup vite.config.js file for all CSS libs
+- upgrade to cobra v.1.5.0
+- **chglog:** config file updated to include merges, refs and issues
+- **server:** run and dev aliases added to server cmd
+- **tailwindcss:** postcss-load-config updated to ^4.0.1
+
+### Pull Requests
+
+- Merge pull request [#44](https://github.com/sveltinio/sveltin/issues/44) from sveltinio/release-0.8.3
+- Merge pull request [#43](https://github.com/sveltinio/sveltin/issues/43) from sveltinio/chglog-include-merges
+- Merge pull request [#42](https://github.com/sveltinio/sveltin/issues/42) from sveltinio/postcss-load-config-update
+- Merge pull request [#41](https://github.com/sveltinio/sveltin/issues/41) from sveltinio/resource-kebab-case
+- Merge pull request [#40](https://github.com/sveltinio/sveltin/issues/40) from sveltinio/hide-reuse
+- Merge pull request [#39](https://github.com/sveltinio/sveltin/issues/39) from sveltinio/server-alias
+- Merge pull request [#38](https://github.com/sveltinio/sveltin/issues/38) from sveltinio/sk-next.361
+
+## [v0.8.2](https://github.com/sveltinio/sveltin/releases/tag/v0.8.2) (2022-06-02)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.1...v0.8.2)
 
 ### Fixed Bugs
 
-- remove dayjs as dependency from `package.json`
+- remove dayjs as dep
+
+### 📖  Documentation
+
+- **CHANGELOG:** updated
+
+### Chores
+
 - codeql action updated to v2
 
 ### Pull Requests
 
 - Merge pull request [#37](https://github.com/sveltinio/sveltin/issues/37) from sveltinio/0.8.2
 
-## [v0.8.1](https://github.com/sveltinio/sveltin/compare/v0.8.0...0.8.1)
+## [v0.8.1](https://github.com/sveltinio/sveltin/releases/tag/v0.8.1) (2022-06-02)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.0...v0.8.1)
 
@@ -70,6 +105,8 @@
 
 ### Chores
 
+- git-ghlog config and template updated
+- deps updated
 - repo name for theme starter updated
 - sveltekit updated to next.321
 - golang.org/x/text as direct dep
@@ -514,13 +551,9 @@
 - changelog file added
 - cli version bumped to 0.2.7
 
-
-
 ## [v0.2.7](https://github.com/sveltinio/sveltin/releases/tag/v0.2.7) (2022-01-25)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.6...v0.2.7)
-
-
 
 ## [v0.2.6](https://github.com/sveltinio/sveltin/releases/tag/v0.2.6) (2022-01-25)
 
