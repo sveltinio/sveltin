@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## [v0.8.5](https://github.com/sveltinio/sveltin/releases/tag/v0.8.5) (2022-07-08)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.4...v0.8.5)
+
+### Fixed Bugs
+
+- **svelte.config.js:** trailingSlash
+
+### 📖  Documentation
+
+- **CHANGELOG:** updated
+
+### Chores
+
+- bump cli version to 0.8.5
+
+### Pull Requests
+
+- Merge pull request [#48](https://github.com/sveltinio/sveltin/issues/48) from sveltinio/release-0.8.5
+
 ## [v0.8.4](https://github.com/sveltinio/sveltin/releases/tag/v0.8.4) (2022-07-08)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.3...v0.8.4)
