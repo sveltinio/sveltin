@@ -95,6 +95,7 @@ var SveltinXMLFS = map[string]string{
 var SveltinVanillaFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/vanillacss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/vanillacss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/vanillacss/vite.config.js.gotxt",
 	"app_html":      "internal/templates/themes/vanillacss/app.html",
 }
 
@@ -119,6 +120,7 @@ var SveltinVanillaUnstyledFS = SveltinFSItem{
 var SveltinTailwindLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/tailwindcss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/tailwindcss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/tailwindcss/vite.config.js.gotxt",
 	"app_html":      "internal/templates/themes/tailwindcss/app.html",
 	"postcss":       "internal/templates/themes/tailwindcss/postcss.config.cjs",
 }
@@ -146,6 +148,7 @@ var SveltinTailwindLibUnstyledFS = SveltinFSItem{
 var SveltinBulmaLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/bulma/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/bulma/svelte.config.js",
+	"vite_config":   "internal/templates/themes/bulma/vite.config.js.gotxt",
 	"app_html":      "internal/templates/themes/bulma/app.html",
 }
 
@@ -172,6 +175,7 @@ var SveltinBulmaLibUnstyledFS = SveltinFSItem{
 var SveltinBootstrapLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/bootstrap/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/bootstrap/svelte.config.js",
+	"vite_config":   "internal/templates/themes/bootstrap/vite.config.js.gotxt",
 	"app_html":      "internal/templates/themes/bootstrap/app.html",
 }
 
@@ -198,6 +202,7 @@ var SveltinBootstrapLibUnstyledFS = SveltinFSItem{
 var SveltinSCSSLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/scss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/scss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/scss/vite.config.js.gotxt",
 	"app_html":      "internal/templates/themes/scss/app.html",
 }
 
