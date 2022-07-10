@@ -46,11 +46,11 @@ The Smartest Way to Build SvelteKit powered static websites.
 
 # Sveltin
 
-Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit powered static websites.</strong>
+Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit powered static websites</strong>.
 
 ## :warning: Project Status
 
-> Sveltin is under active development and some things may change before we hit version 1.0. At the same time, we try to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version if **1.0.0-next-366**). Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is _1.0.0-next-366_).Please, give it a try and let it evolve. If you are interesting on it please, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
 
 ## :mega: Overview
 
@@ -250,7 +250,7 @@ Read more [here][prepare].
 
 `sveltin server` is used to run the VITE server. It wraps svelte-kit defined commands to run the server.
 
-Alias: `s`, `serve`
+Alias: `s`, `serve`, `run`, `dev`
 
 Read more [here][server].
 
