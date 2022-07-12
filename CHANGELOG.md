@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## [v0.8.6](https://github.com/sveltinio/sveltin/releases/tag/v0.8.6) (2022-07-12)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.5...v0.8.6)
+
+### 📖  Documentation
+
+- **CHANGELOG:** updated
+- **README:** updated
+
+### Chores
+
+- bump cli version to 0.8.6
+- sveltekit updated to next.370 and other deps updated
+- golang dependency updated
+
+### Pull Requests
+
+- Merge pull request [#50](https://github.com/sveltinio/sveltin/issues/50) from sveltinio/release-0.8.6
+- Merge pull request [#49](https://github.com/sveltinio/sveltin/issues/49) from sveltinio/readme-typos
+
 ## [v0.8.5](https://github.com/sveltinio/sveltin/releases/tag/v0.8.5) (2022-07-08)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.4...v0.8.5)
