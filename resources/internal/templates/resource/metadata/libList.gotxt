@@ -1,5 +1,6 @@
 {{ $resourceName := .Resource | ToVariableName | Capitalize }}
 {{ $mdName := .Name | ToSnakeCase }}
+import type { Sveltin } from 'src/sveltin';
 import { groupedByMany } from '$lib/utils/collections.js';
 import { list } from './api{{ $resourceName }}';
 
