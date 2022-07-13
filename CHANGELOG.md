@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## [v0.8.7](https://github.com/sveltinio/sveltin/releases/tag/v0.8.7) (2022-07-13)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.6...v0.8.7)
+
+### Fixed Bugs
+
+- remove optimizeDeps config from vite.config.js
+
+### 📖  Documentation
+
+- **CHANGELOG:** updated
+
+### Chores
+
+- bump cli version to 0.8.7
+
+### Pull Requests
+
+- Merge pull request [#52](https://github.com/sveltinio/sveltin/issues/52) from sveltinio/release-0.8.7
+- Merge pull request [#51](https://github.com/sveltinio/sveltin/issues/51) from sveltinio/fix-vite-optimizeDeps
+
 ## [v0.8.6](https://github.com/sveltinio/sveltin/releases/tag/v0.8.6) (2022-07-12)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.5...v0.8.6)
