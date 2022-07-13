@@ -33,9 +33,6 @@ const config = {
 			$themes: path.resolve('themes'),
 		},
 	},
-	optimizeDeps: {
-		include: ['@indaco/svelte-iconoir'],
-	},
 	plugins: [sveltekit()],
 };
 
