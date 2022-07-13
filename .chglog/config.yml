@@ -22,16 +22,16 @@ options:
       - refactor
       - perf
       - ci
-      - docs
       - chore
+      - docs
     title_maps:
       feat: 🚀  New Features
       fix: Fixed Bugs
       perf: 🚄  Performance Improvements
       refactor: 🔧  Code Refactoring
-      docs: 📖  Documentation
       chore: Chores
       ci: ⚙️  CI
+      docs: 📖  Documentation
   header:
     pattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
     pattern_maps:
