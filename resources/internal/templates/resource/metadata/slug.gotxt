@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Sveltin } from 'src/sveltin';
 	import { base } from '$app/paths';
 
 	export let slug: string;

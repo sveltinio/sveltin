@@ -1,3 +1,4 @@
+import type { Sveltin } from 'src/sveltin';
 {{ $mdName := .Name | ToVariableName | Capitalize}}
 import { all } from '$lib/{{ .Resource }}/api{{ $mdName }}';
 

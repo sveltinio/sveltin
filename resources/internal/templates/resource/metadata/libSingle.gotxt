@@ -1,6 +1,7 @@
 {{ $resourceName := .Resource | ToVariableName | Capitalize }}
 {{ $mdName := .Name | ToSnakeCase }}
-import { groupedByOne } from '$lib/utils/collections';
+import type { Sveltin } from 'src/sveltin';
+import { groupedByOne } from '$lib/utils/collections.js';
 import { list } from './api{{ $resourceName }}';
 
 export const all = async (): Promise<Sveltin.ContentMetadata[]> => {
