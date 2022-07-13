@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## [v0.8.8](https://github.com/sveltinio/sveltin/releases/tag/v0.8.8) (2022-07-13)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.7...v0.8.8)
+
+### Fixed Bugs
+
+- svelte-check results with new tsconfig
+
+### Chores
+
+- update svelte-kit to next.371
+- bump cli version to 0.8.8
+- format and lint scripts updated to use their own ignore file
+- **defaults.js.ts:** semicolon missed
+
+### Pull Requests
+
+- Merge pull request [#55](https://github.com/sveltinio/sveltin/issues/55) from sveltinio/release-0.8.8
+- Merge pull request [#54](https://github.com/sveltinio/sveltin/issues/54) from sveltinio/sk-next-371
+- Merge pull request [#53](https://github.com/sveltinio/sveltin/issues/53) from sveltinio/typescript
+
 ## [v0.8.7](https://github.com/sveltinio/sveltin/releases/tag/v0.8.7) (2022-07-13)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.6...v0.8.7)
@@ -7,10 +28,6 @@
 ### Fixed Bugs
 
 - remove optimizeDeps config from vite.config.js
-
-### 📖  Documentation
-
-- **CHANGELOG:** updated
 
 ### Chores
 
@@ -25,16 +42,15 @@
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.5...v0.8.6)
 
-### 📖  Documentation
-
-- **CHANGELOG:** updated
-- **README:** updated
-
 ### Chores
 
 - bump cli version to 0.8.6
 - sveltekit updated to next.370 and other deps updated
 - golang dependency updated
+
+### 📖  Documentation
+
+- **README:** updated
 
 ### Pull Requests
 
@@ -48,10 +64,6 @@
 ### Fixed Bugs
 
 - **svelte.config.js:** trailingSlash
-
-### 📖  Documentation
-
-- **CHANGELOG:** updated
 
 ### Chores
 
@@ -68,10 +80,6 @@
 ### Fixed Bugs
 
 - **vite.config.js:** aliases
-
-### 📖  Documentation
-
-- **CHANGELOG:** updated
 
 ### Chores
 
@@ -119,10 +127,6 @@
 ### Fixed Bugs
 
 - remove dayjs as dep
-
-### 📖  Documentation
-
-- **CHANGELOG:** updated
 
 ### Chores
 
@@ -181,12 +185,6 @@
 - bug report template updated to include the sveltin version number
 - lint-test workflows on PR not only against main branch
 
-### 📖  Documentation
-
-- license owner updated to sveltin contributors
-- **CHANGELOG:** updated
-- **README:** updated
-
 ### Chores
 
 - git-ghlog config and template updated
@@ -196,6 +194,11 @@
 - golang.org/x/text as direct dep
 - **ghurl_parser:** utility added to parse GitHub repository url
 - **website.js.ts:** current year updated
+
+### 📖  Documentation
+
+- license owner updated to sveltin contributors
+- **README:** updated
 
 ### Pull Requests
 
@@ -248,10 +251,6 @@
 
 - lint-test workflow added
 
-### 📖  Documentation
-
-- **CHANGELOG:** updated
-
 ### Chores
 
 - bump CLI version to 0.7.2
@@ -279,19 +278,17 @@
 
 - githooks added and simplified release workflow
 
-### 📖  Documentation
-
-- made with svelte shield added
-- **CHANGELOG:** updated
-- **CHANGELOG:** updated
-- **README:** project status section updated
-
 ### Chores
 
 - set scroll behaviour to smooth
 - bump CLI version to 0.7.1
 - update pre-push hook
 - **index.svelte:** use flexbox instead of grid
+
+### 📖  Documentation
+
+- made with svelte shield added
+- **README:** project status section updated
 
 ### Pull Requests
 
@@ -440,10 +437,6 @@
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.4.0...v0.5.0)
 
-### Fixed Bugs
-
-- **CHANGELOG:** typo
-
 ### 🚀  New Features
 
 - sveltin `prepare` command
@@ -453,10 +446,6 @@
 - nest_steps.go renamed as help_messages.go
 - new underlying logging lib developed
 - CheckIfError renamed as ExitIfError to reflect what it does
-
-### 📖  Documentation
-
-- sveltin root command documentation updated
 
 ### Chores
 
@@ -471,6 +460,10 @@
 - new IsError method added.
 - commented code block deleted
 - **prompt.go:** Select instead of SelectAdd
+
+### 📖  Documentation
+
+- sveltin root command documentation updated
 
 ## [v0.4.0](https://github.com/sveltinio/sveltin/releases/tag/v0.4.0) (2022-02-26)
 
@@ -490,15 +483,6 @@
 
 - **next_steps.go:** interpolate multiline strings
 
-### 📖  Documentation
-
-- code comments
-- overall code comments
-- typos fixed
-- cmd descriptions updated
-- **README:** updated
-- **generateSitemap:** typo
-
 ### Chores
 
 - cli version bumped to 0.4.0
@@ -507,6 +491,15 @@
 - struct SiteConfig renamed as ProjectConfig and moved to a specific file
 - **pages.go:** lint
 - **text.go:** method ToBasePath added
+
+### 📖  Documentation
+
+- code comments
+- overall code comments
+- typos fixed
+- cmd descriptions updated
+- **README:** updated
+- **generateSitemap:** typo
 
 ## [v0.3.1](https://github.com/sveltinio/sveltin/releases/tag/v0.3.1) (2022-02-17)
 
@@ -517,14 +510,14 @@
 - env file templates with server port number
 - trailingSlash to always
 
+### Chores
+
+- bump cli version to 0.3.1
+
 ### 📖  Documentation
 
 - typo
 - scss added to the list of css libs
-
-### Chores
-
-- bump cli version to 0.3.1
 
 ## [v0.3.0](https://github.com/sveltinio/sveltin/releases/tag/v0.3.0) (2022-02-15)
 
@@ -546,13 +539,13 @@
 - package.json file and npmclient handling
 - package manager handling
 
-### 📖  Documentation
-
-- updated
-
 ### Chores
 
 - cli version bumped to 0.3.0
+
+### 📖  Documentation
+
+- updated
 
 ## [v0.2.14](https://github.com/sveltinio/sveltin/releases/tag/v0.2.14) (2022-02-04)
 
@@ -626,14 +619,14 @@
 - pages templates and variables names
 - image path on seo components
 
-### 📖  Documentation
-
-- readme updated
-
 ### Chores
 
 - changelog file added
 - cli version bumped to 0.2.7
+
+### 📖  Documentation
+
+- readme updated
 
 ## [v0.2.7](https://github.com/sveltinio/sveltin/releases/tag/v0.2.7) (2022-01-25)
 
@@ -648,11 +641,11 @@
 - seo for pages
 - interfaces names to match the new ones from the packages
 
-### 📖  Documentation
-
-- **README:** aliases added
-
 ### Chores
 
 - cli version bumped to 0.2.6
 - dependencies update
+
+### 📖  Documentation
+
+- **README:** aliases added
