@@ -1,0 +1,19 @@
+import { groupedBy } from '$lib/{{ .Resource }}/api{{ .Name | ToVariableName | Capitalize }}';
+
+/** @type {import('@sveltejs/kit').RequestHandler} */
+export async function get({ url }) {
+	const { pathname } = url;
+	const metadataName = pathname.substring(pathname.lastIndexOf('/') + 1);
+
+	if (metadataName) {
+		const data = await groupedBy(metadataName);
+		return {
+			status: 200,
+			body: JSON.stringify(data)
+		};
+	} else {
+		return {
+			status: 404
+		};
+	}
+}

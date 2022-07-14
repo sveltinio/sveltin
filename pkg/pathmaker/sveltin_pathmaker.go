@@ -15,12 +15,12 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// SveltinPathMaker is the main struct to deal with path within a Sveltin/SvelteKit project structure
+// SveltinPathMaker is the main struct to deal with path within a Sveltin/SvelteKit project structure.
 type SveltinPathMaker struct {
 	c *config.SveltinConfig
 }
 
-// NewSveltinPathMaker returns a SveltinPathMaker struct
+// NewSveltinPathMaker returns a SveltinPathMaker struct.
 func NewSveltinPathMaker(conf *config.SveltinConfig) *SveltinPathMaker {
 	return &SveltinPathMaker{
 		c: conf,
@@ -55,7 +55,7 @@ func (maker *SveltinPathMaker) GetProjectThemesFolder(project string) string {
 
 // ------------------ FOLDERS ------------------
 
-// GetRootFolder returns a string representing the path to the project root folder folder.
+// GetRootFolder returns a string representing the path to the project root folder.
 func (maker *SveltinPathMaker) GetRootFolder() string {
 	return maker.c.GetProjectRoot()
 }
@@ -78,16 +78,22 @@ func (maker *SveltinPathMaker) GetRoutesFolder() string {
 	return maker.c.GetRoutesPath()
 }
 
-// GetAPIFolder returns a string representing the path to the 'src/routes/api' folder
-// for a sveltin project relative to the project root folder.
-func (maker *SveltinPathMaker) GetAPIFolder() string {
-	return filepath.Join(maker.c.GetAPIPath(), maker.c.GetAPIVersion())
-}
-
 // GetLibFolder returns a string representing the path to the 'src/lib' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetLibFolder() string {
 	return maker.c.GetLibPath()
+}
+
+// GetParamsFolder returns a string representing the path to the 'src/params' folder
+// for a sveltin project relative to the project root folder.
+func (maker *SveltinPathMaker) GetParamsFolder() string {
+	return maker.c.GetParamsPath()
+}
+
+// GetAPIFolder returns a string representing the path to the 'src/routes/api' folder
+// for a sveltin project relative to the project root folder.
+func (maker *SveltinPathMaker) GetAPIFolder() string {
+	return filepath.Join(maker.c.GetAPIPath(), maker.c.GetAPIVersion())
 }
 
 // GetStaticFolder returns a string representing the path to the 'static' folder

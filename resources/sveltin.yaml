@@ -4,8 +4,9 @@ paths:
   content: content
   static: static
   src: src
-  routes: routes
+  params: params
   lib: lib
+  routes: routes
   api: api
   themes: themes
 pages:
@@ -16,12 +17,7 @@ pages:
   slugendpoint: '[slug].ts'
 api:
   version: v1
-  resource:
-    filename: published.json.ts
-    public: published.json
-  metadata:
-    filename: groupedBy.json.ts
-    public: groupedBy.json
+  filename: index.ts
 theme:
   file: theme.config.js
   components: components

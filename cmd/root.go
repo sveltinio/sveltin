@@ -50,17 +50,27 @@ const (
 	ThemeStarter string = "blog-theme-starter"
 )
 
-// folder and file names for a Sveltin project structure.
+// Folder names for a Sveltin project structure.
 const (
-	RootFolder        string = "root"
-	BackupsFolder     string = "backups"
-	ConfigFolder      string = "config"
-	ContentFolder     string = "content"
-	RoutesFolder      string = "routes"
-	ApiFolder         string = "api"
-	LibFolder         string = "lib"
-	StaticFolder      string = "static"
-	ThemesFolder      string = "themes"
+	RootFolder    string = "root"
+	BackupsFolder string = "backups"
+	ConfigFolder  string = "config"
+	ContentFolder string = "content"
+	RoutesFolder  string = "routes"
+	ApiFolder     string = "api"
+	ParamsFolder  string = "params"
+	LibFolder     string = "lib"
+	StaticFolder  string = "static"
+	ThemesFolder  string = "themes"
+)
+
+// File names for a Sveltin project structure.
+const (
+	StringMatcher     string = "string_matcher"
+	GenericMatcher    string = "generic_matcher"
+	ApiIndexFile      string = "api_index"
+	ApiMetadataIndex  string = "api_metadata_index"
+	ApiSlugFile       string = "api_slug"
 	IndexFile         string = "index"
 	IndexEndpointFile string = "indexendpoint"
 	SlugFile          string = "slug"

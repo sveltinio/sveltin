@@ -32,7 +32,7 @@ var SveltinFS embed.FS
 // SveltinFSItem represents an entry for the embedded FS.
 type SveltinFSItem map[string]string
 
-// SveltinProjectFS is map for the project template files.
+// SveltinProjectFS is the map for the project template files.
 var SveltinProjectFS = map[string]string{
 	"defaults":      "internal/templates/site/defaults.js.ts.gotxt",
 	"externals":     "internal/templates/site/externals.js.ts.gotxt",
@@ -47,9 +47,8 @@ var SveltinProjectFS = map[string]string{
 	"theme_config":  "internal/templates/themes/theme.config.js.gotxt",
 }
 
-// SveltinResourceFS is a map for the resource template files.
+// SveltinResourceFS is the map for the resource template files.
 var SveltinResourceFS = map[string]string{
-	"api":           "internal/templates/resource/api.gotxt",
 	"lib":           "internal/templates/resource/lib.gotxt",
 	"index":         "internal/templates/resource/index.gotxt",
 	"indexendpoint": "internal/templates/resource/index.ts.gotxt",
@@ -57,10 +56,23 @@ var SveltinResourceFS = map[string]string{
 	"slugendpoint":  "internal/templates/resource/slug.ts.gotxt",
 }
 
-// SveltinMetadataFS is a map for the metadata template files.
+// SveltinAPIFS is the map for the api template files.
+var SveltinAPIFS = map[string]string{
+	"api_index":           "internal/templates/resource/api/apiIndex.gotxt",
+	"api_slug":            "internal/templates/resource/api/apiSlug.gotxt",
+	"api_metadata_index":  "internal/templates/resource/api/apiMetadataIndex.gotxt",
+	"api_metadata_single": "internal/templates/resource/api/apiMetadataSingle.gotxt",
+	"api_metadata_list":   "internal/templates/resource/api/apiMetadataList.gotxt",
+}
+
+// SveltinMatchersFS is the map for the matchers template files.
+var SveltinMatchersFS = map[string]string{
+	"string_matcher":  "internal/templates/resource/matchers/string.js.gotxt",
+	"generic_matcher": "internal/templates/resource/matchers/generic.js.gotxt",
+}
+
+// SveltinMetadataFS is the map for the metadata template files.
 var SveltinMetadataFS = map[string]string{
-	"api_single":    "internal/templates/resource/metadata/apiSingle.gotxt",
-	"api_list":      "internal/templates/resource/metadata/apiList.gotxt",
 	"lib_single":    "internal/templates/resource/metadata/libSingle.gotxt",
 	"lib_list":      "internal/templates/resource/metadata/libList.gotxt",
 	"index":         "internal/templates/resource/metadata/index.gotxt",
@@ -69,13 +81,13 @@ var SveltinMetadataFS = map[string]string{
 	"slugendpoint":  "internal/templates/resource/metadata/slug.ts.gotxt",
 }
 
-// SveltinPageFS is a map for the page template files.
+// SveltinPageFS is the map for the page template files.
 var SveltinPageFS = map[string]string{
 	"svelte":   "internal/templates/page/page.svelte.gotxt",
 	"markdown": "internal/templates/page/page.svx.gotxt",
 }
 
-// SveltinContentFS is a map for the content template files.
+// SveltinContentFS is the map for the content template files.
 var SveltinContentFS = map[string]string{
 	"blank":  "internal/templates/content/blank.svx.gotxt",
 	"sample": "internal/templates/content/sample.svx.gotxt",
@@ -91,7 +103,7 @@ var SveltinXMLFS = map[string]string{
 
 //=============================================================================
 
-// SveltinVanillaFS is a map for the default templates file whe using plain css.
+// SveltinVanillaFS is themap for the default templates file whe using plain css.
 var SveltinVanillaFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/vanillacss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/vanillacss/svelte.config.js",
@@ -99,7 +111,7 @@ var SveltinVanillaFS = SveltinFSItem{
 	"app_html":      "internal/templates/themes/vanillacss/app.html",
 }
 
-// SveltinVanillaStyledFS is a map for the styled templates file whe using vanilla css.
+// SveltinVanillaStyledFS is the map for the styled templates file whe using vanilla css.
 var SveltinVanillaStyledFS = SveltinFSItem{
 	"layout":  "internal/templates/themes/vanillacss/styled/layout.svelte.gotxt",
 	"app_css": "internal/templates/themes/vanillacss/styled/app.css",
@@ -107,7 +119,7 @@ var SveltinVanillaStyledFS = SveltinFSItem{
 	"footer":  "internal/templates/themes/vanillacss/styled/Footer.svelte",
 }
 
-// SveltinVanillaUnstyledFS is a map for the unstyled templates file whe using vanilla css.
+// SveltinVanillaUnstyledFS is the map for the unstyled templates file whe using vanilla css.
 var SveltinVanillaUnstyledFS = SveltinFSItem{
 	"layout":  "internal/templates/themes/vanillacss/unstyled/layout.svelte.gotxt",
 	"app_css": "internal/templates/themes/vanillacss/unstyled/app.css",
@@ -116,7 +128,7 @@ var SveltinVanillaUnstyledFS = SveltinFSItem{
 
 //=============================================================================
 
-// SveltinTailwindLibFS is a map for the default templates file whe using tailwind css.
+// SveltinTailwindLibFS is the map for the default templates file whe using tailwind css.
 var SveltinTailwindLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/tailwindcss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/tailwindcss/svelte.config.js",
@@ -125,7 +137,7 @@ var SveltinTailwindLibFS = SveltinFSItem{
 	"postcss":       "internal/templates/themes/tailwindcss/postcss.config.cjs",
 }
 
-// SveltinTailwindLibStyledFS is a map for the styled templates file whe using tailwind css.
+// SveltinTailwindLibStyledFS is the map for the styled templates file whe using tailwind css.
 var SveltinTailwindLibStyledFS = SveltinFSItem{
 	"layout":              "internal/templates/themes/tailwindcss/styled/layout.svelte.gotxt",
 	"tailwind_css_config": "internal/templates/themes/tailwindcss/styled/tailwind.config.cjs",
@@ -134,7 +146,7 @@ var SveltinTailwindLibStyledFS = SveltinFSItem{
 	"footer":              "internal/templates/themes/tailwindcss/styled/Footer.svelte",
 }
 
-// SveltinTailwindLibUnstyledFS is a map for the unstyled templates file whe using tailwind css.
+// SveltinTailwindLibUnstyledFS is the map for the unstyled templates file whe using tailwind css.
 var SveltinTailwindLibUnstyledFS = SveltinFSItem{
 	"layout":              "internal/templates/themes/tailwindcss/unstyled/layout.svelte.gotxt",
 	"tailwind_css_config": "internal/templates/themes/tailwindcss/unstyled/tailwind.config.cjs",
@@ -144,7 +156,7 @@ var SveltinTailwindLibUnstyledFS = SveltinFSItem{
 
 //=============================================================================
 
-// SveltinBulmaLibFS is a map for the default templates file whe using bulma.
+// SveltinBulmaLibFS is the map for the default templates file whe using bulma.
 var SveltinBulmaLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/bulma/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/bulma/svelte.config.js",
@@ -152,7 +164,7 @@ var SveltinBulmaLibFS = SveltinFSItem{
 	"app_html":      "internal/templates/themes/bulma/app.html",
 }
 
-// SveltinBulmaLibStyledFS is a map for the styled templates file whe using bulma.
+// SveltinBulmaLibStyledFS is the map for the styled templates file whe using bulma.
 var SveltinBulmaLibStyledFS = SveltinFSItem{
 	"layout":         "internal/templates/themes/bulma/styled/layout.svelte.gotxt",
 	"app_css":        "internal/templates/themes/bulma/styled/app.scss",
@@ -161,7 +173,7 @@ var SveltinBulmaLibStyledFS = SveltinFSItem{
 	"footer":         "internal/templates/themes/bulma/styled/Footer.svelte",
 }
 
-// SveltinBulmaLibUnstyledFS is a map for the unstyled templates file whe using bulma.
+// SveltinBulmaLibUnstyledFS is the map for the unstyled templates file whe using bulma.
 var SveltinBulmaLibUnstyledFS = SveltinFSItem{
 	"layout":         "internal/templates/themes/bulma/unstyled/layout.svelte.gotxt",
 	"app_css":        "internal/templates/themes/bulma/unstyled/app.scss",
@@ -171,7 +183,7 @@ var SveltinBulmaLibUnstyledFS = SveltinFSItem{
 
 //=============================================================================
 
-// SveltinBootstrapLibFS is a map for the default templates file whe using bootstrap.
+// SveltinBootstrapLibFS is the map for the default templates file whe using bootstrap.
 var SveltinBootstrapLibFS = SveltinFSItem{
 	"package_json":  "internal/templates/themes/bootstrap/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/bootstrap/svelte.config.js",
@@ -188,7 +200,7 @@ var SveltinBootstrapLibStyledFS = SveltinFSItem{
 	"footer":         "internal/templates/themes/bootstrap/styled/Footer.svelte",
 }
 
-// SveltinBootstrapLibUnstyledFS is a map for the unstyled templates file whe using bootstrap.
+// SveltinBootstrapLibUnstyledFS is the map for the unstyled templates file whe using bootstrap.
 var SveltinBootstrapLibUnstyledFS = SveltinFSItem{
 	"layout":         "internal/templates/themes/bootstrap/unstyled/layout.svelte.gotxt",
 	"app_css":        "internal/templates/themes/bootstrap/unstyled/app.scss",
@@ -206,7 +218,7 @@ var SveltinSCSSLibFS = SveltinFSItem{
 	"app_html":      "internal/templates/themes/scss/app.html",
 }
 
-// SveltinSCSSLibStyledFS is a map for the styled templates file whe using scss/sass.
+// SveltinSCSSLibStyledFS is the map for the styled templates file whe using scss/sass.
 var SveltinSCSSLibStyledFS = SveltinFSItem{
 	"layout":         "internal/templates/themes/scss/styled/layout.svelte.gotxt",
 	"app_css":        "internal/templates/themes/scss/styled/app.scss",
@@ -215,7 +227,7 @@ var SveltinSCSSLibStyledFS = SveltinFSItem{
 	"footer":         "internal/templates/themes/scss/styled/Footer.svelte",
 }
 
-// SveltinSCSSLibUnstyledFS is a map for the unstyled templates file whe using scss/sass.
+// SveltinSCSSLibUnstyledFS is the map for the unstyled templates file whe using scss/sass.
 var SveltinSCSSLibUnstyledFS = SveltinFSItem{
 	"layout":         "internal/templates/themes/scss/unstyled/layout.svelte.gotxt",
 	"app_css":        "internal/templates/themes/scss/unstyled/app.scss",

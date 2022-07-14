@@ -49,6 +49,7 @@ func TestPaths(t *testing.T) {
 		{path: conf.GetSrcPath(), want: filepath.Join("src")},
 		{path: conf.GetRoutesPath(), want: filepath.Join("src", "routes")},
 		{path: conf.GetLibPath(), want: filepath.Join("src", "lib")},
+		{path: conf.GetParamsPath(), want: filepath.Join("src", "params")},
 		{path: conf.GetAPIPath(), want: filepath.Join("src", "routes", "api")},
 		{path: conf.GetThemesPath(), want: filepath.Join(pwd, "themes")},
 	}
@@ -72,7 +73,5 @@ func TestAPIs(t *testing.T) {
 	is.NoErr(err)
 
 	is.Equal("v1", conf.GetAPIVersion())
-	is.Equal("published.json.ts", conf.GetAPIFilename())
-	is.Equal("published.json", conf.GetPublicAPIFilename())
-	is.Equal("category.json.ts", conf.GetMetadataAPIFilename("category"))
+	is.Equal("index.ts", conf.GetAPIFilename())
 }

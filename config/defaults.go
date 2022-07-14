@@ -86,6 +86,12 @@ func (c *SveltinConfig) GetLibPath() string {
 	return filepath.Join(c.GetSrcPath(), c.Paths.Lib)
 }
 
+// GetParamsPath returns a string representing the path to the 'src/params' folder
+// relative to the current working directory.
+func (c *SveltinConfig) GetParamsPath() string {
+	return filepath.Join(c.GetSrcPath(), c.Paths.Params)
+}
+
 // GetRoutesPath returns a string representing the path to the 'src/routes' folder
 // relative to the current working directory.
 func (c *SveltinConfig) GetRoutesPath() string {
@@ -104,22 +110,10 @@ func (c *SveltinConfig) GetAPIVersion() string {
 	return c.API.Version
 }
 
-// GetAPIFilename returns a string representing the path to the 'src/routes/api/v1/version.ts'
+// GetAPIFilename returns a string representing the path to the 'src/routes/api/v1/<resource>/index.ts'
 // folder relative to the current working directory.
 func (c *SveltinConfig) GetAPIFilename() string {
-	return c.API.Resource.Filename
-}
-
-// GetPublicAPIFilename returns a string representing the path to the 'src/routes/api/v1/published.ts'
-// file relative to the current working directory.
-func (c *SveltinConfig) GetPublicAPIFilename() string {
-	return c.API.Resource.Public
-}
-
-// GetMetadataAPIFilename returns a string representing the path to the 'src/routes/api/v1/<metadata>'
-// folder relative to the current working directory.
-func (c *SveltinConfig) GetMetadataAPIFilename(mdName string) string {
-	return mdName + ".json.ts"
+	return c.API.Filename
 }
 
 // GetThemesPath returns a string representing the path to the 'themes' folder

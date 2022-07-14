@@ -1,0 +1,20 @@
+import { all } from '$lib/{{ .Resource }}/api{{ .Name | ToVariableName | Capitalize }}';
+
+/** @type {import('@sveltejs/kit').RequestHandler} */
+export async function get() {
+	const data = await all();
+	const body = data.map((item) => ({
+		...item
+	}));
+
+	if (body) {
+		return {
+			status: 200,
+			body: JSON.stringify(body)
+		};
+	} else {
+		return {
+			status: 404
+		};
+	}
+}

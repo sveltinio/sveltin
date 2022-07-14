@@ -40,6 +40,13 @@ func GetRoutesFolder(maker *pathmaker.SveltinPathMaker) *Folder {
 	}
 }
 
+// GetParamsFolder create a Folder struct for the "src/params" folder of the project.
+func GetParamsFolder(maker *pathmaker.SveltinPathMaker) *Folder {
+	return &Folder{
+		Name: maker.GetParamsFolder(),
+	}
+}
+
 // GetAPIFolder create a Folder struct for the "src/routes/api" folder of the project.
 func GetAPIFolder(maker *pathmaker.SveltinPathMaker) *Folder {
 	return &Folder{
