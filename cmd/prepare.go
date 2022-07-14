@@ -41,6 +41,7 @@ func RunPrepareCmd(cmd *cobra.Command, args []string) {
 
 	err = helpers.RunPMCommand(npmClient.Name, "prepare", "", nil, false)
 	utils.ExitIfError(err)
+
 	cfg.log.Success("Done")
 }
 
