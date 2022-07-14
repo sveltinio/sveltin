@@ -44,6 +44,7 @@ func RunUpdateCmd(cmd *cobra.Command, args []string) {
 
 	err = helpers.RunPMCommand(npmClient.Name, "update", "", nil, false)
 	utils.ExitIfError(err)
+
 	cfg.log.Success("Done")
 }
 

@@ -44,6 +44,7 @@ func RunInstallCmd(cmd *cobra.Command, args []string) {
 
 	err = helpers.RunPMCommand(npmClient.Name, "install", "", nil, false)
 	utils.ExitIfError(err)
+
 	cfg.log.Success("Done")
 }
 

@@ -9,7 +9,6 @@
 package cmd
 
 import (
-	"embed"
 	"errors"
 	"fmt"
 	"path"
@@ -78,33 +77,20 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
 
-	// GET FOLDER: content
-	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
+	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
+	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)
+	utils.ExitIfError(err)
 
-	// NEW FOLDER content/<resource_name>/<content_name>
-	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData.Name, contentData.Resource)
-
-	// NEW FILE: content/<resource_name>/<content_name>/index.svx
-	contentFile := &composer.File{
-		Name:       cfg.pathMaker.GetResourceContentFilename(),
-		TemplateID: contentData.Type,
-		TemplateData: &config.TemplateData{
-			Name: contentData.Name,
-		},
-	}
-
-	resourceContentFolder.Add(contentFile)
-	contentFolder.Add(resourceContentFolder)
-
-	// SET STATIC FOLDER STRUCTURE for resouce and content
-	staticFolder := makeStaticFolderStructure(&resources.SveltinFS, cfg.fs, contentData)
+	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
+	staticFolder, err := makeContentFolderStructure(StaticFolder, contentData)
+	utils.ExitIfError(err)
 
 	// SET FOLDER STRUCTURE
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
-	projectFolder.Add(staticFolder)
 	projectFolder.Add(contentFolder)
+	projectFolder.Add(staticFolder)
 
-	// GENERATE FOLDER STRUCTURE
+	// GENERATE THE FOLDER TREE
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
@@ -218,7 +204,43 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 
 //=============================================================================
 
-func makeStaticFolderStructure(efs *embed.FS, fs afero.Fs, contentData *config.TemplateData) *composer.Folder {
+func makeContentFolderStructure(folderName string, contentData *config.TemplateData) (*composer.Folder, error) {
+	switch folderName {
+	case ContentFolder:
+		return createContentLocalFolder(contentData), nil
+	case StaticFolder:
+		return createStaticFolderStructure(contentData), nil
+	default:
+		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
+		return nil, sveltinerr.NewDefaultError(err)
+
+	}
+}
+
+//=============================================================================
+
+func createContentLocalFolder(contentData *config.TemplateData) *composer.Folder {
+	// GET FOLDER: content
+	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
+
+	// NEW FOLDER content/<resource_name>/<content_name>
+	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData.Name, contentData.Resource)
+
+	// NEW FILE: content/<resource_name>/<content_name>/index.svx
+	contentFile := &composer.File{
+		Name:       cfg.pathMaker.GetResourceContentFilename(),
+		TemplateID: contentData.Type,
+		TemplateData: &config.TemplateData{
+			Name: contentData.Name,
+		},
+	}
+
+	resourceContentFolder.Add(contentFile)
+	contentFolder.Add(resourceContentFolder)
+	return contentFolder
+}
+
+func createStaticFolderStructure(contentData *config.TemplateData) *composer.Folder {
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 	// NEW FOLDER static/resources

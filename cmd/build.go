@@ -49,6 +49,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	os.Setenv("VITE_PUBLIC_BASE_PATH", cfg.project.BaseURL)
 	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
 	utils.ExitIfError(err)
+
 	cfg.log.Success("Done")
 }
 

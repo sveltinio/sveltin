@@ -69,40 +69,37 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	// Clone starter template github repository
 	themeStarterTemplate := cfg.startersMap[ThemeStarter]
 	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
+
 	gitClient := shell.NewGitClient()
 	err = gitClient.RunGitClone(themeStarterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
-	//err = utils.GitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName))
+	// TO BE REMOVED: err = utils.GitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
-
-	// GET FOLDER: <project_name>
-	projectFolder := cfg.fsManager.GetFolder(projectName)
 
 	// NEW FILE: config/defaults.js
 	f := cfg.fsManager.NewConfigFile(projectName, Defaults, CliVersion)
 	// NEW FOLDER: config
 	configFolder := composer.NewFolder(ConfigFolder)
 	configFolder.Add(f)
-	projectFolder.Add(configFolder)
 
-	// NEW FOLDER: themes
-	themesFolder := composer.NewFolder(ThemesFolder)
-
+	// MAKE FOLDER STRUCTURE: themes/<theme_name> folder
 	themeData := &config.ThemeData{
 		ID:     config.BlankTheme,
 		IsNew:  true,
 		Name:   themeName,
 		CSSLib: cssLibName,
 	}
-	newThemeFolder := makeThemeFolderStructure(themeData)
-	themesFolder.Add(newThemeFolder)
-	// ADD themes folder to the project
-	projectFolder.Add(themesFolder)
+	themeFolder, err := makeProjectFolderStructure(ThemesFolder, "", themeData)
+	utils.ExitIfError(err)
 
 	// SET FOLDER STRUCTURE
+	projectFolder := cfg.fsManager.GetFolder(projectName)
+	projectFolder.Add(configFolder)
+	projectFolder.Add(themeFolder)
+
 	rootFolder := cfg.fsManager.GetFolder(RootFolder)
 	rootFolder.Add(projectFolder)
 
-	// GENERATE FOLDER STRUCTURE
+	// GENERATE THE FOLDER TREE
 	sfs := factory.NewThemeArtifact(&resources.SveltinFS, cfg.fs)
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
@@ -189,3 +186,5 @@ func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
 	}
 }
+
+//=============================================================================
