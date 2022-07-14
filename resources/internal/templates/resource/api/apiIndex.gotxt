@@ -1,0 +1,20 @@
+import { list } from '$lib/posts/apiPosts';
+
+/** @type {import('@sveltejs/kit').RequestHandler} */
+export async function get() {
+	const data = await list();
+	const body = data.map((item) => ({
+		...item
+	}));
+
+	if (body) {
+		return {
+			status: 200,
+			body: JSON.stringify(body)
+		};
+	} else {
+		return {
+			status: 404
+		};
+	}
+}

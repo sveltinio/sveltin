@@ -41,6 +41,8 @@ func (s *SveltinFSManager) GetFolder(name string) *composer.Folder {
 		return composer.GetContentFolder(s.maker)
 	case "routes":
 		return composer.GetRoutesFolder(s.maker)
+	case "params":
+		return composer.GetParamsFolder(s.maker)
 	case "api":
 		return composer.GetAPIFolder(s.maker)
 	case "lib":

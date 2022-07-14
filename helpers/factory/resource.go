@@ -12,6 +12,7 @@ import (
 	"embed"
 
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/resources"
 )
 
@@ -21,6 +22,6 @@ func NewResourceArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "resource",
-		resources: resources.SveltinResourceFS,
+		resources: common.UnionMap(resources.SveltinResourceFS, common.UnionMap(resources.SveltinAPIFS, resources.SveltinMatchersFS)),
 	}
 }

@@ -65,83 +65,38 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	mdType, err := promptMetadataType(metadataType)
 	utils.ExitIfError(err)
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", mdName, mdResource)))
-
-	// NEW FILE: <metadata_name>.json.ts
-	cfg.log.Info("Creating the API endpoint for the metadata")
-	resourceMetadataAPIFile := &composer.File{
-		Name:       cfg.sveltin.GetMetadataAPIFilename(mdName),
-		TemplateID: ApiFolder,
-		TemplateData: &config.TemplateData{
-			Name:     mdName,
-			Resource: mdResource,
-			Type:     mdType,
-			Config:   cfg.sveltin,
-		},
+	metadataTemplateData := &config.TemplateData{
+		Name:     mdName,
+		Resource: mdResource,
+		Type:     mdType,
+		Config:   cfg.sveltin,
 	}
 
-	// NEW FOLDER: src/routes/api/<api_version>/<resource_name>
-	resourceAPIFolder := composer.NewFolder(mdResource)
-	resourceAPIFolder.Add(resourceMetadataAPIFile)
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", metadataTemplateData.Name, metadataTemplateData.Resource)))
 
-	// GET FOLDER: src/routes/api/<api_version> folder
-	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
-	apiFolder.Add(resourceAPIFolder)
+	// MAKE FOLDER STRUCTURE: src/lib folder
+	libFolder, err := makeOrAddContentForMetadataToProjectStructure(LibFolder, metadataTemplateData)
+	utils.ExitIfError(err)
 
-	// NEW FILE: api<metadata_name>.ts file into src/lib/<resource_name> folder
-	cfg.log.Info("Creating the lib file for the metadata")
-	libFile := &composer.File{
-		Name:       cfg.pathMaker.GetResourceLibFilename(mdName),
-		TemplateID: LibFolder,
-		TemplateData: &config.TemplateData{
-			Name:     mdName,
-			Resource: mdResource,
-			Type:     mdType,
-			Config:   cfg.sveltin,
-		},
-	}
-	// NEW FOLDER: src/lib/<resource_name>
-	resourceLibFolder := composer.NewFolder(mdResource)
-	resourceLibFolder.Add(libFile)
+	paramsFolder, err := makeOrAddContentForMetadataToProjectStructure(ParamsFolder, metadataTemplateData)
+	utils.ExitIfError(err)
 
-	// GET FOLDER: src/lib folder
-	libFolder := cfg.fsManager.GetFolder(LibFolder)
-	libFolder.Add(resourceLibFolder)
+	// MAKE FOLDER STRUCTURE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
+	routesFolder, err := makeOrAddContentForMetadataToProjectStructure(RoutesFolder, metadataTemplateData)
+	utils.ExitIfError(err)
 
-	// NEW FOLDER: <metadata_name>
-	resourceMedatadaRoutesFolder := composer.NewFolder(mdName)
-
-	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	cfg.log.Info("Creating the components and endpoints for the metadata")
-	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
-		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
-			TemplateID: item,
-			TemplateData: &config.TemplateData{
-				Name:     mdName,
-				Resource: mdResource,
-				Type:     mdType,
-				Config:   cfg.sveltin,
-			},
-		}
-		resourceMedatadaRoutesFolder.Add(f)
-	}
-
-	// NEW FOLDER: src/routes/<resource_name>/<metadata_name>
-	resourceRoutesFolder := composer.NewFolder(mdResource)
-	resourceRoutesFolder.Add(resourceMedatadaRoutesFolder)
-
-	// GET FOLDER: src/routes folder
-	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
-	routesFolder.Add(resourceRoutesFolder)
+	// MAKE FOLDER STRUCTURE: src/routes/api/<api_version> folder
+	apiFolder, err := makeOrAddContentForMetadataToProjectStructure(ApiFolder, metadataTemplateData)
+	utils.ExitIfError(err)
 
 	// SET FOLDER STRUCTURE
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
-	projectFolder.Add(apiFolder)
 	projectFolder.Add(libFolder)
+	projectFolder.Add(paramsFolder)
 	projectFolder.Add(routesFolder)
+	projectFolder.Add(apiFolder)
 
-	// GENERATE FOLDER STRUCTURE
+	// GENERATE THE FOLDER TREE
 	sfs := factory.NewMetadataArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
@@ -151,7 +106,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	// NEXT STEPS
 	cfg.log.Plain(utils.Underline("Next Steps"))
 	cfg.log.Success("Metadata ready to be used.")
-	cfg.log.Important("Ensure your markdown frontmatter consider it.")
+	cfg.log.Important("Ensure your markdown frontmatter includes it.")
 
 }
 
@@ -240,4 +195,123 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 	default:
 		return "", sveltinerr.NewMetadataTypeNotValidError()
 	}
+}
+
+//=============================================================================
+
+func makeOrAddContentForMetadataToProjectStructure(folderName string, metadataTemaplateData *config.TemplateData) (*composer.Folder, error) {
+	switch folderName {
+	case LibFolder:
+		return createOrAddContentForMetadataToLibLocalFolder(metadataTemaplateData), nil
+	case ParamsFolder:
+		return createOrAddContentForMetadataToParamsLocalFolder(metadataTemaplateData), nil
+	case RoutesFolder:
+		return createOrAddContentForMetadataToRoutesLocalFolder(metadataTemaplateData), nil
+	case ApiFolder:
+		return createOrAddContentForMetadataToApiLocalFolder(metadataTemaplateData), nil
+	default:
+		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
+		return nil, sveltinerr.NewDefaultError(err)
+	}
+}
+
+//=============================================================================
+
+func createOrAddContentForMetadataToLibLocalFolder(metadataTemplateData *config.TemplateData) *composer.Folder {
+	// NEW FILE: api<metadata_name>.ts file into src/lib/<resource_name> folder
+	cfg.log.Info("Creating the lib file for the metadata")
+	libFile := &composer.File{
+		Name:         cfg.pathMaker.GetResourceLibFilename(metadataTemplateData.Name),
+		TemplateID:   LibFolder,
+		TemplateData: metadataTemplateData,
+	}
+	// NEW FOLDER: src/lib/<resource_name>
+	resourceLibFolder := composer.NewFolder(metadataTemplateData.Resource)
+	resourceLibFolder.Add(libFile)
+
+	// GET FOLDER: src/lib folder
+	libFolder := cfg.fsManager.GetFolder(LibFolder)
+	libFolder.Add(resourceLibFolder)
+
+	return libFolder
+}
+
+func createOrAddContentForMetadataToParamsLocalFolder(metadataTemplateData *config.TemplateData) *composer.Folder {
+	// GET FOLDER: src/params folder
+	paramsFolder := cfg.fsManager.GetFolder(ParamsFolder)
+
+	// NEW FILE: src/params/<metadata_name>.js
+	cfg.log.Info("Creating the parameters matcher file for the metadata")
+	metadataMatcherFile := &composer.File{
+		Name:         fmt.Sprintf("%s%s", metadataTemplateData.Name, ".js"),
+		TemplateID:   GenericMatcher,
+		TemplateData: metadataTemplateData,
+	}
+	// Add file to folder
+	paramsFolder.Add(metadataMatcherFile)
+
+	return paramsFolder
+}
+
+func createOrAddContentForMetadataToRoutesLocalFolder(metadataTemaplateData *config.TemplateData) *composer.Folder {
+	// NEW FOLDER: <metadata_name>
+	resourceMedatadaRoutesFolder := composer.NewFolder(metadataTemaplateData.Name)
+
+	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
+	cfg.log.Info("Creating the components and endpoints for the metadata")
+	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
+		f := &composer.File{
+			Name:         helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			TemplateID:   item,
+			TemplateData: metadataTemaplateData,
+		}
+		resourceMedatadaRoutesFolder.Add(f)
+	}
+
+	// NEW FOLDER: src/routes/<resource_name>/<metadata_name>
+	resourceRoutesFolder := composer.NewFolder(metadataTemaplateData.Resource)
+	resourceRoutesFolder.Add(resourceMedatadaRoutesFolder)
+
+	// GET FOLDER: src/routes folder
+	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
+	routesFolder.Add(resourceRoutesFolder)
+
+	return routesFolder
+}
+
+func createOrAddContentForMetadataToApiLocalFolder(metadataTemplateData *config.TemplateData) *composer.Folder {
+	// GET FOLDER: src/routes/api/<api_version> folder
+	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
+
+	// NEW FOLDER: src/routes/api/<api_version>/<resource_name>
+	resourceAPIFolder := composer.NewFolder(metadataTemplateData.Resource)
+
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]
+	resourceAPIMetadataMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", metadataTemplateData.Resource, "=", metadataTemplateData.Name, "]"))
+
+	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/index.ts
+	cfg.log.Info("Creating the REST API endpoint for the resource metadata")
+	resourceMetadataIndexAPIFile := &composer.File{
+		Name:         cfg.sveltin.GetAPIFilename(),
+		TemplateID:   ApiMetadataIndex,
+		TemplateData: metadataTemplateData,
+	}
+	resourceAPIMetadataMatcherFolder.Add(resourceMetadataIndexAPIFile)
+	resourceAPIFolder.Add(resourceAPIMetadataMatcherFolder)
+
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/[<metadata_name> = string]
+	resourceAPIMetadataNameMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", metadataTemplateData.Name, "=", "string", "]"))
+
+	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/[<metadata_name> = string]/index.ts
+	resourceMetadataNameIndexAPIFile := &composer.File{
+		Name:         cfg.sveltin.GetAPIFilename(),
+		TemplateID:   ApiFolder,
+		TemplateData: metadataTemplateData,
+	}
+	resourceAPIMetadataNameMatcherFolder.Add(resourceMetadataNameIndexAPIFile)
+	resourceAPIMetadataMatcherFolder.Add(resourceAPIMetadataNameMatcherFolder)
+
+	apiFolder.Add(resourceAPIFolder)
+
+	return apiFolder
 }

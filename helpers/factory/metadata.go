@@ -12,6 +12,7 @@ import (
 	"embed"
 
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/resources"
 )
 
@@ -21,6 +22,6 @@ func NewMetadataArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "metadata",
-		resources: resources.SveltinMetadataFS,
+		resources: common.UnionMap(resources.SveltinMetadataFS, common.UnionMap(resources.SveltinAPIFS, resources.SveltinMatchersFS)),
 	}
 }

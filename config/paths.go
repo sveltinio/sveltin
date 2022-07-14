@@ -14,9 +14,10 @@ type Paths struct {
 	Config  string `mapstructure:"config"`
 	Content string `mapstructure:"content"`
 	Static  string `mapstructure:"static"`
-	Src     string `mapstructure:"src"`
-	Routes  string `mapstructure:"routes"`
-	Lib     string `mapstructure:"lib"`
-	API     string `mapstructure:"api"`
 	Themes  string `mapstructure:"themes"`
+	Src     string `mapstructure:"src"`
+	Params  string `mapstructure:"params"`
+	Lib     string `mapstructure:"lib"`
+	Routes  string `mapstructure:"routes"`
+	API     string `mapstructure:"api"`
 }

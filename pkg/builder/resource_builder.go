@@ -43,8 +43,17 @@ func (b *ResourceContentBuilder) SetEmbeddedResources(res map[string]string) {
 
 func (b *ResourceContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
-	case API:
-		b.PathToTplFile = b.EmbeddedResources[API]
+	case ApiIndexFile:
+		b.PathToTplFile = b.EmbeddedResources[ApiIndexFile]
+		return nil
+	case ApiSlugFile:
+		b.PathToTplFile = b.EmbeddedResources[ApiSlugFile]
+		return nil
+	case StringMatcher:
+		b.PathToTplFile = b.EmbeddedResources[StringMatcher]
+		return nil
+	case GenericMatcher:
+		b.PathToTplFile = b.EmbeddedResources[GenericMatcher]
 		return nil
 	case Index:
 		b.PathToTplFile = b.EmbeddedResources[Index]
