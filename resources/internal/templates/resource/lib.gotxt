@@ -17,8 +17,8 @@ export const list = async (withMarkup = false) => {
 		})
 	);
 	const publishedByDate = contents
-		.filter((elem) => !elem.meta.draft)
-		.sort((a, b) => (a.meta.created_at < b.meta.created_at ? 1 : -1));
+		.filter((elem) => !elem.meta['draft'])
+		.sort((a, b) => (a.meta['created_at'] < b.meta['created_at'] ? 1 : -1));
 
 	return publishedByDate;
 };
@@ -29,29 +29,29 @@ export const getSingle = async (slug: string) => {
 	const publishedByDate = await list(true);
 
 	const selected = publishedByDate.filter((item) => {
-		return item.meta.slug == slug;
+		return item.meta['slug'] == slug;
 	});
 
 	if (selected.length != 0) {
-		const selectedItemIndex = publishedByDate.findIndex((elem) => slug === elem.meta.slug);
+		const selectedItemIndex = publishedByDate.findIndex((elem) => slug === elem.meta['slug']);
 		const selectedItem = publishedByDate[selectedItemIndex];
 		const current: Sveltin.ContentEntry = {
 			resource: resourceName,
-			metadata: selectedItem.meta,
-			html: selectedItem.markup.html
+			metadata: selectedItem.meta as Sveltin.YAMLFrontmatter,
+			html: selectedItem.markup['html']
 		};
 		const previous: Sveltin.ContentEntry = {
 			resource: resourceName,
 			metadata: <Sveltin.YAMLFrontmatter>{
-				title: publishedByDate[selectedItemIndex + 1]?.meta.title,
-				slug: publishedByDate[selectedItemIndex + 1]?.meta.slug
+				title: publishedByDate[selectedItemIndex + 1]?.meta['title'],
+				slug: publishedByDate[selectedItemIndex + 1]?.meta['slug']
 			}
 		};
 		const next: Sveltin.ContentEntry = {
 			resource: resourceName,
 			metadata: <Sveltin.YAMLFrontmatter>{
-				title: publishedByDate[selectedItemIndex - 1]?.meta.title,
-				slug: publishedByDate[selectedItemIndex - 1]?.meta.slug
+				title: publishedByDate[selectedItemIndex - 1]?.meta['title'],
+				slug: publishedByDate[selectedItemIndex - 1]?.meta['slug']
 			}
 		};
 
