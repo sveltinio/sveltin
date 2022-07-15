@@ -1,7 +1,7 @@
 import { list } from '$lib/posts/apiPosts';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get() {
+export async function GET() {
 	const data = await list();
 	const body = data.map((item) => ({
 		...item

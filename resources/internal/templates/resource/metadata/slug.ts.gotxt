@@ -2,7 +2,7 @@
 import { groupedBy } from '$lib/{{ .Resource }}/api{{ $mdName }}';
 
 /** @type {import('./[slug]').RequestHandler} */
-export async function get({ params }) {
+export async function GET({ params }) {
 	const metadata = await groupedBy(params.slug);
 	if (metadata) {
 		return {

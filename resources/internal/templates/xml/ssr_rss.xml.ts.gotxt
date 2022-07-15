@@ -1,7 +1,8 @@
 import { variables } from '$lib/Env.js';
 import { website } from '$config/website.js';
 
-export async function get() {
+/** @type {import('@sveltejs/kit').RequestHandler} */
+export async function GET() {
 	{{ range $res := .Resources }}
 	const {{ $res }}URL = `${variables.basePath}/api/v1/{{ $res }}/published.json`;
 	const {{ $res }}Request = await fetch({{ $res }}URL);
