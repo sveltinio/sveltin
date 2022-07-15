@@ -19,24 +19,24 @@ The Smartest Way to Build SvelteKit powered static websites.
     </a>
 </p>
 <p align="center">
+    <a href="https://github.com/sveltinio/sveltin/blob/main/LICENSE" target="_blank">
+        <img src="https://img.shields.io/badge/license-apache_2.0-blue?style=flat-square&logo=none" alt="license" />
+    </a>
+    &nbsp;
+     <a href="https://goreportcard.com/report/github.com/sveltinio/sveltin/" target="_blank">
+        <img src="https://goreportcard.com/badge/github.com/sveltinio/sveltin" alt="go report card" />
+    </a>
+    &nbsp;
     <a href="https://pkg.go.dev/github.com/sveltinio/sveltin/" target="_blank">
         <img src="https://pkg.go.dev/badge/github.com/sveltinio/sveltin/.svg" alt="go reference" />
     </a>
     &nbsp;
+    <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
+        <img src="https://img.shields.io/badge/version-v0.8.9-success?style=flat-square&logo=none" alt="sveltin cli version" />
+    </a>
+    &nbsp;
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
         <img src="https://github.com/sveltinio/sveltin/actions/workflows/release.yml/badge.svg" alt="CI" />
-    </a>
-    &nbsp;
-    <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.8.8-success?style=flat-square&logo=none" alt="sveltin cli version" />
-    </a>
-    &nbsp;
-    <a href="https://goreportcard.com/report/github.com/sveltinio/sveltin/" target="_blank">
-        <img src="https://goreportcard.com/badge/github.com/sveltinio/sveltin" alt="go report card" />
-    </a>
-    &nbsp;
-    <a href="https://github.com/sveltinio/sveltin/blob/main/LICENSE" target="_blank">
-        <img src="https://img.shields.io/badge/license-apache_2.0-blue?style=flat-square&logo=none" alt="license" />
     </a>
     &nbsp;
     <a href="https://madewithsvelte.com/p/sveltin/shield-link" target="_blank">
@@ -50,7 +50,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :warning: Project Status
 
-> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-370**). If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-375**). If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
 
 ## :mega: Overview
 

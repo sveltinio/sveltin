@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## [v0.8.9](https://github.com/sveltinio/sveltin/releases/tag/v0.8.9) (2022-07-15)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.8...v0.8.9)
+
+### 🔧  Code Refactoring
+
+- actual work function structure for commands
+- resources and metadata API endpoints now are fully REST. This is really useful during the development. Instead to open a browser, just use `curl` on the terminal. E.g. `http://localshot:5173/posts/category/webdev`
+
+### Chores
+
+- shortening and clearing help messages on commands
+- sveltekit updated to next.375 with **Vite3** support
+- git-ghlog config and template updated
+- **adapter-static:** updated to next.36
+- **app.html:** make uses of %sveltekit.assets% to reference static files
+- **vite.config.js:** clearScreen:false to prevent Vite from clearing the terminal
+
+### Pull Requests
+
+- Merge pull request [#57](https://github.com/sveltinio/sveltin/issues/57) from sveltinio/rest-endpoints
+- Merge pull request [#58](https://github.com/sveltinio/sveltin/issues/58) from sveltinio/cmds-refactoring
+- Merge pull request [#59](https://github.com/sveltinio/sveltin/issues/59) from sveltinio/deps-update
+- Merge pull request [#60](https://github.com/sveltinio/sveltin/issues/60) from sveltinio/sveltekit-assets
+- Merge pull request [#61](https://github.com/sveltinio/sveltin/issues/61) from sveltinio/vite3
+- Merge pull request [#62](https://github.com/sveltinio/sveltin/issues/62) from sveltinio/git-chglog-revert
+- Merge pull request [#63](https://github.com/sveltinio/sveltin/issues/63) from sveltinio/help-messages
+
 ## [v0.8.8](https://github.com/sveltinio/sveltin/releases/tag/v0.8.8) (2022-07-13)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.7...v0.8.8)
