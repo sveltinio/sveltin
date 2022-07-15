@@ -75,7 +75,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	contentData, err := promptContentName(cfg.fs, args, cfg.sveltin)
 	utils.ExitIfError(err)
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as content for %s", contentData.Name, contentData.Resource)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as content for the %s resource", contentData.Name, contentData.Resource)))
 
 	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
 	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)

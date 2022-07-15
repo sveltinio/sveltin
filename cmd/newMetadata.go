@@ -72,7 +72,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 		Config:   cfg.sveltin,
 	}
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as metadata for %s", metadataTemplateData.Name, metadataTemplateData.Resource)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)))
 
 	// MAKE FOLDER STRUCTURE: src/lib folder
 	libFolder, err := makeOrAddContentForMetadataToProjectStructure(LibFolder, metadataTemplateData)
@@ -105,9 +105,7 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 
 	// NEXT STEPS
 	cfg.log.Plain(utils.Underline("Next Steps"))
-	cfg.log.Success("Metadata ready to be used.")
-	cfg.log.Important("Ensure your markdown frontmatter includes it.")
-
+	cfg.log.Important(common.HelperTextNewMetadata(metadataTemplateData))
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {
@@ -219,7 +217,7 @@ func makeOrAddContentForMetadataToProjectStructure(folderName string, metadataTe
 
 func createOrAddContentForMetadataToLibLocalFolder(metadataTemplateData *config.TemplateData) *composer.Folder {
 	// NEW FILE: api<metadata_name>.ts file into src/lib/<resource_name> folder
-	cfg.log.Info("Creating the lib file for the metadata")
+	cfg.log.Info("Lib files")
 	libFile := &composer.File{
 		Name:         cfg.pathMaker.GetResourceLibFilename(metadataTemplateData.Name),
 		TemplateID:   LibFolder,
@@ -237,11 +235,11 @@ func createOrAddContentForMetadataToLibLocalFolder(metadataTemplateData *config.
 }
 
 func createOrAddContentForMetadataToParamsLocalFolder(metadataTemplateData *config.TemplateData) *composer.Folder {
+	cfg.log.Info("Parameters matchers")
 	// GET FOLDER: src/params folder
 	paramsFolder := cfg.fsManager.GetFolder(ParamsFolder)
 
 	// NEW FILE: src/params/<metadata_name>.js
-	cfg.log.Info("Creating the parameters matcher file for the metadata")
 	metadataMatcherFile := &composer.File{
 		Name:         fmt.Sprintf("%s%s", metadataTemplateData.Name, ".js"),
 		TemplateID:   GenericMatcher,
@@ -254,11 +252,11 @@ func createOrAddContentForMetadataToParamsLocalFolder(metadataTemplateData *conf
 }
 
 func createOrAddContentForMetadataToRoutesLocalFolder(metadataTemaplateData *config.TemplateData) *composer.Folder {
+	cfg.log.Info("Routes")
 	// NEW FOLDER: <metadata_name>
 	resourceMedatadaRoutesFolder := composer.NewFolder(metadataTemaplateData.Name)
 
 	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	cfg.log.Info("Creating the components and endpoints for the metadata")
 	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
 		f := &composer.File{
 			Name:         helpers.GetResourceRouteFilename(item, cfg.sveltin),
@@ -280,6 +278,7 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataTemaplateData *con
 }
 
 func createOrAddContentForMetadataToApiLocalFolder(metadataTemplateData *config.TemplateData) *composer.Folder {
+	cfg.log.Info("REST endpoint")
 	// GET FOLDER: src/routes/api/<api_version> folder
 	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
 
@@ -290,7 +289,6 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataTemplateData *config.
 	resourceAPIMetadataMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", metadataTemplateData.Resource, "=", metadataTemplateData.Name, "]"))
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/index.ts
-	cfg.log.Info("Creating the REST API endpoint for the resource metadata")
 	resourceMetadataIndexAPIFile := &composer.File{
 		Name:         cfg.sveltin.GetAPIFilename(),
 		TemplateID:   ApiMetadataIndex,

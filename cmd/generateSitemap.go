@@ -34,7 +34,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("The sitemap.xml file will be created"))
+	cfg.log.Plain(utils.Underline("Generating the sitemap.xml file"))
 
 	cfg.log.Info("Getting list of existing public pages")
 	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
@@ -52,7 +52,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
-	cfg.log.Info("Generating the sitemap.xml file")
+	cfg.log.Info("Saving the sitemap.xml file")
 	sitemapFile := cfg.fsManager.NewNoPage("sitemap", &cfg.project, existingResources, contents, metadata, pages)
 	staticFolder.Add(sitemapFile)
 

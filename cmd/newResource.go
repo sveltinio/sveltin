@@ -148,10 +148,10 @@ func createResourceContentLocalFolder(resourceName string) *composer.Folder {
 	// GET FOLDER: content folder
 	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be created as resource", resourceName)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as resource", resourceName)))
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
-	cfg.log.Info("Creating the content folder for your resource")
+	cfg.log.Info("Content folder")
 	resourceContentFolder := composer.NewFolder(resourceName)
 	contentFolder.Add(resourceContentFolder)
 
@@ -166,7 +166,7 @@ func createResourceLibLocalFolder(resourceName string) *composer.Folder {
 	resourceLibFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/lib/<resource_name>/api<resource_name>.ts
-	cfg.log.Info("Creating the lib file for the resource")
+	cfg.log.Info("Lib files")
 	libFile := &composer.File{
 		Name:       utils.ToLibFile(resourceName),
 		TemplateID: LibFolder,
@@ -182,11 +182,11 @@ func createResourceLibLocalFolder(resourceName string) *composer.Folder {
 }
 
 func createResourceParamsLocalFolder() *composer.Folder {
+	cfg.log.Info("Parameters matchers")
 	// GET FOLDER: src/params folder
 	paramsFolder := cfg.fsManager.GetFolder(ParamsFolder)
 
 	// NEW FILE: src/params/string.js
-	cfg.log.Info("Creating the parameters matcher file for strings")
 	stringMatcherFile := &composer.File{
 		Name:       "string.js",
 		TemplateID: StringMatcher,
@@ -198,7 +198,6 @@ func createResourceParamsLocalFolder() *composer.Folder {
 	paramsFolder.Add(stringMatcherFile)
 
 	// NEW FILE: src/params/slug.js
-	cfg.log.Info("Creating the parameters matcher file for slug")
 	slugMatcherFile := &composer.File{
 		Name:       "slug.js",
 		TemplateID: GenericMatcher,
@@ -221,7 +220,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 	resourceRoutesFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	cfg.log.Info("Creating the components and endpoints for the resource")
+	cfg.log.Info("Routes")
 	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
@@ -239,6 +238,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 }
 
 func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
+	cfg.log.Info("REST endpoints")
 	// GET FOLDER: src/routes/api/<api_version> folder
 	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
 
@@ -246,7 +246,6 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 	resourceAPIFolder := composer.NewFolder(resourceName)
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/index.ts
-	cfg.log.Info("Creating the REST API endpoint for the resource")
 	apiFile := &composer.File{
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiIndexFile,
@@ -264,7 +263,6 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 	slugStringFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", "slug", "=", "string", "]"))
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = slug]/[slug=string]/index.ts
-	cfg.log.Info("Creating the REST API endpoint for the resource slug")
 	apiSlugFile := &composer.File{
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiSlugFile,
