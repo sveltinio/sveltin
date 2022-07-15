@@ -62,7 +62,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageType, err := promptPageType(pageType)
 	utils.ExitIfError(err)
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("'%s' will be added as page", pageName)))
+	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as %s page", pageName, pageType)))
 
 	// GET FOLDER: src/routes
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)

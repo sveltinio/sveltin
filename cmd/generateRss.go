@@ -34,7 +34,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("The rss.xml feed file will be created"))
+	cfg.log.Plain(utils.Underline("Generating the rss.xml feed file"))
 
 	cfg.log.Info("Getting all existing public pages")
 	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
@@ -49,7 +49,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
-	cfg.log.Info("Generating the rss.xml file")
+	cfg.log.Info("Saving the rss.xml file")
 	rssFile := cfg.fsManager.NewNoPage("rss", &cfg.project, existingResources, contents, nil, pages)
 	staticFolder.Add(rssFile)
 

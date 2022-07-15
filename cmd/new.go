@@ -101,7 +101,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient()
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(utils.Underline("A new Sveltin project will be created"))
+	cfg.log.Plain(utils.Underline("Initializing a new Sveltin project"))
 
 	// Clone starter template github repository
 	starterTemplate := cfg.startersMap[SvelteKitStarter]

@@ -12,14 +12,15 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/pkg/logger"
 )
 
-// HelperTextNewProject returns a 'next step' text used after the project creation.
+// HelperTextNewProject returns an help message text for 'project creation'.
 func HelperTextNewProject(projectName string) string {
 	placeHolderText := `1. cd %s
-  2. sveltin install
-  3. sveltin server
+  2. sveltin install (or npm run install, pnpm install, ...)
+  3. sveltin server (or npm run dev, pnpm dev, ...)
 
 To stop the dev server, hit Ctrl-C
 
@@ -28,10 +29,10 @@ Visit the Quick Start guide at https://docs.sveltin.io/quick-start
 	return fmt.Sprintf(placeHolderText, projectName)
 }
 
-// HelperTextNewProjectWithExistingTheme returns a 'next step' text used after the project creation when using an existing theme.
+// HelperTextNewProjectWithExistingTheme returns an help message text for 'project creation when using an existing theme'.
 func HelperTextNewProjectWithExistingTheme(projectName string) string {
 	placeHolderText := `1. cd %s
-  2. sveltin install
+  2. sveltin install (or npm run install, pnpm install, ...)
   3. git init
   4. git submodule add <github_repu_url_for_the_theme> themes/<theme_name>
   5. Follow the instructions on the README from the theme creator
@@ -44,12 +45,32 @@ Visit the Quick Start guide at https://docs.sveltin.io/theming
 	return fmt.Sprintf(placeHolderText, projectName)
 }
 
-// HelperTextNewTheme returns a 'next step' text used after the theme creation.
+// HelperTextNewMetadata returns an help message string for 'metadata creation'.
+func HelperTextNewMetadata(metadataInfo *config.TemplateData) string {
+	placeHolderText := `Metadata ready to be used!
+   Ensure your markdown frontmatter includes it.
+
+   Example:
+
+   %s
+`
+	var exampleString string
+	if metadataInfo.Type == "single" {
+		exampleString = fmt.Sprintf("%s%s", metadataInfo.Name, ": your_value")
+	} else {
+		exampleString = metadataInfo.Name + `:
+    - value 1
+    - value 2`
+	}
+	return fmt.Sprintf(placeHolderText, exampleString)
+}
+
+// HelperTextNewTheme returns an help message string for 'theme creation'.
 func HelperTextNewTheme(projectName string) string {
 	placeHolderText := `1. cd %s
-  2. sveltin install
+  2. sveltin install (or npm run install, pnpm install, ...)
   3. Create your theme components and partials
-  4. sveltin server
+  4. sveltin server (or npm run dev, pnpm dev, ...)
 
 To stop the dev server, hit Ctrl-C
 
@@ -58,14 +79,14 @@ Visit the Quick Start guide at https://docs.sveltin.io/theming
 	return fmt.Sprintf(placeHolderText, projectName)
 }
 
-// HelperTextDryRunFlag returns a text used when running an action in dry-run mode.
+// HelperTextDryRunFlag returns an help message string for commands supporting the 'dry-run mode'.
 func HelperTextDryRunFlag() string {
 	return `  * *********************** *
   * RUNNING IN DRY-RUN MODE *
   * *********************** *`
 }
 
-// HelperTextDeploySummary returns a 'summary' text for commands like deploy.
+// HelperTextDeploySummary returns a summary message string for commands like deploy.
 func HelperTextDeploySummary(numOfFolders, numOfFiles int) string {
 	placeHolderText := `
 SUMMARY:

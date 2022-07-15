@@ -42,7 +42,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("The menu structure will be created"))
+	cfg.log.Plain(utils.Underline("Generating the menu structure file"))
 
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 
@@ -56,7 +56,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	configFolder := cfg.fsManager.GetFolder(ConfigFolder)
 
 	// ADD FILE: config/menu.js
-	cfg.log.Info("Generating menu.js.ts file")
+	cfg.log.Info("Saving the menu.js.ts file")
 	menuFile := &composer.File{
 		Name:       "menu.js.ts",
 		TemplateID: "menu",
