@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"@indaco/svelte-iconoir": "^2.5.1",
 		"@sveltejs/adapter-static": "1.0.0-next.36",
-		"@sveltejs/kit": "1.0.0-next.371",
+		"@sveltejs/kit": "1.0.0-next.375",
 		"@sveltinio/essentials": "^0.2.1",
 		"@sveltinio/media-content": "^0.3.2",
 		"@sveltinio/seo": "^0.1.7",
@@ -62,7 +62,7 @@
 		"tslib": "^2.4.0",
 		"typescript": "^4.7.4",
 		"unist-util-visit": "^4.1.0",
-		"vite": "^2.9.13"
+		"vite": "^3.0.0"
 	},
 	"type": "module"
 }

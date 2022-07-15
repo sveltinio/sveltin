@@ -10,6 +10,7 @@ const pkg = JSON.parse(json);
 /** @type {import('vite').UserConfig} */
 const config = {
 	define: {
+		clearScreen: false,
 		'process.env.VITE_SVELTEKIT_VERSION': JSON.stringify(
 			String(pkg.devDependencies['@sveltejs/kit'])
 		),
