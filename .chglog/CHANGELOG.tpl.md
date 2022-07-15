@@ -18,6 +18,8 @@
 
 ## [{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/releases/tag/{{ .Tag.Name }}) ({{ datetime "2006-01-02" .Tag.Date }})
 
+{{ if .Tag.Previous }}[Full Changelog]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}){{ else }}{{ .Tag.Name }}{{ end }}
+
 {{ range .CommitGroups -}}
 
 ### {{ .Title }}
@@ -53,6 +55,4 @@
 {{ end }}
 {{ end -}}
 {{ end -}}
-
-{{ if .Tag.Previous }}[Full Changelog]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}){{ else }}{{ .Tag.Name }}{{ end }}
 {{ end -}}
