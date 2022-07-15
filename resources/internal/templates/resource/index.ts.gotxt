@@ -2,7 +2,7 @@ import type { Sveltin } from 'src/sveltin';
 import { list } from '$lib/{{ .Name }}/api{{ .Name | ToVariableName | Capitalize }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get() {
+export async function GET() {
 	const resourceName = '{{ .Name }}';
 	const data = await list();
 

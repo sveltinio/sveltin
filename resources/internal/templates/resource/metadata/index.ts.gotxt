@@ -3,7 +3,7 @@ import type { Sveltin } from 'src/sveltin';
 import { all } from '$lib/{{ .Resource }}/api{{ $mdName }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get() {
+export async function GET() {
 	const data = await all();
 	const metadata = data as unknown as Array<Sveltin.ContentMetadata>;
 	return {
