@@ -188,7 +188,7 @@ func newCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The theme you are going to create or reuse")
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
-	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "3000", "The port to start the server on")
+	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
 	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
 }
 
