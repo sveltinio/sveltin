@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## [v0.8.10](https://github.com/sveltinio/sveltin/releases/tag/v0.8.10) (2022-07-16)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.9...v0.8.10)
+
+### Fixed Bugs
+
+- avoid typescript linting errors
+- [#68](https://github.com/sveltinio/sveltin/issues/68) param matchers name when '-' in resource and metadata name
+- update to sveltekit next.377 with uppercase endpoint methods
+- **apiIndex:** wrong import string
+
+### Chores
+
+- update to afero 1.9.0
+- unused files for xml generation as endpoints removed
+- uppercase endpoint methods as per sveltekit next.377
+
+### Pull Requests
+
+- Merge pull request [#65](https://github.com/sveltinio/sveltin/issues/65) from sveltinio/sveltekit-next-377
+- Merge pull request [#66](https://github.com/sveltinio/sveltin/issues/66) from sveltinio/remove-unused-files
+- Merge pull request [#67](https://github.com/sveltinio/sveltin/issues/69) from sveltinio/afero-update
+- Merge pull request [#69](https://github.com/sveltinio/sveltin/issues/69) from sveltinio/fix-matcher-names
+
 ## [v0.8.9](https://github.com/sveltinio/sveltin/releases/tag/v0.8.9) (2022-07-15)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.8...v0.8.9)
