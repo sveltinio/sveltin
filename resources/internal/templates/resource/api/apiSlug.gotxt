@@ -1,7 +1,7 @@
-import { getSingle } from '$lib/posts/apiPosts';
+import { getSingle } from '$lib/{{ .Name }}/api{{ .Name | ToVariableName | Capitalize }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get({ url }) {
+export async function GET({ url }) {
 	const { pathname } = url;
 
 	const slug = pathname.substring(pathname.lastIndexOf('/') + 1);

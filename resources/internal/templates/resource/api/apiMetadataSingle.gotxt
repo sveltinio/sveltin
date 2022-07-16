@@ -1,7 +1,7 @@
 import { groupedBy } from '$lib/{{ .Resource }}/api{{ .Name | ToVariableName | Capitalize }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get({ url }) {
+export async function GET({ url }) {
 	const { pathname } = url;
 	const metadataName = pathname.substring(pathname.lastIndexOf('/') + 1);
 
