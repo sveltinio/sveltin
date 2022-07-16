@@ -257,7 +257,7 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 	resourceAPIFolder.Add(apiFile)
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = slug]
-	resourceSlugMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", resourceName, "=", "slug", "]"))
+	resourceSlugMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", utils.ToSnakeCase(resourceName), "=", "slug", "]"))
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = slug]/[slug=string]
 	slugStringFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", "slug", "=", "string", "]"))

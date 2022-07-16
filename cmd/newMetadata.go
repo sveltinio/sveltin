@@ -241,7 +241,7 @@ func createOrAddContentForMetadataToParamsLocalFolder(metadataTemplateData *conf
 
 	// NEW FILE: src/params/<metadata_name>.js
 	metadataMatcherFile := &composer.File{
-		Name:         fmt.Sprintf("%s%s", metadataTemplateData.Name, ".js"),
+		Name:         fmt.Sprintf("%s%s", utils.ToSnakeCase(metadataTemplateData.Name), ".js"),
 		TemplateID:   GenericMatcher,
 		TemplateData: metadataTemplateData,
 	}
@@ -286,7 +286,7 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataTemplateData *config.
 	resourceAPIFolder := composer.NewFolder(metadataTemplateData.Resource)
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]
-	resourceAPIMetadataMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", metadataTemplateData.Resource, "=", metadataTemplateData.Name, "]"))
+	resourceAPIMetadataMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", utils.ToSnakeCase(metadataTemplateData.Resource), "=", utils.ToSnakeCase(metadataTemplateData.Name), "]"))
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/index.ts
 	resourceMetadataIndexAPIFile := &composer.File{
@@ -298,7 +298,7 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataTemplateData *config.
 	resourceAPIFolder.Add(resourceAPIMetadataMatcherFolder)
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/[<metadata_name> = string]
-	resourceAPIMetadataNameMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", metadataTemplateData.Name, "=", "string", "]"))
+	resourceAPIMetadataNameMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", utils.ToSnakeCase(metadataTemplateData.Name), "=", "string", "]"))
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/[<metadata_name> = string]/index.ts
 	resourceMetadataNameIndexAPIFile := &composer.File{

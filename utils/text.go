@@ -75,7 +75,7 @@ func ToSlug(txt string) string {
 }
 
 // ToSnakeCase returns a copy of string with lowercase
-// replacing "_" and whitespaces with "_"
+// replacing "-" and whitespaces with "_"
 // example: ToSnakeCase("New Resource") returns new_resource.
 func ToSnakeCase(txt string) string {
 	cleanString := strings.ToLower(txt)

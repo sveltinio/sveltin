@@ -11,6 +11,7 @@ package common
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/pkg/logger"
@@ -56,9 +57,9 @@ func HelperTextNewMetadata(metadataInfo *config.TemplateData) string {
 `
 	var exampleString string
 	if metadataInfo.Type == "single" {
-		exampleString = fmt.Sprintf("%s%s", metadataInfo.Name, ": your_value")
+		exampleString = fmt.Sprintf("%s%s", toSnakeCase(metadataInfo.Name), ": your_value")
 	} else {
-		exampleString = metadataInfo.Name + `:
+		exampleString = toSnakeCase(metadataInfo.Name) + `:
     - value 1
     - value 2`
 	}
@@ -114,4 +115,11 @@ func ShowDeployCommandWarningMessages(log *logger.Logger) {
 	listLogger.Append(logger.LevelWarning, "Upload content to the remote folder")
 	listLogger.Info("Be aware! The deploy command will perform the following actions")
 
+}
+
+func toSnakeCase(txt string) string {
+	cleanString := strings.ToLower(txt)
+	cleanString = strings.ReplaceAll(cleanString, " ", "_")
+	cleanString = strings.ReplaceAll(cleanString, "-", "_")
+	return cleanString
 }
