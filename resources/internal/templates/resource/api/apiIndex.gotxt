@@ -1,4 +1,4 @@
-import { list } from '$lib/posts/apiPosts';
+import { list } from '$lib/{{ .Name }}/api{{ .Name | ToVariableName | Capitalize }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET() {
