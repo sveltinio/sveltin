@@ -17,6 +17,8 @@ func TestTextUtils(t *testing.T) {
 	is.Equal("resource-name", ToSlug("Resource Name"))
 	is.Equal("resource-name", ToSlug("Resource_Name"))
 	is.Equal("resource-name", ToSlug("Resource name"))
+	is.Equal("resource_name", ToSnakeCase("resource name"))
+	is.Equal("resource_name", ToSnakeCase("resource-name"))
 	is.Equal("quickStartPage", ToVariableName("quick-start-page"))
 	is.Equal("resourceName", ToVariableName("Resource name"))
 	is.Equal("getting-started.md", ToMDFile("getting started", false))

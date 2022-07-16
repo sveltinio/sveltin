@@ -7,11 +7,11 @@ export const list = async (withMarkup = false) => {
 		contentFilesArray.map(async ([path, resolver]) => {
 			const data = await resolver();
 			const result: Sveltin.DynamicObject = {
-				meta: data.metadata,
+				meta: data['metadata'],
 				path: path
 			};
 			if (withMarkup) {
-				result.markup = data.default.render();
+				result.markup = data['default'].render();
 			}
 			return result;
 		})
