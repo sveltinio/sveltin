@@ -11,6 +11,26 @@
 	* {
 		box-sizing: border-box;
 	}
+
+	code[class*='language-'] {
+		font-size: 0.8rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 20px;
+	}
+
+	@media only screen and (min-width: 1024px) {
+		code[class*='language-'] {
+			font-size: 1rem !important;
+		}
+
+		code[class*='language-'],
+		pre[class*='language-'] {
+			line-height: 25px;
+		}
+	}
 }
 
 @layer components {
