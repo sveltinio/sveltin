@@ -12,11 +12,35 @@ import (
 	"errors"
 	"os"
 
+	"github.com/chzyer/readline"
 	"github.com/manifoldco/promptui"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
+
+/**
+CREDITS TO:
+- https://github.com/manifoldco/promptui/issues/49#issuecomment-573814976
+- https://github.com/manifoldco/promptui/issues/49#issuecomment-1012640880
+**/
+
+type bellSkipper struct{}
+
+// Write implements an io.WriterCloser over os.Stderr, but it skips the terminal
+// bell character.
+func (bs *bellSkipper) Write(b []byte) (int, error) {
+	//const charBell = 7 // c.f. readline.CharBell
+	if len(b) == 1 && b[0] == readline.CharBell {
+		return 0, nil
+	}
+	return os.Stderr.Write(b)
+}
+
+// Close implements an io.WriterCloser over os.Stderr.
+func (bs *bellSkipper) Close() error {
+	return os.Stderr.Close()
+}
 
 // PromptConfirm is used to ask for a yes or no ([Y/N]) question.
 func PromptConfirm(label string) string {
@@ -74,7 +98,8 @@ func PromptGetInput(pc config.PromptContent, validate func(string) error, defaul
 // PromptGetSelect is used to prompt a list of available options to the user and retrieve the selection.
 func PromptGetSelect(pc config.PromptContent, items interface{}, withTemplates bool) (string, error) {
 	prompt := promptui.Select{
-		Label: pc.Label,
+		Label:  pc.Label,
+		Stdout: &bellSkipper{},
 	}
 	if withTemplates {
 		prompt.Templates = &promptui.SelectTemplates{
