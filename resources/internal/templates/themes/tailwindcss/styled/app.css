@@ -28,6 +28,26 @@
 	h1 {
 		@apply mx-auto mt-3 mb-8 transition-all leading-4;
 	}
+
+	code[class*='language-'] {
+		font-size: 0.8rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 20px;
+	}
+
+	@media only screen and (min-width: 1024px) {
+		code[class*='language-'] {
+			font-size: 1rem !important;
+		}
+
+		code[class*='language-'],
+		pre[class*='language-'] {
+			line-height: 25px;
+		}
+	}
 }
 
 .main-container {
