@@ -12,6 +12,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/chzyer/readline"
 	"github.com/manifoldco/promptui"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/config"
@@ -29,8 +30,8 @@ type bellSkipper struct{}
 // Write implements an io.WriterCloser over os.Stderr, but it skips the terminal
 // bell character.
 func (bs *bellSkipper) Write(b []byte) (int, error) {
-	const charBell = 7 // c.f. readline.CharBell
-	if len(b) == 1 && b[0] == charBell {
+	//const charBell = 7 // c.f. readline.CharBell
+	if len(b) == 1 && b[0] == readline.CharBell {
 		return 0, nil
 	}
 	return os.Stderr.Write(b)
