@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## [v0.8.11](https://github.com/sveltinio/sveltin/releases/tag/v0.8.11) (2022-08-02)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.10...v0.8.11)
+
+### Fixed Bugs
+
+- import bootstrap variables for v5.2.0
+- **ci:** test workflow syntax
+- **manifest.webmanifest:** reference path to manifest.webmanifest file
+
+### Chores
+
+- css libs updated
+- readline as direct dependency
+- go deps updated
+- bump afero to 1.9.2
+- bump sveltekit to next.386
+- **app.css:** custom prism styles as sample
+- **app.html:** Remove initial-scale=1 from <meta name="viewport">
+- **ci:** splitting the lint and test github action workflows
+- **package.json:** bump sveltekit to next.401 -> removing the prepare command/script
+- **vite.config.js:** remove the alias to $lib
+- **vite.config.js:** import defineConfig
+
+### Pull Requests
+
+- Merge pull request [#76](https://github.com/sveltinio/sveltin/issues/76) from sveltinio/vite-config
+- Merge pull request [#77](https://github.com/sveltinio/sveltin/issues/77) from sveltinio/no-initial-scale
+- Merge pull request [#78](https://github.com/sveltinio/sveltin/issues/78) from sveltinio/sk-401-no-prepare
+- Merge pull request [#79](https://github.com/sveltinio/sveltin/issues/79) from sveltinio/split-lint-test-workflows
+- Merge pull request [#80](https://github.com/sveltinio/sveltin/issues/80) from sveltinio/update-godeps
+- Merge pull request [#81](https://github.com/sveltinio/sveltin/issues/81) from sveltinio/update-deps
+- Merge pull request [#82](https://github.com/sveltinio/sveltin/issues/82) from sveltinio/fix-bootstrap-vars
+
 ## [v0.8.10](https://github.com/sveltinio/sveltin/releases/tag/v0.8.10) (2022-07-16)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.9...v0.8.10)
