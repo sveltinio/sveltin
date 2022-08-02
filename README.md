@@ -32,7 +32,7 @@ The Smartest Way to Build SvelteKit powered static websites.
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.8.10-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.8.11-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
@@ -82,18 +82,18 @@ cd myBlog
 sveltin install
 
 # Create a public page as Svelte component
-# (http://localhost:3000/contact)
+# (http://localhost:5173//contact)
 sveltin new page contact --type svelte
 
 # Create a 'posts' resource
 sveltin new resource posts
 
 # Add new content to the posts resource
-# (http://localhost:3000/posts/getting-started)
+# (http://localhost:5173//posts/getting-started)
 sveltin new content posts/getting-started
 
 # Add a 'category' metadata
-# (http://localhost:3000/posts/category)
+# (http://localhost:5173//posts/category)
 sveltin new metadata category --resource posts --type single
 
 # Run the server
