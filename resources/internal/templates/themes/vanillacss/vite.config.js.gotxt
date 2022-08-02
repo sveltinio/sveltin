@@ -23,7 +23,7 @@ const config = defineConfig({
 		fs: {
 			// Allow serving files from one level up to the project root
 			// Alternatevaly set server.fs.strict to false
-			allow: ['..'],
+			allow: ['..']
 		},
 	},
 	resolve: {

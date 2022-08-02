@@ -16,31 +16,31 @@ const config = defineConfig({
 		),
 		'process.env.VITE_BUILD_TIME': JSON.stringify(
 			new Date().toISOString()
-		),
+		)
 	},
 	server: {
 		port: {{ .PortNumber }},
 		fs: {
 			// Allow serving files from one level up to the project root
 			// Alternatevaly set server.fs.strict to false
-			allow: ['..'],
-		},
-	},
-	css: {
-		preprocessorOptions: {
-			scss: {
-				additionalData: '@use "src/_variables.scss" as *;',
-			},
+			allow: ['..']
 		},
 	},
 	resolve: {
 		alias: {
 			$config: path.resolve('config'),
 			$content: path.resolve('content'),
-			$themes: path.resolve('themes'),
-		},
+			$themes: path.resolve('themes')
+		}
 	},
 	plugins: [sveltekit()],
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: '@use "src/_variables.scss" as *;'
+			}
+		}
+	}
 });
 
 export default config;
