@@ -3,6 +3,7 @@ module github.com/sveltinio/sveltin
 go 1.17
 
 require (
+	github.com/chzyer/readline v1.5.1
 	github.com/gosimple/slug v1.12.0
 	github.com/jlaffaye/ftp v0.0.0-20220630165035-11536801d1ff
 	github.com/manifoldco/promptui v0.9.0
@@ -20,7 +21,6 @@ require (
 require (
 	github.com/VividCortex/ewma v1.2.0 // indirect
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d // indirect
-	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
