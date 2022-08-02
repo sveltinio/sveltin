@@ -30,7 +30,6 @@ const config = defineConfig({
 		alias: {
 			$config: path.resolve('config'),
 			$content: path.resolve('content'),
-			$lib: path.resolve('src/lib'),
 			$themes: path.resolve('themes'),
 		},
 	},
