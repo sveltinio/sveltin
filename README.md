@@ -50,7 +50,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :warning: Project Status
 
-> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-377**). If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-401**). If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
 
 ## :mega: Overview
 
@@ -168,7 +168,6 @@ Available Commands:
   help        Help about any command
   install     Get all the dependencies from the `package.json` file
   new         Command to create projects, resources, contents, pages, metadata and themes.
-  prepare     It wraps svelte-kit sync command.
   preview     Preview the production version locally
   server      Run the server
   update      Update the dependencies from the `package.json` file
@@ -240,12 +239,6 @@ Alias: `u`
 
 Read more [here][update].
 
-### sveltin prepare
-
-`sveltin prepare` is used to wrap `svelte-kit sync` command.
-
-Read more [here][prepare].
-
 ### sveltin server
 
 `sveltin server` is used to run the VITE server. It wraps svelte-kit defined commands to run the server.
@@ -295,7 +288,6 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [sitemap]: https://docs.sveltin.io/cli/generate-sitemap/
 [rss]: https://docs.sveltin.io/cli/generate-rss/
 [server]: https://docs.sveltin.io/cli/server/
-[prepare]: https://docs.sveltin.io/cli/prepare/
 [install]: https://docs.sveltin.io/cli/install/
 [update]: https://docs.sveltin.io/cli/update/
 [build]: https://docs.sveltin.io/cli/build/
