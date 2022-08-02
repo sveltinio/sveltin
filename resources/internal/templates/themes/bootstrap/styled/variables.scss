@@ -1,6 +1,8 @@
 /* Variables and mixins declared here will be available in all other SCSS files */
 @import 'bootstrap/scss/functions'; /* Override Bootstrap's variables here */
 @import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/utilities';
 
 /* additional colours */
@@ -257,5 +259,3 @@ $utilities: map-merge(
 			),
 	)
 );
-
-@import 'bootstrap/scss/mixins';
