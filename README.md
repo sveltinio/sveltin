@@ -82,18 +82,18 @@ cd myBlog
 sveltin install
 
 # Create a public page as Svelte component
-# (http://localhost:5173//contact)
+# (http://localhost:5173/contact)
 sveltin new page contact --type svelte
 
 # Create a 'posts' resource
 sveltin new resource posts
 
 # Add new content to the posts resource
-# (http://localhost:5173//posts/getting-started)
+# (http://localhost:5173/posts/getting-started)
 sveltin new content posts/getting-started
 
 # Add a 'category' metadata
-# (http://localhost:5173//posts/category)
+# (http://localhost:5173/posts/category)
 sveltin new metadata category --resource posts --type single
 
 # Run the server
