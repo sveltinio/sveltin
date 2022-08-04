@@ -15,7 +15,8 @@
 ### Pull Requests
 
 - Merge pull request [#85](https://github.com/sveltinio/sveltin/issues/85) from sveltinio/fix-mdsvex
-- Merge pull request [#86](https://github.com/sveltinio/sveltin/issues/77) from sveltinio/sveltekit-next.403
+- Merge pull request [#86](https://github.com/sveltinio/sveltin/issues/86) from sveltinio/sveltekit-next.403
+- Merge pull request [#87](https://github.com/sveltinio/sveltin/issues/87) from sveltinio/typos-readme
 
 ## [v0.8.11](https://github.com/sveltinio/sveltin/releases/tag/v0.8.11) (2022-08-02)
 
