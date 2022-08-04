@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## [v0.8.12](https://github.com/sveltinio/sveltin/releases/tag/v0.8.12) (2022-08-04)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.11...v0.8.12)
+
+### Fixed Bugs
+
+- [#84](https://github.com/sveltinio/sveltin/issues/84)
+
+### Chores
+
+- upgrade to sveltekit next.403
+
+### Pull Requests
+
+- Merge pull request [#85](https://github.com/sveltinio/sveltin/issues/85) from sveltinio/fix-mdsvex
+- Merge pull request [#86](https://github.com/sveltinio/sveltin/issues/77) from sveltinio/sveltekit-next.403
+
 ## [v0.8.11](https://github.com/sveltinio/sveltin/releases/tag/v0.8.11) (2022-08-02)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.10...v0.8.11)
@@ -65,7 +82,7 @@
 ### 🔧  Code Refactoring
 
 - actual work function structure for commands
-- resources and metadata API endpoints now are fully REST. This is really useful during the development. Instead to open a browser, just use `curl` on the terminal. E.g. `http://localshot:5173/posts/category/webdev`
+- resources and metadata API endpoints now are fully REST. This is really useful during the development. Instead to open a browser, just use `curl` on the terminal. E.g. `curl http://localshot:5173/api/v1/posts/category/webdev`
 
 ### Chores
 
@@ -73,7 +90,7 @@
 - sveltekit updated to next.375 with **Vite3** support
 - git-ghlog config and template updated
 - **adapter-static:** updated to next.36
-- **app.html:** make uses of %sveltekit.assets% to reference static files
+- **app.html:** make uses of _%sveltekit.assets%_ to reference static files
 - **vite.config.js:** clearScreen:false to prevent Vite from clearing the terminal
 
 ### Pull Requests
