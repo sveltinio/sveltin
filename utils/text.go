@@ -33,7 +33,7 @@ func ToMDFile(txt string, uppercase bool) string {
 // example: ToLibFile("category") returns 'apiCategory.ts'.
 func ToLibFile(txt string) string {
 	vName := ToVariableName(txt)
-	return fmt.Sprintf("api%s.ts", ToTitle(vName))
+	return fmt.Sprintf("load%s.ts", ToTitle(vName))
 }
 
 // ToTitle replace all '-' char with a white space and

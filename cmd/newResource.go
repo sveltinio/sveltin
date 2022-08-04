@@ -165,7 +165,7 @@ func createResourceLibLocalFolder(resourceName string) *composer.Folder {
 	// NEW FOLDER: /src/lib/<resource_name>
 	resourceLibFolder := composer.NewFolder(resourceName)
 
-	// NEW FILE: src/lib/<resource_name>/api<resource_name>.ts
+	// NEW FILE: src/lib/<resource_name>/load<resource_name>.ts
 	cfg.log.Info("Lib files")
 	libFile := &composer.File{
 		Name:       utils.ToLibFile(resourceName),

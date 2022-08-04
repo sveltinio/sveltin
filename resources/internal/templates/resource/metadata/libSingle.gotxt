@@ -2,7 +2,7 @@
 {{ $mdName := .Name | ToSnakeCase }}
 import type { Sveltin } from 'src/sveltin';
 import { groupedByOne } from '$lib/utils/collections.js';
-import { list } from './api{{ $resourceName }}';
+import { list } from './load{{ $resourceName }}';
 
 export const all = async (): Promise<Sveltin.ContentMetadata[]> => {
 	const mdName = '{{ $mdName }}';

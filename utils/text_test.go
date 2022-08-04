@@ -23,7 +23,7 @@ func TestTextUtils(t *testing.T) {
 	is.Equal("resourceName", ToVariableName("Resource name"))
 	is.Equal("getting-started.md", ToMDFile("getting started", false))
 	is.Equal("GETTING-STARTED.md", ToMDFile("getting started", true))
-	is.Equal("apiCategory.ts", ToLibFile("category"))
+	is.Equal("loadCategory.ts", ToLibFile("category"))
 	is.Equal(fmt.Sprintf("\n %s\n-------------\n", "Sample Text"), Underline("Sample Text"))
 	is.Equal(time.Now().Format("02-Jan-2006"), Today())
 	is.Equal("2022", CurrentYear())

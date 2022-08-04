@@ -1,4 +1,4 @@
-import { groupedBy } from '$lib/{{ .Resource }}/api{{ .Name | ToVariableName | Capitalize }}';
+import { groupedBy } from '$lib/{{ .Resource }}/load{{ .Name | ToVariableName | Capitalize }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ url }) {
