@@ -53,7 +53,7 @@ var SveltinResourceFS = map[string]string{
 	"index":         "internal/templates/resource/index.gotxt",
 	"indexendpoint": "internal/templates/resource/index.ts.gotxt",
 	"slug":          "internal/templates/resource/slug.gotxt",
-	"slugendpoint":  "internal/templates/resource/slug.ts.gotxt",
+	"slugendpoint":  "internal/templates/resource/slug.json.ts.gotxt",
 }
 
 // SveltinAPIFS is the map for the api template files.

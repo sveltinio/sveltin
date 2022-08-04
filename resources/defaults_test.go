@@ -35,7 +35,7 @@ func TestSveltinResourceFS(t *testing.T) {
 	is.Equal("internal/templates/resource/index.gotxt", SveltinResourceFS["index"])
 	is.Equal("internal/templates/resource/index.ts.gotxt", SveltinResourceFS["indexendpoint"])
 	is.Equal("internal/templates/resource/slug.gotxt", SveltinResourceFS["slug"])
-	is.Equal("internal/templates/resource/slug.ts.gotxt", SveltinResourceFS["slugendpoint"])
+	is.Equal("internal/templates/resource/slug.json.ts.gotxt", SveltinResourceFS["slugendpoint"])
 }
 
 func TestSveltinAPIFS(t *testing.T) {

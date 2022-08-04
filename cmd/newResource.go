@@ -67,7 +67,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	libFolder, err := makeResourceFolderStructure(LibFolder, resourceName, cfg)
 	utils.ExitIfError(err)
 
-	// MAKE FOLDER STRUCTURE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
+	// MAKE FOLDER STRUCTURE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].json.ts}
 	routesFolder, err := makeResourceFolderStructure(RoutesFolder, resourceName, cfg)
 	utils.ExitIfError(err)
 
@@ -219,7 +219,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceName)
 
-	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
+	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].json.ts}
 	cfg.log.Info("Routes")
 	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
 		f := &composer.File{
