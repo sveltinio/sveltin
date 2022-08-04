@@ -14,7 +14,7 @@ pages:
   index: index.svelte
   indexendpoint: index.ts
   slug: '[slug].svelte'
-  slugendpoint: '[slug].ts'
+  slugendpoint: '[slug].json.ts'
 api:
   version: v1
   filename: index.ts

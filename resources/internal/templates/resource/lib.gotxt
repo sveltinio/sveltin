@@ -10,9 +10,6 @@ export const list = async (withMarkup = false) => {
 				meta: data['metadata'],
 				path: path
 			};
-			if (withMarkup) {
-				result.markup = data['default'].render();
-			}
 			return result;
 		})
 	);
@@ -37,8 +34,7 @@ export const getSingle = async (slug: string) => {
 		const selectedItem = publishedByDate[selectedItemIndex];
 		const current: Sveltin.ContentEntry = {
 			resource: resourceName,
-			metadata: selectedItem.meta as Sveltin.YAMLFrontmatter,
-			html: selectedItem.markup['html']
+			metadata: selectedItem.meta as Sveltin.YAMLFrontmatter
 		};
 		const previous: Sveltin.ContentEntry = {
 			resource: resourceName,

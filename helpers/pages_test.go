@@ -82,7 +82,7 @@ func TestGetResourceRouteFilename(t *testing.T) {
 		},
 		{
 			name: "slugendpoint",
-			want: "[slug].ts",
+			want: "[slug].json.ts",
 		},
 	}
 	for _, tc := range tests {
