@@ -1,6 +1,6 @@
 import type { Sveltin } from 'src/sveltin';
 
-export const list = async (withMarkup = false) => {
+export async function list() {
 	const contentFiles = import.meta.glob('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
 	const contents = await Promise.all(
@@ -21,9 +21,9 @@ export const list = async (withMarkup = false) => {
 };
 
 {{ $slugName := .Name | ToSlug}}
-export const getSingle = async (slug: string) => {
+export async function getSingle(slug: string) {
 	const resourceName = '{{ $slugName }}';
-	const publishedByDate = await list(true);
+	const publishedByDate = await list();
 
 	const selected = publishedByDate.filter((item) => {
 		return item.meta['slug'] == slug;
