@@ -32,7 +32,7 @@ The Smartest Way to Build SvelteKit powered static websites.
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.8.11-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.8.12-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
