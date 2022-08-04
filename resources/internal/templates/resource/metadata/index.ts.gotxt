@@ -1,6 +1,6 @@
 import type { Sveltin } from 'src/sveltin';
 {{ $mdName := .Name | ToVariableName | Capitalize}}
-import { all } from '$lib/{{ .Resource }}/api{{ $mdName }}';
+import { all } from '$lib/{{ .Resource }}/load{{ $mdName }}';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET() {

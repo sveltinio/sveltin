@@ -1,5 +1,5 @@
 {{ $mdName := .Name | ToVariableName | Capitalize }}
-import { groupedBy } from '$lib/{{ .Resource }}/api{{ $mdName }}';
+import { groupedBy } from '$lib/{{ .Resource }}/load{{ $mdName }}';
 
 /** @type {import('./[slug]').RequestHandler} */
 export async function GET({ params }) {
