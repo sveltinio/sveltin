@@ -26,6 +26,7 @@ func GetASCIIArt() string {
 }
 
 // SveltinFS is the name for the embedded FS used by Sveltin.
+//
 //go:embed internal/templates/*
 var SveltinFS embed.FS
 
