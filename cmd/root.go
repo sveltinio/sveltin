@@ -42,8 +42,6 @@ type appConfig struct {
 //=============================================================================
 
 const (
-	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.8.12"
 	// SvelteKitStarter is a string representing the project starter id.
 	SvelteKitStarter string = "starter"
 	// ThemeStarter is a string representing the project starter id for new themes.
