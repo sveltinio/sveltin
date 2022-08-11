@@ -93,7 +93,7 @@ func (s *FTPServerConnection) MakeDirs(folders []string, dryRun bool) error {
 		return err
 	}
 	if dryRun {
-		jww.FEEDBACK.Println(common.HelperTextDryRunFlag())
+		common.PrintHelperTextDryRunFlag()
 	}
 
 	pb := utils.NewProgressBar(len(folders))

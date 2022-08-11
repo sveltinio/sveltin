@@ -17,6 +17,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/internal/tui/confirm"
 	"github.com/sveltinio/sveltin/pkg/ftpfs"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -86,9 +87,10 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	common.ShowDeployCommandWarningMessages(cfg.log)
 	//setDefaultLoggerOptions()
 
-	confirmStr := promptBackupConfirm()
+	isConfirm, err := confirm.Run(&confirm.Settings{Question: "Continue?"})
+	utils.ExitIfError(err)
 
-	if isConfirm(confirmStr) {
+	if isConfirm {
 		// create a local tar archive as backup for the remote folder content
 		if isBackup {
 			backupsFolderPath := filepath.Join(cfg.pathMaker.GetRootFolder(), BackupsFolder)
@@ -130,7 +132,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		utils.ExitIfError(err)
 
 		// LOG SUMMARY TO THE STDOUT
-		cfg.log.Info(common.HelperTextDeploySummary(len(foldersList), len(filesList)))
+		common.PrintHelperTextDeploySummary(len(foldersList), len(filesList))
 		cfg.log.Success("Done")
 	}
 }
@@ -171,12 +173,4 @@ func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 		})
 	utils.ExitIfError(err)
 	return fList
-}
-
-func promptBackupConfirm() string {
-	return common.PromptConfirm("Do you wish to continue?")
-}
-
-func isConfirm(value string) bool {
-	return value == "y"
 }

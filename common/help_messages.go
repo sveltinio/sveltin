@@ -13,92 +13,129 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/sveltinio/sveltin/config"
+	styles "github.com/sveltinio/sveltin/internal/tui/styles"
 	"github.com/sveltinio/sveltin/pkg/logger"
 )
 
-// HelperTextNewProject returns an help message text for 'project creation'.
-func HelperTextNewProject(projectName string) string {
-	placeHolderText := `1. cd %s
-  2. sveltin install (or npm run install, pnpm install, ...)
-  3. sveltin server (or npm run dev, pnpm dev, ...)
-
-To stop the dev server, hit Ctrl-C
-
-Visit the Quick Start guide at https://docs.sveltin.io/quick-start
-`
-	return fmt.Sprintf(placeHolderText, projectName)
+type UserProjectConfig struct {
+	ProjectName   string
+	CSSLibName    string
+	ThemeName     string
+	NPMClientName string
 }
 
-// HelperTextNewProjectWithExistingTheme returns an help message text for 'project creation when using an existing theme'.
-func HelperTextNewProjectWithExistingTheme(projectName string) string {
-	placeHolderText := `1. cd %s
-  2. sveltin install (or npm run install, pnpm install, ...)
-  3. git init
-  4. git submodule add <github_repu_url_for_the_theme> themes/<theme_name>
-  5. Follow the instructions on the README from the theme creator
-  6. sveltin server
-
-To stop the dev server, hit Ctrl-C
-
-Visit the Quick Start guide at https://docs.sveltin.io/theming
-`
-	return fmt.Sprintf(placeHolderText, projectName)
+// PrintSummary shows a summary text with the project settings selected by the user.
+func (uc *UserProjectConfig) PrintSummary() {
+	fmt.Println(
+		styles.List.Render(
+			lipgloss.JoinVertical(lipgloss.Left,
+				styles.ListHeader("Here are your choices"),
+				styles.ListDone("Project Name: ", uc.ProjectName),
+				styles.ListDone("CSS Lib: ", uc.CSSLibName),
+				styles.ListDone("Theme: ", uc.ThemeName),
+				styles.ListDone("NPM Client: ", uc.NPMClientName),
+			),
+		),
+	)
 }
 
-// HelperTextNewMetadata returns an help message string for 'metadata creation'.
-func HelperTextNewMetadata(metadataInfo *config.TemplateData) string {
-	placeHolderText := `Metadata ready to be used!
-   Ensure your markdown frontmatter includes it.
+// PrintNextStepsHelperForNewProject prints an help message as next steps for a project creation.
+func (uc *UserProjectConfig) PrintNextStepsHelperForNewProject() {
+	desc := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.ListHeader("Next Steps"),
+		styles.ListNumbered("1. cd "+uc.ProjectName),
+		styles.ListNumbered("2. sveltin install "+styles.Gray("(or npm run install, pnpm install, ...)")),
+		styles.ListNumbered("3. sveltin server"+styles.Gray(" (or npm run dev, pnpm dev, ...)")),
+	))
+	additionalInfo := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.DescStyle.Render("To stop the dev server, hit Ctrl-C"),
+		styles.InfoStyle.Render("Visit the Quick Start guide"+styles.Divider+styles.URL("https://docs.sveltin.io/quick-start")),
+	))
+	fmt.Println(desc)
+	fmt.Println(additionalInfo)
+}
 
-   Example:
+// PrintNextStepsHelperForNewProjectWithExistingTheme pprints an help message as next steps for a project creation with an existing theme'.
+func (uc *UserProjectConfig) PrintNextStepsHelperForNewProjectWithExistingTheme() {
+	desc := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.ListHeader("Next Steps"),
+		styles.ListNumbered("1. cd "+uc.ProjectName),
+		styles.ListNumbered("2. sveltin install "+styles.Gray("(or npm run install, pnpm install, ...)")),
+		styles.ListNumbered("3. git init"),
+		styles.ListNumbered("4. git submodule add <github_repu_url_for_the_theme> themes/<theme_name>"),
+		styles.ListNumbered("5. Follow the instructions on the README file from the theme creator"),
+		styles.ListNumbered("6. sveltin server"+styles.Gray(" (or npm run dev, pnpm dev, ...)")),
+	))
+	additionalInfo := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.DescStyle.Render("To stop the dev server, hit Ctrl-C"),
+		styles.InfoStyle.Render("Visit the Theme guide"+styles.Divider+styles.URL("https://docs.sveltin.io/theming")),
+	))
+	fmt.Println(desc)
+	fmt.Println(additionalInfo)
+}
 
-   %s
-`
+// PrintHelperTextNewMetadata prints an help message string for 'metadata creation'.
+func PrintHelperTextNewMetadata(metadataInfo *config.TemplateData) {
+
 	var exampleString string
 	if metadataInfo.Type == "single" {
 		exampleString = fmt.Sprintf("%s%s", toSnakeCase(metadataInfo.Name), ": your_value")
 	} else {
 		exampleString = toSnakeCase(metadataInfo.Name) + `:
-    - value 1
-    - value 2`
+  - value 1
+  - value 2`
 	}
-	return fmt.Sprintf(placeHolderText, exampleString)
+
+	infoMsg := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.TitleStyle.Render("Metadata ready to be used!"),
+		styles.InfoStyle.Render("Ensure your markdown frontmatter includes it."),
+		styles.NewLine,
+		styles.Plain("Example:"),
+		styles.NewLine,
+		styles.Italic(exampleString),
+	))
+
+	fmt.Println(infoMsg)
+
 }
 
-// HelperTextNewTheme returns an help message string for 'theme creation'.
-func HelperTextNewTheme(projectName string) string {
-	placeHolderText := `1. cd %s
-  2. sveltin install (or npm run install, pnpm install, ...)
-  3. Create your theme components and partials
-  4. sveltin server (or npm run dev, pnpm dev, ...)
-
-To stop the dev server, hit Ctrl-C
-
-Visit the Quick Start guide at https://docs.sveltin.io/theming
-`
-	return fmt.Sprintf(placeHolderText, projectName)
+// PrintHelperTextNewTheme returns an help message string for 'theme creation'.
+func (uc *UserProjectConfig) PrintHelperTextNewTheme() {
+	desc := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.ListHeader("Next Steps"),
+		styles.ListNumbered("1. cd "+uc.ProjectName),
+		styles.ListNumbered("2. sveltin install "+styles.Gray("(or npm run install, pnpm install, ...)")),
+		styles.ListNumbered("3. Create your theme components and partials"),
+		styles.ListNumbered("4. sveltin server"+styles.Gray(" (or npm run dev, pnpm dev, ...)")),
+	))
+	additionalInfo := styles.List.Render(lipgloss.JoinVertical(lipgloss.Left,
+		styles.DescStyle.Render("To stop the dev server, hit Ctrl-C"),
+		styles.InfoStyle.Render("Visit the Theme guide"+styles.Divider+styles.URL("https://docs.sveltin.io/theming")),
+	))
+	fmt.Println(desc)
+	fmt.Println(additionalInfo)
 }
 
-// HelperTextDryRunFlag returns an help message string for commands supporting the 'dry-run mode'.
-func HelperTextDryRunFlag() string {
-	return `  * *********************** *
-  * RUNNING IN DRY-RUN MODE *
-  * *********************** *`
+// PrintHelperTextDryRunFlag prints a message box for commands supporting the 'dry-run mode'.
+func PrintHelperTextDryRunFlag() {
+	fmt.Println(styles.Bordered("RUNNING IN DRY-RUN MODE"))
 }
 
-// HelperTextDeploySummary returns a summary message string for commands like deploy.
-func HelperTextDeploySummary(numOfFolders, numOfFiles int) string {
-	placeHolderText := `
-SUMMARY:
-
-- Total number of created folders: %s
-- Total number of copied files: %s`
-
+// PrintHelperTextDeploySummary prints a summary message string for commands like deploy.
+func PrintHelperTextDeploySummary(numOfFolders, numOfFiles int) {
 	folderCounter := strconv.Itoa(numOfFolders)
 	filesCounter := strconv.Itoa(numOfFiles)
-
-	return fmt.Sprintf(placeHolderText, folderCounter, filesCounter)
+	fmt.Println(
+		styles.List.Render(
+			lipgloss.JoinVertical(lipgloss.Left,
+				styles.ListHeader("SUMMARY"),
+				styles.ListDone("Total number of created folders: ", folderCounter),
+				styles.ListDone("Total number of copied files: ", filesCounter),
+			),
+		),
+	)
 }
 
 // ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.

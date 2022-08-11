@@ -12,7 +12,6 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
@@ -96,13 +95,4 @@ Please check the help: sveltin [command] -h`
 		errA := errors.New(errorMsg)
 		return sveltinerr.NewDefaultError(errA)
 	}
-}
-
-// GetPromptObjectKeys returns a slice of string with Ids.
-func GetPromptObjectKeys(po []config.PromptObject) []string {
-	res := []string{}
-	for _, v := range po {
-		res = append(res, v.String())
-	}
-	return res
 }
