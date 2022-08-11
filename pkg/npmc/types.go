@@ -15,6 +15,7 @@ import (
 // NPMClient is the struct representing an npm client with name and version.
 type NPMClient struct {
 	Name    string
+	Desc    string
 	Version string
 }
 
