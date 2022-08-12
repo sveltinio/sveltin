@@ -23,7 +23,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/css"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
-	"github.com/sveltinio/sveltin/internal/tui/confirm"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/internal/tui/toggle"
 	"github.com/sveltinio/sveltin/pkg/npmc"
@@ -117,11 +116,6 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectConfigSummary.PrintSummary()
 
 	if !isWithConfirm(withConfirm) {
-		confirmConfig := &confirm.Config{Question: "Confirm?"}
-		result, err := confirm.Run(confirmConfig)
-		utils.ExitIfError(err)
-		withConfirm = result
-
 		toggleConfig := &toggle.Config{Question: "Confirm?"}
 		toggle, err := toggle.Run(toggleConfig)
 		utils.ExitIfError(err)
