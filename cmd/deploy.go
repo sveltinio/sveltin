@@ -87,7 +87,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	common.ShowDeployCommandWarningMessages(cfg.log)
 	//setDefaultLoggerOptions()
 
-	isConfirm, err := confirm.Run(&confirm.Settings{Question: "Continue?"})
+	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})
 	utils.ExitIfError(err)
 
 	if isConfirm {

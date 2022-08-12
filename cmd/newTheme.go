@@ -156,7 +156,7 @@ func isValidForThemeMaker() {
 func promptThemeName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		themeNamePromptContent := &input.Settings{
+		themeNamePromptContent := &input.Config{
 			Placeholder: "What's the theme name?",
 			ErrorMsg:    "Please, provide a name for the theme.",
 		}

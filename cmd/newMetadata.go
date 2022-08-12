@@ -131,7 +131,7 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 
 	switch nameLenght := len(mdResourceFlag); {
 	case nameLenght == 0:
-		resourcePromptContent := &choose.Settings{
+		resourcePromptContent := &choose.Config{
 			Title:    "Which existing resource?",
 			ErrorMsg: "Please, provide an existing resource name.",
 		}
@@ -155,7 +155,7 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 func promptMetadataName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		metadataNamePromptContent := &input.Settings{
+		metadataNamePromptContent := &input.Config{
 			Placeholder: "What's the metadata name?",
 			ErrorMsg:    "Please, provide a name for the metadata.",
 		}
@@ -183,7 +183,7 @@ func promptMetadataType(mdTypeFlag string) (string, error) {
 
 	switch nameLenght := len(mdTypeFlag); {
 	case nameLenght == 0:
-		metadataTypePromptContent := &choose.Settings{
+		metadataTypePromptContent := &choose.Config{
 			Title:    "Which relationship between your content and the metadata?",
 			ErrorMsg: "Please, provide a metadata type.",
 		}

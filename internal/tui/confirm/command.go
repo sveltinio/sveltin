@@ -5,45 +5,63 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/sveltinio/sveltin/internal/tui"
 )
 
-type Settings struct {
-	Question          string
-	OkButtonLabel     string
-	CancelButtonLabel string
+const (
+	yesLabel = "Yes"
+	noLabel  = "No"
+)
+
+// Config represents the struct to configure the tui command.
+type Config struct {
+	Question            string
+	OkButtonLabel       string
+	CancelButtonLabel   string
+	QuestionStyle       lipgloss.Style
+	ButtonStyle         lipgloss.Style
+	SelectedButtonStyle lipgloss.Style
 }
 
-func (cs *Settings) initialModel() model {
-	_okButtonLabel := ""
-	if cs.OkButtonLabel != "" {
-		_okButtonLabel = cs.OkButtonLabel
-	} else {
-		_okButtonLabel = "Yes"
+// setDefaults sets default values for Config if not present.
+func (cfg *Config) setDefaults() *Config {
+	if cfg.OkButtonLabel == "" {
+		cfg.OkButtonLabel = yesLabel
 	}
-
-	_cancelButtonLabel := ""
-	if cs.CancelButtonLabel != "" {
-		_cancelButtonLabel = cs.CancelButtonLabel
-	} else {
-		_cancelButtonLabel = "No"
+	if cfg.CancelButtonLabel == "" {
+		cfg.CancelButtonLabel = noLabel
 	}
+	if tui.IsEmpty(cfg.QuestionStyle) {
+		cfg.QuestionStyle = questionStyle
+	}
+	if tui.IsEmpty(cfg.ButtonStyle) {
+		cfg.ButtonStyle = defaultButtonStyle
+	}
+	if tui.IsEmpty(cfg.SelectedButtonStyle) {
+		cfg.SelectedButtonStyle = activeButtonStyle
+	}
+	return cfg
+}
 
+func (cfg *Config) initialModel() model {
 	return model{
-		question:          cs.Question,
-		okButtonLabel:     _okButtonLabel,
-		cancelButtonLabel: _cancelButtonLabel,
+		question:          cfg.Question,
+		okButtonLabel:     cfg.OkButtonLabel,
+		cancelButtonLabel: cfg.CancelButtonLabel,
 		confirmation:      true,
 
-		questionStyle: questionStyle,
-		buttonStyle:   defaultButtonStyle,
-		selectedStyle: activeButtonStyle,
+		questionStyle: cfg.QuestionStyle,
+		buttonStyle:   cfg.ButtonStyle,
+		selectedStyle: cfg.SelectedButtonStyle,
 	}
 }
 
 // Run provides a shell script interface for prompting a user to confirm an
 // action with an affirmative or negative answer.
-func Run(cs *Settings) (bool, error) {
-	m, err := tea.NewProgram(cs.initialModel(), tea.WithOutput(os.Stderr)).StartReturningModel()
+func Run(cfg *Config) (bool, error) {
+	defaultConfig := cfg.setDefaults()
+	m, err := tea.NewProgram(defaultConfig.initialModel(), tea.WithOutput(os.Stderr)).StartReturningModel()
 
 	if err != nil {
 		return false, fmt.Errorf("unable to run confirm: %w", err)

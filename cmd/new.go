@@ -24,7 +24,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
-	"github.com/sveltinio/sveltin/internal/tui/confirm"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/internal/tui/toggle"
 	"github.com/sveltinio/sveltin/pkg/npmc"
@@ -117,11 +116,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	projectConfigSummary.PrintSummary()
 
 	if !isWithConfirm(withConfirm) {
-		result, err := confirm.Run(&confirm.Settings{Question: "Confirm?"})
-		utils.ExitIfError(err)
-		withConfirm = result
-
-		toggle, err := toggle.Run(&toggle.Settings{Question: "Confirm?"})
+		toggleConfig := &toggle.Config{Question: "Confirm?"}
+		toggle, err := toggle.Run(toggleConfig)
 		utils.ExitIfError(err)
 		withConfirm = toggle
 	}
@@ -230,11 +226,11 @@ func init() {
 func promptProjectName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		projectNamePromptContent := &input.Settings{
+		projectNamePromptConfig := &input.Config{
 			Placeholder: "What's the name of your project? ",
 			ErrorMsg:    "Please, provide a name for your project.",
 		}
-		result, err := input.Run(projectNamePromptContent)
+		result, err := input.Run(projectNamePromptConfig)
 		if err != nil {
 			return "", err
 		}
@@ -255,8 +251,8 @@ func promptThemeSelection(themeFlag string) (string, error) {
 	}
 	switch themeFlagLenght := len(themeFlag); {
 	case themeFlagLenght == 0:
-		themePromptContent := &choose.Settings{
-			Title:    "Do you wish to create a new theme or using an existing one?",
+		themePromptContent := &choose.Config{
+			Title:    "Do you wish to create a new theme or use an existing one?",
 			ErrorMsg: "Please, select a theme option.",
 		}
 
@@ -288,7 +284,7 @@ func promptCSSLibName(cssLibName string) (string, error) {
 
 	switch nameLenght := len(cssLibName); {
 	case nameLenght == 0:
-		cssPromptContent := &choose.Settings{
+		cssPromptContent := &choose.Config{
 			Title:    "Which CSS lib do you want to use for your theme?",
 			ErrorMsg: "Please, provide the CSS Lib name.",
 		}
@@ -323,7 +319,7 @@ func promptNPMClient(items []string) (string, error) {
 		if len(items) == 1 {
 			return items[0], nil
 		}
-		pmPromptContent := &choose.Settings{
+		pmPromptContent := &choose.Config{
 			Title:    "Which package manager do you want to use?",
 			ErrorMsg: "Please, provide the name of the package manager.",
 		}
@@ -350,7 +346,7 @@ func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName stri
 	switch themeSelection {
 	case config.BlankTheme:
 		defaultThemeName := strings.Join([]string{projectName, "theme"}, "_")
-		newThemePromptContent := &input.Settings{
+		newThemePromptContent := &input.Config{
 			Placeholder: "What's the name for your new theme? (Default: " + defaultThemeName + ")",
 			ErrorMsg:    "Please, provide a name for your theme.",
 		}

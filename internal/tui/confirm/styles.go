@@ -3,9 +3,6 @@ package confirm
 import "github.com/charmbracelet/lipgloss"
 
 var (
-	// Colors
-	muted = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
-
 	// Styles
 	dialogBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
