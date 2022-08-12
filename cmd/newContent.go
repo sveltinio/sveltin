@@ -114,7 +114,7 @@ func init() {
 func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*config.TemplateData, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		contentNamePromptContent := &input.Settings{
+		contentNamePromptContent := &input.Config{
 			Placeholder: "What's the content title? (it will be the slug to the page)",
 			ErrorMsg:    "Please, provide a title for the content.",
 		}
@@ -172,7 +172,7 @@ func promptContentTemplateSelection(templateType string) (string, error) {
 
 	switch nameLenght := len(templateType); {
 	case nameLenght == 0:
-		templatePromptContent := &choose.Settings{
+		templatePromptContent := &choose.Config{
 			Title:    "Which template for your content?",
 			ErrorMsg: "Please, provide a template name for the content file.",
 		}
@@ -196,7 +196,7 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
 	entries := choose.ToListItem(availableResources)
-	resourcePromptContent := &choose.Settings{
+	resourcePromptContent := &choose.Config{
 		Title:    "Which existing resource?",
 		ErrorMsg: "Please, provide an existing resource name.",
 	}

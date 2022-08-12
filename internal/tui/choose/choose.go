@@ -1,10 +1,3 @@
-/**
- * Copyright © 2021-present Sveltin contributors <github@sveltin.io>
- *
- * Use of this source code is governed by Apache 2.0 license
- * that can be found in the LICENSE file.
- */
-
 // Package choose ...
 package choose
 
@@ -15,8 +8,6 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
-
-const listHeight = 14
 
 type errMsg error
 
@@ -68,7 +59,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.list.SetWidth(msg.Width)
 		return m, nil
-
 	case tea.KeyMsg:
 		switch msg.Type {
 		case tea.KeyCtrlC, tea.KeyEscape:
@@ -81,19 +71,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, tea.Quit
 		}
-
-		/*switch keypress := msg.String(); keypress {
-		case "ctrl+c":
-			m.quitting = true
-			return m, tea.Quit
-
-		case "enter":
-			i, ok := m.list.SelectedItem().(Item)
-			if ok {
-				m.choice = string(i.Name)
-			}
-			return m, tea.Quit
-		}*/
 	case errMsg:
 		m.err = msg
 		return m, nil

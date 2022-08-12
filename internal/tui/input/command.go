@@ -8,10 +8,17 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/sveltinio/sveltin/internal/tui"
 )
 
-type Settings struct {
-	Focus        bool
+const (
+	defaultPlaceholder = "Placeholder text..."
+	defaultText        = "Default value..."
+	defaultErrorMsg    = "Error Message..."
+)
+
+// Config represents the struct to configure the tui command.
+type Config struct {
 	Placeholder  string
 	DefaultValue string
 	ErrorMsg     string
@@ -20,31 +27,48 @@ type Settings struct {
 	PromptStyle lipgloss.Style
 }
 
-func (is *Settings) initialModel() model {
-	ti := textinput.New()
-
-	if is.Focus {
-		ti.Focus()
+// setDefaults sets default values for Config if not present.
+func (cfg *Config) setDefaults() *Config {
+	if cfg.Placeholder == "" {
+		cfg.Placeholder = defaultPlaceholder
 	}
-	ti.Placeholder = is.Placeholder
-	ti.SetValue(is.DefaultValue)
-	ti.TextStyle = textStyle
-	ti.PromptStyle = promptStyle
+	if cfg.DefaultValue == "" {
+		cfg.DefaultValue = defaultText
+	}
+	if cfg.ErrorMsg == "" {
+		cfg.ErrorMsg = defaultErrorMsg
+	}
+	if tui.IsEmpty(cfg.TextStyle) {
+		cfg.TextStyle = textStyle
+	}
+	if tui.IsEmpty(cfg.PromptStyle) {
+		cfg.PromptStyle = promptStyle
+	}
+	return cfg
+}
+
+func (cfg *Config) initialModel() model {
+	ti := textinput.New()
+	ti.Focus()
+	ti.Placeholder = cfg.Placeholder
+	//ti.SetValue(cfg.DefaultValue)
+	ti.TextStyle = cfg.TextStyle
+	ti.PromptStyle = cfg.PromptStyle
 
 	return model{
 		textInput:    ti,
-		placeholder:  is.Placeholder,
-		defaultValue: is.DefaultValue,
-		err:          errors.New(is.ErrorMsg),
-		textStyle:    textStyle,
-		promptStyle:  promptStyle,
+		placeholder:  cfg.Placeholder,
+		defaultValue: cfg.DefaultValue,
+		err:          errors.New(cfg.ErrorMsg),
+		textStyle:    cfg.TextStyle,
+		promptStyle:  cfg.PromptStyle,
 	}
 }
 
 // Run is used to prompt an input the user and retrieve the value.
-func Run(is *Settings) (string, error) {
-	ti := is.initialModel()
-	p := tea.NewProgram(ti, tea.WithOutput(os.Stderr))
+func Run(cfg *Config) (string, error) {
+	defaultConfig := cfg.setDefaults()
+	p := tea.NewProgram(defaultConfig.initialModel(), tea.WithOutput(os.Stderr))
 
 	tm, err := p.StartReturningModel()
 	m := tm.(model)

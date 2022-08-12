@@ -105,7 +105,7 @@ func init() {
 func promptResourceName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		resourceNamePromptContent := &input.Settings{
+		resourceNamePromptContent := &input.Config{
 			Placeholder: "What's the resource name? (e.g. posts, portfolio ...)",
 			ErrorMsg:    "Please, provide a name for the resource.",
 		}

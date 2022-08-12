@@ -102,7 +102,7 @@ func promptPageName(inputs []string) (string, error) {
 	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		pageNamePromptContent := &input.Settings{
+		pageNamePromptContent := &input.Config{
 			Placeholder: "What's the page name?",
 			ErrorMsg:    "Please, provide a name for the page.",
 		}
@@ -128,7 +128,7 @@ func promptPageType(pageTypeFlag string) (string, error) {
 
 	switch nameLenght := len(pageTypeFlag); {
 	case nameLenght == 0:
-		pagePromptContent := &choose.Settings{
+		pagePromptContent := &choose.Config{
 			Title:    "What's the page type?",
 			ErrorMsg: "Please, provide a page type",
 		}
