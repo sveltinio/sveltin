@@ -14,13 +14,16 @@ import (
 	"path"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
-	"github.com/sveltinio/sveltin/pkg/composer"
+	"github.com/sveltinio/sveltin/internal/composer"
+	"github.com/sveltinio/sveltin/internal/tui/choose"
+	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -111,11 +114,12 @@ func init() {
 func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*config.TemplateData, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		contentNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a title for the content.",
-			Label:    "What's the content title? (it will be the slug to the page)",
+		contentNamePromptContent := &input.Config{
+			Placeholder: "What's the content title? (it will be the slug to the page)",
+			ErrorMsg:    "Please, provide a title for the content.",
 		}
-		contentName, err := common.PromptGetInput(contentNamePromptContent, nil, "")
+		//contentName, err := common.PromptGetInput(contentNamePromptContent, nil, "")
+		contentName, err := input.Run(contentNamePromptContent)
 		if err != nil {
 			return nil, err
 		}
@@ -161,24 +165,24 @@ func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*
 }
 
 func promptContentTemplateSelection(templateType string) (string, error) {
-	promptObjects := []config.PromptObject{
-		{ID: Blank, Name: "Frontmatter only"},
-		{ID: Sample, Name: "Full sample content"},
+	entries := []list.Item{
+		choose.Item{Name: Blank, Desc: "Frontmatter only"},
+		choose.Item{Name: Sample, Desc: "Full sample content"},
 	}
 
 	switch nameLenght := len(templateType); {
 	case nameLenght == 0:
-		templatePromptContent := config.PromptContent{
+		templatePromptContent := &choose.Config{
+			Title:    "Which template for your content?",
 			ErrorMsg: "Please, provide a template name for the content file.",
-			Label:    "Which template for your content?",
 		}
-		result, err := common.PromptGetSelect(templatePromptContent, promptObjects, true)
+		result, err := choose.Run(templatePromptContent, entries)
 		if err != nil {
 			return "", err
 		}
 		return result, nil
 	case nameLenght != 0:
-		valid := common.GetPromptObjectKeys(promptObjects)
+		valid := choose.GetItemsKeys(entries)
 		if !common.Contains(valid, templateType) {
 			return "", sveltinerr.NewContentTemplateTypeNotValidError()
 		}
@@ -191,11 +195,12 @@ func promptContentTemplateSelection(templateType string) (string, error) {
 func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
-	resourcePromptContent := config.PromptContent{
+	entries := choose.ToListItem(availableResources)
+	resourcePromptContent := &choose.Config{
+		Title:    "Which existing resource?",
 		ErrorMsg: "Please, provide an existing resource name.",
-		Label:    "Which existing resource?",
 	}
-	result, err := common.PromptGetSelect(resourcePromptContent, availableResources, false)
+	result, err := choose.Run(resourcePromptContent, entries)
 	if err != nil {
 		return "", err
 	}

@@ -25,6 +25,7 @@ func GetInstalledNPMClientList() []npmc.NPMClient {
 		if valid {
 			a := npmc.NPMClient{
 				Name:    pm,
+				Desc:    pm,
 				Version: version,
 			}
 			npmClientList = append(npmClientList, a)

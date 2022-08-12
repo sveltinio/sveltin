@@ -12,10 +12,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	"github.com/sveltinio/sveltin/internal/tui/choose"
+	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -100,11 +102,11 @@ func promptPageName(inputs []string) (string, error) {
 	var name string
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		pageNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for the page.",
-			Label:    "What's the page name?",
+		pageNamePromptContent := &input.Config{
+			Placeholder: "What's the page name?",
+			ErrorMsg:    "Please, provide a name for the page.",
 		}
-		name, err := common.PromptGetInput(pageNamePromptContent, nil, "")
+		name, err := input.Run(pageNamePromptContent)
 		if err != nil {
 			return "", err
 		}
@@ -119,24 +121,24 @@ func promptPageName(inputs []string) (string, error) {
 }
 
 func promptPageType(pageTypeFlag string) (string, error) {
-	promptObjects := []config.PromptObject{
-		{ID: Svelte, Name: "Svelte"},
-		{ID: Markdown, Name: "Markdown in Svelte"},
+	entries := []list.Item{
+		choose.Item{Name: Svelte, Desc: "Svelte"},
+		choose.Item{Name: Markdown, Desc: "Markdown in Svelte"},
 	}
 
 	switch nameLenght := len(pageTypeFlag); {
 	case nameLenght == 0:
-		pagePromptContent := config.PromptContent{
+		pagePromptContent := &choose.Config{
+			Title:    "What's the page type?",
 			ErrorMsg: "Please, provide a page type",
-			Label:    "What's the page type?",
 		}
-		result, err := common.PromptGetSelect(pagePromptContent, promptObjects, true)
+		result, err := choose.Run(pagePromptContent, entries)
 		if err != nil {
 			return "", err
 		}
 		return result, nil
 	case nameLenght != 0:
-		valid := common.GetPromptObjectKeys(promptObjects)
+		valid := choose.GetItemsKeys(entries)
 		if !common.Contains(valid, pageTypeFlag) {
 			return "", sveltinerr.NewPageTypeNotValidError()
 		}

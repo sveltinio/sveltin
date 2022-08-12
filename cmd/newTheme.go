@@ -21,8 +21,9 @@ import (
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers/factory"
-	"github.com/sveltinio/sveltin/pkg/composer"
-	"github.com/sveltinio/sveltin/pkg/css"
+	"github.com/sveltinio/sveltin/internal/composer"
+	"github.com/sveltinio/sveltin/internal/css"
+	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/pkg/shell"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
@@ -118,8 +119,15 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	cfg.log.Plain(utils.Underline("Next Steps"))
-	cfg.log.Plain(common.HelperTextNewTheme(projectName))
+	projectConfigSummary := common.UserProjectConfig{
+		ProjectName:   projectName,
+		CSSLibName:    cssLibName,
+		ThemeName:     themeName,
+		NPMClientName: npmClient.Desc,
+	}
+	//cfg.log.Plain(utils.Underline("Next Steps"))
+	//cfg.log.Plain(common.HelperTextNewTheme(projectName))
+	projectConfigSummary.PrintHelperTextNewTheme()
 }
 
 func newThemeCmdFlags(cmd *cobra.Command) {
@@ -148,11 +156,11 @@ func isValidForThemeMaker() {
 func promptThemeName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		themeNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for the theme.",
-			Label:    "What's the theme name?",
+		themeNamePromptContent := &input.Config{
+			Placeholder: "What's the theme name?",
+			ErrorMsg:    "Please, provide a name for the theme.",
 		}
-		result, err := common.PromptGetInput(themeNamePromptContent, nil, "")
+		result, err := input.Run(themeNamePromptContent)
 		if err != nil {
 			return "", err
 		}

@@ -12,13 +12,16 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
-	"github.com/sveltinio/sveltin/pkg/composer"
+	"github.com/sveltinio/sveltin/internal/composer"
+	"github.com/sveltinio/sveltin/internal/tui/choose"
+	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -104,8 +107,9 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	cfg.log.Plain(utils.Underline("Next Steps"))
-	cfg.log.Important(common.HelperTextNewMetadata(metadataTemplateData))
+	//cfg.log.Plain(utils.Underline("Next Steps"))
+	//cfg.log.Important(common.HelperTextNewMetadata(metadataTemplateData))
+	common.PrintHelperTextNewMetadata(metadataTemplateData)
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {
@@ -123,13 +127,17 @@ func init() {
 func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig) (string, error) {
 	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
 
+	options := choose.ToListItem(availableResources)
+
 	switch nameLenght := len(mdResourceFlag); {
 	case nameLenght == 0:
-		resourcePromptContent := config.PromptContent{
+		resourcePromptContent := &choose.Config{
+			Title:    "Which existing resource?",
 			ErrorMsg: "Please, provide an existing resource name.",
-			Label:    "Which existing resource?",
 		}
-		result, err := common.PromptGetSelect(resourcePromptContent, availableResources, false)
+
+		//result, err := common.PromptGetSelect(resourcePromptContent, availableResources, false)
+		result, err := choose.Run(resourcePromptContent, options)
 		if err != nil {
 			return "", err
 		}
@@ -147,12 +155,12 @@ func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig)
 func promptMetadataName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		metadataNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for the metadata.",
-			Label:    "What's the metadata name?",
+		metadataNamePromptContent := &input.Config{
+			Placeholder: "What's the metadata name?",
+			ErrorMsg:    "Please, provide a name for the metadata.",
 		}
 
-		result, err := common.PromptGetInput(metadataNamePromptContent, nil, "")
+		result, err := input.Run(metadataNamePromptContent)
 		if err != nil {
 			return "", err
 		}
@@ -168,24 +176,24 @@ func promptMetadataName(inputs []string) (string, error) {
 }
 
 func promptMetadataType(mdTypeFlag string) (string, error) {
-	promptObjects := []config.PromptObject{
-		{ID: "single", Name: "(1:1) One-to-One"},
-		{ID: "list", Name: "(1:m) One-to-Many"},
+	entries := []list.Item{
+		choose.Item{Name: "single", Desc: "(1:1) One-to-One"},
+		choose.Item{Name: "list", Desc: "(1:m) One-to-Many"},
 	}
 
 	switch nameLenght := len(mdTypeFlag); {
 	case nameLenght == 0:
-		metadataTypePromptContent := config.PromptContent{
+		metadataTypePromptContent := &choose.Config{
+			Title:    "Which relationship between your content and the metadata?",
 			ErrorMsg: "Please, provide a metadata type.",
-			Label:    "Which relationship between your content and the metadata?",
 		}
-		result, err := common.PromptGetSelect(metadataTypePromptContent, promptObjects, true)
+		result, err := choose.Run(metadataTypePromptContent, entries)
 		if err != nil {
 			return "", err
 		}
 		return result, nil
 	case nameLenght != 0:
-		valid := common.GetPromptObjectKeys(promptObjects)
+		valid := choose.GetItemsKeys(entries)
 		if !common.Contains(valid, mdTypeFlag) {
 			return "", sveltinerr.NewMetadataTypeNotValidError()
 		}

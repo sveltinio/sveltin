@@ -14,7 +14,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"path/filepath"
 	"sort"
 	"time"
@@ -94,7 +93,7 @@ func (s *FTPServerConnection) MakeDirs(folders []string, dryRun bool) error {
 		return err
 	}
 	if dryRun {
-		jww.FEEDBACK.Println(common.HelperTextDryRunFlag())
+		common.PrintHelperTextDryRunFlag()
 	}
 
 	pb := utils.NewProgressBar(len(folders))
@@ -260,7 +259,7 @@ func (s *FTPServerConnection) createTarball(appFs afero.Fs, tarballFilePath stri
 			}
 			defer r.Close()
 			// retrieve the file content
-			buf, err := ioutil.ReadAll(r)
+			buf, err := io.ReadAll(r)
 			if err != nil {
 				return err
 			}

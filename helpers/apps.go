@@ -12,7 +12,7 @@ import (
 	"github.com/sveltinio/sveltin/config"
 )
 
-//InitStartersTemplatesMap creates a map[string]string containining project name and repo url
+// InitStartersTemplatesMap creates a map[string]string containining project name and repo url
 // used by the `sveltin new` command to clone the starter project.
 func InitStartersTemplatesMap() map[string]config.StarterTemplate {
 	starterTemplatesMap := make(map[string]config.StarterTemplate)

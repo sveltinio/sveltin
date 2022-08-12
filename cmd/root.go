@@ -19,9 +19,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
-	"github.com/sveltinio/sveltin/pkg/fsm"
+	"github.com/sveltinio/sveltin/internal/fsm"
+	"github.com/sveltinio/sveltin/internal/pathmaker"
 	"github.com/sveltinio/sveltin/pkg/logger"
-	"github.com/sveltinio/sveltin/pkg/pathmaker"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"gopkg.in/yaml.v3"
@@ -42,8 +42,6 @@ type appConfig struct {
 //=============================================================================
 
 const (
-	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.8.12"
 	// SvelteKitStarter is a string representing the project starter id.
 	SvelteKitStarter string = "starter"
 	// ThemeStarter is a string representing the project starter id for new themes.

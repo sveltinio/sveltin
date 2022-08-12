@@ -12,11 +12,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
-	"github.com/sveltinio/sveltin/pkg/composer"
+	"github.com/sveltinio/sveltin/internal/composer"
+	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -105,11 +105,11 @@ func init() {
 func promptResourceName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		resourceNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for the resource.",
-			Label:    "What's the resource name? (e.g. posts, portfolio ...)",
+		resourceNamePromptContent := &input.Config{
+			Placeholder: "What's the resource name? (e.g. posts, portfolio ...)",
+			ErrorMsg:    "Please, provide a name for the resource.",
 		}
-		result, err := common.PromptGetInput(resourceNamePromptContent, nil, "")
+		result, err := input.Run(resourceNamePromptContent)
 		if err != nil {
 			return "", err
 		}

@@ -14,13 +14,17 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
-	"github.com/sveltinio/sveltin/pkg/composer"
-	"github.com/sveltinio/sveltin/pkg/css"
+	"github.com/sveltinio/sveltin/internal/composer"
+	"github.com/sveltinio/sveltin/internal/css"
+	"github.com/sveltinio/sveltin/internal/tui/choose"
+	"github.com/sveltinio/sveltin/internal/tui/input"
+	"github.com/sveltinio/sveltin/internal/tui/toggle"
 	"github.com/sveltinio/sveltin/pkg/npmc"
 	"github.com/sveltinio/sveltin/pkg/shell"
 	"github.com/sveltinio/sveltin/pkg/sveltinerr"
@@ -35,6 +39,7 @@ var (
 	withThemeName  string
 	withPortNumber string
 	withGit        bool
+	withConfirm    bool
 )
 
 // names for the available style options
@@ -101,85 +106,103 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient()
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(utils.Underline("Initializing a new Sveltin project"))
-
-	// Clone starter template github repository
-	starterTemplate := cfg.startersMap[SvelteKitStarter]
-	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
-
-	gitClient := shell.NewGitClient()
-	err = gitClient.RunGitClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
-	//TO BE REMOVED: err = utils.GitClone(starterTemplate.URL, pathMaker.GetProjectRoot(projectName))
-	utils.ExitIfError(err)
-
-	// GET FOLDER: <project_name>
-	cfg.log.Info("Creating the project folder structure")
-
-	// MAKE FOLDER STRUCTURE: config folder
-	configFolder, err := makeProjectFolderStructure(ConfigFolder, "", nil)
-	utils.ExitIfError(err)
-
-	// MAKE FOLDER STRUCTURE: content folder
-	contentFolder, err := makeProjectFolderStructure(ContentFolder, "", nil)
-	utils.ExitIfError(err)
-
-	// MAKE FOLDER STRUCTURE: src/routes folder
-	routesFolder, err := makeProjectFolderStructure(RoutesFolder, "", themeData)
-	utils.ExitIfError(err)
-
-	// MAKE FOLDER STRUCTURE: themes/<theme_name> folder
-	themeFolder, err := makeProjectFolderStructure(ThemesFolder, "", themeData)
-	utils.ExitIfError(err)
-
-	// NEW FILE: env.production
-	dotEnvTplData := &config.TemplateData{
-		Name:    DotEnvProdFile,
-		BaseURL: fmt.Sprintf("http://%s.com", projectName),
+	projectConfigSummary := common.UserProjectConfig{
+		ProjectName:   projectName,
+		CSSLibName:    cssLibName,
+		ThemeName:     themeSelection,
+		NPMClientName: npmClient.Desc,
 	}
-	f := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 
-	// SET FOLDER STRUCTURE
-	projectFolder := cfg.fsManager.GetFolder(projectName)
-	projectFolder.Add(f)
-	projectFolder.Add(configFolder)
-	projectFolder.Add(contentFolder)
-	projectFolder.Add(routesFolder)
-	projectFolder.Add(themeFolder)
+	projectConfigSummary.PrintSummary()
 
-	rootFolder := cfg.fsManager.GetFolder(RootFolder)
-	rootFolder.Add(projectFolder)
-
-	// GENERATE THE FOLDER TREE
-	sfs := factory.NewProjectArtifact(&resources.SveltinFS, cfg.fs)
-	err = rootFolder.Create(sfs)
-	utils.ExitIfError(err)
-
-	// SETUP THE CSS LIB
-	cfg.log.Info("Setting up the CSS Lib")
-	tplData := config.TemplateData{
-		ProjectName: projectName,
-		NPMClient:   npmClient.ToString(),
-		PortNumber:  withPortNumber,
-		Theme:       themeData,
-	}
-	err = setupCSSLib(&resources.SveltinFS, cfg, &tplData)
-	utils.ExitIfError(err)
-
-	// INITIALIZE GIT REPO
-	if isInitGitRepo(withGit) {
-		cfg.log.Info("Initializing empty Git repository")
-		err = gitClient.RunInit(projectFolder.GetPath(), true)
+	if !isWithConfirm(withConfirm) {
+		toggleConfig := &toggle.Config{Question: "Confirm?"}
+		toggle, err := toggle.Run(toggleConfig)
 		utils.ExitIfError(err)
+		withConfirm = toggle
 	}
 
-	cfg.log.Success("Done")
+	if isWithConfirm(withConfirm) {
+		cfg.log.Plain(utils.Underline("Initializing a new Sveltin project"))
 
-	// NEXT STEPS
-	cfg.log.Plain(utils.Underline("Next Steps"))
-	if themeData.ID != config.ExistingTheme {
-		cfg.log.Plain(common.HelperTextNewProject(projectName))
-	} else {
-		cfg.log.Plain(common.HelperTextNewProjectWithExistingTheme(projectName))
+		// Clone starter template github repository
+		starterTemplate := cfg.startersMap[SvelteKitStarter]
+		cfg.log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
+
+		gitClient := shell.NewGitClient()
+		err = gitClient.RunGitClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
+		utils.ExitIfError(err)
+
+		// GET FOLDER: <project_name>
+		cfg.log.Info("Creating the project folder structure")
+
+		// MAKE FOLDER STRUCTURE: config folder
+		configFolder, err := makeProjectFolderStructure(ConfigFolder, "", nil)
+		utils.ExitIfError(err)
+
+		// MAKE FOLDER STRUCTURE: content folder
+		contentFolder, err := makeProjectFolderStructure(ContentFolder, "", nil)
+		utils.ExitIfError(err)
+
+		// MAKE FOLDER STRUCTURE: src/routes folder
+		routesFolder, err := makeProjectFolderStructure(RoutesFolder, "", themeData)
+		utils.ExitIfError(err)
+
+		// MAKE FOLDER STRUCTURE: themes/<theme_name> folder
+		themeFolder, err := makeProjectFolderStructure(ThemesFolder, "", themeData)
+		utils.ExitIfError(err)
+
+		// NEW FILE: env.production
+		dotEnvTplData := &config.TemplateData{
+			Name:    DotEnvProdFile,
+			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+		}
+		f := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
+
+		// SET FOLDER STRUCTURE
+		projectFolder := cfg.fsManager.GetFolder(projectName)
+		projectFolder.Add(f)
+		projectFolder.Add(configFolder)
+		projectFolder.Add(contentFolder)
+		projectFolder.Add(routesFolder)
+		projectFolder.Add(themeFolder)
+
+		rootFolder := cfg.fsManager.GetFolder(RootFolder)
+		rootFolder.Add(projectFolder)
+
+		// GENERATE THE FOLDER TREE
+		sfs := factory.NewProjectArtifact(&resources.SveltinFS, cfg.fs)
+		err = rootFolder.Create(sfs)
+		utils.ExitIfError(err)
+
+		// SETUP THE CSS LIB
+		cfg.log.Info("Setting up the CSS Lib")
+		tplData := config.TemplateData{
+			ProjectName: projectName,
+			NPMClient:   npmClient.ToString(),
+			PortNumber:  withPortNumber,
+			Theme:       themeData,
+		}
+		err = setupCSSLib(&resources.SveltinFS, cfg, &tplData)
+		utils.ExitIfError(err)
+
+		// INITIALIZE GIT REPO
+		if isInitGitRepo(withGit) {
+			cfg.log.Info("Initializing empty Git repository")
+			err = gitClient.RunInit(projectFolder.GetPath(), true)
+			utils.ExitIfError(err)
+		}
+
+		cfg.log.Success("Done")
+
+		// NEXT STEPS
+		if themeData.ID != config.ExistingTheme {
+			projectConfigSummary.PrintNextStepsHelperForNewProject()
+			//cfg.log.Plain(common.HelperTextNewProject(projectName))
+		} else {
+			projectConfigSummary.PrintNextStepsHelperForNewProjectWithExistingTheme()
+			//cfg.log.Plain(common.HelperTextNewProjectWithExistingTheme(projectName))
+		}
 	}
 
 }
@@ -190,6 +213,7 @@ func newCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
 	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
+	cmd.Flags().BoolVarP(&withConfirm, "yes", "y", false, "Confirm the settings and create the project structure")
 }
 
 func init() {
@@ -202,11 +226,11 @@ func init() {
 func promptProjectName(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
-		projectNamePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for your project.",
-			Label:    "What's the name of your project?",
+		projectNamePromptConfig := &input.Config{
+			Placeholder: "What's the name of your project? ",
+			ErrorMsg:    "Please, provide a name for your project.",
 		}
-		result, err := common.PromptGetInput(projectNamePromptContent, nil, "")
+		result, err := input.Run(projectNamePromptConfig)
 		if err != nil {
 			return "", err
 		}
@@ -220,23 +244,28 @@ func promptProjectName(inputs []string) (string, error) {
 }
 
 func promptThemeSelection(themeFlag string) (string, error) {
+	entries := []list.Item{
+		choose.Item{Name: config.BlankTheme, Desc: "Create a new theme"},
+		choose.Item{Name: config.SveltinTheme, Desc: "Sveltin default theme"},
+		//choose.Item{Name: config.ExistingTheme, Desc: "Use an existing theme"},
+	}
 	switch themeFlagLenght := len(themeFlag); {
 	case themeFlagLenght == 0:
-		promptObjects := []config.PromptObject{
-			{ID: config.BlankTheme, Name: "Create a new theme"},
-			{ID: config.SveltinTheme, Name: "Sveltin default theme"},
-			//{ID: config.ExistingTheme, Name: "Use an existing theme"},
-		}
-		themePromptContent := config.PromptContent{
+		themePromptContent := &choose.Config{
+			Title:    "Do you wish to create a new theme or use an existing one?",
 			ErrorMsg: "Please, select a theme option.",
-			Label:    "Do you wish to create a new theme or using an existing one?",
 		}
-		result, err := common.PromptGetSelect(themePromptContent, promptObjects, true)
+
+		result, err := choose.Run(themePromptContent, entries)
 		if err != nil {
 			return "", err
 		}
 		return result, nil
 	case themeFlagLenght != 0:
+		valid := choose.GetItemsKeys(entries)
+		if !common.Contains(valid, themeFlag) {
+			return "", sveltinerr.NewOptionNotValidError(themeFlag, valid)
+		}
 		return themeFlag, nil
 	default:
 		err := errors.New("something went wrong: value not valid")
@@ -245,27 +274,28 @@ func promptThemeSelection(themeFlag string) (string, error) {
 }
 
 func promptCSSLibName(cssLibName string) (string, error) {
-	promptObjects := []config.PromptObject{
-		{ID: VanillaCSS, Name: "Plain CSS"},
-		{ID: Scss, Name: "Scss/Sass"},
-		{ID: TailwindCSS, Name: "Tailwind CSS"},
-		{ID: Bulma, Name: "Bulma"},
-		{ID: Bootstrap, Name: "Bootstrap"},
+	entries := []list.Item{
+		choose.Item{Name: VanillaCSS, Desc: "Plain CSS"},
+		choose.Item{Name: Scss, Desc: "Scss/Sass"},
+		choose.Item{Name: TailwindCSS, Desc: "Tailwind CSS"},
+		choose.Item{Name: Bulma, Desc: "Bulma"},
+		choose.Item{Name: Bootstrap, Desc: "Bootstrap"},
 	}
 
 	switch nameLenght := len(cssLibName); {
 	case nameLenght == 0:
-		cssPromptContent := config.PromptContent{
+		cssPromptContent := &choose.Config{
+			Title:    "Which CSS lib do you want to use for your theme?",
 			ErrorMsg: "Please, provide the CSS Lib name.",
-			Label:    "Which CSS lib do you want to use for your theme?",
 		}
-		result, err := common.PromptGetSelect(cssPromptContent, promptObjects, true)
+
+		result, err := choose.Run(cssPromptContent, entries)
 		if err != nil {
 			return "", err
 		}
 		return result, nil
 	case nameLenght != 0:
-		valid := common.GetPromptObjectKeys(promptObjects)
+		valid := choose.GetItemsKeys(entries)
 		if !common.Contains(valid, cssLibName) {
 			return "", sveltinerr.NewOptionNotValidError(cssLibName, valid)
 		}
@@ -282,17 +312,19 @@ func promptNPMClient(items []string) (string, error) {
 		return "", sveltinerr.NewDefaultError(err)
 	}
 
+	entries := choose.ToListItem(items)
+
 	switch nameLenght := len(npmClientName); {
 	case nameLenght == 0:
 		if len(items) == 1 {
 			return items[0], nil
 		}
-		pmPromptContent := config.PromptContent{
+		pmPromptContent := &choose.Config{
+			Title:    "Which package manager do you want to use?",
 			ErrorMsg: "Please, provide the name of the package manager.",
-			Label:    "Which package manager do you want to use?",
 		}
 
-		result, err := common.PromptGetSelect(pmPromptContent, items, false)
+		result, err := choose.Run(pmPromptContent, entries)
 		if err != nil {
 			return "", err
 		}
@@ -310,15 +342,16 @@ func promptNPMClient(items []string) (string, error) {
 
 //=============================================================================
 
-func buildThemeData(input, themeFlagValue, projectName, cssLibName string) (*config.ThemeData, error) {
-	switch input {
+func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName string) (*config.ThemeData, error) {
+	switch themeSelection {
 	case config.BlankTheme:
 		defaultThemeName := strings.Join([]string{projectName, "theme"}, "_")
-		newThemePromptContent := config.PromptContent{
-			ErrorMsg: "Please, provide a name for your theme.",
-			Label:    "What's the name for your new theme?",
+		newThemePromptContent := &input.Config{
+			Placeholder: "What's the name for your new theme? (Default: " + defaultThemeName + ")",
+			ErrorMsg:    "Please, provide a name for your theme.",
 		}
-		themeName, err := common.PromptGetInput(newThemePromptContent, nil, defaultThemeName)
+		//themeName, err := common.PromptGetInput(newThemePromptContent,  defaultThemeName)
+		themeName, err := input.Run(newThemePromptContent)
 		if err != nil {
 			return nil, err
 		}
@@ -342,8 +375,8 @@ func buildThemeData(input, themeFlagValue, projectName, cssLibName string) (*con
 			CSSLib: cssLibName,
 		}, nil
 	default:
-		if utils.IsValidURL(input) {
-			_, err := utils.NewGitHubURLParser(input)
+		if utils.IsValidURL(themeSelection) {
+			_, err := utils.NewGitHubURLParser(themeSelection)
 			if err != nil {
 				return nil, err
 			}
@@ -407,6 +440,10 @@ func setupCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) err
 
 func isInitGitRepo(gitFlagValue bool) bool {
 	return gitFlagValue
+}
+
+func isWithConfirm(confirmFlagValue bool) bool {
+	return confirmFlagValue
 }
 
 //=============================================================================

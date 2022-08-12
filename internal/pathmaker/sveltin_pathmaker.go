@@ -47,7 +47,7 @@ func (maker *SveltinPathMaker) GetProjectContentFolder(project string) string {
 	return filepath.Join(maker.c.GetProjectRoot(), project, maker.c.Paths.Content)
 }
 
-//GetProjectThemesFolder returns a string representing the path to the 'themes' folder
+// GetProjectThemesFolder returns a string representing the path to the 'themes' folder
 // for a sveltin project relative to the current working directory.
 func (maker *SveltinPathMaker) GetProjectThemesFolder(project string) string {
 	return filepath.Join(maker.c.GetProjectRoot(), project, maker.c.Paths.Themes)

@@ -18,7 +18,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/pkg/builder"
+	"github.com/sveltinio/sveltin/internal/builder"
 )
 
 // IsValidFileForContent checks is the provided FileInfo has valid
