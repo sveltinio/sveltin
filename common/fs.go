@@ -18,7 +18,7 @@ import (
 	"time"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 // MkDir is a wrapper for afero MkdirAll to create folder structure on the file system.

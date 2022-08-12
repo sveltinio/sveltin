@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 func TestNotGitHubURL(t *testing.T) {
@@ -20,12 +20,10 @@ func TestNotValidGitHubRepoURL(t *testing.T) {
 	notValidURL := "https://github.com/sveltinio"
 	_, err := NewGitHubURLParser(notValidURL)
 	is.Equal(sveltinerr.NewNotValidGitHubRepoURL(notValidURL), err)
-	is.Equal("[SveltinError: NotValidGitHubRepo (Code=5)] <user>/<repo> not in url path, received: 'https://github.com/sveltinio'", err.Error())
 
 	notValidURL = "https://github.com"
 	_, err = NewGitHubURLParser(notValidURL)
 	is.Equal(sveltinerr.NewNotValidGitHubRepoURL(notValidURL), err)
-	is.Equal("[SveltinError: NotValidGitHubRepo (Code=5)] <user>/<repo> not in url path, received: 'https://github.com'", err.Error())
 }
 
 func TestGitHubURLParser(t *testing.T) {

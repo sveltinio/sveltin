@@ -15,7 +15,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 // LocalShell is a Shell implementation.

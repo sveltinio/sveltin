@@ -12,8 +12,8 @@ import (
 	"os/exec"
 
 	"github.com/spf13/afero"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/pkg/npmc"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 )
 
 // GetInstalledNPMClientList returns the list of installed npmClient as slice of NPMClient.

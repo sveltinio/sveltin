@@ -9,14 +9,14 @@
 package helpers
 
 import (
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/pkg/shell"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 // RunPMCommand executes package manager (npm, pnpm, yarn) commands.
 func RunPMCommand(pmName string, pmCmd string, mode string, packages []string, silentMode bool) error {
-	nodePM := shell.NewNodePackageManager()
+	nodePM := shell.NewNPMClient()
 	var err error
 	switch pmCmd {
 	case "install":
@@ -28,7 +28,7 @@ func RunPMCommand(pmName string, pmCmd string, mode string, packages []string, s
 	case "addPackages":
 		err = nodePM.RunAddPackages(pmName, pmCmd, mode, packages, silentMode)
 	default:
-		err = sveltinerr.NewPackageManagerCommandNotValidError()
+		err = sveltinerr.NewNPMClientCommandNotValidError()
 	}
 	utils.ExitIfError(err)
 	return nil

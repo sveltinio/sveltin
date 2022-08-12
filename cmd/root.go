@@ -9,7 +9,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -19,10 +18,10 @@ import (
 	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
 	"github.com/sveltinio/sveltin/pkg/logger"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"gopkg.in/yaml.v3"
 )
@@ -162,7 +161,9 @@ func isValidProject() {
 	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
 	if !exists {
 		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
-		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+		//jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+		jww.FATAL.Printf("\n%s", err.Error())
+		os.Exit(0)
 	}
 }
 

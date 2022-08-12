@@ -16,7 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/resources"
 )
 
