@@ -16,9 +16,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
 	"github.com/sveltinio/sveltin/internal/tui/input"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )

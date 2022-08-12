@@ -12,7 +12,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 // Contains returns true if an element is in a slice.

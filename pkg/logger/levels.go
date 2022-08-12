@@ -11,7 +11,7 @@ package logger
 import (
 	"fmt"
 
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 // LogLevel represents the level of severity.

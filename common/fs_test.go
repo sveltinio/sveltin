@@ -6,7 +6,7 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/resources"
 )
 
@@ -151,7 +151,7 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(11, re.Code)
-		is.Equal("[SveltinError: FileNotFoundError (Code=11)] please, check the file path", re.Error())
+		is.Equal("please, check the file path", re.Message)
 
 	}
 

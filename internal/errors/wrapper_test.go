@@ -15,7 +15,7 @@ func TestErrors(t *testing.T) {
 	errVar := NewDefaultError(err)
 	re := errVar.(*SveltinError)
 	is.Equal(10, re.Code)
-	is.Equal("Error", re.Name)
+	is.Equal("DefaultError", re.Name)
 
 	errVar = NewFileNotFoundError()
 	re = errVar.(*SveltinError)
@@ -26,7 +26,7 @@ func TestErrors(t *testing.T) {
 	re = errVar.(*SveltinError)
 	is.Equal(12, re.Code)
 	is.Equal("DirInsteadOfFileError", re.Name)
-	is.Equal("[SveltinError: DirInsteadOfFileError (Code=12)] please, check the file path. It seems to be a directory, not a file", re.Error())
+	is.Equal("please, check the file path. It seems to be a directory, not a file", re.Message)
 
 	errVar = NewDirNotFoundError()
 	re = errVar.(*SveltinError)
@@ -75,15 +75,15 @@ func TestErrors(t *testing.T) {
 	is.Equal("MetadataTypeNotValidError", re.Name)
 
 	err = errors.New("")
-	errVar = NewPackageManagerCommandError(err)
+	errVar = NewNPMClientCommandError(err)
 	re = errVar.(*SveltinError)
 	is.Equal(80, re.Code)
-	is.Equal("PackageManagerCommandError", re.Name)
+	is.Equal("NPMClientCommandError", re.Name)
 
-	errVar = NewPackageManagerCommandNotValidError()
+	errVar = NewNPMClientCommandNotValidError()
 	re = errVar.(*SveltinError)
 	is.Equal(81, re.Code)
-	is.Equal("PackageManagerCommandNotValidError", re.Name)
+	is.Equal("NPMClientCommandNotValidError", re.Name)
 
 	errVar = NewExecSystemCommandError("git", "init")
 	re = errVar.(*SveltinError)

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-	"github.com/sveltinio/sveltin/pkg/sveltinerr"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 func TestContains(t *testing.T) {
@@ -74,8 +74,8 @@ func TestCheckMinMaxArgsBoundaries(t *testing.T) {
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects at least `+strconv.Itoa(tc.min)+` argument.
-Please check the help: sveltin [command] -h`, re.Error())
+		is.Equal(`This command expects at least `+strconv.Itoa(tc.min)+` argument.
+Please check the help: sveltin [command] -h`, re.Message)
 	}
 }
 
@@ -95,8 +95,8 @@ func TestNotValidCheckMinMaxArgs(t *testing.T) {
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
-Please check the help: sveltin [command] -h`, re.Error())
+		is.Equal(`This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
+Please check the help: sveltin [command] -h`, re.Message)
 	}
 
 }
@@ -134,7 +134,7 @@ func TestCheckMinMaxArgsWithMaxEqualsZero(t *testing.T) {
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects no arguments. Please check the help: sveltin [command] -h`, re.Error())
+		is.Equal(`This command expects no arguments. Please check the help: sveltin [command] -h`, re.Message)
 	}
 }
 
@@ -153,7 +153,7 @@ func TestCheckMinMaxArgsWithNumOfArgsGreaterThanMax(t *testing.T) {
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(32, re.Code)
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
-		is.Equal(`[SveltinError: NumOfArgsNotValidErrorWithMessage (Code=32)] This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
-Please check the help: sveltin [command] -h`, re.Error())
+		is.Equal(`This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
+Please check the help: sveltin [command] -h`, re.Message)
 	}
 }
