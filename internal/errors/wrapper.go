@@ -167,6 +167,7 @@ func NewNumOfArgsNotValidError() error {
 	return newSveltinError(31, "NumOfArgsNotValidError", "Wrong Number Of Arguments", err.Error(), err)
 }
 
+// NewNumOfArgsNotValidErrorWithMessage ...
 func NewNumOfArgsNotValidErrorWithMessage(err error) error {
 	return newSveltinError(32, "NumOfArgsNotValidErrorWithMessage", "Wrong Number Of Arguments", err.Error(), err)
 }
