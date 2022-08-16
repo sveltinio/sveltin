@@ -22,7 +22,12 @@ type Config struct {
 	ErrorMsg     string
 	ListHeight   int
 	DefaultWidth int
-	TitleStyle   lipgloss.Style
+
+	ShowStatusBar   *bool
+	ShowHelp        *bool
+	EnableFiltering *bool
+	//styles
+	TitleStyle lipgloss.Style
 }
 
 // setDefaults sets default values for Config if not present.
@@ -36,16 +41,25 @@ func (cfg *Config) setDefaults() *Config {
 	if tui.IsEmpty(cfg.TitleStyle) {
 		cfg.TitleStyle = titleStyle
 	}
+	if cfg.ShowStatusBar == nil {
+		cfg.ShowStatusBar = new(bool)
+	}
+	if cfg.ShowHelp == nil {
+		cfg.ShowHelp = new(bool)
+	}
+	if cfg.EnableFiltering == nil {
+		cfg.EnableFiltering = new(bool)
+	}
 	return cfg
 }
 
 func (cfg *Config) initialModel(items []list.Item) model {
 	l := list.New(items, itemDelegate{}, cfg.DefaultWidth, cfg.ListHeight)
 	l.Title = cfg.Title
-	l.SetShowStatusBar(false)
-	l.SetFilteringEnabled(false)
+	l.SetShowStatusBar(*cfg.ShowStatusBar)
+	l.SetFilteringEnabled(*cfg.EnableFiltering)
 	l.Styles.Title = cfg.TitleStyle
-	l.SetShowHelp(false)
+	l.SetShowHelp(*cfg.ShowHelp)
 
 	return model{
 		list: l,
