@@ -70,7 +70,7 @@ func Run(cfg *Config) (bool, error) {
 	m, err := tea.NewProgram(defaultConfig.initialModel(), tea.WithOutput(os.Stderr)).StartReturningModel()
 
 	if err != nil {
-		return false, fmt.Errorf("unable to run confirm: %w", err)
+		return false, fmt.Errorf("unable to run toggle: %w", err)
 	}
 
 	if m.(model).confirmation {
