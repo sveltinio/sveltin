@@ -139,18 +139,20 @@ func PrintHelperTextDeploySummary(numOfFolders, numOfFiles int) {
 }
 
 // ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
-func ShowDeployCommandWarningMessages(log *logger.Logger) {
-	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
+func ShowDeployCommandWarningMessages() {
+	listLogger := logger.NewListLogger()
+	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
 		Timestamp: false,
 		Colors:    true,
 		Labels:    true,
 		Icons:     true,
 	})
-	listLogger := log.WithList()
-	listLogger.Append(logger.LevelWarning, "Create a backup of the existing content on the remote folder")
-	listLogger.Append(logger.LevelWarning, "Delete existing content except what specified with --exclude flag")
-	listLogger.Append(logger.LevelWarning, "Upload content to the remote folder")
-	listLogger.Info("Be aware! The deploy command will perform the following actions")
+
+	listLogger.Title("Be aware! The deploy command will perform the following actions")
+	listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
+	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude flag")
+	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
+	listLogger.Render()
 
 }
 

@@ -9,7 +9,6 @@
 package logger
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -18,7 +17,7 @@ import (
 // LogEntry represents a single log entry.
 type LogEntry struct {
 	Logger     *Logger
-	Level      LogLevel
+	Level      Level
 	Message    string
 	Entries    []LogEntry
 	prefix     string
@@ -33,8 +32,22 @@ func NewLogEntry(logger *Logger) *LogEntry {
 	}
 }
 
+// NewListLogger returns a new entry with `entries` set.
+func NewListLogger() *LogEntry {
+	l := &Logger{
+		Printer: iconAndColorOnlyTextPrinter(),
+		Level:   DebugLevel,
+	}
+	return NewLogEntry(l).withList()
+}
+
+// Title set the test to be used as title for ListLogger.
+func (item *LogEntry) Title(title string) {
+	item.Message = title
+}
+
 // WithList returns a new entry with `entries` set.
-func (item *LogEntry) WithList() *LogEntry {
+func (item *LogEntry) withList() *LogEntry {
 	return &LogEntry{
 		Logger:     item.Logger,
 		Entries:    []LogEntry{},
@@ -43,20 +56,14 @@ func (item *LogEntry) WithList() *LogEntry {
 	}
 }
 
-func (item *LogEntry) isWithList() bool {
+// IsListLogger returns true when ListLogger.
+func (item *LogEntry) IsListLogger() bool {
 	return len(item.Entries) > 0
 }
 
 // String returns the entry as string.
 func (item *LogEntry) String() string {
-	var buffer bytes.Buffer
-	if item.isWithList() {
-		fmt.Fprintf(&buffer, "%s", item.Logger.Printer.FormatList(item))
-	} else {
-		fmt.Fprintf(&buffer, "%s", item.Logger.Printer.Format(item, true))
-	}
-
-	return buffer.String()
+	return item.Logger.Printer.Format(item)
 }
 
 // SetIndentChar sets the char used as prefix when indent list entries. Whitespace as default.
@@ -70,7 +77,7 @@ func (item *LogEntry) SetIndentSize(size int) {
 }
 
 // Append add an entry to the `entries`.
-func (item *LogEntry) Append(level LogLevel, msg string) {
+func (item *LogEntry) Append(level Level, msg string) {
 	elem := LogEntry{
 		Logger:  item.Logger,
 		Level:   level,
@@ -78,6 +85,13 @@ func (item *LogEntry) Append(level LogLevel, msg string) {
 		prefix:  item.prefix,
 	}
 	item.Entries = append(item.Entries, elem)
+}
+
+// Render prints log entry when ListLogger.
+func (item *LogEntry) Render() {
+	if item.IsListLogger() {
+		item.Logger.log(item)
+	}
 }
 
 // Indent add a string as prefix when indent list entries.
@@ -93,56 +107,56 @@ func (item *LogEntry) Unindent() {
 
 // Plain level message.
 func (item *LogEntry) Plain(msg string) {
-	item.Level = LevelDefault
+	item.Level = DefaultLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Debug level message.
 func (item *LogEntry) Debug(msg string) {
-	item.Level = LevelDebug
+	item.Level = DebugLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Info level message.
 func (item *LogEntry) Info(msg string) {
-	item.Level = LevelInfo
+	item.Level = InfoLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Error level message.
 func (item *LogEntry) Error(msg string) {
-	item.Level = LevelError
+	item.Level = ErrorLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Warning level message.
 func (item *LogEntry) Warning(msg string) {
-	item.Level = LevelWarning
+	item.Level = WarningLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Success level message.
 func (item *LogEntry) Success(msg string) {
-	item.Level = LevelSuccess
+	item.Level = SuccessLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Important level message.
 func (item *LogEntry) Important(msg string) {
-	item.Level = LevelImportant
+	item.Level = ImportantLevel
 	item.Message = msg
 	item.Logger.log(item)
 }
 
 // Fatal level message.
 func (item *LogEntry) Fatal(msg string) {
-	item.Level = LevelFatal
+	item.Level = FatalLevel
 	item.Message = msg
 	item.Logger.log(item)
 	os.Exit(1)

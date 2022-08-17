@@ -8,29 +8,17 @@
 // Package logger ...
 package logger
 
-import "time"
-
-//import "fmt"
-
 // Logger represents a logger with configurable Printer and Level.
 type Logger struct {
 	Printer Printer
-	Level   LogLevel
+	Level   Level
 }
 
 // New returns a new logger.
 func New() *Logger {
 	return &Logger{
-		Printer: &TextPrinter{
-			Options: &PrinterOptions{
-				Timestamp:       true,
-				TimestampFormat: time.RFC3339,
-				Colors:          true,
-				Labels:          true,
-				Icons:           true,
-			},
-		},
-		Level: LevelDebug,
+		Printer: fullTextPrinter(),
+		Level:   DebugLevel,
 	}
 }
 
@@ -40,13 +28,8 @@ func (l *Logger) SetPrinter(printer Printer) {
 }
 
 // SetLevel sets the logger Level.
-func (l *Logger) SetLevel(level LogLevel) {
+func (l *Logger) SetLevel(level Level) {
 	l.Level = level
-}
-
-// WithList returns a new entry with `entries` set.
-func (l *Logger) WithList() *LogEntry {
-	return NewLogEntry(l).WithList()
 }
 
 // Plain level message.

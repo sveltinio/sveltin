@@ -10,6 +10,5 @@ package logger
 
 // Formatter is the interface defining the methods to be implemented by a printer.
 type Formatter interface {
-	Format(*LogEntry, bool) string
-	FormatList(*LogEntry) string
+	Format(*LogEntry) string
 }

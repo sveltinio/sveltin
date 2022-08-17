@@ -10,70 +10,67 @@ package logger
 
 import (
 	"fmt"
-
-	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"strconv"
 )
 
-// LogLevel represents the level of severity.
-type LogLevel int
+// Level represents the level of severity.
+type Level int8
 
 // Log Levels.
 const (
-	LevelPanic LogLevel = iota
-	LevelFatal
-	LevelError
-	LevelWarning
-	LevelInfo
-	LevelSuccess
-	LevelDebug
-	LevelImportant
-	LevelDefault
+	DebugLevel Level = iota
+	FatalLevel
+	ErrorLevel
+	WarningLevel
+	InfoLevel
+	SuccessLevel
+	ImportantLevel
+	DefaultLevel
 )
 
+var levelLabelMap = map[Level]string{
+	DebugLevel:     "DEBU",
+	FatalLevel:     "FATA",
+	ErrorLevel:     "ERRO",
+	InfoLevel:      "INFO",
+	WarningLevel:   "WARN",
+	SuccessLevel:   "SUCC",
+	ImportantLevel: "NOTI",
+	DefaultLevel:   "",
+}
+
 // String returns the log level as string.
-func (level LogLevel) String() string {
-	switch level {
-	case LevelDebug:
+func (l Level) String() string {
+	switch l {
+	case DebugLevel:
 		return "LevelDebug"
-	case LevelInfo:
-		return "LevelInfo"
-	case LevelSuccess:
-		return "LevelSuccess"
-	case LevelError:
-		return "LevelError"
-	case LevelWarning:
-		return "LevelWarning"
-	case LevelImportant:
-		return "LevelImportant"
-	case LevelFatal:
+	case FatalLevel:
 		return "LevelFatal"
+	case ErrorLevel:
+		return "LevelError"
+	case InfoLevel:
+		return "LevelInfo"
+	case WarningLevel:
+		return "LevelWarning"
+	case SuccessLevel:
+		return "LevelSuccess"
+	case ImportantLevel:
+		return "LevelImportant"
+	case DefaultLevel:
+		return ""
 	}
-	return LevelDefault.String()
+	return strconv.Itoa(int(l))
 }
 
-func makeLogLevelLabelMap() map[LogLevel]string {
-	return map[LogLevel]string{
-		LevelDefault:   "",
-		LevelDebug:     "[DEBU]",
-		LevelFatal:     "[FATA]",
-		LevelError:     "[ERRO]",
-		LevelWarning:   "[WARN]",
-		LevelSuccess:   "[SUCC]",
-		LevelInfo:      "[INFO]",
-		LevelImportant: "[NOTI]",
+func getLabelByLevel(level Level) (string, error) {
+	if _, ok := levelLabelMap[level]; ok {
+		return levelLabelMap[level], nil
 	}
+	return "", fmt.Errorf("%s is not a valid Level", level.String())
 }
 
-func getLabelByLogLevel(level LogLevel) (string, error) {
-	labelMap := makeLogLevelLabelMap()
-	if _, ok := labelMap[level]; ok {
-		return labelMap[level], nil
-	}
-	return "", sveltinerr.NewDefaultError(fmt.Errorf("%s is not a valid LogLevel", level.String()))
-}
-
-func getLabel(level LogLevel) string {
-	if label, err := getLabelByLogLevel(level); err == nil {
+func getLevelLabel(level Level) string {
+	if label, err := getLabelByLevel(level); err == nil {
 		return label
 	}
 	return "undefined"

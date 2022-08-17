@@ -11,50 +11,43 @@ package logger
 import (
 	"fmt"
 
-	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/charmbracelet/lipgloss"
 )
 
-type color int
-
-const (
-	noColor = iota + 30
-	red
-	green
-	yellow
-	blue
-	magenta
-	cyan
-	white
+var (
+	// Colors
+	white  = lipgloss.AdaptiveColor{Light: "#FFFFFF", Dark: "#FFFFFF"}
+	cyan   = lipgloss.AdaptiveColor{Light: "#4f46e5", Dark: "#c7d2fe"}
+	red    = lipgloss.AdaptiveColor{Light: "#ef4444", Dark: "#ef4444"}
+	orange = lipgloss.AdaptiveColor{Light: "#facc15", Dark: "#fb923c"}
+	//yellow  = lipgloss.AdaptiveColor{Light: "#eab308", Dark: "#facc15"}
+	green   = lipgloss.AdaptiveColor{Light: "#166534", Dark: "#22c55e"}
+	blue    = lipgloss.AdaptiveColor{Light: "#1d4ed8", Dark: "#3b82f6"}
+	magenta = lipgloss.AdaptiveColor{Light: "#7e22ce", Dark: "#a855f7"}
+	muted   = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
 )
 
-func colorCode(color color) string {
-	return fmt.Sprintf("\033[0;%dm", int(color))
+var levelColorMap = map[Level]lipgloss.AdaptiveColor{
+	DefaultLevel:   white,
+	DebugLevel:     cyan,
+	FatalLevel:     red,
+	ErrorLevel:     red,
+	WarningLevel:   orange,
+	SuccessLevel:   green,
+	InfoLevel:      blue,
+	ImportantLevel: magenta,
 }
 
-func makeLogLevelColorMap() map[LogLevel]string {
-	return map[LogLevel]string{
-		LevelDefault:   colorCode(white),
-		LevelDebug:     colorCode(cyan),
-		LevelFatal:     colorCode(red),
-		LevelError:     colorCode(red),
-		LevelWarning:   colorCode(yellow),
-		LevelSuccess:   colorCode(green),
-		LevelInfo:      colorCode(blue),
-		LevelImportant: colorCode(magenta),
+func getColorByLevel(level Level) (lipgloss.AdaptiveColor, error) {
+	if _, ok := levelColorMap[level]; ok {
+		return levelColorMap[level], nil
 	}
+	return lipgloss.AdaptiveColor{}, fmt.Errorf("%s is not a valid Level", level.String())
 }
 
-func getColorByLogLevel(level LogLevel) (string, error) {
-	colorMap := makeLogLevelColorMap()
-	if _, ok := colorMap[level]; ok {
-		return colorMap[level], nil
-	}
-	return "", sveltinerr.NewDefaultError(fmt.Errorf("%s is not a valid LogLevel", level.String()))
-}
-
-func getColor(level LogLevel) string {
-	if c, err := getColorByLogLevel(level); err == nil {
+func getColor(level Level) lipgloss.AdaptiveColor {
+	if c, err := getColorByLevel(level); err == nil {
 		return c
 	}
-	return colorCode(noColor)
+	return white
 }

@@ -12,14 +12,16 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"strings"
+	"io"
+	"os"
 	"time"
 
-	"github.com/mattn/go-colorable"
+	"github.com/charmbracelet/lipgloss"
 )
 
 // TextPrinter sets stdout as printer.
 type TextPrinter struct {
+	Writer  io.Writer
 	Options *PrinterOptions
 }
 
@@ -28,56 +30,99 @@ func (tp *TextPrinter) SetPrinterOptions(options *PrinterOptions) {
 	tp.Options = options
 }
 
+func fullTextPrinter() *TextPrinter {
+	return &TextPrinter{
+		Writer: os.Stdout,
+		Options: &PrinterOptions{
+			Timestamp:       true,
+			TimestampFormat: time.RFC3339,
+			Colors:          true,
+			Icons:           true,
+			Labels:          true,
+		},
+	}
+}
+
+func iconAndColorOnlyTextPrinter() *TextPrinter {
+	return &TextPrinter{
+		Writer: os.Stdout,
+		Options: &PrinterOptions{
+			Timestamp: false,
+			Colors:    true,
+			Icons:     true,
+			Labels:    false,
+		},
+	}
+}
+
 // Print send the message string to the stdout.
 func (tp *TextPrinter) Print(msg string) {
-	stdOut := bufio.NewWriter(colorable.NewColorableStdout())
+	stdOut := bufio.NewWriter(tp.Writer)
 	stdOut.WriteString(msg)
 	stdOut.WriteString("\n")
 	stdOut.Flush()
 }
 
-// Format defines how a single log entry will be formatted by the TextLogger printer.
-func (tp *TextPrinter) Format(item *LogEntry, isWithList bool) string {
-	if isWithList {
-		return fmt.Sprintf("%s%s %s", item.prefix, formatMarkup(item.Level, tp.Options), formatMessage(white, item.Message))
+// Format defines how the TextPrinter will format a log entry.
+func (tp *TextPrinter) Format(item *LogEntry) string {
+	if item.IsListLogger() {
+		return formatList(item, tp.Options)
 	}
-	return formatMessage(white, item.Message)
-}
-
-// FormatList defines how a log entry with List will be formatted by the TextLogger printer.
-func (tp *TextPrinter) FormatList(item *LogEntry) string {
-	var buffer bytes.Buffer
-	fmt.Fprintf(&buffer, "\n%s\n", item.Logger.Printer.Format(item, false))
-	buffer.WriteString(strings.Repeat("-", len(item.Message)+1))
-	buffer.WriteString("\n")
-	for _, line := range item.Entries {
-		fmt.Fprintf(&buffer, "%s\n", item.Logger.Printer.Format(&line, true))
-	}
-	return buffer.String()
+	return formatSingle(item, tp.Options)
 }
 
 //=============================================================================
 
-func formatMessage(color color, msg string) string {
-	return fmt.Sprintf("%s%s", colorCode(color), msg)
+// Format defines how a single log entry will be formatted by the TextLogger printer.
+func formatSingle(item *LogEntry, options *PrinterOptions) string {
+	return fmt.Sprintf("%s%s %s", item.prefix, formatMarkup(item.Level, options), formatText(item.Message))
 }
 
-func formatMarkup(level LogLevel, options *PrinterOptions) string {
-	timestampStr := ""
+// FormatList defines how a log entry with List will be formatted by the TextLogger printer.
+func formatList(item *LogEntry, options *PrinterOptions) string {
+	var buffer bytes.Buffer
+	if item.Message != "" {
+		fmt.Fprintf(&buffer, "%s\n", formatListTitle(item.Message))
+	}
+	for _, line := range item.Entries {
+		fmt.Fprintf(&buffer, "%s\n", formatListItem(&line, options))
+	}
+	return buffer.String()
+}
+
+func formatListTitle(msg string) string {
+	return listTitleStyle(msg)
+}
+
+func formatListItem(item *LogEntry, options *PrinterOptions) string {
+	text := fmt.Sprintf("%s %s %s", item.prefix, formatMarkup(item.Level, options), formatText(item.Message))
+	logRow := lipgloss.JoinHorizontal(lipgloss.Center, listItemStyle(text, item.prefix, item.indentSize))
+	return fmt.Sprint(logRow)
+}
+
+func formatText(msg string) string {
+	textColor := getColor(DefaultLevel)
+	return fmt.Sprint(textStyle(textColor, msg))
+}
+
+func formatMarkup(level Level, options *PrinterOptions) string {
+	timestamp := ""
 	if options.Timestamp {
-		timestampStr = fmt.Sprintf("%s ", time.Now().Format(options.TimestampFormat))
+		timestamp = fmt.Sprintf("%s ", time.Now().Format(options.TimestampFormat))
 	}
-	colorStr := ""
+	color := lipgloss.AdaptiveColor{}
 	if options.Colors {
-		colorStr = getColor(level)
+		color = getColor(level)
 	}
-	iconStr := ""
+	icon := ""
 	if options.Icons {
-		iconStr = getIcon(level)
+		icon = getIcon(level)
 	}
-	labelStr := ""
+	label := ""
 	if options.Labels {
-		labelStr = getLabel(level)
+		label = fmt.Sprintf(" %s", getLevelLabel(level))
 	}
-	return fmt.Sprintf("%s%s%s %s", timestampStr, colorStr, iconStr, labelStr)
+
+	logRow := lipgloss.JoinHorizontal(lipgloss.Center, timestampStyle(timestamp), iconStyle(color, icon), levelStyle(color, label))
+	return fmt.Sprint(logRow)
 }
