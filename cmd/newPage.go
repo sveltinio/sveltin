@@ -17,6 +17,7 @@ import (
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/resources"
@@ -64,7 +65,8 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageType, err := promptPageType(pageType)
 	utils.ExitIfError(err)
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as %s page", pageName, pageType)))
+	actionTitleText := fmt.Sprintf("Creating '%s' as %s page", pageName, pageType)
+	cfg.log.Plain(styles.Title(actionTitleText))
 
 	// GET FOLDER: src/routes
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)

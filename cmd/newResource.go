@@ -12,11 +12,13 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -91,9 +93,10 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	cfg.log.Plain(utils.Underline("Next Steps"))
-	cfg.log.Success("Resource ready to be used. Start by adding content to it.")
-	cfg.log.Important(fmt.Sprintf("Eg: sveltin new content %s/getting-started", resourceName))
+	common.PrintHelperTextNewResource(resourceName)
+	//cfg.log.Plain(utils.Underline("Next Steps"))
+	//cfg.log.Success("Resource ready to be used. Start by adding content to it.")
+	//cfg.log.Important(fmt.Sprintf("Eg: sveltin new content %s/getting-started", resourceName))
 }
 
 func init() {
@@ -148,7 +151,7 @@ func createResourceContentLocalFolder(resourceName string) *composer.Folder {
 	// GET FOLDER: content folder
 	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as resource", resourceName)))
+	cfg.log.Plain(styles.Title(fmt.Sprintf("Creating '%s' as resource", resourceName)))
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
 	cfg.log.Info("Content folder")

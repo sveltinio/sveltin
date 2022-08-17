@@ -21,6 +21,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/resources"
@@ -75,7 +76,8 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 		Config:   cfg.sveltin,
 	}
 
-	cfg.log.Plain(utils.Underline(fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)))
+	actionTitleText := fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)
+	cfg.log.Plain(styles.Title(actionTitleText))
 
 	// MAKE FOLDER STRUCTURE: src/lib folder
 	libFolder, err := makeOrAddContentForMetadataToProjectStructure(LibFolder, metadataTemplateData)

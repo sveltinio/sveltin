@@ -14,6 +14,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -42,7 +43,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("Generating the menu structure file"))
+	cfg.log.Plain(styles.Title("Generating the menu structure file"))
 
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 

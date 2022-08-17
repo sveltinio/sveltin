@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -34,7 +35,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("Generating the sitemap.xml file"))
+	cfg.log.Plain(styles.Title("Generating the sitemap.xml file"))
 
 	cfg.log.Info("Getting list of existing public pages")
 	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
