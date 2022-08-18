@@ -5,8 +5,8 @@
  * that can be found in the LICENSE file.
  */
 
-// Package styles ...
-package styles
+// Package markup ...
+package markup
 
 import (
 	"fmt"

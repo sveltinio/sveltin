@@ -17,7 +17,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/internal/styles"
+	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tui/confirm"
 	"github.com/sveltinio/sveltin/pkg/ftpfs"
 	"github.com/sveltinio/sveltin/utils"
@@ -53,7 +53,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(styles.H1("Deploy your website to the FTP server"))
+	cfg.log.Plain(markup.H1("Deploy your website to the FTP server"))
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
 	if len(withExcludeFile) != 0 {
