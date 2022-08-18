@@ -43,7 +43,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(styles.Title("Generating the menu structure file"))
+	cfg.log.Plain(styles.H1("Generating the menu structure file"))
 
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 

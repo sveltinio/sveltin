@@ -66,7 +66,7 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient()
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(styles.Title("A Starter project will be created"))
+	cfg.log.Plain(styles.H1("A Starter project will be created"))
 
 	// Clone starter template github repository
 	themeStarterTemplate := cfg.startersMap[ThemeStarter]

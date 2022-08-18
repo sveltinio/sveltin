@@ -124,7 +124,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	}
 
 	if isWithConfirm(withConfirm) {
-		cfg.log.Plain(styles.Title("Initializing a new Sveltin project"))
+		cfg.log.Plain(styles.H1("Initializing a new Sveltin project"))
 
 		// Clone starter template github repository
 		starterTemplate := cfg.startersMap[SvelteKitStarter]

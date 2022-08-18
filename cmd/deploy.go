@@ -53,7 +53,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(styles.Title("Deploy your website to the FTP server"))
+	cfg.log.Plain(styles.H1("Deploy your website to the FTP server"))
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
 	if len(withExcludeFile) != 0 {

@@ -58,6 +58,9 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// MAKE FOLDER STRUCTURE: content folder
+	headingText := fmt.Sprintf("Creating '%s' as resource", resourceName)
+	cfg.log.Plain(styles.H1(headingText))
+
 	contentFolder, err := makeResourceFolderStructure(ContentFolder, resourceName, cfg)
 	utils.ExitIfError(err)
 
@@ -150,8 +153,6 @@ func makeResourceFolderStructure(folderName string, resourceName string, cfg app
 func createResourceContentLocalFolder(resourceName string) *composer.Folder {
 	// GET FOLDER: content folder
 	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
-
-	cfg.log.Plain(styles.Title(fmt.Sprintf("Creating '%s' as resource", resourceName)))
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
 	cfg.log.Info("Content folder")

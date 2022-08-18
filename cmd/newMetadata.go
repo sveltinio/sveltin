@@ -76,8 +76,8 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 		Config:   cfg.sveltin,
 	}
 
-	actionTitleText := fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)
-	cfg.log.Plain(styles.Title(actionTitleText))
+	headingText := fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)
+	cfg.log.Plain(styles.H1(headingText))
 
 	// MAKE FOLDER STRUCTURE: src/lib folder
 	libFolder, err := makeOrAddContentForMetadataToProjectStructure(LibFolder, metadataTemplateData)

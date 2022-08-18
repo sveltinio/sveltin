@@ -41,7 +41,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(styles.Title("Building the Sveltin project"))
+	cfg.log.Plain(styles.H1("Building the Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
