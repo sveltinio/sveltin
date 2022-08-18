@@ -23,7 +23,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
-	"github.com/sveltinio/sveltin/internal/styles"
+	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/resources"
@@ -80,7 +80,7 @@ func RunNewContentCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
-	cfg.log.Plain(styles.H1(headingText))
+	cfg.log.Plain(markup.H1(headingText))
 
 	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
 	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)

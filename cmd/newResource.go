@@ -18,7 +18,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
-	"github.com/sveltinio/sveltin/internal/styles"
+	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -59,7 +59,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 
 	// MAKE FOLDER STRUCTURE: content folder
 	headingText := fmt.Sprintf("Creating '%s' as resource", resourceName)
-	cfg.log.Plain(styles.H1(headingText))
+	cfg.log.Plain(markup.H1(headingText))
 
 	contentFolder, err := makeResourceFolderStructure(ContentFolder, resourceName, cfg)
 	utils.ExitIfError(err)
