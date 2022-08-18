@@ -13,6 +13,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -33,7 +34,7 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("Running the Vite server"))
+	cfg.log.Plain(styles.H1("Running the Vite server"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)

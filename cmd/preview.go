@@ -13,6 +13,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -35,7 +36,7 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("Preview your Sveltin project"))
+	cfg.log.Plain(styles.H1("Preview your Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)

@@ -94,7 +94,7 @@ func TestFileExists(t *testing.T) {
 
 		exists, err := FileExists(memFS, tc.pathToFile)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(11, re.Code)
+		is.Equal(8, int(re.Code))
 		is.Equal("FileNotFoundError", re.Name)
 		is.Equal(false, exists)
 	}
@@ -110,7 +110,7 @@ func TestFileExists(t *testing.T) {
 
 		exists, err := FileExists(memFS, tc.pathToFile)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(12, re.Code)
+		is.Equal(9, int(re.Code))
 		is.Equal("DirInsteadOfFileError", re.Name)
 		is.Equal(false, exists)
 	}
@@ -150,7 +150,7 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 
 		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(11, re.Code)
+		is.Equal(8, int(re.Code))
 		is.Equal("please, check the file path", re.Message)
 
 	}

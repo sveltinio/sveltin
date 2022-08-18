@@ -15,7 +15,7 @@ type Printer interface {
 	Formatter
 }
 
-// PrinterOptions represents the valid options for a printer.
+// PrinterOptions sets stdout as printer.
 type PrinterOptions struct {
 	Timestamp       bool
 	TimestampFormat string

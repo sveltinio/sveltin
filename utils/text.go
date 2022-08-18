@@ -9,7 +9,6 @@
 package utils
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 	"time"
@@ -43,15 +42,6 @@ func ToTitle(txt string) string {
 	cleanTitle := strings.ReplaceAll(txt, "-", " ")
 	c := cases.Title(language.Und, cases.NoLower)
 	return c.String(cleanTitle)
-}
-
-// Underline returns a string underlined
-func Underline(txt string) string {
-	var buffer bytes.Buffer
-	fmt.Fprintf(&buffer, "\n %s\n", txt)
-	buffer.WriteString(strings.Repeat("-", len(txt)+2))
-	buffer.WriteString("\n")
-	return buffer.String()
 }
 
 // ToURL returns a trimmed string with '/' as prefix.

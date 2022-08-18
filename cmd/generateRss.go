@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -34,7 +35,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	cfg.log.Plain(utils.Underline("Generating the rss.xml feed file"))
+	cfg.log.Plain(styles.H1("Generating the RSS feed file"))
 
 	cfg.log.Info("Getting all existing public pages")
 	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
@@ -42,14 +43,14 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Info("Getting all existing resources")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
 
-	cfg.log.Info("Getting all contents for the resources")
+	cfg.log.Info("Getting all resources contents")
 	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
 
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
-	cfg.log.Info("Saving the rss.xml file")
+	cfg.log.Info("Saving the file to the static folder")
 	rssFile := cfg.fsManager.NewNoPage("rss", &cfg.project, existingResources, contents, nil, pages)
 	staticFolder.Add(rssFile)
 

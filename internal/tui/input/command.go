@@ -23,6 +23,7 @@ type Config struct {
 	DefaultValue string
 	ErrorMsg     string
 	// styles
+	Focus       *bool
 	TextStyle   lipgloss.Style
 	PromptStyle lipgloss.Style
 }
@@ -38,6 +39,10 @@ func (cfg *Config) setDefaults() *Config {
 	if cfg.ErrorMsg == "" {
 		cfg.ErrorMsg = defaultErrorMsg
 	}
+	if cfg.Focus == nil {
+		_focus := true
+		cfg.Focus = &_focus
+	}
 	if tui.IsEmpty(cfg.TextStyle) {
 		cfg.TextStyle = textStyle
 	}
@@ -49,7 +54,9 @@ func (cfg *Config) setDefaults() *Config {
 
 func (cfg *Config) initialModel() model {
 	ti := textinput.New()
-	ti.Focus()
+	if *cfg.Focus {
+		ti.Focus()
+	}
 	ti.Placeholder = cfg.Placeholder
 	//ti.SetValue(cfg.DefaultValue)
 	ti.TextStyle = cfg.TextStyle

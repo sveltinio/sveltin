@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/pkg/npmc"
 )
 
@@ -42,7 +41,16 @@ func TestGetAvailableNPMClient(t *testing.T) {
 	for _, tc := range tests {
 		is := is.New(t)
 		installed := GetInstalledNPMClientList()
-		got := common.Contains(GetNPMClientNames(installed), tc.npmClient.Name)
+		got := contains(GetNPMClientNames(installed), tc.npmClient.Name)
 		is.Equal(got, tc.wanted)
 	}
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }

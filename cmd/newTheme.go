@@ -24,6 +24,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/pkg/shell"
 	"github.com/sveltinio/sveltin/resources"
@@ -65,7 +66,7 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient()
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(utils.Underline("A Starter project will be created"))
+	cfg.log.Plain(styles.H1("A Starter project will be created"))
 
 	// Clone starter template github repository
 	themeStarterTemplate := cfg.startersMap[ThemeStarter]

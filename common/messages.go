@@ -11,11 +11,11 @@ package common
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
-	"github.com/charmbracelet/lipgloss"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/pkg/logger"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // UserProjectConfig represents the user selections when creating a new sveltin project.
@@ -28,135 +28,131 @@ type UserProjectConfig struct {
 
 // PrintSummary shows a summary text with the project settings selected by the user.
 func (uc *UserProjectConfig) PrintSummary() {
-	fmt.Println(
-		list.Render(
-			lipgloss.JoinVertical(lipgloss.Left,
-				listHeader("Here are your choices"),
-				listDone("Project Name: ", uc.ProjectName),
-				listDone("CSS Lib: ", uc.CSSLibName),
-				listDone("Theme: ", uc.ThemeName),
-				listDone("NPM Client: ", uc.NPMClientName),
-			),
-		),
-	)
+	entries := map[string]string{
+		"Project Name: ": uc.ProjectName,
+		"CSSLib: ":       uc.CSSLibName,
+		"Theme: ":        uc.ThemeName,
+		"NPM Client: ":   uc.NPMClientName,
+	}
+	fmt.Println(styles.NewULWithIconPrefix("RECAP your choices", entries, styles.CheckMark))
 }
 
 // PrintNextStepsHelperForNewProject prints an help message as next steps for a project creation.
 func (uc *UserProjectConfig) PrintNextStepsHelperForNewProject() {
-	desc := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		listHeader("Next Steps"),
-		listNumbered("1. cd "+uc.ProjectName),
-		listNumbered("2. sveltin install "+gray("(or npm run install, pnpm install, ...)")),
-		listNumbered("3. sveltin server"+gray(" (or npm run dev, pnpm dev, ...)")),
-	))
-	additionalInfo := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		descStyle.Render("To stop the dev server, hit Ctrl-C"),
-		infoStyle.Render("Visit the Quick Start guide"+divider+url("https://docs.sveltin.io/quick-start")),
-	))
-	fmt.Println(desc)
-	fmt.Println(additionalInfo)
+	steps := []string{
+		fmt.Sprintf("cd %s", uc.ProjectName),
+		fmt.Sprintf("sveltin install %s", styles.Faint("(or npm run install, pnpm install, ...)")),
+		fmt.Sprintf("sveltin server %s", styles.Faint(" (or npm run dev, pnpm dev, ...)")),
+	}
+	nextStepsMsg := styles.NewOLWithTitle("Next Steps", steps)
+
+	fmt.Printf("%s%s", nextStepsMsg, devServerInfoMessage())
 }
 
 // PrintNextStepsHelperForNewProjectWithExistingTheme pprints an help message as next steps for a project creation with an existing theme'.
 func (uc *UserProjectConfig) PrintNextStepsHelperForNewProjectWithExistingTheme() {
-	desc := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		listHeader("Next Steps"),
-		listNumbered("1. cd "+uc.ProjectName),
-		listNumbered("2. sveltin install "+gray("(or npm run install, pnpm install, ...)")),
-		listNumbered("3. git init"),
-		listNumbered("4. git submodule add <github_repu_url_for_the_theme> themes/<theme_name>"),
-		listNumbered("5. Follow the instructions on the README file from the theme creator"),
-		listNumbered("6. sveltin server"+gray(" (or npm run dev, pnpm dev, ...)")),
-	))
-	additionalInfo := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		descStyle.Render("To stop the dev server, hit Ctrl-C"),
-		infoStyle.Render("Visit the Theme guide"+divider+url("https://docs.sveltin.io/theming")),
-	))
-	fmt.Println(desc)
-	fmt.Println(additionalInfo)
+	steps := []string{
+		fmt.Sprintf("cd %s", uc.ProjectName),
+		fmt.Sprintf("sveltin install %s", styles.Faint("(or npm run install, pnpm install, ...)")),
+		"git init",
+		"git submodule add <github_repu_url_for_the_theme> themes/<theme_name>",
+		"Follow the instructions on the README file from the theme creator",
+		fmt.Sprintf("sveltin server %s", styles.Faint(" (or npm run dev, pnpm dev, ...)")),
+	}
+	nextStepsMsg := styles.NewOLWithTitle("Next Steps", steps)
+
+	fmt.Printf("%s%s\n", nextStepsMsg, devServerInfoMessage())
+}
+
+// PrintHelperTextNewResource prints an help message string for 'resource creation'.
+func PrintHelperTextNewResource(name string) {
+	exampleString := fmt.Sprintf("sveltin new content %s/getting-started", name)
+	entries := []string{
+		styles.P("Start by adding content to it, e.g."),
+		styles.BR,
+		styles.Code(exampleString),
+	}
+
+	fmt.Println(styles.Section("Resource ready to be used.", entries))
 }
 
 // PrintHelperTextNewMetadata prints an help message string for 'metadata creation'.
 func PrintHelperTextNewMetadata(metadataInfo *config.TemplateData) {
-
 	var exampleString string
 	if metadataInfo.Type == "single" {
-		exampleString = fmt.Sprintf("%s%s", toSnakeCase(metadataInfo.Name), ": your_value")
+		exampleString = fmt.Sprintf("%s%s", utils.ToSnakeCase(metadataInfo.Name), ": your_value")
 	} else {
-		exampleString = toSnakeCase(metadataInfo.Name) + `:
+		exampleString = utils.ToSnakeCase(metadataInfo.Name) + `:
   - value 1
   - value 2`
 	}
 
-	infoMsg := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		titleStyle.Render("Metadata ready to be used!"),
-		infoStyle.Render("Ensure your markdown frontmatter includes it."),
-		newLine,
-		plain("Example:"),
-		newLine,
-		italic(exampleString),
-	))
+	entries := []string{
+		styles.P("Ensure your markdown frontmatter includes it, e.g."),
+		styles.BR,
+		styles.Code(exampleString),
+	}
 
-	fmt.Println(infoMsg)
-
+	fmt.Println(styles.Section("Metadata ready to be used.", entries))
 }
 
 // PrintHelperTextNewTheme returns an help message string for 'theme creation'.
 func (uc *UserProjectConfig) PrintHelperTextNewTheme() {
-	desc := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		listHeader("Next Steps"),
-		listNumbered("1. cd "+uc.ProjectName),
-		listNumbered("2. sveltin install "+gray("(or npm run install, pnpm install, ...)")),
-		listNumbered("3. Create your theme components and partials"),
-		listNumbered("4. sveltin server"+gray(" (or npm run dev, pnpm dev, ...)")),
-	))
-	additionalInfo := list.Render(lipgloss.JoinVertical(lipgloss.Left,
-		descStyle.Render("To stop the dev server, hit Ctrl-C"),
-		infoStyle.Render("Visit the Theme guide"+divider+url("https://docs.sveltin.io/theming")),
-	))
-	fmt.Println(desc)
-	fmt.Println(additionalInfo)
+	steps := []string{
+		fmt.Sprintf("cd %s", uc.ProjectName),
+		fmt.Sprintf("sveltin install %s", styles.Faint("(or npm run install, pnpm install, ...)")),
+		"Create your theme components and partials",
+		fmt.Sprintf("sveltin server %s", styles.Faint(" (or npm run dev, pnpm dev, ...)")),
+	}
+	nextStepsMsg := styles.NewOLWithTitle("Next Steps", steps)
+
+	fmt.Printf("%s\n%s\n", nextStepsMsg, themingInfoMessage())
 }
 
 // PrintHelperTextDryRunFlag prints a message box for commands supporting the 'dry-run mode'.
 func PrintHelperTextDryRunFlag() {
-	fmt.Println(bordered("RUNNING IN DRY-RUN MODE"))
+	fmt.Println(styles.Bordered("RUNNING IN DRY-RUN MODE"))
 }
 
 // PrintHelperTextDeploySummary prints a summary message string for commands like deploy.
 func PrintHelperTextDeploySummary(numOfFolders, numOfFiles int) {
-	folderCounter := strconv.Itoa(numOfFolders)
-	filesCounter := strconv.Itoa(numOfFiles)
-	fmt.Println(
-		list.Render(
-			lipgloss.JoinVertical(lipgloss.Left,
-				listHeader("SUMMARY"),
-				listDone("Total number of created folders: ", folderCounter),
-				listDone("Total number of copied files: ", filesCounter),
-			),
-		),
-	)
+	entries := map[string]string{
+		"Total number of created folders: ": strconv.Itoa(numOfFolders),
+		"Total number of copied files: ":    strconv.Itoa(numOfFiles),
+	}
+	fmt.Println(styles.NewULWithIconPrefix("SUMMARY", entries, styles.CheckMark))
 }
 
 // ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
-func ShowDeployCommandWarningMessages(log *logger.Logger) {
-	log.Printer.SetPrinterOptions(&logger.PrinterOptions{
+func ShowDeployCommandWarningMessages() {
+	listLogger := logger.NewListLogger()
+	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
 		Timestamp: false,
 		Colors:    true,
 		Labels:    true,
 		Icons:     true,
 	})
-	listLogger := log.WithList()
-	listLogger.Append(logger.LevelWarning, "Create a backup of the existing content on the remote folder")
-	listLogger.Append(logger.LevelWarning, "Delete existing content except what specified with --exclude flag")
-	listLogger.Append(logger.LevelWarning, "Upload content to the remote folder")
-	listLogger.Info("Be aware! The deploy command will perform the following actions")
 
+	listLogger.Title("Be aware! The deploy command will perform the following actions")
+	listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
+	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude flag")
+	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
+	listLogger.Render()
 }
 
-func toSnakeCase(txt string) string {
-	cleanString := strings.ToLower(txt)
-	cleanString = strings.ReplaceAll(cleanString, " ", "_")
-	cleanString = strings.ReplaceAll(cleanString, "-", "_")
-	return cleanString
+func devServerInfoMessage() string {
+	return styles.Section("To stop the dev server, hit Ctrl-C",
+		[]string{
+			styles.Faint("Visit the Quick Start guide") +
+				styles.Divider +
+				styles.A("https://docs.sveltin.io/quick-start")})
+}
+
+func themingInfoMessage() string {
+	return styles.Section("To stop the dev server, hit Ctrl-C",
+		[]string{
+			styles.Faint("Visit the Theme guide") +
+				styles.Divider +
+				styles.A("https://docs.sveltin.io/theming"),
+		})
 }

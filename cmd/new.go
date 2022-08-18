@@ -23,6 +23,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/styles"
 	"github.com/sveltinio/sveltin/internal/tui/choose"
 	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/internal/tui/toggle"
@@ -123,7 +124,7 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 	}
 
 	if isWithConfirm(withConfirm) {
-		cfg.log.Plain(utils.Underline("Initializing a new Sveltin project"))
+		cfg.log.Plain(styles.H1("Initializing a new Sveltin project"))
 
 		// Clone starter template github repository
 		starterTemplate := cfg.startersMap[SvelteKitStarter]
@@ -198,10 +199,8 @@ func NewCmdRun(cmd *cobra.Command, args []string) {
 		// NEXT STEPS
 		if themeData.ID != config.ExistingTheme {
 			projectConfigSummary.PrintNextStepsHelperForNewProject()
-			//cfg.log.Plain(common.HelperTextNewProject(projectName))
 		} else {
 			projectConfigSummary.PrintNextStepsHelperForNewProjectWithExistingTheme()
-			//cfg.log.Plain(common.HelperTextNewProjectWithExistingTheme(projectName))
 		}
 	}
 
