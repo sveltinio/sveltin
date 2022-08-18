@@ -9,7 +9,6 @@
 package logger
 
 import (
-	"fmt"
 	"runtime"
 )
 
@@ -37,19 +36,12 @@ var levelIconMap = map[Level]icon{
 	ImportantLevel: iconImportant,
 }
 
-func getIconByLevel(level Level) (icon, error) {
-	if _, ok := levelIconMap[level]; ok {
-		return levelIconMap[level], nil
-	}
-	return "", fmt.Errorf("%s is not a valid LogLevel", level.String())
-}
-
 func getIcon(level Level) string {
 	if isWindows() {
 		return ">"
 	}
-	if icon, err := getIconByLevel(level); err == nil {
-		return string(icon)
+	if _, ok := levelIconMap[level]; ok {
+		return string(levelIconMap[level])
 	}
 	return "undefined"
 }

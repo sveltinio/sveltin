@@ -9,17 +9,16 @@
 package logger
 
 import (
-	"fmt"
-
 	"github.com/charmbracelet/lipgloss"
 )
 
 var (
 	// Colors
-	white  = lipgloss.AdaptiveColor{Light: "#FFFFFF", Dark: "#FFFFFF"}
-	cyan   = lipgloss.AdaptiveColor{Light: "#4f46e5", Dark: "#c7d2fe"}
-	red    = lipgloss.AdaptiveColor{Light: "#ef4444", Dark: "#ef4444"}
-	orange = lipgloss.AdaptiveColor{Light: "#facc15", Dark: "#fb923c"}
+	nocolor = lipgloss.AdaptiveColor{Light: "#000000", Dark: "#FFFFFF"}
+	gray    = lipgloss.AdaptiveColor{Light: "#191919", Dark: "#c7c7c7"}
+	sky     = lipgloss.AdaptiveColor{Light: "#0ea5e9", Dark: "#e0f2fe"}
+	red     = lipgloss.AdaptiveColor{Light: "#ef4444", Dark: "#ef4444"}
+	orange  = lipgloss.AdaptiveColor{Light: "#f97316", Dark: "#fb923c"}
 	//yellow  = lipgloss.AdaptiveColor{Light: "#eab308", Dark: "#facc15"}
 	green   = lipgloss.AdaptiveColor{Light: "#166534", Dark: "#22c55e"}
 	blue    = lipgloss.AdaptiveColor{Light: "#1d4ed8", Dark: "#3b82f6"}
@@ -28,8 +27,8 @@ var (
 )
 
 var levelColorMap = map[Level]lipgloss.AdaptiveColor{
-	DefaultLevel:   white,
-	DebugLevel:     cyan,
+	DefaultLevel:   gray,
+	DebugLevel:     sky,
 	FatalLevel:     red,
 	ErrorLevel:     red,
 	WarningLevel:   orange,
@@ -38,16 +37,9 @@ var levelColorMap = map[Level]lipgloss.AdaptiveColor{
 	ImportantLevel: magenta,
 }
 
-func getColorByLevel(level Level) (lipgloss.AdaptiveColor, error) {
-	if _, ok := levelColorMap[level]; ok {
-		return levelColorMap[level], nil
-	}
-	return lipgloss.AdaptiveColor{}, fmt.Errorf("%s is not a valid Level", level.String())
-}
-
 func getColor(level Level) lipgloss.AdaptiveColor {
-	if c, err := getColorByLevel(level); err == nil {
-		return c
+	if _, ok := levelColorMap[level]; ok {
+		return levelColorMap[level]
 	}
-	return white
+	return nocolor
 }

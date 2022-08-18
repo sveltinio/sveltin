@@ -9,7 +9,6 @@
 package logger
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -18,7 +17,8 @@ type Level int8
 
 // Log Levels.
 const (
-	DebugLevel Level = iota
+	NoLevel Level = iota
+	DebugLevel
 	FatalLevel
 	ErrorLevel
 	WarningLevel
@@ -58,20 +58,15 @@ func (l Level) String() string {
 		return "LevelImportant"
 	case DefaultLevel:
 		return ""
+	default:
+		return strconv.Itoa(int(l))
 	}
-	return strconv.Itoa(int(l))
-}
 
-func getLabelByLevel(level Level) (string, error) {
-	if _, ok := levelLabelMap[level]; ok {
-		return levelLabelMap[level], nil
-	}
-	return "", fmt.Errorf("%s is not a valid Level", level.String())
 }
 
 func getLevelLabel(level Level) string {
-	if label, err := getLabelByLevel(level); err == nil {
-		return label
+	if _, ok := levelLabelMap[level]; ok {
+		return levelLabelMap[level]
 	}
-	return "undefined"
+	return "undefined log level"
 }
