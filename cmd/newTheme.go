@@ -26,7 +26,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/pkg/shell"
+	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )

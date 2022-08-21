@@ -10,7 +10,7 @@ package helpers
 
 import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
-	"github.com/sveltinio/sveltin/pkg/shell"
+	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/utils"
 )
 

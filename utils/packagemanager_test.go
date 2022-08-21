@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-	"github.com/sveltinio/sveltin/pkg/npmc"
+	"github.com/sveltinio/sveltin/internal/npmc"
 )
 
 func TestPackageManager(t *testing.T) {
