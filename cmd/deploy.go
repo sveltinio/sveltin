@@ -18,8 +18,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/prompti/confirm"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/internal/ftpfs"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/pkg/ftpfs"
 	"github.com/sveltinio/sveltin/utils"
 )
 
