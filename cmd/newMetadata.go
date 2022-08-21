@@ -15,6 +15,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/prompti/choose"
+	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
@@ -22,8 +24,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/internal/tui/choose"
-	"github.com/sveltinio/sveltin/internal/tui/input"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )

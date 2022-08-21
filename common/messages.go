@@ -27,6 +27,7 @@ type UserProjectConfig struct {
 }
 
 // PrintSummary shows a summary text with the project settings selected by the user.
+/*
 func (uc *UserProjectConfig) PrintSummary() {
 	entries := map[string]string{
 		"Project Name: ": uc.ProjectName,
@@ -36,9 +37,10 @@ func (uc *UserProjectConfig) PrintSummary() {
 	}
 	fmt.Println(markup.NewULWithIconPrefix("RECAP your choices", entries, markup.CheckMark))
 }
+*/
 
 // PrintNextStepsHelperForNewProject prints an help message as next steps for a project creation.
-func (uc *UserProjectConfig) PrintNextStepsHelperForNewProject() {
+func PrintNextStepsHelperForNewProject(uc *UserProjectConfig) {
 	steps := []string{
 		fmt.Sprintf("cd %s", uc.ProjectName),
 		fmt.Sprintf("sveltin install %s", markup.Faint("(or npm run install, pnpm install, ...)")),
@@ -46,11 +48,11 @@ func (uc *UserProjectConfig) PrintNextStepsHelperForNewProject() {
 	}
 	nextStepsMsg := markup.NewOLWithTitle("Next Steps", steps)
 
-	fmt.Printf("%s%s", nextStepsMsg, devServerInfoMessage())
+	fmt.Printf("%s%s\n", nextStepsMsg, devServerInfoMessage())
 }
 
 // PrintNextStepsHelperForNewProjectWithExistingTheme pprints an help message as next steps for a project creation with an existing theme'.
-func (uc *UserProjectConfig) PrintNextStepsHelperForNewProjectWithExistingTheme() {
+func PrintNextStepsHelperForNewProjectWithExistingTheme(uc *UserProjectConfig) {
 	steps := []string{
 		fmt.Sprintf("cd %s", uc.ProjectName),
 		fmt.Sprintf("sveltin install %s", markup.Faint("(or npm run install, pnpm install, ...)")),
@@ -80,7 +82,7 @@ func PrintHelperTextNewResource(name string) {
 func PrintHelperTextNewMetadata(metadataInfo *config.TemplateData) {
 	var exampleString string
 	if metadataInfo.Type == "single" {
-		exampleString = fmt.Sprintf("%s%s", utils.ToSnakeCase(metadataInfo.Name), ": your_value")
+		exampleString = fmt.Sprintf("%s: your_value", utils.ToSnakeCase(metadataInfo.Name))
 	} else {
 		exampleString = utils.ToSnakeCase(metadataInfo.Name) + `:
   - value 1
