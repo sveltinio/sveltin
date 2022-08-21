@@ -14,8 +14,8 @@ import (
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/pkg/logger"
 	"github.com/sveltinio/sveltin/utils"
+	logger "github.com/sveltinio/yinlog"
 )
 
 // UserProjectConfig represents the user selections when creating a new sveltin project.
