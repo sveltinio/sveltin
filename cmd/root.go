@@ -21,8 +21,8 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/sveltin/pkg/logger"
 	"github.com/sveltinio/sveltin/resources"
+	logger "github.com/sveltinio/yinlog"
 	"gopkg.in/yaml.v3"
 )
 
