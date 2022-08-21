@@ -16,7 +16,7 @@ deps:
 build:
     ENV GOARCH=amd64
     FROM +deps
-    COPY --dir cmd common config helpers pkg resources utils ./
+    COPY --dir cmd common config helpers internal resources utils ./
     COPY main.go ./
     RUN go build -o build/sveltin main.go
     SAVE ARTIFACT build/sveltin /sveltin AS LOCAL build/sveltin
