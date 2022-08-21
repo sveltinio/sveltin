@@ -41,6 +41,7 @@ const (
 	contentTemplateTypeNotValidError
 	pageTypeNotValidError
 	metadataTypeNotValidError
+	npmClientNotFoundError
 	npmClientCommandError
 	npmClientCommandNotValidError
 	packageManagerCommandNotValidError
@@ -237,6 +238,11 @@ func NewPageTypeNotValidError() error {
 func NewMetadataTypeNotValidError() error {
 	err := errors.New("it seems a not valid type has been used as metadata")
 	return newSveltinError(metadataTypeNotValidError, "MetadataTypeNotValidError", "Not A Valid Metadata Type", err.Error(), err)
+}
+
+// NewNPMClientNotFoundError ...
+func NewNPMClientNotFoundError(err error) error {
+	return newSveltinError(npmClientNotFoundError, "NPMClientNotFoundError", "No NPM Client found", err.Error(), err)
 }
 
 // NewNPMClientCommandError ...

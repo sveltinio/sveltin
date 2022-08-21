@@ -2,7 +2,7 @@
     <img src="resources/sveltin-logo.png" width="224px" alt="sveltin logo"/>
 </h1>
 <h2 align="center">
-The Smartest Way to Build SvelteKit powered static websites.
+The Smartest Way to Create SvelteKit powered static websites.
 </h2>
 <p align="center">
 <a href="https://sveltin.io/" target="_blank">
