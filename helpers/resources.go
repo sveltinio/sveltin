@@ -9,8 +9,10 @@
 package helpers
 
 import (
+	"fmt"
 	"log"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
@@ -25,23 +27,6 @@ func ResourceExists(fs afero.Fs, name string, c *config.SveltinConfig) error {
 		return sveltinerr.NewResourceNotFoundError()
 	}
 	return nil
-}
-
-// GetAllResourcesForMenuFile returns a slice of resource names as formatted string a js file.
-func GetAllResourcesForMenuFile(fs afero.Fs, path string) []string {
-	resources := []string{}
-	if common.DirExists(fs, path) {
-		files, err := afero.ReadDir(fs, path)
-		if err != nil {
-			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
-		}
-		for _, f := range files {
-			if f.IsDir() {
-				resources = append(resources, `"`+f.Name()+`"`)
-			}
-		}
-	}
-	return resources
 }
 
 // GetAllResources returns a slice of resource names as string.
@@ -119,11 +104,16 @@ func GetResourceMetadataMap(fs afero.Fs, resources []string, path string) map[st
 			resourcePath := filepath.Join(path, resource)
 			r, _ := afero.ReadDir(fs, resourcePath)
 			for _, entry := range r {
-				if entry.IsDir() {
+				fmt.Println(entry.Name())
+				if entry.IsDir() && excludeIfNotValidEntry(entry.Name()) {
 					metadata[resource] = append(metadata[resource], entry.Name())
 				}
 			}
 		}
 	}
 	return metadata
+}
+
+func excludeIfNotValidEntry(s string) bool {
+	return !(strings.HasPrefix(s, "[") || strings.Contains(s, "["))
 }

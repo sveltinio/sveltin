@@ -8,31 +8,9 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"gopkg.in/yaml.v3"
 )
-
-func TestGetPublicPages(t *testing.T) {
-	is := is.New(t)
-	path := "src/routes"
-
-	tests := []struct {
-		filename string
-	}{
-		{filename: "index.svelte"},
-		{filename: "about.svx"},
-		{filename: "contact.mdx"},
-	}
-
-	memFS := afero.NewMemMapFs()
-	for _, tc := range tests {
-		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
-	}
-
-	pages := GetAllPublicPages(memFS, path)
-	is.Equal(2, len(pages))
-}
 
 func TestPublicPageFilename(t *testing.T) {
 	tests := []struct {
