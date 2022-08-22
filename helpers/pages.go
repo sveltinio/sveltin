@@ -9,11 +9,11 @@
 package helpers
 
 import (
+	"log"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/afero"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/config"
 )
 
@@ -23,7 +23,7 @@ func GetAllPublicPages(fs afero.Fs, path string) []string {
 	pages := []string{}
 
 	if err != nil {
-		jww.FATAL.Fatalf("Something went wrong visiting dir %s. Are you sure it exists?", path)
+		log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
 	}
 
 	for _, f := range files {

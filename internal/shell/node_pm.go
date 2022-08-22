@@ -12,7 +12,6 @@ import (
 	"context"
 	"fmt"
 
-	jww "github.com/spf13/jwalterweatherman"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
@@ -103,16 +102,16 @@ func (s *NPMClient) RunAddPackages(pmName string, operation string, mode string,
 	}
 
 	for _, p := range packages {
-		jww.FEEDBACK.Printf("  * %s\n", p)
+		fmt.Printf("  * %s\n", p)
 		output, err := s.GetShell().BackgroundExecute(context.Background(), pmName, pmCmd, p)
 		if err != nil {
 			return sveltinerr.NewExecSystemCommandErrorWithMsg(err)
 		}
 
 		if !silentMode {
-			jww.FEEDBACK.Println(string(output))
+			fmt.Println(string(output))
 		}
 	}
-	jww.FEEDBACK.Println("\n✔ Done")
+	fmt.Println("\n✔ Done")
 	return nil
 }

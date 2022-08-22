@@ -14,13 +14,13 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
+	"log"
 	"path/filepath"
 	"sort"
 	"time"
 
 	"github.com/jlaffaye/ftp"
 	"github.com/spf13/afero"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -31,6 +31,8 @@ type FTPServerConnection struct {
 	serverFolder string
 	client       *ftp.ServerConn
 }
+
+const doneMarker = "✔"
 
 // NewFTPServerConnection returns a new FTPServerConnection struct.
 func NewFTPServerConnection(config *FTPConnectionConfig) FTPServerConnection {
@@ -54,7 +56,7 @@ func (s *FTPServerConnection) SetRootFolder(name string) {
 // Dial contains the logic for the FTP receiver to handle the dial command.
 func (s *FTPServerConnection) Dial() error {
 	connStr := s.Config.makeConnectionString()
-	jww.FEEDBACK.Printf("* Connecting to the FTP Server (%s) ", connStr)
+	log.Printf("* Connecting to the FTP Server (%s) ", connStr)
 	c, err := ftp.Dial(connStr, ftp.DialWithTimeout(time.Duration(s.Config.Timeout)*time.Second), ftp.DialWithDisabledEPSV(s.Config.IsEPSV))
 	if err != nil {
 		return err
@@ -65,7 +67,7 @@ func (s *FTPServerConnection) Dial() error {
 
 // Login contains the logic for the FTP receiver to handle the login command.
 func (s *FTPServerConnection) Login() error {
-	jww.FEEDBACK.Printf("* Login (as %s)", s.Config.User)
+	log.Printf("* Login (as %s)", s.Config.User)
 	if err := s.client.Login(s.Config.User, s.Config.Password); err != nil {
 		return err
 	}
@@ -74,7 +76,7 @@ func (s *FTPServerConnection) Login() error {
 
 // Logout contains the logic for the FTP receiver to handle the logout command.
 func (s *FTPServerConnection) Logout() error {
-	jww.FEEDBACK.Println("* Closing the connection to the FTP server")
+	log.Println("* Closing the connection to the FTP server")
 	if err := s.client.Quit(); err != nil {
 		return err
 	}
@@ -100,7 +102,7 @@ func (s *FTPServerConnection) MakeDirs(folders []string, dryRun bool) error {
 
 	for _, folder := range folders {
 		if dryRun {
-			jww.FEEDBACK.Println("  ✔ " + folder + " -> would be created")
+			log.Printf("  %s %s  -> would be created\n", doneMarker, folder)
 		} else {
 			if err := s.client.MakeDir(folder); err != nil {
 				return err
@@ -143,13 +145,13 @@ func (s *FTPServerConnection) DeleteAll(exclude []string, dryrun bool) error {
 	}
 
 	if len(entries) > 0 {
-		jww.FEEDBACK.Println("* Deleting previous content from the FTP remote folder")
+		log.Println("* Deleting previous content from the FTP remote folder")
 
 		for _, entry := range entries {
 			switch entry.Type {
 			case ftp.EntryTypeFolder:
 				if dryrun {
-					jww.FEEDBACK.Println("  ✔ " + entry.Name + " -> folder would be recursively deleted")
+					log.Printf("  %s %s -> folder would be recursively deleted\n", doneMarker, entry.Name)
 				} else {
 					folder := filepath.Join(s.serverFolder, entry.Name)
 					if err := s.client.RemoveDirRecur(folder); err != nil {
@@ -158,7 +160,7 @@ func (s *FTPServerConnection) DeleteAll(exclude []string, dryrun bool) error {
 				}
 			case ftp.EntryTypeFile:
 				if dryrun {
-					jww.FEEDBACK.Println("  ✔ " + entry.Name + " -> would be deleted")
+					log.Printf("  %s %s -> would be deleted\n", doneMarker, entry.Name)
 				} else {
 					file := filepath.Join(s.serverFolder, entry.Name)
 					if !common.Contains(exclude, filepath.Base(file)) {
@@ -178,7 +180,7 @@ func (s *FTPServerConnection) DeleteAll(exclude []string, dryrun bool) error {
 // DoBackup contains the logic for the FTP receiver to handle the backup command.
 func (s *FTPServerConnection) DoBackup(appFs afero.Fs, tarballFilePath string, dryRun bool) error {
 	archiveFilename := tarballFilePath + "_" + time.Now().Format("20060102_3:4:5PM") + ".tar.gz"
-	jww.FEEDBACK.Printf("* Reading the remote folder '%s' ", s.serverFolder)
+	log.Printf("* Reading the remote folder '%s' ", s.serverFolder)
 	remoteFiles := s.walkRemote()
 	if err := s.createTarball(appFs, archiveFilename, remoteFiles, dryRun); err != nil {
 		return err
@@ -204,7 +206,7 @@ func (s *FTPServerConnection) uploadSingle(filename string, data *bytes.Buffer, 
 	saveAs := filepath.Base(filename)
 
 	if dryRun {
-		jww.FEEDBACK.Println("  ✔ " + filename + " -> would be uploaded")
+		log.Printf("  %s %s -> would be uploaded\n", doneMarker, filename)
 	} else {
 		cwd, _ := s.client.CurrentDir()
 		if cwd != saveTo {
@@ -223,7 +225,7 @@ func (s *FTPServerConnection) uploadSingle(filename string, data *bytes.Buffer, 
 //=============================================================================
 
 func (s *FTPServerConnection) createTarball(appFs afero.Fs, tarballFilePath string, filePaths []string, dryRun bool) error {
-	jww.FEEDBACK.Printf("* Creating the archive file '%s' as backup", tarballFilePath)
+	log.Printf("* Creating the archive file '%s' as backup", tarballFilePath)
 	// In-memory file system
 	memFs := afero.NewMemMapFs()
 	// Create a new archive file
@@ -250,7 +252,7 @@ func (s *FTPServerConnection) createTarball(appFs afero.Fs, tarballFilePath stri
 		}
 
 		if dryRun {
-			jww.FEEDBACK.Println("  ✔ " + f + " -> would be added to the archive file")
+			log.Printf("  %s %s -> would be added to the archive file\n", doneMarker, f)
 		} else {
 			// fetch the file from the remote FTP server
 			r, err := s.client.Retr(fName)

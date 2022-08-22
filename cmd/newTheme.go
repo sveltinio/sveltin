@@ -12,12 +12,12 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
@@ -150,7 +150,7 @@ func isValidForThemeMaker() {
 	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
 	if exists {
 		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
-		jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
 	}
 }
 

@@ -9,12 +9,12 @@
 package cmd
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
@@ -118,7 +118,7 @@ func init() {
 func loadSveltinConfig() {
 	err := yaml.Unmarshal(YamlConfig, &cfg.sveltin)
 	if err != nil {
-		jww.FATAL.Fatal(err)
+		log.Fatal(err)
 	}
 }
 
@@ -161,8 +161,8 @@ func isValidProject() {
 	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
 	if !exists {
 		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
-		//jww.FATAL.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
-		jww.FATAL.Printf("\n%s", err.Error())
+		//log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+		log.Printf("\n%s", err.Error())
 		os.Exit(0)
 	}
 }
