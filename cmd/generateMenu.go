@@ -50,7 +50,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Info("Getting list of existing public pages")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
-	allResources := helpers.GetAllResourcesForMenuFile(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
+	allResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
 	allRoutesExceptsResource := common.Difference(allRoutes, allResources)
 	// exclude api folder from the list
 	publicPages := common.Difference(allRoutesExceptsResource, []string{ApiFolder})
