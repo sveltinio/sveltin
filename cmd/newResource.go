@@ -47,8 +47,8 @@ This command:
 - Create a <resource_name> folder within "content" folder, so that you can add new content for the resource
 - Add the resource as route within the "src/routes" folder, creating its own folder
 - Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name>
-- Scaffold index.svelte component and index.ts endpoint to list all the content belongs to a resource
-- Scaffold [slug].svelte component and [slug].ts endpoint to get access to a specific content page
+- Scaffold +page.svelte component and +page.serve.ts endpoint to list all the content belongs to a resource
+- Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page
 	`,
 	Run: RunNewResourceCmd,
 }
