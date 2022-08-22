@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Sveltin } from 'src/sveltin';
 	import { base } from '$app/paths';
+	import type { PageData } from './$types';
 
-	export let slug: string;
-	export let metadata: Sveltin.ContentMetadata;
-	export let itemsCounter = metadata.items.length;
+	export let data: PageData;
+	$: ({ slug, metadata } = data);
+	$: itemsCounter = metadata.items.length;
 </script>
 
 <div class="artifact-container">

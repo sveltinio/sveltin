@@ -76,9 +76,9 @@ var SveltinMatchersFS = map[string]string{
 var SveltinMetadataFS = map[string]string{
 	"lib_single":    "internal/templates/resource/metadata/libSingle.gotxt",
 	"lib_list":      "internal/templates/resource/metadata/libList.gotxt",
-	"index":         "internal/templates/resource/metadata/index.gotxt",
-	"indexendpoint": "internal/templates/resource/metadata/index.ts.gotxt",
-	"slug":          "internal/templates/resource/metadata/slug.gotxt",
+	"index":         "internal/templates/resource/metadata/page.svelte.gotxt",
+	"indexendpoint": "internal/templates/resource/metadata/page.server.ts.gotxt",
+	"slug":          "internal/templates/resource/metadata/slug.svelte.gotxt",
 	"slugendpoint":  "internal/templates/resource/metadata/slug.ts.gotxt",
 }
 

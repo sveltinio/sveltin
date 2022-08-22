@@ -50,9 +50,9 @@ func TestSveltinAPIFS(t *testing.T) {
 func TestSveltinMetadataFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("internal/templates/resource/metadata/libList.gotxt", SveltinMetadataFS["lib_list"])
-	is.Equal("internal/templates/resource/metadata/index.gotxt", SveltinMetadataFS["index"])
-	is.Equal("internal/templates/resource/metadata/index.ts.gotxt", SveltinMetadataFS["indexendpoint"])
-	is.Equal("internal/templates/resource/metadata/slug.gotxt", SveltinMetadataFS["slug"])
+	is.Equal("internal/templates/resource/metadata/page.svelte.gotxt", SveltinMetadataFS["index"])
+	is.Equal("internal/templates/resource/metadata/page.server.ts.gotxt", SveltinMetadataFS["indexendpoint"])
+	is.Equal("internal/templates/resource/metadata/slug.svelte.gotxt", SveltinMetadataFS["slug"])
 	is.Equal("internal/templates/resource/metadata/slug.ts.gotxt", SveltinMetadataFS["slugendpoint"])
 }
 
