@@ -10,8 +10,8 @@ paths:
   api: api
   themes: themes
 pages:
-  content: index.svx
-  index: index.svelte
+  content: +page.svx
+  index: +page.svelte
   indexendpoint: index.ts
   slug: '[slug].svelte'
   slugendpoint: '[slug].json.ts'

@@ -71,12 +71,15 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// GET FOLDER: src/routes
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
-	// NEW FILE: src/routes/<page_name.svelte|svx>
+	// NEW FOLDER: src/routes/<page_name>
+	pageFolder := cfg.fsManager.GetFolder(pageName)
+	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
 	pageFile := cfg.fsManager.NewPublicPage(pageName, pageType)
 	utils.ExitIfError(err)
 
 	// ADD TO THE ROUTES FOLDER
-	routesFolder.Add(pageFile)
+	pageFolder.Add(pageFile)
+	routesFolder.Add(pageFolder)
 
 	// SET FOLDER STRUCTURE
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)

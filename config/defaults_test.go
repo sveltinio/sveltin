@@ -21,8 +21,8 @@ func TestPages(t *testing.T) {
 	err = yaml.Unmarshal(yamlFile, &conf)
 	is.NoErr(err)
 
-	is.Equal("index.svx", conf.GetContentPageFilename())
-	is.Equal("index.svelte", conf.GetIndexPageFilename())
+	is.Equal("+page.svx", conf.GetContentPageFilename())
+	is.Equal("+page.svelte", conf.GetIndexPageFilename())
 	is.Equal("[slug].svelte", conf.GetSlugPageFilename())
 }
 

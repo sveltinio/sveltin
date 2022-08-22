@@ -56,12 +56,12 @@ func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
 }
 
 // PublicPageFilename returns the filename string for a public page based on the page type (svelte or markdown).
-func PublicPageFilename(name string, pageType string) string {
+func PublicPageFilename(pageType string) string {
 	switch pageType {
 	case "svelte":
-		return name + `.svelte`
+		return `+page.svelte`
 	case "markdown":
-		return name + `.svx`
+		return `+page.svx`
 	default:
 		return ""
 	}

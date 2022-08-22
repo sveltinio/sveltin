@@ -44,20 +44,20 @@ func TestPublicPageFilename(t *testing.T) {
 				Name: "index",
 				Type: "svelte",
 			},
-			want: "index.svelte",
+			want: "+page.svelte",
 		},
 		{
 			pageData: &config.TemplateData{
 				Name: "about",
 				Type: "markdown",
 			},
-			want: "about.svx",
+			want: "+page.svx",
 		},
 	}
 
 	for _, tc := range tests {
 		is := is.New(t)
-		is.Equal(PublicPageFilename(tc.pageData.Name, tc.pageData.Type), tc.want)
+		is.Equal(PublicPageFilename(tc.pageData.Type), tc.want)
 	}
 }
 
@@ -70,7 +70,7 @@ func TestGetResourceRouteFilename(t *testing.T) {
 	}{
 		{
 			name: "index",
-			want: "index.svelte",
+			want: "+page.svelte",
 		},
 		{
 			name: "indexendpoint",
