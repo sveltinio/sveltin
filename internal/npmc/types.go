@@ -37,19 +37,19 @@ func (s NPMClientInfoStr) ToNPMClient() NPMClient {
 	}
 }
 
-// Script is a map representing the bugs section of a package.json file
+// Script is a map representing the script section of a package.json file
 type Script map[string]string
 
-// Engine is a map representing the bugs section of a package.json file
+// Engine is a map representing the engine section of a package.json file
 type Engine map[string]string
 
-// PublishConfig is a map representing the bugs section of a package.json file
+// PublishConfig is a map representing the publishConfig section of a package.json file
 type PublishConfig map[string]string
 
-// Dependency is a map representing the bugs section of a package.json file
+// Dependency is a map representing the dependency section of a package.json file
 type Dependency map[string]string
 
-// Repository is a struct representing the bugs section of a package.json file
+// Repository is a struct representing the repository section of a package.json file
 type Repository struct {
 	Type string `json:"type"`
 	URL  string `json:"url"`
