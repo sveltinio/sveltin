@@ -10,6 +10,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
@@ -48,7 +49,11 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 
 	cfg.log.Info("Getting list of existing public pages")
-	publicPages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
+	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
+	allResources := helpers.GetAllResourcesForMenuFile(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
+	allRoutesExceptsResource := common.Difference(allRoutes, allResources)
+	// exclude api folder from the list
+	publicPages := common.Difference(allRoutesExceptsResource, []string{ApiFolder})
 
 	cfg.log.Info("Getting list of existing resources")
 	availableResources := helpers.GetAllResourcesWithContentName(cfg.fs, cfg.pathMaker.GetPathToExistingResources(), withContentFlag)

@@ -27,6 +27,23 @@ func ResourceExists(fs afero.Fs, name string, c *config.SveltinConfig) error {
 	return nil
 }
 
+// GetAllResourcesForMenuFile returns a slice of resource names as formatted string a js file.
+func GetAllResourcesForMenuFile(fs afero.Fs, path string) []string {
+	resources := []string{}
+	if common.DirExists(fs, path) {
+		files, err := afero.ReadDir(fs, path)
+		if err != nil {
+			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
+		}
+		for _, f := range files {
+			if f.IsDir() {
+				resources = append(resources, `"`+f.Name()+`"`)
+			}
+		}
+	}
+	return resources
+}
+
 // GetAllResources returns a slice of resource names as string.
 func GetAllResources(fs afero.Fs, path string) []string {
 	resources := []string{}

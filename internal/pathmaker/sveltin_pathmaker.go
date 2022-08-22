@@ -128,6 +128,12 @@ func (maker *SveltinPathMaker) GetPathToPublicPages() string {
 	return filepath.Join(maker.c.GetProjectRoot(), maker.c.GetRoutesPath())
 }
 
+// GetPathToRoutes returns a string representing the path to the 'src/routes' folder
+// for a sveltin project relative to the project root folder.
+func (maker *SveltinPathMaker) GetPathToRoutes() string {
+	return filepath.Join(maker.c.GetProjectRoot(), maker.c.GetRoutesPath())
+}
+
 // GetPathToExistingResources returns a string representing the path to the 'content' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetPathToExistingResources() string {

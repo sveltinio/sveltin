@@ -39,6 +39,23 @@ func GetAllPublicPages(fs afero.Fs, path string) []string {
 	return pages
 }
 
+// GetAllRoutes return a slice of all available public page names as string.
+func GetAllRoutes(fs afero.Fs, path string) []string {
+	files, err := afero.ReadDir(fs, path)
+	if err != nil {
+		log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
+	}
+
+	routes := []string{}
+	for _, f := range files {
+		if f.IsDir() {
+			routes = append(routes, `"`+f.Name()+`"`)
+		}
+	}
+
+	return routes
+}
+
 // GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
 func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
 	switch txt {
