@@ -25,6 +25,6 @@ func TestPages(t *testing.T) {
 	pathMaker := NewSveltinPathMaker(&conf)
 
 	artifact := "posts"
-	is.Equal(filepath.Join("+page.svx"), pathMaker.GetResourceContentFilename())
+	is.Equal(filepath.Join("index.svx"), pathMaker.GetResourceContentFilename())
 	is.Equal("loadPosts.ts", pathMaker.GetResourceLibFilename(artifact))
 }

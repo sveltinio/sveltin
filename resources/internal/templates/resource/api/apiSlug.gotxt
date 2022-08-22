@@ -1,20 +1,14 @@
 import { getSingle } from '$lib/{{ .Name }}/load{{ .Name | ToVariableName | Capitalize }}';
+import { error } from '@sveltejs/kit';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET({ url }) {
 	const { pathname } = url;
-
 	const slug = pathname.substring(pathname.lastIndexOf('/') + 1);
-
-	if (slug) {
-		const data = await getSingle(slug);
-		return {
-			status: 200,
-			body: JSON.stringify(data)
-		};
-	} else {
-		return {
-			status: 404
-		};
+	if (!slug) {
+		throw error(404, '{{ .Name | ToVariableName | Capitalize }} not found');
 	}
+
+	const data = await getSingle(slug);
+	return new Response(JSON.stringify(data));
 }

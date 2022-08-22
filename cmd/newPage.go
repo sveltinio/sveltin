@@ -18,6 +18,7 @@ import (
 	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
+	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/resources"
@@ -46,9 +47,8 @@ var newPageCmd = &cobra.Command{
 	Long: resources.GetASCIIArt() + `
 Create a new "public" page.
 
-Pages are Svelte components written in .svelte files. The filename determines the route.
-A file called either src/routes/about.svelte or src/routes/about/index.svelte
-would correspond to the /about route.
+Pages are Svelte components written in .svelte or .svx (for markdown) files. The filename determines the route,
+so creating a page named "about" will generate the followin route /about/+page.<svelte|svx>
 
 This command allows you to select between a svelte component page and a markdown page.`,
 	Run: NewPageCmdRun,
@@ -72,7 +72,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
 	// NEW FOLDER: src/routes/<page_name>
-	pageFolder := cfg.fsManager.GetFolder(pageName)
+	pageFolder := composer.NewFolder(pageName)
 	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
 	pageFile := cfg.fsManager.NewPublicPage(pageName, pageType)
 	utils.ExitIfError(err)

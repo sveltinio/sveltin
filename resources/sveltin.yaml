@@ -10,14 +10,14 @@ paths:
   api: api
   themes: themes
 pages:
-  content: +page.svx
+  content: index.svx
   index: +page.svelte
-  indexendpoint: index.ts
-  slug: '[slug].svelte'
-  slugendpoint: '[slug].json.ts'
+  indexendpoint: +page.server.ts
+  slug: '+page.svelte'
+  slugendpoint: '+page.ts'
 api:
   version: v1
-  filename: index.ts
+  filename: +server.ts
 theme:
   file: theme.config.js
   components: components

@@ -98,7 +98,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
