@@ -9,10 +9,10 @@
 package helpers
 
 import (
+	"log"
 	"path/filepath"
 
 	"github.com/spf13/afero"
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
@@ -33,7 +33,7 @@ func GetAllResources(fs afero.Fs, path string) []string {
 	if common.DirExists(fs, path) {
 		files, err := afero.ReadDir(fs, path)
 		if err != nil {
-			jww.FATAL.Fatalf("Something went wrong visiting dir %s. Are you sure it exists?", path)
+			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
 		}
 		for _, f := range files {
 			if f.IsDir() {
@@ -51,7 +51,7 @@ func GetAllResourcesWithContentName(fs afero.Fs, path string, children bool) []*
 	if exists {
 		files, err := afero.ReadDir(fs, path)
 		if err != nil {
-			jww.FATAL.Fatalf("Something went wrong visiting dir %s. Are you sure it exists?", path)
+			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
 		}
 		for _, f := range files {
 			if f.IsDir() {
@@ -59,7 +59,7 @@ func GetAllResourcesWithContentName(fs afero.Fs, path string, children bool) []*
 				if children {
 					subFolders, err := afero.ReadDir(fs, filepath.Join(path, f.Name()))
 					if err != nil {
-						jww.FATAL.Fatalf("Something went wrong visiting subfolder %s. Are you sure it exists?", f.Name())
+						log.Fatalf("Something went wrong visiting the subfolder %s. Are you sure it exists?", f.Name())
 					}
 					for _, s := range subFolders {
 						if s.IsDir() {

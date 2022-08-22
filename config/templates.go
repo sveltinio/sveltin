@@ -11,10 +11,9 @@ package config
 import (
 	"bytes"
 	"embed"
+	"log"
 	"path/filepath"
 	"text/template"
-
-	jww "github.com/spf13/jwalterweatherman"
 )
 
 // TplConfig is the struct representing all is needed by a template file
@@ -34,7 +33,7 @@ func (tplConfig *TplConfig) Run(embedFS *embed.FS) []byte {
 	tmpl := template.Must(template.New(tplFilename).Funcs(funcMap).ParseFS(embedFS, pathToTplFile))
 	var writer bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&writer, tplFilename, tplConfig.Data); err != nil {
-		jww.FATAL.Fatalln(err.Error())
+		log.Fatalln(err.Error())
 	}
 	return writer.Bytes()
 }
