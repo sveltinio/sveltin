@@ -242,7 +242,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
-	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.server.ts}
+	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
 	for _, item := range []string{SlugFile, SlugEndpointFile} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
