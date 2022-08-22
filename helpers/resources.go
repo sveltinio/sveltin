@@ -9,7 +9,6 @@
 package helpers
 
 import (
-	"fmt"
 	"log"
 	"path/filepath"
 	"strings"
@@ -104,7 +103,6 @@ func GetResourceMetadataMap(fs afero.Fs, resources []string, path string) map[st
 			resourcePath := filepath.Join(path, resource)
 			r, _ := afero.ReadDir(fs, resourcePath)
 			for _, entry := range r {
-				fmt.Println(entry.Name())
 				if entry.IsDir() && excludeIfNotValidEntry(entry.Name()) {
 					metadata[resource] = append(metadata[resource], entry.Name())
 				}

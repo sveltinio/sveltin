@@ -9,8 +9,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
@@ -42,15 +40,12 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Info("Getting list of existing resources")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
-	fmt.Println(existingResources)
 
 	cfg.log.Info("Getting list of all resources contents")
 	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
-	fmt.Println(contents)
 
 	cfg.log.Info("Getting list of all resources metadata")
 	metadata := helpers.GetResourceMetadataMap(cfg.fs, existingResources, cfg.sveltin.GetRoutesPath())
-	fmt.Println(metadata)
 
 	cfg.log.Info("Getting all existing public pages")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
