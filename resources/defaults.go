@@ -118,6 +118,7 @@ var SveltinVanillaStyledFS = SveltinFSItem{
 	"app_css": "internal/templates/themes/vanillacss/styled/app.css",
 	"hero":    "internal/templates/themes/vanillacss/styled/Hero.svelte",
 	"footer":  "internal/templates/themes/vanillacss/styled/Footer.svelte",
+	"error":   "internal/templates/themes/error.styled.svelte",
 }
 
 // SveltinVanillaUnstyledFS is the map for the unstyled templates file whe using vanilla css.
@@ -125,6 +126,7 @@ var SveltinVanillaUnstyledFS = SveltinFSItem{
 	"layout":  "internal/templates/themes/vanillacss/unstyled/layout.svelte.gotxt",
 	"app_css": "internal/templates/themes/vanillacss/unstyled/app.css",
 	"hero":    "internal/templates/themes/vanillacss/unstyled/Hero.svelte",
+	"error":   "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================
@@ -145,6 +147,7 @@ var SveltinTailwindLibStyledFS = SveltinFSItem{
 	"app_css":             "internal/templates/themes/tailwindcss/styled/app.css",
 	"hero":                "internal/templates/themes/tailwindcss/styled/Hero.svelte",
 	"footer":              "internal/templates/themes/tailwindcss/styled/Footer.svelte",
+	"error":               "internal/templates/themes/error.styled.svelte",
 }
 
 // SveltinTailwindLibUnstyledFS is the map for the unstyled templates file whe using tailwind css.
@@ -153,6 +156,7 @@ var SveltinTailwindLibUnstyledFS = SveltinFSItem{
 	"tailwind_css_config": "internal/templates/themes/tailwindcss/unstyled/tailwind.config.cjs",
 	"app_css":             "internal/templates/themes/tailwindcss/unstyled/app.css",
 	"hero":                "internal/templates/themes/tailwindcss/unstyled/Hero.svelte",
+	"error":               "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================
@@ -172,6 +176,7 @@ var SveltinBulmaLibStyledFS = SveltinFSItem{
 	"variables_scss": "internal/templates/themes/bulma/styled/variables.scss",
 	"hero":           "internal/templates/themes/bulma/styled/Hero.svelte",
 	"footer":         "internal/templates/themes/bulma/styled/Footer.svelte",
+	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
 // SveltinBulmaLibUnstyledFS is the map for the unstyled templates file whe using bulma.
@@ -180,6 +185,7 @@ var SveltinBulmaLibUnstyledFS = SveltinFSItem{
 	"app_css":        "internal/templates/themes/bulma/unstyled/app.scss",
 	"variables_scss": "internal/templates/themes/bulma/unstyled/variables.scss",
 	"hero":           "internal/templates/themes/bulma/unstyled/Hero.svelte",
+	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================
@@ -199,6 +205,7 @@ var SveltinBootstrapLibStyledFS = SveltinFSItem{
 	"variables_scss": "internal/templates/themes/bootstrap/styled/variables.scss",
 	"hero":           "internal/templates/themes/bootstrap/styled/Hero.svelte",
 	"footer":         "internal/templates/themes/bootstrap/styled/Footer.svelte",
+	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
 // SveltinBootstrapLibUnstyledFS is the map for the unstyled templates file whe using bootstrap.
@@ -207,6 +214,7 @@ var SveltinBootstrapLibUnstyledFS = SveltinFSItem{
 	"app_css":        "internal/templates/themes/bootstrap/unstyled/app.scss",
 	"variables_scss": "internal/templates/themes/bootstrap/unstyled/variables.scss",
 	"hero":           "internal/templates/themes/bootstrap/unstyled/Hero.svelte",
+	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================
@@ -226,6 +234,7 @@ var SveltinSCSSLibStyledFS = SveltinFSItem{
 	"variables_scss": "internal/templates/themes/scss/styled/variables.scss",
 	"hero":           "internal/templates/themes/scss/styled/Hero.svelte",
 	"footer":         "internal/templates/themes/scss/styled/Footer.svelte",
+	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
 // SveltinSCSSLibUnstyledFS is the map for the unstyled templates file whe using scss/sass.
@@ -234,4 +243,5 @@ var SveltinSCSSLibUnstyledFS = SveltinFSItem{
 	"app_css":        "internal/templates/themes/scss/unstyled/app.scss",
 	"variables_scss": "internal/templates/themes/scss/unstyled/variables.scss",
 	"hero":           "internal/templates/themes/scss/unstyled/Hero.svelte",
+	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
