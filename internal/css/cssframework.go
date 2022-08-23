@@ -94,7 +94,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying __layout.svelte. file
+	// Copying +layout.svelte. file
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
@@ -102,6 +102,16 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
+
+	// Copying +error.svelte. file
+	sourceFile = embeddedResources[ErrorFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+error.svelte")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
 	// Copying Hero.svelte component
 	sourceFile = embeddedResources[HeroFileID]
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Hero.svelte")
@@ -164,14 +174,24 @@ func makeUnstyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying __layout.svelte. file
+	// Copying +layout.svelte. file
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
+
+	// Copying +error.svelte. file
+	sourceFile = embeddedResources[ErrorFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+error.svelte")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
 	// Copying Hero.svelte component
 	sourceFile = embeddedResources[HeroFileID]
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Hero.svelte")
@@ -227,11 +247,20 @@ func makeTheme(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying __layout.svelte. file
+	// Copying +layout.svelte. file
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
+	// Copying +error.svelte. file
+	sourceFile = embeddedResources[ErrorFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+error.svelte")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
