@@ -44,6 +44,8 @@ var addMetadataCmd = &cobra.Command{
 	Long: resources.GetASCIIArt() + `
 Command to add new metadata for your content to an existing resource.
 
+**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.
+
 What is a "metadata" for Sveltin?
 Whatever you enter in the front-matter of your markdown content for which you want content grouped by it.
 

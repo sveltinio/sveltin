@@ -39,7 +39,7 @@ var initCmd = &cobra.Command{
 	Args:    cobra.RangeArgs(0, 3),
 	Short:   "Initialize a new sveltin project",
 	Long: resources.GetASCIIArt() + `
-This command scaffold a new sveltin project.
+Command to scaffold a new sveltin project.
 
 Examples:
 

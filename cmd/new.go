@@ -51,8 +51,8 @@ const (
 
 var newCmd = &cobra.Command{
 	Use:   "new",
-	Short: "Create nee resources, pages and themes",
-	Long: `This command creates resources (e.g. blog posts, recipes, ...), pages and themes depending on the subcommand used with it.
+	Short: "Create new resources, pages and themes",
+	Long: `Command to create resources (e.g. blog posts, recipes, ...), pages and themes depending on the subcommand used with it.
 
 Examples:
 

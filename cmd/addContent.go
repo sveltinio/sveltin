@@ -55,7 +55,7 @@ Create a new markdown file for your content and a folder to store the statics us
 New file can contain just the frontmatter or a sample content.
 Use the --template flag to select the right one to you. Valid options: blank or sample
 
-**Note**: This command must be used after you create a resource for the content.
+**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.
 
 Example:
 
