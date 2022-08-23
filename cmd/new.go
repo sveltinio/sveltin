@@ -9,8 +9,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -60,7 +58,10 @@ sveltin new page about
 sveltin new resource posts
 sveltin new theme paper --css tailwindcss --npmClient pnpm`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("new called")
+		// Exit if running sveltin commands from a not valid directory.
+		isValidProject()
+
+		cfg.log.Important("Run 'sveltin new -h'")
 	},
 }
 
