@@ -37,26 +37,26 @@ var (
 
 //=============================================================================
 
-var newMetadataCmd = &cobra.Command{
-	Use:     "metadata [name] --resource [resource] --type [single|list]",
-	Aliases: []string{"m, groupedBy"},
-	Short:   "Command to add a new metadata to your content as a Sveltekit resource",
+var addMetadataCmd = &cobra.Command{
+	Use:     "metadata [name] --to [resource] --as [single|list]",
+	Aliases: []string{"groupedBy"},
+	Short:   "Command to add a new metadata for your content to an existing Sveltekit resource",
 	Long: resources.GetASCIIArt() + `
-Command to add new metadata from your content to an existing resource.
+Command to add new metadata for your content to an existing resource.
 
 What is a "metadata" for Sveltin?
 Whatever you enter in the front-matter of your markdown content for which you want content grouped by it.
 
-Types:
+Metadata Types:
 
 - single: 1:1 relationship (e.g. category)
 - list: 1:many relationship (e.g. tags)
 `,
-	Run: RunNewMetadataCmd,
+	Run: RunAddMetadataCmd,
 }
 
-// RunNewMetadataCmd is the actual work function.
-func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
+// RunAddMetadataCmd is the actual work function.
+func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
@@ -109,19 +109,17 @@ func RunNewMetadataCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done")
 
 	// NEXT STEPS
-	//cfg.log.Plain(utils.Underline("Next Steps"))
-	//cfg.log.Important(common.HelperTextNewMetadata(metadataTemplateData))
 	common.PrintHelperTextNewMetadata(metadataTemplateData)
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&resourceName, "resource", "r", "", "Name of the resource the new metadata is belongs to.")
-	cmd.Flags().StringVarP(&metadataType, "type", "t", "", "Type of the new metadata. (possible values: single or list)")
+	cmd.Flags().StringVarP(&resourceName, "to", "t", "", "Name of the resource the new metadata is belongs to.")
+	cmd.Flags().StringVarP(&metadataType, "as", "a", "", "Type of the new metadata. (possible values: single or list)")
 }
 
 func init() {
-	newCmd.AddCommand(newMetadataCmd)
-	metadataCmdFlags(newMetadataCmd)
+	metadataCmdFlags(addMetadataCmd)
+	addCmd.AddCommand(addMetadataCmd)
 }
 
 //=============================================================================

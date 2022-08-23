@@ -162,15 +162,19 @@ Usage:
   sveltin [command]
 
 Available Commands:
+  add         Add content and metadata to a resource
   build       Builds a production version of your static website
-  deploy      Command to deploy your website over FTP
-  generate    Command to generate static files (sitemap, rss, menu)
+  completion  Generate the autocompletion script for the specified shell
+  deploy      Deploy your website over FTP
+  generate    Generate static files (sitemap, rss, menu)
   help        Help about any command
-  install     Get all the dependencies from the `package.json` file
-  new         Command to create projects, resources, contents, pages, metadata and themes.
+  init        Initialize a new sveltin project
+  install     Install your project dependencies
+  new         Create nee resources, pages and themes
   preview     Preview the production version locally
-  server      Run the server
-  update      Update the dependencies from the `package.json` file
+  server      Run the development server
+  update      Update your project dependencies
+  version     Print the version number of Sveltin
 
 Flags:
   -h, --help      help for sveltin
@@ -183,9 +187,17 @@ sveltin comes with a set of commands and subcommands to help dealing with your S
 
 Each command can be executed with inline arguments or interactivly.
 
+## sveltin init
+
+`sveltin init` is the main command to scaffold a project.
+
+Alias: `create`
+
+Read more [here][init].
+
 ### sveltin new
 
-`sveltin new` is the main command to generate projects, artifacts and themes for your website.
+`sveltin new` is the main command to generate pages, resources (routes) and themes for your project.
 
 Alias: `create`
 
@@ -194,15 +206,30 @@ Alias: `create`
 
 | Subcommand |   Aliases    | Description                                                            |
 | :--------- | :----------: | :--------------------------------------------------------------------- |
-| [content]  |      c       | Command to create a new content for existing resource.                 |
-| [metadata] | m, groupedBy | Command to add a new metadata to your content as a Sveltekit resource. |
 | [page]     |      p       | Command to create a new public page.                                   |
 | [resource] |      r       | Command to create a new resource.                                      |
-| [theme]    |      t       | Command to create a new theme.                                         |
 
 </details>
 
 Read more [here][new].
+
+### sveltin add
+
+`sveltin add` is the main command to add content and metadata to existing resources.
+
+Alias: `a`
+
+<details>
+    <summary>(Click to expand the list of avilable subcommands)</summary>
+
+| Subcommand |   Aliases    | Description                                                            |
+| :--------- | :----------: | :--------------------------------------------------------------------- |
+| [content]  |      c       | Command to create a new content for existing resource.                 |
+| [metadata] | m, groupedBy | Command to add a new metadata to your content as a Sveltekit resource. |
+
+</details>
+
+Read more [here][add].
 
 ### sveltin generate
 
@@ -277,12 +304,14 @@ Read more [here][contributing].
 
 Sveltin is free and open-source software licensed under the Apache 2.0 License.
 
+[init]: https://docs.sveltin.io/cli/init/
 [new]: https://docs.sveltin.io/cli/new/
 [resource]: https://docs.sveltin.io/cli/new-resource/
-[content]: https://docs.sveltin.io/cli/new-content/
-[metadata]: https://docs.sveltin.io/cli/new-metadata/
 [page]: https://docs.sveltin.io/cli/new-page/
 [theme]: https://docs.sveltin.io/cli/new-theme/
+[add]: https://docs.sveltin.io/cli/add/
+[content]: https://docs.sveltin.io/cli/add-content/
+[metadata]: https://docs.sveltin.io/cli/add-metadata/
 [generate]: https://docs.sveltin.io/cli/generate/
 [menu]: https://docs.sveltin.io/cli/generate-menu/
 [sitemap]: https://docs.sveltin.io/cli/generate-sitemap/

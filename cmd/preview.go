@@ -24,10 +24,9 @@ var previewCmd = &cobra.Command{
 	Use:   "preview",
 	Short: "Preview the production version locally",
 	Long: resources.GetASCIIArt() + `
-After you've built your app with sveltin build (or svelte-kit build),
-you can start the production version locally with sveltin preview.
+Run after sveltin build (or vite build), you can start the production version locally with sveltin preview.
 
-It wraps sveltekit-preview command.`,
+It wraps vite preview command.`,
 	Run: RunPreviewCmd,
 }
 

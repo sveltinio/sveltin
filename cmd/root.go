@@ -94,7 +94,7 @@ var rootCmd = &cobra.Command{
 A powerful CLI for your SvelteKit powered static website!
 
 sveltin is the main command used to boost your productivity
-while creating a new production-ready project.
+while creating a new production-ready SvelteKit project.
 
 Resources:
   Documentation           -> https://docs.sveltin.io
@@ -162,8 +162,8 @@ func isValidProject() {
 	if !exists {
 		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
 		//log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
-		log.Printf("\n%s", err.Error())
-		os.Exit(0)
+		log.Fatalf("\n%s", err.Error())
+		//os.Exit(0)
 	}
 }
 
@@ -172,6 +172,6 @@ func isValidProject() {
 // GetSveltinCommands returns an array of pointers to the implemented cobra.Command
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
-		newCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd, newThemeCmd,
+		initCmd, newCmd, addCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd,
 	}
 }

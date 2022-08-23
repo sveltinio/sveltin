@@ -28,7 +28,7 @@ var buildCmd = &cobra.Command{
 	Long: resources.GetASCIIArt() + `
 Builds a production version of your static website.
 
-It wraps sveltekit-build command.
+It wraps vite build command.
 
 Ensure to edit env.production and .sveltin.toml files to reflect
 your production environment

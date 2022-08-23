@@ -19,7 +19,7 @@ var generateCmd = &cobra.Command{
 	Use:     "generate",
 	Aliases: []string{"g, gen"},
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Command to generate static files (sitemap, rss, menu)",
+	Short:   "Generate static files (sitemap, rss, menu)",
 	Long: resources.GetASCIIArt() + `
 Used to generate static files through its own subcommands.
 
