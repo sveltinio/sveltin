@@ -94,7 +94,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying __layout.svelte. file
+	// Copying +layout.svelte. file
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
@@ -164,11 +164,11 @@ func makeUnstyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying __layout.svelte. file
+	// Copying +layout.svelte. file
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -227,11 +227,11 @@ func makeTheme(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying __layout.svelte. file
+	// Copying +layout.svelte. file
 	sourceFile = embeddedResources[LayoutFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "__layout.svelte")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
