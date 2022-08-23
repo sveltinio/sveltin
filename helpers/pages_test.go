@@ -8,31 +8,9 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"gopkg.in/yaml.v3"
 )
-
-func TestGetPublicPages(t *testing.T) {
-	is := is.New(t)
-	path := "src/routes"
-
-	tests := []struct {
-		filename string
-	}{
-		{filename: "index.svelte"},
-		{filename: "about.svx"},
-		{filename: "contact.mdx"},
-	}
-
-	memFS := afero.NewMemMapFs()
-	for _, tc := range tests {
-		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
-	}
-
-	pages := GetAllPublicPages(memFS, path)
-	is.Equal(2, len(pages))
-}
 
 func TestPublicPageFilename(t *testing.T) {
 	tests := []struct {
@@ -44,20 +22,20 @@ func TestPublicPageFilename(t *testing.T) {
 				Name: "index",
 				Type: "svelte",
 			},
-			want: "index.svelte",
+			want: "+page.svelte",
 		},
 		{
 			pageData: &config.TemplateData{
 				Name: "about",
 				Type: "markdown",
 			},
-			want: "about.svx",
+			want: "+page.svx",
 		},
 	}
 
 	for _, tc := range tests {
 		is := is.New(t)
-		is.Equal(PublicPageFilename(tc.pageData.Name, tc.pageData.Type), tc.want)
+		is.Equal(PublicPageFilename(tc.pageData.Type), tc.want)
 	}
 }
 
@@ -70,19 +48,19 @@ func TestGetResourceRouteFilename(t *testing.T) {
 	}{
 		{
 			name: "index",
-			want: "index.svelte",
+			want: "+page.svelte",
 		},
 		{
 			name: "indexendpoint",
-			want: "index.ts",
+			want: "+page.server.ts",
 		},
 		{
 			name: "slug",
-			want: "[slug].svelte",
+			want: "+page.svelte",
 		},
 		{
 			name: "slugendpoint",
-			want: "[slug].json.ts",
+			want: "+page.ts",
 		},
 	}
 	for _, tc := range tests {

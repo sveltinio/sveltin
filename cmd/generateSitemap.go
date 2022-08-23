@@ -10,6 +10,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -37,9 +38,6 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Plain(markup.H1("Generating the sitemap file"))
 
-	cfg.log.Info("Getting list of existing public pages")
-	pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
-
 	cfg.log.Info("Getting list of existing resources")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
 
@@ -48,6 +46,12 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Info("Getting list of all resources metadata")
 	metadata := helpers.GetResourceMetadataMap(cfg.fs, existingResources, cfg.sveltin.GetRoutesPath())
+
+	cfg.log.Info("Getting all existing public pages")
+	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
+	allRoutesExceptsResource := common.Difference(allRoutes, existingResources)
+	// exclude api folder from the list
+	pages := common.Difference(allRoutesExceptsResource, []string{ApiFolder})
 
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)

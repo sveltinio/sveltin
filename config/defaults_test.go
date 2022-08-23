@@ -22,8 +22,9 @@ func TestPages(t *testing.T) {
 	is.NoErr(err)
 
 	is.Equal("index.svx", conf.GetContentPageFilename())
-	is.Equal("index.svelte", conf.GetIndexPageFilename())
-	is.Equal("[slug].svelte", conf.GetSlugPageFilename())
+	is.Equal("+page.svelte", conf.GetIndexPageFilename())
+	is.Equal("+page.svelte", conf.GetSlugPageFilename())
+	is.Equal("+page.ts", conf.GetSlugEndpointFilename())
 }
 
 func TestPaths(t *testing.T) {
@@ -73,5 +74,5 @@ func TestAPIs(t *testing.T) {
 	is.NoErr(err)
 
 	is.Equal("v1", conf.GetAPIVersion())
-	is.Equal("index.ts", conf.GetAPIFilename())
+	is.Equal("+server.ts", conf.GetAPIFilename())
 }

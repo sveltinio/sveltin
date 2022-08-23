@@ -266,8 +266,8 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataTemaplateData *con
 	// NEW FOLDER: <metadata_name>
 	resourceMedatadaRoutesFolder := composer.NewFolder(metadataTemaplateData.Name)
 
-	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{index.svelte, index.ts, [slug].svelte, [slug].ts}
-	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
+	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.server.ts}
+	for _, item := range []string{IndexFile, IndexEndpointFile} {
 		f := &composer.File{
 			Name:         helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID:   item,
@@ -275,6 +275,19 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataTemaplateData *con
 		}
 		resourceMedatadaRoutesFolder.Add(f)
 	}
+
+	// NEW FOLDER: src/routes/<resource_name>/[slug]
+	slugFolder := composer.NewFolder("[slug]")
+	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
+	for _, item := range []string{SlugFile, SlugEndpointFile} {
+		f := &composer.File{
+			Name:         helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			TemplateID:   item,
+			TemplateData: metadataTemaplateData,
+		}
+		slugFolder.Add(f)
+	}
+	resourceMedatadaRoutesFolder.Add(slugFolder)
 
 	// NEW FOLDER: src/routes/<resource_name>/<metadata_name>
 	resourceRoutesFolder := composer.NewFolder(metadataTemaplateData.Resource)

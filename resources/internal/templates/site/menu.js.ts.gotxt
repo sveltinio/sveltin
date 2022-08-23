@@ -43,8 +43,8 @@ const menu: Array<IMenuItem> = [{
 {{ if eq (PlusOne $index) $numOfPages }}
 {{ end }}
 		{
-			identifier: {{ $page }},
-			name: {{ $page | Capitalize }},
+			identifier: "{{ $page }}",
+			name: "{{ $page | Capitalize }}",
 			url: "{{ $page | ToURL }}",
 			weight: {{ Sum $pagesStartFrom $index}}
 		}

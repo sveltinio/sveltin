@@ -1,8 +1,9 @@
 <script lang="ts">
+	import type { PageData } from './$types';
 	import { base } from '$app/paths';
-	import type { Sveltin } from 'src/sveltin';
 
-	export let metadata: Array<Sveltin.ContentMetadata>;
+	export let data: PageData;
+	$: ({ metadata } = data);
 </script>
 {{ $mdName := .Name | ToVariableName}}
 <div class="artifact-container">

@@ -1,8 +1,8 @@
 import type { Sveltin } from 'src/sveltin';
 import { list } from '$lib/{{ .Name }}/load{{ .Name | ToVariableName | Capitalize }}';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET() {
+/** @type {import('./$types').PageServerLoad} */
+export async function load() {
 	const resourceName = '{{ .Name }}';
 	const data = await list();
 
@@ -16,10 +16,7 @@ export async function GET() {
 		items.push(item);
 	});
 	return {
-		status: 200,
-		body: {
-			resourceName: resourceName,
-			items: items
-		}
+		resourceName: resourceName,
+		items: items
 	};
 }

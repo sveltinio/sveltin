@@ -11,6 +11,7 @@ package helpers
 import (
 	"log"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
@@ -102,11 +103,15 @@ func GetResourceMetadataMap(fs afero.Fs, resources []string, path string) map[st
 			resourcePath := filepath.Join(path, resource)
 			r, _ := afero.ReadDir(fs, resourcePath)
 			for _, entry := range r {
-				if entry.IsDir() {
+				if entry.IsDir() && excludeIfNotValidEntry(entry.Name()) {
 					metadata[resource] = append(metadata[resource], entry.Name())
 				}
 			}
 		}
 	}
 	return metadata
+}
+
+func excludeIfNotValidEntry(s string) bool {
+	return !(strings.HasPrefix(s, "[") || strings.Contains(s, "["))
 }

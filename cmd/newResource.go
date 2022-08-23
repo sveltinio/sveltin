@@ -35,16 +35,20 @@ var newResourceCmd = &cobra.Command{
 	Long: resources.GetASCIIArt() + `
 Command to create new resources.
 
-What is a "resource" for Sveltin?
-A resource is a way to group, serve and expose your content.
+Why "resource" instead of "route"?
+Although a resource is basically a route on SvelteKit router, a resource is not an empty route. The retional behind
+the name is related to the fact that to serve content a route alone is not enough. To name a few, we need libs,
+pages, endpoints, a place to serve static contents like images for the content belongs the route etc.
+
+That's why "resource", all you need to group, serve and expose the content's route.
 
 This command:
 
 - Create a <resource_name> folder within "content" folder, so that you can add new content for the resource
 - Add the resource as route within the "src/routes" folder, creating its own folder
 - Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name>
-- Scaffold index.svelte component and index.ts endpoint to list all the content belongs to a resource
-- Scaffold [slug].svelte component and [slug].ts endpoint to get access to a specific content page
+- Scaffold +page.svelte component and +page.serve.ts endpoint to list all the content belongs to a resource
+- Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page
 	`,
 	Run: RunNewResourceCmd,
 }
@@ -222,10 +226,9 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceName)
-
-	// NEW FILE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].json.ts}
+	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.server.ts}
 	cfg.log.Info("Routes")
-	for _, item := range []string{IndexFile, IndexEndpointFile, SlugFile, SlugEndpointFile} {
+	for _, item := range []string{IndexFile, IndexEndpointFile} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
@@ -236,6 +239,22 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 		}
 		resourceRoutesFolder.Add(f)
 	}
+
+	// NEW FOLDER: src/routes/<resource_name>/[slug]
+	slugFolder := composer.NewFolder("[slug]")
+	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
+	for _, item := range []string{SlugFile, SlugEndpointFile} {
+		f := &composer.File{
+			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			TemplateID: item,
+			TemplateData: &config.TemplateData{
+				Name:   resourceName,
+				Config: cfg.sveltin,
+			},
+		}
+		slugFolder.Add(f)
+	}
+	resourceRoutesFolder.Add(slugFolder)
 	routesFolder.Add(resourceRoutesFolder)
 
 	return routesFolder
@@ -249,7 +268,7 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>
 	resourceAPIFolder := composer.NewFolder(resourceName)
 
-	// NEW FILE: src/routes/api/<version>/<resource_name>/index.ts
+	// NEW FILE: src/routes/api/<version>/<resource_name>/+server.ts
 	apiFile := &composer.File{
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiIndexFile,
@@ -260,13 +279,9 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 	}
 	resourceAPIFolder.Add(apiFile)
 
-	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = slug]
-	resourceSlugMatcherFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", utils.ToSnakeCase(resourceName), "=", "slug", "]"))
-
-	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[<resource_name> = slug]/[slug=string]
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[slug=string]
 	slugStringFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", "slug", "=", "string", "]"))
-
-	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = slug]/[slug=string]/index.ts
+	// NEW FILE: src/routes/api/<version>/<resource_name>/[slug=string]/+server.ts
 	apiSlugFile := &composer.File{
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiSlugFile,
@@ -276,8 +291,7 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 		},
 	}
 	slugStringFolder.Add(apiSlugFile)
-	resourceSlugMatcherFolder.Add(slugStringFolder)
-	resourceAPIFolder.Add(resourceSlugMatcherFolder)
+	resourceAPIFolder.Add(slugStringFolder)
 
 	// Add folders to src/routes/api/<version>/
 	apiFolder.Add(resourceAPIFolder)

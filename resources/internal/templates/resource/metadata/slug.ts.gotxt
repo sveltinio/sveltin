@@ -1,24 +1,16 @@
 {{ $mdName := .Name | ToVariableName | Capitalize }}
 import { groupedBy } from '$lib/{{ .Resource }}/load{{ $mdName }}';
+import { error } from '@sveltejs/kit';
 
-/** @type {import('./[slug]').RequestHandler} */
-export async function GET({ params }) {
+/** @type {import('./$types').PageLoad} */
+export async function load({ params }) {
 	const metadata = await groupedBy(params.slug);
 	if (metadata) {
 		return {
-			body: {
-				slug: params.slug,
-				metadata
-			}
+			slug: params.slug,
+			metadata
 		};
 	}
 
-	// return errors
-	const errors: Record<string, Error> = {};
-	return {
-		status: 404,
-		body: {
-			errors
-		}
-	};
+	throw error(404, 'Not found');
 }

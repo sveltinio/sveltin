@@ -10,33 +10,26 @@ package helpers
 
 import (
 	"log"
-	"path/filepath"
-	"strings"
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/config"
 )
 
-// GetAllPublicPages return a slice of all available public page names as string.
-func GetAllPublicPages(fs afero.Fs, path string) []string {
+// GetAllRoutes return a slice of all available public page names as string.
+func GetAllRoutes(fs afero.Fs, path string) []string {
 	files, err := afero.ReadDir(fs, path)
-	pages := []string{}
-
 	if err != nil {
 		log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
 	}
 
+	routes := []string{}
 	for _, f := range files {
-		pageName := ""
-		if IsValidFileForContent(f) {
-			if f.Name() != "index.svelte" {
-				pageName = strings.TrimSuffix(f.Name(), filepath.Ext(f.Name()))
-				pages = append(pages, `"`+pageName+`"`)
-			}
+		if f.IsDir() {
+			routes = append(routes, f.Name())
 		}
 	}
 
-	return pages
+	return routes
 }
 
 // GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
@@ -56,12 +49,12 @@ func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
 }
 
 // PublicPageFilename returns the filename string for a public page based on the page type (svelte or markdown).
-func PublicPageFilename(name string, pageType string) string {
+func PublicPageFilename(pageType string) string {
 	switch pageType {
 	case "svelte":
-		return name + `.svelte`
+		return `+page.svelte`
 	case "markdown":
-		return name + `.svx`
+		return `+page.svx`
 	default:
 		return ""
 	}
