@@ -15,8 +15,9 @@
 	},
 	"devDependencies": {
 		"@indaco/svelte-iconoir": "^2.5.1",
+		"@popperjs/core": "^2.11.5",
 		"@sveltejs/adapter-static": "1.0.0-next.39",
-		"@sveltejs/kit": "1.0.0-next.428"
+		"@sveltejs/kit": "1.0.0-next.431",
 		"@sveltinio/essentials": "^0.2.1",
 		"@sveltinio/media-content": "^0.3.2",
 		"@sveltinio/seo": "^0.1.7",
@@ -27,7 +28,7 @@
 		"@types/node": "^18.6.3",
 		"@typescript-eslint/eslint-plugin": "^5.33.1",
 		"@typescript-eslint/parser": "^5.33.1",
-		"bulma": "^0.9.4",
+		"bootstrap": "^5.2.0",
 		"eslint": "^8.22.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",

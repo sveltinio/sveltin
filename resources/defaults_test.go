@@ -76,9 +76,37 @@ func TestSveltinXMLFS(t *testing.T) {
 	is.Equal("internal/templates/xml/ssr_rss.xml.ts.gotxt", SveltinXMLFS["rss_ssr"])
 }
 
-func TestSveltinThemeFS(t *testing.T) {
+func TestBootstrapThemeFS(t *testing.T) {
 	is := is.New(t)
-	is.Equal("internal/templates/themes/tailwindcss/postcss.config.cjs", SveltinTailwindLibFS["postcss"])
-	is.Equal("internal/templates/themes/tailwindcss/styled/app.css", SveltinTailwindLibStyledFS["app_css"])
-	is.Equal("internal/templates/themes/tailwindcss/unstyled/tailwind.config.cjs", SveltinTailwindLibUnstyledFS["tailwind_css_config"])
+	is.Equal("internal/templates/themes/sveltin/bootstrap/package.json.gotxt", BootstrapSveltinThemeFS["package_json"])
+	is.Equal("internal/templates/themes/sveltin/bootstrap/app.scss", BootstrapSveltinThemeFS["app_css"])
+	is.Equal("internal/templates/themes/blank/bootstrap/variables.scss", BootstrapBlankThemeFS["variables_scss"])
+}
+
+func TestBulmaThemeFS(t *testing.T) {
+	is := is.New(t)
+	is.Equal("internal/templates/themes/sveltin/bulma/layout.svelte.gotxt", BulmaSveltinThemeFS["layout"])
+	is.Equal("internal/templates/themes/sveltin/bulma/app.scss", BulmaSveltinThemeFS["app_css"])
+	is.Equal("internal/templates/themes/blank/bulma/variables.scss", BulmaBlankThemeFS["variables_scss"])
+}
+
+func TestSCSSThemeFS(t *testing.T) {
+	is := is.New(t)
+	is.Equal("internal/templates/themes/sveltin/scss/package.json.gotxt", SCSSSveltinThemeFS["package_json"])
+	is.Equal("internal/templates/themes/sveltin/scss/app.scss", SCSSSveltinThemeFS["app_css"])
+	is.Equal("internal/templates/themes/blank/scss/variables.scss", SCSSBlankThemeFS["variables_scss"])
+}
+
+func TestTailwindSveltinThemeFS(t *testing.T) {
+	is := is.New(t)
+	is.Equal("internal/templates/themes/sveltin/tailwindcss/postcss.config.cjs", TailwindSveltinThemeFS["postcss"])
+	is.Equal("internal/templates/themes/sveltin/tailwindcss/app.css", TailwindSveltinThemeFS["app_css"])
+	is.Equal("internal/templates/themes/blank/tailwindcss/tailwind.config.cjs", TailwindBlankThemeFS["tailwind_css_config"])
+}
+
+func TestVanillaThemeFS(t *testing.T) {
+	is := is.New(t)
+	is.Equal("internal/templates/themes/sveltin/vanillacss/package.json.gotxt", VanillaSveltinThemeFS["package_json"])
+	is.Equal("internal/templates/themes/sveltin/vanillacss/app.css", VanillaSveltinThemeFS["app_css"])
+	is.Equal("internal/templates/themes/blank/vanillacss/vite.config.js.gotxt", VanillaBlankThemeFS["vite_config"])
 }
