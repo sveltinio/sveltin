@@ -27,6 +27,7 @@ const (
 	AppCSSFileID         string = "app_css"
 	VariablesFileID      string = "variables_scss"
 	LayoutFileID         string = "layout"
+	LayoutTSFileID       string = "layout_ts"
 	ErrorFileID          string = "error"
 	SvelteConfigFileID   string = "svelte_config"
 	ViteConfigFileID     string = "vite_config"

@@ -2,7 +2,6 @@
 import { groupedBy } from '$lib/{{ .Resource }}/load{{ $mdName }}';
 import { error } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
 	const metadata = await groupedBy(params.slug);
 	if (metadata) {

@@ -28,7 +28,6 @@ const config = {
 		trailingSlash: 'always',
 		prerender: {
 			crawl: true,
-			default: true,
 			enabled: true,
 			entries: ['*'],
 		},
