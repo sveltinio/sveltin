@@ -1,23 +1,42 @@
-name: test
+name: Test
 on:
   push:
     branches: [main]
   pull_request:
-permissions:
-  contents: read
 
-defaults:
-  run:
-    shell: bash
 jobs:
   test:
-    name: Run tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        go: ['1.17', '1.18', '1.19']
+        include:
+          - os: ubuntu-latest
+            go: 1.18
+          - os: macos-latest
+            go: 1.18
+          - os: macos-latest
+            go: 1.19
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out sveltin
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
         with:
-          go-version: 1.17.1
-      - run: go test -cover -race -vet=off ./...
+          go-version: ${{ matrix.go }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Install Go modules
+        run: go mod download
+
+      - name: Verify dependencies
+        run: go mod verify
+
+      - name: Run sveltin tests
+        run: go test -cover -race -vet=off ./...
