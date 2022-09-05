@@ -94,6 +94,9 @@ func (b *ResourceContentBuilder) setFuncs() {
 		"ToVariableName": func(txt string) string {
 			return utils.ToVariableName(txt)
 		},
+		"ReplaceIfNested": func(txt string) string {
+			return utils.ReplaceIfNested(txt)
+		},
 		"ToLibFile": func(txt string) string {
 			return utils.ToLibFile(txt)
 		},

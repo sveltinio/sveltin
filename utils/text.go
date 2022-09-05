@@ -92,6 +92,10 @@ func ToVariableName(txt string) string {
 	return strings.Join(frags, "")
 }
 
+func ReplaceIfNested(txt string) string {
+	return strings.ReplaceAll(txt, "/", "_")
+}
+
 // Today returns the current date as formatted string "DD-ShortMonth-YYYY".
 func Today() string {
 	return time.Now().Format("02-Jan-2006")
