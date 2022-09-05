@@ -104,144 +104,145 @@ var SveltinXMLFS = map[string]string{
 
 //=============================================================================
 
-// SveltinVanillaFS is themap for the default templates file whe using plain css.
-var SveltinVanillaFS = SveltinFSItem{
-	"package_json":  "internal/templates/themes/vanillacss/package.json.gotxt",
-	"svelte_config": "internal/templates/themes/vanillacss/svelte.config.js",
-	"vite_config":   "internal/templates/themes/vanillacss/vite.config.js.gotxt",
-	"app_html":      "internal/templates/themes/vanillacss/app.html",
+// BootstrapSveltinThemeFS is a map for the styled templates file whe using bootstrap.
+var BootstrapSveltinThemeFS = SveltinFSItem{
+	"package_json":   "internal/templates/themes/sveltin/bootstrap/package.json.gotxt",
+	"svelte_config":  "internal/templates/themes/sveltin/bootstrap/svelte.config.js",
+	"vite_config":    "internal/templates/themes/sveltin/bootstrap/vite.config.js.gotxt",
+	"layout":         "internal/templates/themes/sveltin/bootstrap/layout.svelte.gotxt",
+	"app_html":       "internal/templates/themes/sveltin/bootstrap/app.html",
+	"app_css":        "internal/templates/themes/sveltin/bootstrap/app.scss",
+	"variables_scss": "internal/templates/themes/sveltin/bootstrap/variables.scss",
+	"hero":           "internal/templates/themes/sveltin/bootstrap/Hero.svelte",
+	"footer":         "internal/templates/themes/sveltin/bootstrap/Footer.svelte",
+	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
-// SveltinVanillaStyledFS is the map for the styled templates file whe using vanilla css.
-var SveltinVanillaStyledFS = SveltinFSItem{
-	"layout":  "internal/templates/themes/vanillacss/styled/layout.svelte.gotxt",
-	"app_css": "internal/templates/themes/vanillacss/styled/app.css",
-	"hero":    "internal/templates/themes/vanillacss/styled/Hero.svelte",
-	"footer":  "internal/templates/themes/vanillacss/styled/Footer.svelte",
-	"error":   "internal/templates/themes/error.styled.svelte",
-}
-
-// SveltinVanillaUnstyledFS is the map for the unstyled templates file whe using vanilla css.
-var SveltinVanillaUnstyledFS = SveltinFSItem{
-	"layout":  "internal/templates/themes/vanillacss/unstyled/layout.svelte.gotxt",
-	"app_css": "internal/templates/themes/vanillacss/unstyled/app.css",
-	"hero":    "internal/templates/themes/vanillacss/unstyled/Hero.svelte",
-	"error":   "internal/templates/themes/error.unstyled.svelte",
+// BootstrapBlankThemeFS is the map for the unstyled templates file whe using bootstrap.
+var BootstrapBlankThemeFS = SveltinFSItem{
+	"package_json":   "internal/templates/themes/blank/bootstrap/package.json.gotxt",
+	"svelte_config":  "internal/templates/themes/blank/bootstrap/svelte.config.js",
+	"vite_config":    "internal/templates/themes/blank/bootstrap/vite.config.js.gotxt",
+	"app_html":       "internal/templates/themes/blank/bootstrap/app.html",
+	"layout":         "internal/templates/themes/blank/bootstrap/layout.svelte.gotxt",
+	"app_css":        "internal/templates/themes/blank/bootstrap/app.scss",
+	"variables_scss": "internal/templates/themes/blank/bootstrap/variables.scss",
+	"hero":           "internal/templates/themes/blank/bootstrap/Hero.svelte",
+	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================
 
-// SveltinTailwindLibFS is the map for the default templates file whe using tailwind css.
-var SveltinTailwindLibFS = SveltinFSItem{
-	"package_json":  "internal/templates/themes/tailwindcss/package.json.gotxt",
-	"svelte_config": "internal/templates/themes/tailwindcss/svelte.config.js",
-	"vite_config":   "internal/templates/themes/tailwindcss/vite.config.js.gotxt",
-	"app_html":      "internal/templates/themes/tailwindcss/app.html",
-	"postcss":       "internal/templates/themes/tailwindcss/postcss.config.cjs",
+// BulmaSveltinThemeFS is the map for the styled templates file whe using bulma.
+var BulmaSveltinThemeFS = SveltinFSItem{
+	"package_json":   "internal/templates/themes/sveltin/bulma/package.json.gotxt",
+	"svelte_config":  "internal/templates/themes/sveltin/bulma/svelte.config.js",
+	"vite_config":    "internal/templates/themes/sveltin/bulma/vite.config.js.gotxt",
+	"layout":         "internal/templates/themes/sveltin/bulma/layout.svelte.gotxt",
+	"app_html":       "internal/templates/themes/sveltin/bulma/app.html",
+	"app_css":        "internal/templates/themes/sveltin/bulma/app.scss",
+	"variables_scss": "internal/templates/themes/sveltin/bulma/variables.scss",
+	"hero":           "internal/templates/themes/sveltin/bulma/Hero.svelte",
+	"footer":         "internal/templates/themes/sveltin/bulma/Footer.svelte",
+	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
-// SveltinTailwindLibStyledFS is the map for the styled templates file whe using tailwind css.
-var SveltinTailwindLibStyledFS = SveltinFSItem{
-	"layout":              "internal/templates/themes/tailwindcss/styled/layout.svelte.gotxt",
-	"tailwind_css_config": "internal/templates/themes/tailwindcss/styled/tailwind.config.cjs",
-	"app_css":             "internal/templates/themes/tailwindcss/styled/app.css",
-	"hero":                "internal/templates/themes/tailwindcss/styled/Hero.svelte",
-	"footer":              "internal/templates/themes/tailwindcss/styled/Footer.svelte",
+// BulmaBlankThemeFS is the map for the unstyled templates file whe using bulma.
+var BulmaBlankThemeFS = SveltinFSItem{
+	"package_json":   "internal/templates/themes/blank/bulma/package.json.gotxt",
+	"svelte_config":  "internal/templates/themes/blank/bulma/svelte.config.js",
+	"vite_config":    "internal/templates/themes/blank/bulma/vite.config.js.gotxt",
+	"app_html":       "internal/templates/themes/blank/bulma/app.html",
+	"layout":         "internal/templates/themes/blank/bulma/layout.svelte.gotxt",
+	"app_css":        "internal/templates/themes/blank/bulma/app.scss",
+	"variables_scss": "internal/templates/themes/blank/bulma/variables.scss",
+	"hero":           "internal/templates/themes/blank/bulma/Hero.svelte",
+	"error":          "internal/templates/themes/error.unstyled.svelte",
+}
+
+//=============================================================================
+
+// SCSSSveltinThemeFS is the map for the styled templates file whe using scss/sass.
+var SCSSSveltinThemeFS = SveltinFSItem{
+	"package_json":   "internal/templates/themes/sveltin/scss/package.json.gotxt",
+	"svelte_config":  "internal/templates/themes/sveltin/scss/svelte.config.js",
+	"vite_config":    "internal/templates/themes/sveltin/scss/vite.config.js.gotxt",
+	"app_html":       "internal/templates/themes/sveltin/scss/app.html",
+	"layout":         "internal/templates/themes/sveltin/scss/layout.svelte.gotxt",
+	"app_css":        "internal/templates/themes/sveltin/scss/app.scss",
+	"variables_scss": "internal/templates/themes/sveltin/scss/variables.scss",
+	"hero":           "internal/templates/themes/sveltin/scss/Hero.svelte",
+	"footer":         "internal/templates/themes/sveltin/scss/Footer.svelte",
+	"error":          "internal/templates/themes/error.styled.svelte",
+}
+
+// SCSSBlankThemeFS is the map for the unstyled templates file whe using scss/sass.
+var SCSSBlankThemeFS = SveltinFSItem{
+	"package_json":   "internal/templates/themes/blank/scss/package.json.gotxt",
+	"svelte_config":  "internal/templates/themes/blank/scss/svelte.config.js",
+	"vite_config":    "internal/templates/themes/blank/scss/vite.config.js.gotxt",
+	"layout":         "internal/templates/themes/blank/scss/layout.svelte.gotxt",
+	"app_html":       "internal/templates/themes/blank/scss/app.html",
+	"app_css":        "internal/templates/themes/blank/scss/app.scss",
+	"variables_scss": "internal/templates/themes/blank/scss/variables.scss",
+	"hero":           "internal/templates/themes/blank/scss/Hero.svelte",
+	"error":          "internal/templates/themes/error.unstyled.svelte",
+}
+
+//=============================================================================
+
+// TailwindSveltinThemeFS is the map for the styled templates file whe using tailwind css.
+var TailwindSveltinThemeFS = SveltinFSItem{
+	"package_json":        "internal/templates/themes/sveltin/tailwindcss/package.json.gotxt",
+	"svelte_config":       "internal/templates/themes/sveltin/tailwindcss/svelte.config.js",
+	"vite_config":         "internal/templates/themes/sveltin/tailwindcss/vite.config.js.gotxt",
+	"tailwind_css_config": "internal/templates/themes/sveltin/tailwindcss/tailwind.config.cjs",
+	"layout":              "internal/templates/themes/sveltin/tailwindcss/layout.svelte.gotxt",
+	"app_html":            "internal/templates/themes/sveltin/tailwindcss/app.html",
+	"postcss":             "internal/templates/themes/sveltin/tailwindcss/postcss.config.cjs",
+	"app_css":             "internal/templates/themes/sveltin/tailwindcss/app.css",
+	"hero":                "internal/templates/themes/sveltin/tailwindcss/Hero.svelte",
+	"footer":              "internal/templates/themes/sveltin/tailwindcss/Footer.svelte",
 	"error":               "internal/templates/themes/error.styled.svelte",
 }
 
-// SveltinTailwindLibUnstyledFS is the map for the unstyled templates file whe using tailwind css.
-var SveltinTailwindLibUnstyledFS = SveltinFSItem{
-	"layout":              "internal/templates/themes/tailwindcss/unstyled/layout.svelte.gotxt",
-	"tailwind_css_config": "internal/templates/themes/tailwindcss/unstyled/tailwind.config.cjs",
-	"app_css":             "internal/templates/themes/tailwindcss/unstyled/app.css",
-	"hero":                "internal/templates/themes/tailwindcss/unstyled/Hero.svelte",
+// TailwindBlankThemeFS is the map for the unstyled templates file whe using tailwind css.
+var TailwindBlankThemeFS = SveltinFSItem{
+	"package_json":        "internal/templates/themes/blank/tailwindcss/package.json.gotxt",
+	"svelte_config":       "internal/templates/themes/blank/tailwindcss/svelte.config.js",
+	"vite_config":         "internal/templates/themes/blank/tailwindcss/vite.config.js.gotxt",
+	"tailwind_css_config": "internal/templates/themes/blank/tailwindcss/tailwind.config.cjs",
+	"postcss":             "internal/templates/themes/blank/tailwindcss/postcss.config.cjs",
+	"layout":              "internal/templates/themes/blank/tailwindcss/layout.svelte.gotxt",
+	"app_html":            "internal/templates/themes/blank/tailwindcss/app.html",
+	"app_css":             "internal/templates/themes/blank/tailwindcss/app.css",
+	"hero":                "internal/templates/themes/blank/tailwindcss/Hero.svelte",
 	"error":               "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================
 
-// SveltinBulmaLibFS is the map for the default templates file whe using bulma.
-var SveltinBulmaLibFS = SveltinFSItem{
-	"package_json":  "internal/templates/themes/bulma/package.json.gotxt",
-	"svelte_config": "internal/templates/themes/bulma/svelte.config.js",
-	"vite_config":   "internal/templates/themes/bulma/vite.config.js.gotxt",
-	"app_html":      "internal/templates/themes/bulma/app.html",
+// VanillaSveltinThemeFS is the map for the styled templates file whe using vanilla css.
+var VanillaSveltinThemeFS = SveltinFSItem{
+	"package_json":  "internal/templates/themes/sveltin/vanillacss/package.json.gotxt",
+	"svelte_config": "internal/templates/themes/sveltin/vanillacss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/sveltin/vanillacss/vite.config.js.gotxt",
+	"app_html":      "internal/templates/themes/sveltin/vanillacss/app.html",
+	"layout":        "internal/templates/themes/sveltin/vanillacss/layout.svelte.gotxt",
+	"app_css":       "internal/templates/themes/sveltin/vanillacss/app.css",
+	"hero":          "internal/templates/themes/sveltin/vanillacss/Hero.svelte",
+	"footer":        "internal/templates/themes/sveltin/vanillacss/Footer.svelte",
+	"error":         "internal/templates/themes/error.styled.svelte",
 }
 
-// SveltinBulmaLibStyledFS is the map for the styled templates file whe using bulma.
-var SveltinBulmaLibStyledFS = SveltinFSItem{
-	"layout":         "internal/templates/themes/bulma/styled/layout.svelte.gotxt",
-	"app_css":        "internal/templates/themes/bulma/styled/app.scss",
-	"variables_scss": "internal/templates/themes/bulma/styled/variables.scss",
-	"hero":           "internal/templates/themes/bulma/styled/Hero.svelte",
-	"footer":         "internal/templates/themes/bulma/styled/Footer.svelte",
-	"error":          "internal/templates/themes/error.styled.svelte",
-}
-
-// SveltinBulmaLibUnstyledFS is the map for the unstyled templates file whe using bulma.
-var SveltinBulmaLibUnstyledFS = SveltinFSItem{
-	"layout":         "internal/templates/themes/bulma/unstyled/layout.svelte.gotxt",
-	"app_css":        "internal/templates/themes/bulma/unstyled/app.scss",
-	"variables_scss": "internal/templates/themes/bulma/unstyled/variables.scss",
-	"hero":           "internal/templates/themes/bulma/unstyled/Hero.svelte",
-	"error":          "internal/templates/themes/error.unstyled.svelte",
-}
-
-//=============================================================================
-
-// SveltinBootstrapLibFS is the map for the default templates file whe using bootstrap.
-var SveltinBootstrapLibFS = SveltinFSItem{
-	"package_json":  "internal/templates/themes/bootstrap/package.json.gotxt",
-	"svelte_config": "internal/templates/themes/bootstrap/svelte.config.js",
-	"vite_config":   "internal/templates/themes/bootstrap/vite.config.js.gotxt",
-	"app_html":      "internal/templates/themes/bootstrap/app.html",
-}
-
-// SveltinBootstrapLibStyledFS is a map for the styled templates file whe using bootstrap.
-var SveltinBootstrapLibStyledFS = SveltinFSItem{
-	"layout":         "internal/templates/themes/bootstrap/styled/layout.svelte.gotxt",
-	"app_css":        "internal/templates/themes/bootstrap/styled/app.scss",
-	"variables_scss": "internal/templates/themes/bootstrap/styled/variables.scss",
-	"hero":           "internal/templates/themes/bootstrap/styled/Hero.svelte",
-	"footer":         "internal/templates/themes/bootstrap/styled/Footer.svelte",
-	"error":          "internal/templates/themes/error.styled.svelte",
-}
-
-// SveltinBootstrapLibUnstyledFS is the map for the unstyled templates file whe using bootstrap.
-var SveltinBootstrapLibUnstyledFS = SveltinFSItem{
-	"layout":         "internal/templates/themes/bootstrap/unstyled/layout.svelte.gotxt",
-	"app_css":        "internal/templates/themes/bootstrap/unstyled/app.scss",
-	"variables_scss": "internal/templates/themes/bootstrap/unstyled/variables.scss",
-	"hero":           "internal/templates/themes/bootstrap/unstyled/Hero.svelte",
-	"error":          "internal/templates/themes/error.unstyled.svelte",
-}
-
-//=============================================================================
-
-// SveltinSCSSLibFS is a map for the default templates file whe using scss/sass.
-var SveltinSCSSLibFS = SveltinFSItem{
-	"package_json":  "internal/templates/themes/scss/package.json.gotxt",
-	"svelte_config": "internal/templates/themes/scss/svelte.config.js",
-	"vite_config":   "internal/templates/themes/scss/vite.config.js.gotxt",
-	"app_html":      "internal/templates/themes/scss/app.html",
-}
-
-// SveltinSCSSLibStyledFS is the map for the styled templates file whe using scss/sass.
-var SveltinSCSSLibStyledFS = SveltinFSItem{
-	"layout":         "internal/templates/themes/scss/styled/layout.svelte.gotxt",
-	"app_css":        "internal/templates/themes/scss/styled/app.scss",
-	"variables_scss": "internal/templates/themes/scss/styled/variables.scss",
-	"hero":           "internal/templates/themes/scss/styled/Hero.svelte",
-	"footer":         "internal/templates/themes/scss/styled/Footer.svelte",
-	"error":          "internal/templates/themes/error.styled.svelte",
-}
-
-// SveltinSCSSLibUnstyledFS is the map for the unstyled templates file whe using scss/sass.
-var SveltinSCSSLibUnstyledFS = SveltinFSItem{
-	"layout":         "internal/templates/themes/scss/unstyled/layout.svelte.gotxt",
-	"app_css":        "internal/templates/themes/scss/unstyled/app.scss",
-	"variables_scss": "internal/templates/themes/scss/unstyled/variables.scss",
-	"hero":           "internal/templates/themes/scss/unstyled/Hero.svelte",
-	"error":          "internal/templates/themes/error.unstyled.svelte",
+// VanillaBlankThemeFS is the map for the unstyled templates file whe using vanilla css.
+var VanillaBlankThemeFS = SveltinFSItem{
+	"package_json":  "internal/templates/themes/blank/vanillacss/package.json.gotxt",
+	"svelte_config": "internal/templates/themes/blank/vanillacss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/blank/vanillacss/vite.config.js.gotxt",
+	"app_html":      "internal/templates/themes/blank/vanillacss/app.html",
+	"layout":        "internal/templates/themes/blank/vanillacss/layout.svelte.gotxt",
+	"app_css":       "internal/templates/themes/blank/vanillacss/app.css",
+	"hero":          "internal/templates/themes/blank/vanillacss/Hero.svelte",
+	"error":         "internal/templates/themes/error.unstyled.svelte",
 }
