@@ -271,15 +271,15 @@ func makeTheme(cssLib *CSSLib) error {
 func makeResourcesMapForStyled(cssLib *CSSLib) (map[string]string, error) {
 	switch cssLib.Name {
 	case Bootstrap:
-		return common.UnionMap(resources.SveltinBootstrapLibFS, resources.SveltinBootstrapLibStyledFS), nil
+		return resources.BootstrapSveltinThemeFS, nil
 	case Bulma:
-		return common.UnionMap(resources.SveltinBulmaLibFS, resources.SveltinBulmaLibStyledFS), nil
+		return resources.BulmaSveltinThemeFS, nil
 	case Scss:
-		return common.UnionMap(resources.SveltinSCSSLibFS, resources.SveltinSCSSLibStyledFS), nil
+		return resources.SCSSSveltinThemeFS, nil
 	case TailwindCSS:
-		return common.UnionMap(resources.SveltinTailwindLibFS, resources.SveltinTailwindLibStyledFS), nil
+		return resources.TailwindSveltinThemeFS, nil
 	case VanillaCSS:
-		return common.UnionMap(resources.SveltinVanillaFS, resources.SveltinVanillaStyledFS), nil
+		return resources.VanillaSveltinThemeFS, nil
 	default:
 		return nil, sveltinerr.NewOptionNotValidError(cssLib.Name, AvailableCSSLib)
 	}
@@ -288,15 +288,15 @@ func makeResourcesMapForStyled(cssLib *CSSLib) (map[string]string, error) {
 func makeResourcesMapForUnstyled(cssLib *CSSLib) (map[string]string, error) {
 	switch cssLib.Name {
 	case Bootstrap:
-		return common.UnionMap(resources.SveltinBootstrapLibFS, resources.SveltinBootstrapLibUnstyledFS), nil
+		return resources.BootstrapBlankThemeFS, nil
 	case Bulma:
-		return common.UnionMap(resources.SveltinBulmaLibFS, resources.SveltinBulmaLibUnstyledFS), nil
+		return resources.BulmaBlankThemeFS, nil
 	case Scss:
-		return common.UnionMap(resources.SveltinSCSSLibFS, resources.SveltinSCSSLibUnstyledFS), nil
+		return resources.SCSSBlankThemeFS, nil
 	case TailwindCSS:
-		return common.UnionMap(resources.SveltinTailwindLibFS, resources.SveltinTailwindLibUnstyledFS), nil
+		return resources.TailwindBlankThemeFS, nil
 	case VanillaCSS:
-		return common.UnionMap(resources.SveltinVanillaFS, resources.SveltinVanillaUnstyledFS), nil
+		return resources.VanillaBlankThemeFS, nil
 	default:
 		return nil, sveltinerr.NewOptionNotValidError(cssLib.Name, AvailableCSSLib)
 	}
