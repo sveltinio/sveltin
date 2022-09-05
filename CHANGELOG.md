@@ -83,6 +83,7 @@
 - Merge pull request [#105](https://github.com/sveltinio/sveltin/issues/105) from sveltinio/nested-resources
 - Merge pull request [#106](https://github.com/sveltinio/sveltin/issues/106) from sveltinio/sveltekit-latest
 - Merge pull request [#107](https://github.com/sveltinio/sveltin/issues/107) from sveltinio/go-deps
+- Merge pull request [#108](https://github.com/sveltinio/sveltin/issues/108) from bump-vite-sveltekit
 
 ## [v0.8.12](https://github.com/sveltinio/sveltin/releases/tag/v0.8.12) (2022-08-04)
 
