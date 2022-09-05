@@ -3,7 +3,7 @@ project_name: sveltin
 before:
   hooks:
     # Clean up unused dependencies
-    - go mod tidy
+    - go mod tidy -compat=1.17
     # Downloads all modules specified in go.mod
     - go mod download
 builds:
