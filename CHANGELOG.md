@@ -1,5 +1,89 @@
 # CHANGELOG
 
+## [v0.9.0](https://github.com/sveltinio/sveltin/releases/tag/v0.9.0) (2022-09-05)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.12...v0.9.0)
+
+### Fixed Bugs
+
+- variable name when creating new resource with name like customers/projects
+- **connection.go:** golangci SA1019
+- **layout:** filename fixed to the new `+layout.svelte` when unstyled project
+- **lib.gotxt:** unused param removed from list function
+
+### 🚀 New Features
+
+- **sveltekit:** updated to next.469 with adapter-static.42
+
+### Breakings
+
+- `init` command added (alias `create`) to scaffold a new project instead of `new`
+- `new` command is now used **only** to create pages and resources (`routes`)
+- `add` command added to create new content and metadata
+
+### 🔧 Code Refactoring
+
+- All prompts are now based on [@charmbracelet](https://github.com/charmbracelet) [bubbletea](https://github.com/charmbracelet/bubbletea) and [lipgloss](https://github.com/charmbracelet/lipgloss) through `sveltinio/prompti` package
+- **logger:** externalised through `sveltinio/yinlog` based on [@charmbracelet](https://github.com/charmbracelet) [lipgloss](https://github.com/charmbracelet/lipgloss)
+- drop dependency from `manifoldco/promptui`
+- **errors:** styled
+- **themes:** make embed themes folder structure more logical
+- user messages styles
+- drop dependency from `jww`
+- moving pkgs to the right place -> `internal`
+- lib files renamed as `load<Resource>` instead of `api<Resource>`
+
+### ⚙️ CI
+
+- github actions updated
+- **test.yml:** updated to run tests against multiple OS and go versions
+- **Earthfile:** updated include pkg folder
+
+### Chores
+
+- upgrade `github.com/vbauerster/mpb` to v8
+- upgrade `github.com/jlaffaye/ftp` to the latest version
+- error page (`+error.svelte`) added over project creation
+- remove warnings about file is not gofmtd
+- cleanup console log
+- move CliVersion string to new version cmd
+- renaming `internal/styles` package as `internal/markup`
+- move builder, composer, css and pathmaker from pkg to internal
+- go deps updated
+- **go.mod:** tidy
+- **npmc:** handle Desc as addition struct field
+- **package.json:** svelte-kit sync added to avoid warnings on dev and check
+- **wrapper.go:** golint ok
+
+### 📖 Documentation
+
+- **README:** updated to reflect cmd changes
+- **cmds:** commands help messages updated, typos fixed for add and new cmds help messages
+- **newResource:** typo fixed in code comment
+
+### Pull Requests
+
+- Merge pull request [#88](https://github.com/sveltinio/sveltin/issues/88) from sveltinio/typos-readme
+- Merge pull request [#89](https://github.com/sveltinio/sveltin/issues/89) from sveltinio/rename-lib-files
+- Merge pull request [#90](https://github.com/sveltinio/sveltin/issues/90) from sveltinio/fix-earthfile
+- Merge pull request [#91](https://github.com/sveltinio/sveltin/issues/91) from sveltinio/refactor-user-prompts
+- Merge pull request [#92](https://github.com/sveltinio/sveltin/issues/92) from sveltinio/refactor-styling-errors
+- Merge pull request [#93](https://github.com/sveltinio/sveltin/issues/93) from sveltinio/refactor-unified-logging
+- Merge pull request [#94](https://github.com/sveltinio/sveltin/issues/94) from sveltinio/rename-styles-markup
+- Merge pull request [#95](https://github.com/sveltinio/sveltin/issues/95) from sveltinio/externalise-tui-prompts
+- Merge pull request [#96](https://github.com/sveltinio/sveltin/issues/96) from sveltinio/externalise-logger
+- Merge pull request [#97](https://github.com/sveltinio/sveltin/issues/97) from sveltinio/refactor-pkg-internal
+- Merge pull request [#98](https://github.com/sveltinio/sveltin/issues/98) from sveltinio/no-jww
+- Merge pull request [#99](https://github.com/sveltinio/sveltin/issues/99) from sveltinio/typos-comments-npmc
+- Merge pull request [#100](https://github.com/sveltinio/sveltin/issues/100) from sveltinio/new-kit-routing
+- Merge pull request [#101](https://github.com/sveltinio/sveltin/issues/101) from sveltinio/fix-layout-filename
+- Merge pull request [#102](https://github.com/sveltinio/sveltin/issues/102) from sveltinio/add-error-page
+- Merge pull request [#103](https://github.com/sveltinio/sveltin/issues/103) from sveltinio/reshape-embed-themes
+- Merge pull request [#104](https://github.com/sveltinio/sveltin/issues/104) from sveltinio/ci-workflows
+- Merge pull request [#105](https://github.com/sveltinio/sveltin/issues/105) from sveltinio/nested-resources
+- Merge pull request [#106](https://github.com/sveltinio/sveltin/issues/106) from sveltinio/sveltekit-latest
+- Merge pull request [#107](https://github.com/sveltinio/sveltin/issues/107) from sveltinio/go-deps
+
 ## [v0.8.12](https://github.com/sveltinio/sveltin/releases/tag/v0.8.12) (2022-08-04)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.11...v0.8.12)
