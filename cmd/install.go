@@ -22,10 +22,10 @@ import (
 
 var installCmd = &cobra.Command{
 	Use:     "install",
-	Aliases: []string{"i", "init"},
-	Short:   "Get all the dependencies from the `package.json` file",
+	Aliases: []string{"i"},
+	Short:   "Install your project dependencies",
 	Long: resources.GetASCIIArt() + `
-Initialize the Sveltin project getting all dependencies from the package.json file.
+Install all dependencies from the 'package.json0 file.
 
 It wraps (npm|pnpm|yarn) install.
 `,

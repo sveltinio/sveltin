@@ -30,11 +30,11 @@ var generateMenuCmd = &cobra.Command{
 	Use:   "menu",
 	Short: "Generate the menu config file for your Sveltin project",
 	Long: resources.GetASCIIArt() + `
-It creates a 'menu.json' file into the 'config' folder to be used by Svelte components.
+Create the menu (menu.js.ts) file into the 'config' folder to be used by Svelte components.
 
 By default it list all resources and public pages.
 
-The --full flag will also includes content names for all resources.
+The --full flag will includes content names for all resources too.
 `,
 	Run: RunGenerateMenuCmd,
 }

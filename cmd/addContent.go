@@ -45,17 +45,17 @@ const (
 
 //=============================================================================
 
-var newContentCmd = &cobra.Command{
+var addContentCmd = &cobra.Command{
 	Use:     "content [name]",
 	Aliases: []string{"c"},
-	Short:   "Command to create a new content for existing resource",
+	Short:   "Command to add new content to an existing resource",
 	Long: resources.GetASCIIArt() + `
 Create a new markdown file for your content and a folder to store the statics used by the content itself.
 
 New file can contain just the frontmatter or a sample content.
 Use the --template flag to select the right one to you. Valid options: blank or sample
 
-**Note**: This command must be used after you create a resource for the content.
+**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.
 
 Example:
 
@@ -68,11 +68,11 @@ As result:
 - an index.svx file is placed there
 - a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
 `,
-	Run: RunNewContentCmd,
+	Run: RunAddContentCmd,
 }
 
-// RunNewContentCmd is the actual work function.
-func RunNewContentCmd(cmd *cobra.Command, args []string) {
+// RunAddContentCmd is the actual work function.
+func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
@@ -107,8 +107,8 @@ func contentCmdFlags(cmd *cobra.Command) {
 }
 
 func init() {
-	newCmd.AddCommand(newContentCmd)
-	contentCmdFlags(newContentCmd)
+	contentCmdFlags(addContentCmd)
+	addCmd.AddCommand(addContentCmd)
 }
 
 //=============================================================================
