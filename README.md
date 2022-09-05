@@ -73,7 +73,7 @@ With few commands Sveltin flex the muscles 💪
 
 ```bash
 # Create a project with TailwindCSS support
-sveltin new myBlog --css tailwindcss
+sveltin init myBlog --css tailwindcss
 
 # Move to the project folder
 cd myBlog
@@ -90,11 +90,11 @@ sveltin new resource posts
 
 # Add new content to the posts resource
 # (http://localhost:5173/posts/getting-started)
-sveltin new content posts/getting-started
+sveltin add content posts/getting-started
 
 # Add a 'category' metadata
 # (http://localhost:5173/posts/category)
-sveltin new metadata category --resource posts --type single
+sveltin add metadata category --to posts --as single
 
 # Run the server
 sveltin server
@@ -199,7 +199,7 @@ Read more [here][init].
 
 `sveltin new` is the main command to generate pages, resources (routes) and themes for your project.
 
-Alias: `create`
+Alias: `n`
 
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
@@ -207,7 +207,7 @@ Alias: `create`
 | Subcommand |   Aliases    | Description                                                            |
 | :--------- | :----------: | :--------------------------------------------------------------------- |
 | [page]     |      p       | Command to create a new public page.                                   |
-| [resource] |      r       | Command to create a new resource.                                      |
+| [resource] |   r, route   | Command to create a new resource.                                      |
 
 </details>
 
@@ -235,7 +235,7 @@ Read more [here][add].
 
 `sveltin generate` is used to generate static files like sitemap, menu structure or rss feed file.
 
-Alias: `g`, `gen`
+Alias: `g`
 
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
@@ -254,7 +254,7 @@ Read more [here][generate].
 
 `sveltin install` is used to initialize the Sveltin project getting all depencencies from the `package.json` file.
 
-Alias: `i`, `init`
+Alias: `i`
 
 Read more [here][install].
 
@@ -308,7 +308,6 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [new]: https://docs.sveltin.io/cli/new/
 [resource]: https://docs.sveltin.io/cli/new-resource/
 [page]: https://docs.sveltin.io/cli/new-page/
-[theme]: https://docs.sveltin.io/cli/new-theme/
 [add]: https://docs.sveltin.io/cli/add/
 [content]: https://docs.sveltin.io/cli/add-content/
 [metadata]: https://docs.sveltin.io/cli/add-metadata/

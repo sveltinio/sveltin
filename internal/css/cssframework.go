@@ -68,11 +68,11 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
-	// Copying vite.config.js file
+	// Copying vite.config.ts file
 	sourceFile = embeddedResources[ViteConfigFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.js")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.ts")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -99,6 +99,15 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
+	// Copying +layout.ts. file
+	sourceFile = embeddedResources[LayoutTSFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.ts")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -148,11 +157,11 @@ func makeUnstyled(cssLib *CSSLib) error {
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
-	// Copying vite.config.js file
+	// Copying vite.config.ts file
 	sourceFile = embeddedResources[ViteConfigFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.js")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.ts")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -179,6 +188,15 @@ func makeUnstyled(cssLib *CSSLib) error {
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
+	// Copying +layout.ts. file
+	sourceFile = embeddedResources[LayoutTSFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.ts")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -221,11 +239,11 @@ func makeTheme(cssLib *CSSLib) error {
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
-	// Copying vite.config.js file
+	// Copying vite.config.ts file
 	sourceFile = embeddedResources[ViteConfigFileID]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
-	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.js")
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.ts")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}
@@ -252,6 +270,15 @@ func makeTheme(cssLib *CSSLib) error {
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
+	// Copying +layout.ts. file
+	sourceFile = embeddedResources[LayoutTSFileID]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Config.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.ts")
 	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
 		return err
 	}

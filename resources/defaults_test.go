@@ -108,5 +108,5 @@ func TestVanillaThemeFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("internal/templates/themes/sveltin/vanillacss/package.json.gotxt", VanillaSveltinThemeFS["package_json"])
 	is.Equal("internal/templates/themes/sveltin/vanillacss/app.css", VanillaSveltinThemeFS["app_css"])
-	is.Equal("internal/templates/themes/blank/vanillacss/vite.config.js.gotxt", VanillaBlankThemeFS["vite_config"])
+	is.Equal("internal/templates/themes/blank/vanillacss/vite.config.ts.gotxt", VanillaBlankThemeFS["vite_config"])
 }
