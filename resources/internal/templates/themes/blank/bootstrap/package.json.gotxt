@@ -17,7 +17,7 @@
 		"@indaco/svelte-iconoir": "^2.5.1",
 		"@popperjs/core": "^2.11.5",
 		"@sveltejs/adapter-static": "1.0.0-next.39",
-		"@sveltejs/kit": "1.0.0-next.429",
+		"@sveltejs/kit": "1.0.0-next.431",
 		"@sveltinio/essentials": "^0.2.1",
 		"@sveltinio/media-content": "^0.3.2",
 		"@sveltinio/seo": "^0.1.7",
