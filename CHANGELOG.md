@@ -13,7 +13,7 @@
 
 ### 🚀 New Features
 
-- **sveltekit:** updated to next.469 with adapter-static.42
+- **sveltekit:** updated to next.470 with adapter-static.42
 
 ### Breakings
 
