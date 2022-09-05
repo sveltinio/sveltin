@@ -92,6 +92,7 @@ func ToVariableName(txt string) string {
 	return strings.Join(frags, "")
 }
 
+// ReplaceIfNested returns a copy of string to be used as variable name when a resource name is a nested one.
 func ReplaceIfNested(txt string) string {
 	return strings.ReplaceAll(txt, "/", "_")
 }
