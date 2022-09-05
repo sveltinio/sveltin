@@ -17,7 +17,7 @@ import (
 
 var generateCmd = &cobra.Command{
 	Use:     "generate",
-	Aliases: []string{"g, gen"},
+	Aliases: []string{"g"},
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Generate static files (sitemap, rss, menu)",
 	Long: resources.GetASCIIArt() + `

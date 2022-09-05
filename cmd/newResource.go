@@ -101,9 +101,6 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 
 	// NEXT STEPS
 	common.PrintHelperTextNewResource(resourceName)
-	//cfg.log.Plain(utils.Underline("Next Steps"))
-	//cfg.log.Success("Resource ready to be used. Start by adding content to it.")
-	//cfg.log.Important(fmt.Sprintf("Eg: sveltin new content %s/getting-started", resourceName))
 }
 
 func init() {
