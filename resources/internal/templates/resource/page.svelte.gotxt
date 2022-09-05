@@ -1,5 +1,6 @@
-{{ $varName := .Name | ToVariableName}}
+{{ $varName := .Name | ToVariableName | ReplaceIfNested }}
 <script lang="ts">
+    import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import type { Sveltin } from 'src/sveltin';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
@@ -26,6 +27,8 @@
 			type: TwitterCardType.Summary
 		}
 	};
+
+	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g,'');
 </script>
 
 <PageMetaTags data={ {{ $varName }}IndexPage } />
@@ -48,7 +51,7 @@
 		{:else}
 		<h2 class="message warning">
 			Nothing to show here! Create some content first and reload the page:
-			<span><pre><code class="text-default">sveltin new content {{ $varName }}/getting-started</code></pre></span>
+			<span><pre><code class="text-default">sveltin new content {pathname}/getting-started</code></pre></span>
 		</h2>
 		{/if}
 	</div>
