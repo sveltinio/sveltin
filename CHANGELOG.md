@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## [v0.9.1](https://github.com/sveltinio/sveltin/releases/tag/v0.9.1) (2022-09-06)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.9.0...v0.9.1)
+
+### Fixed Bugs
+
+- make generated page variable reactive
+
+### Chores
+
+- sveltekit updated to **next.472**
+- upgrade minor npm deps
+- indirect go deps added to generate command docs
+
+### 📖  Documentation
+
+- **cmds:** uniforming cobra help strings for commands
+
+### Pull Requests
+
+- Merge pull request [#110](https://github.com/sveltinio/sveltin/issues/110) from cobra-doc-deps
+- Merge pull request [#111](https://github.com/sveltinio/sveltin/issues/111) from page-flags
+- Merge pull request [#112](https://github.com/sveltinio/sveltin/issues/112) from content-flags
+- Merge pull request [#113](https://github.com/sveltinio/sveltin/issues/113) from update-minor-npm-deps
+- Merge pull request [#114](https://github.com/sveltinio/sveltin/issues/114) from uniforming-help-messages
+- Merge pull request [#115](https://github.com/sveltinio/sveltin/issues/115) from fix-page-variable
+- Merge pull request [#116](https://github.com/sveltinio/sveltin/issues/116) from sk-next.472
+
 ## [v0.9.0](https://github.com/sveltinio/sveltin/releases/tag/v0.9.0) (2022-09-05)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.12...v0.9.0)
@@ -83,7 +111,7 @@
 - Merge pull request [#105](https://github.com/sveltinio/sveltin/issues/105) from sveltinio/nested-resources
 - Merge pull request [#106](https://github.com/sveltinio/sveltin/issues/106) from sveltinio/sveltekit-latest
 - Merge pull request [#107](https://github.com/sveltinio/sveltin/issues/107) from sveltinio/go-deps
-- Merge pull request [#108](https://github.com/sveltinio/sveltin/issues/108) from bump-vite-sveltekit
+- Merge pull request [#109](https://github.com/sveltinio/sveltin/issues/109) from bump-vite-sveltekit
 
 ## [v0.8.12](https://github.com/sveltinio/sveltin/releases/tag/v0.8.12) (2022-08-04)
 
