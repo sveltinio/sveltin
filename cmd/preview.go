@@ -22,8 +22,10 @@ import (
 
 var previewCmd = &cobra.Command{
 	Use:   "preview",
-	Short: "Preview the production version locally",
+	Short: "Preview the production version locally.",
 	Long: resources.GetASCIIArt() + `
+Command used to start the production version locally.
+
 Run after sveltin build (or vite build), you can start the production version locally with sveltin preview.
 
 It wraps vite preview command.`,

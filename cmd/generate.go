@@ -19,9 +19,9 @@ var generateCmd = &cobra.Command{
 	Use:     "generate",
 	Aliases: []string{"g"},
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Generate static files (sitemap, rss, menu)",
+	Short:   "Generate static files (sitemap, rss, menu).",
 	Long: resources.GetASCIIArt() + `
-Used to generate static files through its own subcommands.
+Command used to generate static files through its own subcommands.
 
 Run 'sveltin generate -h' for further details.
 `,

@@ -23,7 +23,7 @@ import (
 var serverCmd = &cobra.Command{
 	Use:     "server",
 	Aliases: []string{"s", "serve", "run", "dev"},
-	Short:   "Run the development server",
+	Short:   "Run the development server (vite).",
 	Long: resources.GetASCIIArt() + `
 It wraps vite dev to start a development server`,
 	Run: RunServerCmd,

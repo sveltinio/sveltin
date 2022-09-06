@@ -31,9 +31,9 @@ import (
 var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Aliases: []string{"r", "route"},
-	Short:   "Create a new resource (route)",
+	Short:   "Create a new resource (route).",
 	Long: resources.GetASCIIArt() + `
-Command to create new resources.
+Command used to create new resources.
 
 Why "resource" instead of "route"?
 Although a resource is basically a route on SvelteKit router, a resource is not an empty route. The retional behind

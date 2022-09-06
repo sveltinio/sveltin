@@ -50,8 +50,8 @@ const (
 var newCmd = &cobra.Command{
 	Use:     "new",
 	Aliases: []string{"n"},
-	Short:   "Create new resources, pages and themes",
-	Long: `Command to create resources (e.g. blog posts, recipes, ...), pages and themes depending on the subcommand used with it.
+	Short:   "Create new resources, pages and themes.",
+	Long: `Command used to creates SvelteKit routes in your project. A routes in Sveltin is both a public page or a resource.
 
 Examples:
 

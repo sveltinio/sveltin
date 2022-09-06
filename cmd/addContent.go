@@ -46,9 +46,9 @@ const (
 var addContentCmd = &cobra.Command{
 	Use:     "content [name]",
 	Aliases: []string{"c"},
-	Short:   "Command to add new content to an existing resource",
+	Short:   "Add new content to an existing resource.",
 	Long: resources.GetASCIIArt() + `
-Create a new markdown file for your content and a folder to store the statics used by the content itself.
+Command used to create a new markdown file as content and a folder to store the statics used by the content itself.
 
 New file can contain just the frontmatter or a sample content.
 Use the --template flag to select the right one to you. Valid options: blank or sample

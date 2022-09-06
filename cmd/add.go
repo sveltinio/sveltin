@@ -16,8 +16,8 @@ import (
 var addCmd = &cobra.Command{
 	Use:     "add",
 	Aliases: []string{"a"},
-	Short:   "Add content and metadata to a resource",
-	Long: `Command to add content and metadata to existing resources through its own subcommands.
+	Short:   "Add content and metadata to an existing resource.",
+	Long: `Command used to add content and metadata to an existing resources through its own subcommands.
 
 Run 'sveltin add -h' for further details.`,
 	Run: func(cmd *cobra.Command, args []string) {

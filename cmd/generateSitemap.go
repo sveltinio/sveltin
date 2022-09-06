@@ -22,9 +22,9 @@ import (
 
 var generateSitemapCmd = &cobra.Command{
 	Use:   "sitemap",
-	Short: "Generate the stimap file for your Sveltin project",
+	Short: "Generate the sitemap file for your Sveltin project.",
 	Long: resources.GetASCIIArt() + `
-Create the sitemap (sitemap.xml) file for your website.
+Command used to generate the sitemap (sitemap.xml) file for your website.
 
 It makes use of the .env.production file to reflect the base url for your website.
 `,
