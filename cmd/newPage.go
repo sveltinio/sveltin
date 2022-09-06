@@ -93,7 +93,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func pageCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&pageType, "type", "t", "", "Sveltekit page as Svelte component or markdown via mdsvex. Possible values: svelte, markdown")
+	cmd.Flags().StringVarP(&pageType, "as", "a", "", "Sveltekit page as Svelte component or markdown via mdsvex. Possible values: svelte, markdown")
 }
 
 func init() {
