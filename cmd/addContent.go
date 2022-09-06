@@ -14,12 +14,10 @@ import (
 	"path"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/prompti/choose"
 	"github.com/sveltinio/prompti/input"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
@@ -33,7 +31,7 @@ import (
 //=============================================================================
 
 var (
-	templateFlag string
+	withSampleContent bool
 )
 
 const (
@@ -59,8 +57,8 @@ Use the --template flag to select the right one to you. Valid options: blank or 
 
 Example:
 
-1. You have already created a new resource called "posts"
-2. call "sveltin new content posts/my-first-content --template sample"
+1. You have already created a "posts" resource
+2. run: sveltin new content posts/my-first-content --sample
 
 As result:
 
@@ -76,7 +74,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	contentData, err := promptContentName(cfg.fs, args, cfg.sveltin)
+	contentData, err := promptContentName(cfg.fs, args, withSampleContent, cfg.sveltin)
 	utils.ExitIfError(err)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
@@ -103,7 +101,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 }
 
 func contentCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&templateFlag, "template", "t", "", "Generate a markdown file based on templates (valid options: blank or sample).")
+	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file.")
 }
 
 func init() {
@@ -113,19 +111,19 @@ func init() {
 
 //=============================================================================
 
-func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*config.TemplateData, error) {
+func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.SveltinConfig) (*config.TemplateData, error) {
+	contentType := Blank
+	if isSample {
+		contentType = Sample
+	}
+
 	switch numOfArgs := len(inputs); {
 	case numOfArgs < 1:
 		contentNamePromptContent := &input.Config{
 			Placeholder: "What's the content title? (it will be the slug to the page)",
 			ErrorMsg:    "Please, provide a title for the content.",
 		}
-		//contentName, err := common.PromptGetInput(contentNamePromptContent, nil, "")
 		contentName, err := input.Run(contentNamePromptContent)
-		if err != nil {
-			return nil, err
-		}
-		contentType, err := promptContentTemplateSelection(templateFlag)
 		if err != nil {
 			return nil, err
 		}
@@ -150,11 +148,6 @@ func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*
 			return nil, err
 		}
 
-		contentType, err := promptContentTemplateSelection(templateFlag)
-		if err != nil {
-			return nil, err
-		}
-
 		return &config.TemplateData{
 			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
@@ -163,34 +156,6 @@ func promptContentName(fs afero.Fs, inputs []string, c *config.SveltinConfig) (*
 	default:
 		err := errors.New("something went wrong: value not valid")
 		return nil, sveltinerr.NewDefaultError(err)
-	}
-}
-
-func promptContentTemplateSelection(templateType string) (string, error) {
-	entries := []list.Item{
-		choose.Item{Name: Blank, Desc: "Frontmatter only"},
-		choose.Item{Name: Sample, Desc: "Full sample content"},
-	}
-
-	switch nameLenght := len(templateType); {
-	case nameLenght == 0:
-		templatePromptContent := &choose.Config{
-			Title:    "Which template for your content?",
-			ErrorMsg: "Please, provide a template name for the content file.",
-		}
-		result, err := choose.Run(templatePromptContent, entries)
-		if err != nil {
-			return "", err
-		}
-		return result, nil
-	case nameLenght != 0:
-		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, templateType) {
-			return "", sveltinerr.NewContentTemplateTypeNotValidError()
-		}
-		return templateType, nil
-	default:
-		return "", sveltinerr.NewContentTemplateTypeNotValidError()
 	}
 }
 
