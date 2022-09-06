@@ -1,9 +1,8 @@
 {{ $varName := .Name | ToVariableName | ReplaceIfNested }}
 <script lang="ts">
-    import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import type { Sveltin } from 'src/sveltin';
-	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
 	import { Card } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
@@ -11,10 +10,9 @@
 	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let data: PageData;
-	let resourceName = data.resourceName;
-	let items = data.items as Array<Sveltin.ContentEntry>;
+	$: ({ resourceName, items } = data);
 
-	const {{ $varName }}IndexPage: IWebPageMetadata = {
+	$: {{ $varName }}IndexPage = {
 		url: getPageUrl(resourceName, website),
 		title: website.name,
 		description: 'Here you can find the list of all available {{ .Name }}.',

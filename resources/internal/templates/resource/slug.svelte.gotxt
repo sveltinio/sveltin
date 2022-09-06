@@ -15,71 +15,67 @@
 	$: previous = before;
 	$: next = after;
 
-	let slugPageData = {} as IWebPageMetadata;
-	if (current) {
-		slugPageData = {
-			url: getSlugPageUrl(current, website),
-			title: current.metadata.title,
-			description: current.metadata.headline,
-			keywords: website.keywords ? website.keywords : '',
-			author: current.metadata.author,
-			image: getCoverImagePath(current, website),
-			opengraph: {
-				type: OpenGraphType.Article,
-				article: {
-					published_at: current.metadata.created_at,
-					modified_at: current.metadata.updated_at
-				}
-			},
-			twitter: {
-				type: TwitterCardType.Summary
+	$: slugPageData = {
+		url: getSlugPageUrl(current, website),
+		title: current.metadata.title,
+		description: current.metadata.headline,
+		keywords: website.keywords ? website.keywords : '',
+		author: current.metadata.author,
+		image: getCoverImagePath(current, website),
+		opengraph: {
+			type: OpenGraphType.Article,
+			article: {
+				published_at: current.metadata.created_at,
+				modified_at: current.metadata.updated_at
 			}
-		};
-	}
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
 </script>
 
-{#if current}
-	<PageMetaTags data={slugPageData} />
-	<JsonLdWebPage data={slugPageData} />
-	<JsonLdBreadcrumbs
-		baseURL={website.baseURL}
-		parent={current.resource}
-		currentTitle={slugPageData.title}
-	/>
+<PageMetaTags data={slugPageData} />
+<JsonLdWebPage data={slugPageData} />
+<JsonLdBreadcrumbs
+	baseURL={website.baseURL}
+	parent={current.resource}
+	currentTitle={slugPageData.title}
+/>
 
-	<article class="artifact-container">
-		<div class="content">
-			<h1>{current.metadata.title}</h1>
-			{#if current.metadata.created_at}
-				<h3>
-					<time datetime={new Date(current.metadata.created_at).toISOString()} />
-				</h3>
-			{/if}
-			{#if current.metadata.cover}
-				<div class="cover">
-					<img
-						src={`/resources/${current.resource}/${current.metadata.slug}/${current.metadata.cover}`}
-						title={`cover for ${current.metadata.title}`}
-						alt={`cover for ${current.metadata.title}`}
-					/>
-				</div>
-			{/if}
-			<div>
-				<TOC
-					resource={current.resource}
-					slug={current.metadata.slug}
-					headings={current.metadata.headings}
-					withChildren={true}
+<article class="artifact-container">
+	<div class="content">
+		<h1>{current.metadata.title}</h1>
+		{#if current.metadata.created_at}
+			<h3>
+				<time datetime={new Date(current.metadata.created_at).toISOString()} />
+			</h3>
+		{/if}
+		{#if current.metadata.cover}
+			<div class="cover">
+				<img
+					src={`/resources/${current.resource}/${current.metadata.slug}/${current.metadata.cover}`}
+					title={`cover for ${current.metadata.title}`}
+					alt={`cover for ${current.metadata.title}`}
 				/>
-
-				<div class="markdown-body">
-					<svelte:component this={mdsvexComponent} />
-				</div>
 			</div>
-			<PrevNextButtons {previous} {next} />
+		{/if}
+		<div>
+			<TOC
+				resource={current.resource}
+				slug={current.metadata.slug}
+				headings={current.metadata.headings}
+				withChildren={true}
+			/>
+
+			<div class="markdown-body">
+				<svelte:component this={mdsvexComponent} />
+			</div>
 		</div>
-	</article>
-{/if}
+		<PrevNextButtons {previous} {next} />
+	</div>
+</article>
+
 
 <style>
 	.cover {
