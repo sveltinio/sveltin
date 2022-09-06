@@ -86,7 +86,7 @@ sveltin install
 sveltin new page contact --as svelte
 
 # Create a public page as MDsveX component
-# (http://localhost:5173/contact)
+# (http://localhost:5173/about)
 sveltin new page about --as markdown
 
 # Create a 'posts' resource
