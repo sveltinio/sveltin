@@ -43,9 +43,9 @@ const (
 var newPageCmd = &cobra.Command{
 	Use:     "page [name]",
 	Aliases: []string{"p"},
-	Short:   "Create a new page route",
+	Short:   "Create a new page route.",
 	Long: resources.GetASCIIArt() + `
-Create a new public page route.
+Command used to create a new public page route.
 
 Pages are Svelte components written in .svelte or .svx (for markdown) files. The filename determines the route,
 so creating a page named "about" will generate the followin route /about/+page.<svelte|svx>

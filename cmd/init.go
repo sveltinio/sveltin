@@ -37,9 +37,9 @@ var initCmd = &cobra.Command{
 	Use:     "init <project>",
 	Aliases: []string{"create"},
 	Args:    cobra.RangeArgs(0, 3),
-	Short:   "Initialize a new sveltin project",
+	Short:   "Initialize a new Sveltin project.",
 	Long: resources.GetASCIIArt() + `
-Command to scaffold a new sveltin project.
+Command used to initialize/scaffold a new sveltin project.
 
 Examples:
 
@@ -157,7 +157,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 func initCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The theme you are going to create or reuse")
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
+	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The CSS lib to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
 	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
 }

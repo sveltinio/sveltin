@@ -23,9 +23,9 @@ import (
 var installCmd = &cobra.Command{
 	Use:     "install",
 	Aliases: []string{"i"},
-	Short:   "Install your project dependencies",
+	Short:   "Install your project dependencies.",
 	Long: resources.GetASCIIArt() + `
-Install all dependencies from the 'package.json0 file.
+Command used to install all dependencies from the 'package.json' file.
 
 It wraps (npm|pnpm|yarn) install.
 `,

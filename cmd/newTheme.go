@@ -36,9 +36,9 @@ import (
 var newThemeCmd = &cobra.Command{
 	Use:     "theme <name>",
 	Aliases: []string{"t"},
-	Short:   "Command to create a new theme",
+	Short:   "Create a new theme reusable theme",
 	Long: resources.GetASCIIArt() + `
-This command help you creating new themes for projects, so that can be shared with others and reused.
+Command used to create a new theme for projects so that can be shared with others and reused.
 
 Examples:
 
