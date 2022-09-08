@@ -168,7 +168,6 @@ Usage:
 Available Commands:
   add         Add content and metadata to a resource
   build       Builds a production version of your static website
-  completion  Generate the autocompletion script for the specified shell
   deploy      Deploy your website over FTP
   generate    Generate static files (sitemap, rss, menu)
   help        Help about any command
