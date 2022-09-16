@@ -19,7 +19,7 @@ const menu: Array<IMenuItem> = [
 		name: "{{ $resource | Base | Capitalize }}",
 		url: "{{ $resource | ToURL }}",
 		external: false,
-		weight: {{ Sum 1 $index }}
+		weight: {{ Sum 2 $index }}
 		{{- if $withContent }}
 			{{- $resourceContents := index $contentValues $resource -}}
 			{{- $l := len $resourceContents -}}
