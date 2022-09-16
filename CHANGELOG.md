@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## [v0.10.0](https://github.com/sveltinio/sveltin/releases/tag/v0.10.0) (2022-09-16)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.9.1...v0.10.0)
+
+### Fixed Bugs
+
+- api endpoints were still on old sveltekit routing mechanism. Updated and fixed an issue when building the project due to `prerender=true` on those files. `fallback: '200.html'` on [static adapter configuration](https://github.com/sveltejs/kit/tree/master/packages/adapter-static) made the magic.
+
+### 🚀 New Features
+
+- `new resource` cmd allows to specify the group layout name according to the sveltekit [Advanced layouts](https://kit.svelte.dev/docs/advanced-routing#advanced-layouts) by passing the `--group` flag
+
+	```bash
+	sveltin new resource testimonials --group marketing
+	```
+- `new resource` cmd allow to specify if a different layout for the `slug` pages must be created in addition to the one for the `index` page.
+
+	```bash
+	sveltin new resource posts --slug
+	```
+
+### 🔧 Code Refactoring
+
+- `config.TemplateData` struct makes use of individual struct for each artifact template data
+- file templates updated accordingly
+- generate commands (`menu`, `rss`, `sitemap`) simplified and updated to work for grouped layout too
+- `GetAllRoutes` refactored to use `afero.Walk`
+
+### Chores
+
+- sveltekit updated to next.483
+- go deps updated
+- uniform function names
+
+### Pull Requests
+
+- Merge pull request [#119](https://github.com/sveltinio/sveltin/issues/119) from kit-advanced-layout
+
 ## [v0.9.1](https://github.com/sveltinio/sveltin/releases/tag/v0.9.1) (2022-09-06)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.9.0...v0.9.1)
