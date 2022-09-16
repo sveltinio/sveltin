@@ -1,4 +1,4 @@
-import { list } from '$lib/{{ .Name }}/load{{ .Name | ToVariableName | Capitalize }}';
+import { list } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 import { error } from '@sveltejs/kit';
 export const prerender = true;
 

@@ -13,7 +13,7 @@
 			<h2>{slug}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
 			<ul>
 				{#each metadata.items as item}
-					<li><a sveltekit:prefetch href="{base}/{{.Resource}}/{item.slug}">{item.title}</a></li>
+					<li><a data-sveltekit-prefetch href="{base}/{{.Metadata.Resource}}/{item.slug}">{item.title}</a></li>
 				{/each}
 			</ul>
 		{:else}

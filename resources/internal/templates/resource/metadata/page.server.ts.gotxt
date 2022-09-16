@@ -1,6 +1,6 @@
 import type { Sveltin } from 'src/sveltin';
-{{ $mdName := .Name | ToVariableName | Capitalize}}
-import { all } from '$lib/{{ .Resource }}/load{{ $mdName }}';
+{{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
+import { all } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 
 export async function load() {
 	const data = await all();

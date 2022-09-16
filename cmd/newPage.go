@@ -21,6 +21,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -65,6 +66,11 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageType, err := promptPageType(pageType)
 	utils.ExitIfError(err)
 
+	pageData := &tpltypes.PageData{
+		Name: pageName,
+		Type: pageType,
+	}
+
 	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageType)
 	cfg.log.Plain(markup.H1(headingText))
 
@@ -74,7 +80,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// NEW FOLDER: src/routes/<page_name>
 	pageFolder := composer.NewFolder(pageName)
 	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
-	pageFile := cfg.fsManager.NewPublicPage(pageName, pageType)
+	pageFile := cfg.fsManager.NewPublicPageFile(pageData)
 	utils.ExitIfError(err)
 
 	// ADD TO THE ROUTES FOLDER

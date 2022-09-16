@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 	logger "github.com/sveltinio/yinlog"
 )
@@ -79,7 +79,7 @@ func PrintHelperTextNewResource(name string) {
 }
 
 // PrintHelperTextNewMetadata prints an help message string for 'metadata creation'.
-func PrintHelperTextNewMetadata(metadataInfo *config.TemplateData) {
+func PrintHelperTextNewMetadata(metadataInfo *tpltypes.MetadataData) {
 	var exampleString string
 	if metadataInfo.Type == "single" {
 		exampleString = fmt.Sprintf("%s: your_value", utils.ToSnakeCase(metadataInfo.Name))

@@ -8,18 +8,21 @@
 // Package config ...
 package config
 
+import "github.com/sveltinio/sveltin/internal/tpltypes"
+
 // TemplateData is the struct representing all the data to be passed to a template file.
 type TemplateData struct {
 	ProjectName string
-	NPMClient   string
-	BaseURL     string
-	PortNumber  string
 	Name        string
-	Resource    string
-	Type        string
 	Config      *SveltinConfig
-	Menu        *MenuConfig
-	NoPage      *NoPage
-	Theme       *ThemeData
-	Misc        string
+	NPMClient   *tpltypes.NPMClientData
+	Vite        *tpltypes.ViteData
+	Page        *tpltypes.PageData
+	Resource    *tpltypes.ResourceData
+	Content     *tpltypes.ContentData
+	Metadata    *tpltypes.MetadataData
+	Menu        *tpltypes.MenuData
+	NoPage      *tpltypes.NoPageData
+	Theme       *tpltypes.ThemeData
+	Misc        *tpltypes.MiscFileData
 }

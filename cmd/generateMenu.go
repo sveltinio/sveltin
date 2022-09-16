@@ -10,11 +10,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
-	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
@@ -46,37 +43,23 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Plain(markup.H1("Generating the menu structure file"))
 
-	projectFolder := cfg.fsManager.GetFolder(RootFolder)
+	cfg.log.Info("Getting list of all resources contents")
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
 
-	cfg.log.Info("Getting list of existing public pages")
+	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
-	allResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
-	allRoutesExceptsResource := common.Difference(allRoutes, allResources)
-	// exclude api folder from the list
-	publicPages := common.Difference(allRoutesExceptsResource, []string{ApiFolder})
-
-	cfg.log.Info("Getting list of existing resources")
-	availableResources := helpers.GetAllResourcesWithContentName(cfg.fs, cfg.pathMaker.GetPathToExistingResources(), withContentFlag)
 
 	// GET FOLDER: config
 	configFolder := cfg.fsManager.GetFolder(ConfigFolder)
 
 	// ADD FILE: config/menu.js
 	cfg.log.Info("Saving the menu.js.ts file")
-	menuFile := &composer.File{
-		Name:       "menu.js.ts",
-		TemplateID: "menu",
-		TemplateData: &config.TemplateData{
-			Menu: &config.MenuConfig{
-				Resources:   availableResources,
-				Pages:       publicPages,
-				WithContent: withContentFlag,
-			},
-		},
-	}
+	menuFile := cfg.fsManager.NewMenuFile("menu", &cfg.project, allRoutes, contents, withContentFlag)
 	configFolder.Add(menuFile)
 
 	// SET FOLDER STRUCTURE
+	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(configFolder)
 
 	// GENERATE THE FOLDER TREE

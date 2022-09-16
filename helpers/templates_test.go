@@ -10,6 +10,7 @@ import (
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"gopkg.in/yaml.v3"
 )
@@ -42,7 +43,7 @@ func TestExecSveltinTpl(t *testing.T) {
 
 	pathToTplFile := resources.SveltinProjectFS["theme_config"]
 	data := config.TemplateData{
-		Theme: &config.ThemeData{
+		Theme: &tpltypes.ThemeData{
 			Name: "white",
 		},
 	}

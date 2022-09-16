@@ -16,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 )
 
 // SveltinFSManager is the struct for a pathmaker.
@@ -57,41 +58,55 @@ func (s *SveltinFSManager) GetFolder(name string) *composer.Folder {
 }
 
 // NewResourceContentFolder returns a pointer to the 'resource content' Folder.
-func (s *SveltinFSManager) NewResourceContentFolder(name string, resource string) *composer.Folder {
-	return composer.NewFolder(filepath.Join(resource, name))
+func (s *SveltinFSManager) NewResourceContentFolder(contentData *tpltypes.ContentData) *composer.Folder {
+	return composer.NewFolder(filepath.Join(contentData.Resource, contentData.Name))
 }
 
 // NewResourceContentFile returns a pointer to the 'resource content' File.
-func (s *SveltinFSManager) NewResourceContentFile(name string, template string) *composer.File {
+func (s *SveltinFSManager) NewResourceContentFile(contentData *tpltypes.ContentData) *composer.File {
 	return &composer.File{
 		Name:       s.maker.GetResourceContentFilename(),
-		TemplateID: template,
+		TemplateID: contentData.Type,
 		TemplateData: &config.TemplateData{
-			Name: name,
+			Content: contentData,
 		},
 	}
 }
 
-// NewPublicPage returns a pointer to a new 'public page' File.
-func (s *SveltinFSManager) NewPublicPage(name string, language string) *composer.File {
+// NewPublicPageFile returns a pointer to a new 'public page' File.
+func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData) *composer.File {
 	return &composer.File{
-		Name:       helpers.PublicPageFilename(language),
-		TemplateID: language,
+		Name:       helpers.PublicPageFilename(pageData.Type),
+		TemplateID: pageData.Type,
 		TemplateData: &config.TemplateData{
-			Name: name,
+			Page: pageData,
 		},
 	}
 }
 
-// NewNoPage returns a pointer to a 'no-public page' File.
-func (s *SveltinFSManager) NewNoPage(name string, projectConfig *config.ProjectConfig, resources []string, contents map[string][]string, metadata map[string][]string, pages []string) *composer.File {
+// NewNoPageFile returns a pointer to a 'no-public page' File.
+func (s *SveltinFSManager) NewNoPageFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string) *composer.File {
 	return &composer.File{
 		Name:       name + ".xml",
 		TemplateID: name,
 		TemplateData: &config.TemplateData{
-			NoPage: &config.NoPage{
+			NoPage: &tpltypes.NoPageData{
 				Config: projectConfig,
-				Items:  helpers.NewNoPageItems(resources, contents, metadata, pages),
+				Items:  helpers.NewNoPageItems(resources, contents),
+			},
+		},
+	}
+}
+
+// NewMenuFile returns a pointer to a 'no-public page' File.
+func (s *SveltinFSManager) NewMenuFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string, withContentFlag bool) *composer.File {
+	return &composer.File{
+		Name:       name + ".js.ts",
+		TemplateID: name,
+		TemplateData: &config.TemplateData{
+			Menu: &tpltypes.MenuData{
+				Items:       helpers.NewMenuItems(resources, contents),
+				WithContent: withContentFlag,
 			},
 		},
 	}
@@ -105,8 +120,10 @@ func (s *SveltinFSManager) NewConfigFile(projectName string, name string, cliVer
 		TemplateID: name,
 		TemplateData: &config.TemplateData{
 			ProjectName: projectName,
-			Name:        filename,
-			Misc:        cliVersion,
+			Misc: &tpltypes.MiscFileData{
+				Name: filename,
+				Info: cliVersion,
+			},
 		},
 	}
 }
@@ -117,16 +134,5 @@ func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.Tem
 		Name:         tplData.Name,
 		TemplateID:   "dotenv",
 		TemplateData: tplData,
-	}
-}
-
-// NewContentFile returns a pointer to a new 'content' File.
-func (s *SveltinFSManager) NewContentFile(name string, template string, resource string) *composer.File {
-	return &composer.File{
-		Name:       s.maker.GetResourceContentFilename(),
-		TemplateID: template,
-		TemplateData: &config.TemplateData{
-			Name: name,
-		},
 	}
 }

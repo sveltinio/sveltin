@@ -47,7 +47,6 @@ func Unique(s []string) []string {
 	for _, elem := range s {
 		if len(elem) != 0 {
 			if _, value := inResult[elem]; !value {
-
 				inResult[elem] = true
 				uniqueValues = append(uniqueValues, elem)
 			}

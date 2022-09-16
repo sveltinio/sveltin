@@ -1,7 +1,7 @@
 import type { Sveltin } from 'src/sveltin';
 
 export async function list() {
-	const contentFiles = import.meta.glob('/{{ .Config.Paths.Content }}/{{ .Name }}/**/*.{svelte.md,md,svx}');
+	const contentFiles = import.meta.glob('/{{ .Config.Paths.Content }}/{{ .Resource.Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
 	const contents = await Promise.all(
 		contentFilesArray.map(async ([path, resolver]) => {
@@ -20,7 +20,7 @@ export async function list() {
 	return publishedByDate;
 };
 
-{{ $slugName := .Name | ToSlug}}
+{{ $slugName := .Resource.Name | ToSlug}}
 export async function getSingle(slug: string) {
 	const resourceName = '{{ $slugName }}';
 	const publishedByDate = await list();

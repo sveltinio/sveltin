@@ -1,4 +1,4 @@
-import { getSingle } from '$lib/{{ .Name }}/load{{ .Name | ToVariableName | Capitalize }}';
+import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 import { error } from '@sveltejs/kit';
 export const prerender = true;
 
@@ -7,7 +7,7 @@ export async function GET({ url }) {
 	const { pathname } = url;
 	const slug = pathname.substring(pathname.lastIndexOf('/') + 1);
 	if (!slug) {
-		throw error(404, '{{ .Name | ToVariableName | Capitalize }} not found');
+		throw error(404, '{{ .Resource.Name | ToVariableName | Capitalize }} not found');
 	}
 
 	const data = await getSingle(slug);

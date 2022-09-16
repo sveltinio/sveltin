@@ -27,6 +27,7 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/shell"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -84,8 +85,8 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	configFolder.Add(f)
 
 	// MAKE FOLDER STRUCTURE: themes/<theme_name> folder
-	themeData := &config.ThemeData{
-		ID:     config.BlankTheme,
+	themeData := &tpltypes.ThemeData{
+		ID:     tpltypes.BlankTheme,
 		IsNew:  true,
 		Name:   themeName,
 		CSSLib: cssLibName,
@@ -110,9 +111,15 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Info("Setting up the CSS Lib")
 	tplData := config.TemplateData{
 		ProjectName: projectName,
-		NPMClient:   npmClient.ToString(),
-		PortNumber:  withPortNumber,
-		Theme:       themeData,
+		NPMClient: &tpltypes.NPMClientData{
+			Name:    npmClient.Name,
+			Version: npmClient.Version,
+			Info:    npmClient.ToString(),
+		},
+		Vite: &tpltypes.ViteData{
+			Port: withPortNumber,
+		},
+		Theme: themeData,
 	}
 	err = setupThemeCSSLib(&resources.SveltinFS, cfg, &tplData)
 	utils.ExitIfError(err)

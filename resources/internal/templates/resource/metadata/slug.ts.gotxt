@@ -1,5 +1,5 @@
-{{ $mdName := .Name | ToVariableName | Capitalize }}
-import { groupedBy } from '$lib/{{ .Resource }}/load{{ $mdName }}';
+{{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
+import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {

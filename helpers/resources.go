@@ -10,7 +10,9 @@ package helpers
 
 import (
 	"log"
+	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -45,36 +47,52 @@ func GetAllResources(fs afero.Fs, path string) []string {
 	return resources
 }
 
-// GetAllResourcesWithContentName traverses the resource contents and returns a slice of ResourceItem.
-func GetAllResourcesWithContentName(fs afero.Fs, path string, children bool) []*config.ResourceItem {
-	var result []*config.ResourceItem
-	exists, _ := afero.DirExists(fs, path)
-	if exists {
-		files, err := afero.ReadDir(fs, path)
-		if err != nil {
-			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
-		}
-		for _, f := range files {
-			if f.IsDir() {
-				item := config.NewResourceItem(f.Name())
-				if children {
-					subFolders, err := afero.ReadDir(fs, filepath.Join(path, f.Name()))
-					if err != nil {
-						log.Fatalf("Something went wrong visiting the subfolder %s. Are you sure it exists?", f.Name())
-					}
-					for _, s := range subFolders {
-						if s.IsDir() {
-							item.AddChild(s.Name())
+// GetAllRoutes return a slice of all routes names as string.
+func GetAllRoutes(fs afero.Fs, path string) []string {
+	entries := []string{}
+	if common.DirExists(fs, path) {
+		walkFunc := func(filepath string, info os.FileInfo, err error) error {
+			if info.IsDir() {
+				replacer := strings.NewReplacer(path, "", "/[slug]", "")
+				res := replacer.Replace(filepath)
+				res = strings.TrimSpace(res)
+
+				if !strings.HasPrefix(res, "/api") {
+					// Match (group) name
+					re := regexp.MustCompile(`\/\((.*?)\)`)
+					if re.MatchString(res) {
+						submatchall := re.FindAllString(res, -1)
+
+						for _, element := range submatchall {
+							element = strings.ReplaceAll(res, element, "")
+							element = strings.Replace(element, "/", "", 1)
+
+							if !common.Contains(entries, element) {
+								entries = append(entries, element)
+							}
+						}
+					} else {
+						if !common.Contains(entries, res) {
+							entries = append(entries, res)
 						}
 					}
 				}
-				result = append(result, item)
-
+				return nil
 			}
+			return nil
+		}
+
+		err := afero.Walk(fs, path, walkFunc)
+		if err != nil {
+			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
 		}
 	}
 
-	return result
+	routes := []string{}
+	for _, file := range entries {
+		routes = append(routes, strings.Replace(file, "/", "", 1))
+	}
+	return common.Unique(routes)
 }
 
 // GetResourceContentMap returns a map of resources and relative contents.

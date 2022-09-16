@@ -10,7 +10,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -38,27 +37,19 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Plain(markup.H1("Generating the sitemap file"))
 
-	cfg.log.Info("Getting list of existing resources")
-	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
-
 	cfg.log.Info("Getting list of all resources contents")
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
 	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
 
-	cfg.log.Info("Getting list of all resources metadata")
-	metadata := helpers.GetResourceMetadataMap(cfg.fs, existingResources, cfg.sveltin.GetRoutesPath())
-
-	cfg.log.Info("Getting all existing public pages")
+	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
-	allRoutesExceptsResource := common.Difference(allRoutes, existingResources)
-	// exclude api folder from the list
-	pages := common.Difference(allRoutesExceptsResource, []string{ApiFolder})
 
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
 	cfg.log.Info("Saving the file to the static folder")
-	sitemapFile := cfg.fsManager.NewNoPage("sitemap", &cfg.project, existingResources, contents, metadata, pages)
+	sitemapFile := cfg.fsManager.NewNoPageFile("sitemap", &cfg.project, allRoutes, contents)
 	staticFolder.Add(sitemapFile)
 
 	// SET FOLDER STRUCTURE

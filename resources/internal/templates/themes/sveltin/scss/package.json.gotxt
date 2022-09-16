@@ -1,7 +1,8 @@
 {
 	"name": "{{ .ProjectName }}",
 	"version": "0.1.0",
-	"packageManager": "{{ .NPMClient }}",
+	"type": "module",
+	"packageManager": "{{ .NPMClient.Info }}",
 	"scripts": {
 		"dev": "svelte-kit sync && vite dev",
 		"clean": "rimraf build",
@@ -14,9 +15,9 @@
 		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
-		"@indaco/svelte-iconoir": "^2.6.0",
+		"@indaco/svelte-iconoir": "^2.6.1",
 		"@sveltejs/adapter-static": "1.0.0-next.43",
-		"@sveltejs/kit": "1.0.0-next.481",
+		"@sveltejs/kit": "1.0.0-next.483",
 		"@sveltinio/essentials": "^0.2.1",
 		"@sveltinio/media-content": "^0.3.2",
 		"@sveltinio/seo": "^0.1.7",
@@ -52,6 +53,5 @@
 		"typescript": "^4.8.2",
 		"unist-util-visit": "^4.1.1",
 		"vite": "^3.1.0"
-	},
-	"type": "module"
+	}
 }
