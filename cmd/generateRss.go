@@ -10,7 +10,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -38,25 +37,19 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Plain(markup.H1("Generating the RSS feed file"))
 
-	cfg.log.Info("Getting all existing resources")
+	cfg.log.Info("Getting list of all resources contents")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
-
-	cfg.log.Info("Getting all resources contents")
 	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
 
-	cfg.log.Info("Getting all existing public pages")
+	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
-	allRoutesExceptsResource := common.Difference(allRoutes, existingResources)
-	// exclude api folder from the list
-	pages := common.Difference(allRoutesExceptsResource, []string{ApiFolder})
-	//pages := helpers.GetAllPublicPages(cfg.fs, cfg.pathMaker.GetPathToPublicPages())
 
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 
 	// NEW FILE: static/rss.xml
 	cfg.log.Info("Saving the file to the static folder")
-	rssFile := cfg.fsManager.NewNoPage("rss", &cfg.project, existingResources, contents, nil, pages)
+	rssFile := cfg.fsManager.NewNoPageFile("rss", &cfg.project, allRoutes, contents)
 	staticFolder.Add(rssFile)
 
 	// SET FOLDER STRUCTURE

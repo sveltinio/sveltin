@@ -15,6 +15,7 @@ pages:
   indexendpoint: +page.server.ts
   slug: '+page.svelte'
   slugendpoint: '+page.ts'
+  sluglayout: '+layout.svelte'
 api:
   version: v1
   filename: +server.ts

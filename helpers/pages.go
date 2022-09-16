@@ -9,28 +9,9 @@
 package helpers
 
 import (
-	"log"
-
-	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 )
-
-// GetAllRoutes return a slice of all available public page names as string.
-func GetAllRoutes(fs afero.Fs, path string) []string {
-	files, err := afero.ReadDir(fs, path)
-	if err != nil {
-		log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
-	}
-
-	routes := []string{}
-	for _, f := range files {
-		if f.IsDir() {
-			routes = append(routes, f.Name())
-		}
-	}
-
-	return routes
-}
 
 // GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
 func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
@@ -43,6 +24,8 @@ func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
 		return c.GetSlugPageFilename()
 	case "slugendpoint":
 		return c.GetSlugEndpointFilename()
+	case "sluglayout":
+		return c.GetSlugLayoutFilename()
 	default:
 		return ""
 	}
@@ -61,11 +44,9 @@ func PublicPageFilename(pageType string) string {
 }
 
 // NewNoPageItems return a NoPageItems.
-func NewNoPageItems(resources []string, content map[string][]string, metadata map[string][]string, pages []string) *config.NoPageItems {
-	r := new(config.NoPageItems)
+func NewNoPageItems(resources []string, content map[string][]string) *tpltypes.NoPageItems {
+	r := new(tpltypes.NoPageItems)
 	r.Resources = resources
 	r.Content = content
-	r.Metadata = metadata
-	r.Pages = pages
 	return r
 }

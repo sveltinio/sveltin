@@ -20,6 +20,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 
@@ -28,9 +29,16 @@ import (
 
 //=============================================================================
 
+var (
+	group          string
+	withSlugLayout bool
+)
+
+//=============================================================================
+
 var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
-	Aliases: []string{"r", "route"},
+	Aliases: []string{"route", "r"},
 	Short:   "Create a new resource (route).",
 	Long: resources.GetASCIIArt() + `
 Command used to create new resources.
@@ -61,27 +69,33 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	resourceName, err := promptResourceName(args)
 	utils.ExitIfError(err)
 
+	resourceData := &tpltypes.ResourceData{
+		Name:       resourceName,
+		Group:      group,
+		SlugLayout: withSlugLayout,
+	}
+
 	// MAKE FOLDER STRUCTURE: content folder
-	headingText := fmt.Sprintf("Creating '%s' as resource", resourceName)
+	headingText := fmt.Sprintf("Creating '%s' as resource", resourceData.Name)
 	cfg.log.Plain(markup.H1(headingText))
 
-	contentFolder, err := makeResourceFolderStructure(ContentFolder, resourceName, cfg)
+	contentFolder, err := makeResourceFolderStructure(ContentFolder, resourceData, cfg)
 	utils.ExitIfError(err)
 
 	// MAKE FOLDER STRUCTURE: src/params
-	paramsFolder, err := makeResourceFolderStructure(ParamsFolder, resourceName, cfg)
+	paramsFolder, err := makeResourceFolderStructure(ParamsFolder, resourceData, cfg)
 	utils.ExitIfError(err)
 
 	// MAKE FOLDER STRUCTURE: src/lib folder
-	libFolder, err := makeResourceFolderStructure(LibFolder, resourceName, cfg)
+	libFolder, err := makeResourceFolderStructure(LibFolder, resourceData, cfg)
 	utils.ExitIfError(err)
 
 	// MAKE FOLDER STRUCTURE: src/routes/<resource_name>/{index.svelte, index.ts, [slug].svelte, [slug].json.ts}
-	routesFolder, err := makeResourceFolderStructure(RoutesFolder, resourceName, cfg)
+	routesFolder, err := makeResourceFolderStructure(RoutesFolder, resourceData, cfg)
 	utils.ExitIfError(err)
 
 	// MAKE FOLDER STRUCTURE: src/routes/api/<api_version> folder
-	apiFolder, err := makeResourceFolderStructure(ApiFolder, resourceName, cfg)
+	apiFolder, err := makeResourceFolderStructure(ApiFolder, resourceData, cfg)
 	utils.ExitIfError(err)
 
 	// SET FOLDER STRUCTURE
@@ -103,8 +117,14 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	common.PrintHelperTextNewResource(resourceName)
 }
 
+func resourceCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&group, "group", "g", "", "Group name for resource routes (https://kit.svelte.dev/docs/advanced-routing#advanced-layouts)")
+	cmd.Flags().BoolVarP(&withSlugLayout, "slug", "", false, "Use a different layout for the slug pages (https://kit.svelte.dev/docs/advanced-routing#advanced-layouts-layout)")
+}
+
 func init() {
 	newCmd.AddCommand(newResourceCmd)
+	resourceCmdFlags(newResourceCmd)
 }
 
 //=============================================================================
@@ -131,18 +151,18 @@ func promptResourceName(inputs []string) (string, error) {
 
 //=============================================================================
 
-func makeResourceFolderStructure(folderName string, resourceName string, cfg appConfig) (*composer.Folder, error) {
+func makeResourceFolderStructure(folderName string, resourceData *tpltypes.ResourceData, cfg appConfig) (*composer.Folder, error) {
 	switch folderName {
 	case ContentFolder:
-		return createResourceContentLocalFolder(resourceName), nil
+		return createResourceContentLocalFolder(resourceData), nil
 	case ParamsFolder:
-		return createResourceParamsLocalFolder(), nil
+		return createResourceParamsLocalFolder(resourceData), nil
 	case LibFolder:
-		return createResourceLibLocalFolder(resourceName), nil
+		return createResourceLibLocalFolder(resourceData), nil
 	case RoutesFolder:
-		return createResourceRoutesLocalFolder(cfg, resourceName), nil
+		return createResourceRoutesLocalFolder(cfg, resourceData), nil
 	case ApiFolder:
-		return createResourceAPIRoutesLocalFolder(resourceName), nil
+		return createResourceAPIRoutesLocalFolder(resourceData), nil
 	default:
 		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
 		return nil, sveltinerr.NewDefaultError(err)
@@ -151,33 +171,34 @@ func makeResourceFolderStructure(folderName string, resourceName string, cfg app
 
 //=============================================================================
 
-func createResourceContentLocalFolder(resourceName string) *composer.Folder {
+func createResourceContentLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
 	// GET FOLDER: content folder
 	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
 	cfg.log.Info("Content folder")
-	resourceContentFolder := composer.NewFolder(resourceName)
+	resourceContentFolder := composer.NewFolder(resourceData.Name)
 	contentFolder.Add(resourceContentFolder)
 
 	return contentFolder
 }
 
-func createResourceLibLocalFolder(resourceName string) *composer.Folder {
+func createResourceLibLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
 	// GET FOLDER: src/lib folder
 	libFolder := cfg.fsManager.GetFolder(LibFolder)
 
 	// NEW FOLDER: /src/lib/<resource_name>
-	resourceLibFolder := composer.NewFolder(resourceName)
+	resourceLibFolder := composer.NewFolder(resourceData.Name)
 
 	// NEW FILE: src/lib/<resource_name>/load<resource_name>.ts
 	cfg.log.Info("Lib files")
 	libFile := &composer.File{
-		Name:       utils.ToLibFile(resourceName),
+		Name:       utils.ToLibFile(resourceData.Name),
 		TemplateID: LibFolder,
 		TemplateData: &config.TemplateData{
-			Name:   resourceName,
-			Config: cfg.sveltin,
+			Name:         resourceData.Name,
+			ResourceData: resourceData,
+			Config:       cfg.sveltin,
 		},
 	}
 	resourceLibFolder.Add(libFile)
@@ -186,7 +207,7 @@ func createResourceLibLocalFolder(resourceName string) *composer.Folder {
 	return libFolder
 }
 
-func createResourceParamsLocalFolder() *composer.Folder {
+func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
 	cfg.log.Info("Parameters matchers")
 	// GET FOLDER: src/params folder
 	paramsFolder := cfg.fsManager.GetFolder(ParamsFolder)
@@ -196,7 +217,8 @@ func createResourceParamsLocalFolder() *composer.Folder {
 		Name:       "string.js",
 		TemplateID: StringMatcher,
 		TemplateData: &config.TemplateData{
-			Config: cfg.sveltin,
+			ResourceData: resourceData,
+			Config:       cfg.sveltin,
 		},
 	}
 	// Add file to folder
@@ -207,8 +229,9 @@ func createResourceParamsLocalFolder() *composer.Folder {
 		Name:       "slug.js",
 		TemplateID: GenericMatcher,
 		TemplateData: &config.TemplateData{
-			Name:   "slug",
-			Config: cfg.sveltin,
+			Name:         "slug",
+			ResourceData: resourceData,
+			Config:       cfg.sveltin,
 		},
 	}
 	// Add file to folder
@@ -217,12 +240,12 @@ func createResourceParamsLocalFolder() *composer.Folder {
 	return paramsFolder
 }
 
-func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *composer.Folder {
+func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.ResourceData) *composer.Folder {
 	// GET FOLDER: src/routes folder
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
 	// NEW FOLDER: src/routes/<resource_name>
-	resourceRoutesFolder := composer.NewFolder(resourceName)
+	resourceRoutesFolder := composer.NewFolder(resourceData.Name)
 	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.server.ts}
 	cfg.log.Info("Routes")
 	for _, item := range []string{IndexFile, IndexEndpointFile} {
@@ -230,8 +253,9 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:   resourceName,
-				Config: cfg.sveltin,
+				Name:         resourceData.Name,
+				ResourceData: resourceData,
+				Config:       cfg.sveltin,
 			},
 		}
 		resourceRoutesFolder.Add(f)
@@ -240,38 +264,53 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceName string) *compos
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
 	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
-	for _, item := range []string{SlugFile, SlugEndpointFile} {
+	slugFiles := []string{SlugFile, SlugEndpointFile}
+	if resourceData.SlugLayout {
+		slugFiles = append(slugFiles, SlugLayoutFile)
+	}
+	for _, item := range slugFiles {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:   resourceName,
-				Config: cfg.sveltin,
+				Name:         resourceData.Name,
+				ResourceData: resourceData,
+				Config:       cfg.sveltin,
 			},
 		}
 		slugFolder.Add(f)
 	}
 	resourceRoutesFolder.Add(slugFolder)
-	routesFolder.Add(resourceRoutesFolder)
+
+	if utils.IsEmpty(resourceData.Group) {
+		routesFolder.Add(resourceRoutesFolder)
+	} else {
+		// NEW FOLDER: src/routes/(group_name)/<resource_name>
+		resourceGroupRoutesFolder := composer.NewFolder(fmt.Sprintf("(%s)", resourceData.Group))
+		resourceGroupRoutesFolder.Add(resourceRoutesFolder)
+		routesFolder.Add(resourceGroupRoutesFolder)
+
+	}
 
 	return routesFolder
 }
 
-func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
+func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
 	cfg.log.Info("REST endpoints")
 	// GET FOLDER: src/routes/api/<api_version> folder
 	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>
-	resourceAPIFolder := composer.NewFolder(resourceName)
+	resourceAPIFolder := composer.NewFolder(resourceData.Name)
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/+server.ts
 	apiFile := &composer.File{
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiIndexFile,
 		TemplateData: &config.TemplateData{
-			Name:   resourceName,
-			Config: cfg.sveltin,
+			Name:         resourceData.Name,
+			ResourceData: resourceData,
+			Config:       cfg.sveltin,
 		},
 	}
 	resourceAPIFolder.Add(apiFile)
@@ -283,8 +322,9 @@ func createResourceAPIRoutesLocalFolder(resourceName string) *composer.Folder {
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiSlugFile,
 		TemplateData: &config.TemplateData{
-			Name:   resourceName,
-			Config: cfg.sveltin,
+			Name:         resourceData.Name,
+			ResourceData: resourceData,
+			Config:       cfg.sveltin,
 		},
 	}
 	slugStringFolder.Add(apiSlugFile)

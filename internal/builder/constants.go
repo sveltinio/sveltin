@@ -73,6 +73,8 @@ const (
 	Slug string = "slug"
 	// SlugEndpoint is the string for the 'slug' file.
 	SlugEndpoint string = "slugendpoint"
+	// SlugLayout is the string from the 'layout' file
+	SlugLayout string = "sluglayout"
 
 	//=============================================================================
 

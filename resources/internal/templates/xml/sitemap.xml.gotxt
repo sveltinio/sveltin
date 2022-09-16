@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	{{ $baseURL := .NoPage.Config.BaseURL}}
-	{{ $changeFreq := .NoPage.Config.SitemapChangeFreq }}
-	{{ $priority := .NoPage.Config.SitemapPriority }}
-	{{ $contentValues := .NoPage.Items.Content }}
-	{{ $metadataValues := .NoPage.Items.Metadata }}
+	{{- $baseURL := .NoPageData.Config.BaseURL -}}
+	{{- $changeFreq := .NoPageData.Config.SitemapChangeFreq -}}
+	{{- $priority := .NoPageData.Config.SitemapPriority -}}
+	{{- $resources := .NoPageData.Items.Resources -}}
+	{{ $contentValues := .NoPageData.Items.Content }}
 	<url>
 		<loc>{{ $baseURL }}</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>
-	{{ range $page := .NoPage.Items.Pages }}
-	<url>
-		<loc>{{ $baseURL }}/{{ $page | Trimmed }}/</loc>
-		<changefreq>{{ $changeFreq }}</changefreq>
-		<priority>{{ $priority }}</priority>
-	</url>
-	{{ end }}
-	{{ range $resource := .NoPage.Items.Resources }}
+{{- range $resource := $resources -}}
+{{ if $resource }}
 	<url>
 		<loc>{{ $baseURL }}/{{ $resource }}/</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
@@ -30,12 +24,6 @@
 		<priority>{{ $priority }}</priority>
 	</url>
 		{{ end }}
-		{{ range $metadata := index $metadataValues $resource }}
-	<url>
-		<loc>{{ $baseURL }}/{{ $resource }}/{{ $metadata }}/</loc>
-		<changefreq>{{ $changeFreq }}</changefreq>
-		<priority>{{ $priority }}</priority>
-	</url>
-		{{ end }}
-	{{ end }}
+{{ end }}
+{{- end -}}
 </urlset>

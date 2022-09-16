@@ -17,6 +17,11 @@ import (
 	"golang.org/x/text/language"
 )
 
+// IsEmpty returns true if a string is empty.
+func IsEmpty(txt string) bool {
+	return len(txt) == 0
+}
+
 // ToMDFile returns a string with .md extension
 // example: ToMDFile("getting started", false) returns 'getting-started.md'.
 // example: ToMDFile("getting started", true) returns 'GETTING-STARTED.md'.
@@ -110,6 +115,11 @@ func CurrentYear() string {
 // PlusOne adds one to the integer parameter.
 func PlusOne(x int) int {
 	return x + 1
+}
+
+// MinusOne subtract one to the integer parameter.
+func MinusOne(x int) int {
+	return x - 1
 }
 
 // Sum adds two integer values.

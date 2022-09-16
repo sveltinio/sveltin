@@ -67,6 +67,9 @@ func (b *ResourceContentBuilder) setPathToTplFile() error {
 	case SlugEndpoint:
 		b.PathToTplFile = b.EmbeddedResources[SlugEndpoint]
 		return nil
+	case SlugLayout:
+		b.PathToTplFile = b.EmbeddedResources[SlugLayout]
+		return nil
 	case Lib:
 		b.PathToTplFile = b.EmbeddedResources[Lib]
 		return nil

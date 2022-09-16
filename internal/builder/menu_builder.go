@@ -9,6 +9,7 @@
 package builder
 
 import (
+	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -57,15 +58,19 @@ func (b *MenuContentBuilder) SetTemplateData(artifactData *config.TemplateData) 
 
 func (b *MenuContentBuilder) setFuncs() {
 	b.Funcs = template.FuncMap{
+		"StringsJoin": strings.Join,
+		"Base":        filepath.Base,
 		"Capitalize": func(txt string) string {
 			return utils.ToTitle(txt)
 		},
-		"StringsJoin": strings.Join,
 		"ToURL": func(txt string) string {
 			return utils.ToURL(txt)
 		},
 		"PlusOne": func(x int) int {
 			return utils.PlusOne(x)
+		},
+		"MinusOne": func(x int) int {
+			return utils.MinusOne(x)
 		},
 		"Sum": func(x int, y int) int {
 			return utils.Sum(x, y)

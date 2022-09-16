@@ -1,8 +1,8 @@
 import type { Sveltin } from 'src/sveltin';
-import { list } from '$lib/{{ .Name }}/load{{ .Name | ToVariableName | Capitalize }}';
+import { list } from '$lib/{{ .ResourceData.Name }}/load{{ .ResourceData.Name | ToVariableName | Capitalize }}';
 
 export async function load() {
-	const resourceName = '{{ .Name }}';
+	const resourceName = '{{ .ResourceData.Name }}';
 	const data = await list();
 
 	const items: Array<Sveltin.ContentEntry> = [];

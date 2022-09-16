@@ -21,6 +21,7 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	logger "github.com/sveltinio/yinlog"
 	"gopkg.in/yaml.v3"
@@ -31,7 +32,7 @@ import (
 type appConfig struct {
 	log         *logger.Logger
 	sveltin     *config.SveltinConfig
-	project     config.ProjectConfig
+	project     tpltypes.ProjectData
 	pathMaker   *pathmaker.SveltinPathMaker
 	fsManager   *fsm.SveltinFSManager
 	startersMap map[string]config.StarterTemplate
@@ -72,6 +73,7 @@ const (
 	IndexEndpointFile string = "indexendpoint"
 	SlugFile          string = "slug"
 	SlugEndpointFile  string = "slugendpoint"
+	SlugLayoutFile    string = "sluglayout"
 	SettingsFile      string = ".sveltin-settings.yaml"
 	DotEnvProdFile    string = ".env.production"
 )
@@ -137,7 +139,7 @@ func initAppConfig() {
 	cfg.fs = afero.NewOsFs()
 }
 
-func loadEnvFile(filename string) (config config.ProjectConfig, err error) {
+func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
 	viper.SetConfigName(filename)

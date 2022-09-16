@@ -16,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 )
 
 // SveltinFSManager is the struct for a pathmaker.
@@ -83,15 +84,29 @@ func (s *SveltinFSManager) NewPublicPage(name string, language string) *composer
 	}
 }
 
-// NewNoPage returns a pointer to a 'no-public page' File.
-func (s *SveltinFSManager) NewNoPage(name string, projectConfig *config.ProjectConfig, resources []string, contents map[string][]string, metadata map[string][]string, pages []string) *composer.File {
+// NewNoPageFile returns a pointer to a 'no-public page' File.
+func (s *SveltinFSManager) NewNoPageFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string) *composer.File {
 	return &composer.File{
 		Name:       name + ".xml",
 		TemplateID: name,
 		TemplateData: &config.TemplateData{
-			NoPage: &config.NoPage{
+			NoPageData: &tpltypes.NoPageData{
 				Config: projectConfig,
-				Items:  helpers.NewNoPageItems(resources, contents, metadata, pages),
+				Items:  helpers.NewNoPageItems(resources, contents),
+			},
+		},
+	}
+}
+
+// NewMenuFile returns a pointer to a 'no-public page' File.
+func (s *SveltinFSManager) NewMenuFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string, withContentFlag bool) *composer.File {
+	return &composer.File{
+		Name:       name + ".js.ts",
+		TemplateID: name,
+		TemplateData: &config.TemplateData{
+			MenuData: &tpltypes.MenuData{
+				Items:       helpers.NewMenuItems(resources, contents),
+				WithContent: withContentFlag,
 			},
 		},
 	}

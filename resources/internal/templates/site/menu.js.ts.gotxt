@@ -1,53 +1,45 @@
-{{ $withContent := .Menu.WithContent }}
-{{ $numOfResources := len .Menu.Resources}}
+{{- $resources := .MenuData.Items.Resources -}}
+{{- $resourceCounter := len $resources -}}
+{{- $contentValues := .MenuData.Items.Content -}}
+{{- $withContent := .MenuData.WithContent -}}
+
 import type { IMenuItem } from '@sveltinio/seo/types';
-const menu: Array<IMenuItem> = [{
-			identifier: "home",
-			name: "Home",
-			url: "/",
-			weight: 1
-		}
-{{if (gt $numOfResources 0) }},{{end }}
-{{ range $index, $resource := .Menu.Resources }}
-{{ if $index}},{{ end }}
-		{
-			identifier: "{{ $resource.GetName }}",
-			name: "{{ $resource.GetName | Capitalize }}",
-			url: "{{ $resource.GetName | ToURL }}",
-         external: false,
-			weight: {{ Sum 2 $index}}
-{{ if $withContent }}
-{{ $numOfResourceContents := len $resource.GetContents }}
-{{if (gt $numOfResources 0) }},{{end }}
-         children: [
-{{ range $i, $content := $resource.GetContents }}
-{{ if $i}},{{ end }}
-            {
-               identifier: "{{ $content }}",
-			      name: "{{ $content | Capitalize }}",
-			      url: "{{ $resource.GetName | ToURL }}{{ $content | ToURL }}",
-               external: false,
-			      weight: {{ Sum 1 $i}}
-            }
-{{ end }}
-         ]
-{{ end }}
-      }
-{{ end }}
+const menu: Array<IMenuItem> = [
+	{
+		identifier: "home",
+		name: "Home",
+		url: "/",
+		weight: 1
+	}{{- if $resourceCounter  -}},{{- end -}}
 
-{{ $pagesStartFrom := Sum $numOfResources 2}}
-{{ $numOfPages := len .Menu.Pages }}
-{{if (gt $numOfPages 0) }},{{end }}
-{{ range $index, $page := .Menu.Pages }}
-{{ if $index}},{{ end }}
-{{ if eq (PlusOne $index) $numOfPages }}
-{{ end }}
-		{
-			identifier: "{{ $page }}",
-			name: "{{ $page | Capitalize }}",
-			url: "{{ $page | ToURL }}",
-			weight: {{ Sum $pagesStartFrom $index}}
-		}
-{{ end }}];
-
-export { menu }
+{{- range $index, $resource := $resources -}}
+	{{ if $resource }}
+	{
+		identifier: "{{ $resource }}",
+		name: "{{ $resource | Base | Capitalize }}",
+		url: "{{ $resource | ToURL }}",
+		external: false,
+		weight: {{ Sum 1 $index }}
+		{{- if $withContent }}
+			{{- $resourceContents := index $contentValues $resource -}}
+			{{- $l := len $resourceContents -}}
+			{{- if gt $l 0 -}},{{- end -}}
+			{{- if $l }}
+		children: [
+			{{- range $i, $c := $resourceContents }}
+			{
+				identifier: "{{ $c }}",
+				name: "{{ $c | Capitalize }}",
+				url: "{{ $resource }}/{{ $c }}",
+				external: false,
+				weight: {{ Sum 1 $i}}
+			}{{- $contentCounter := len $resourceContents -}}{{- if (lt $i ($contentCounter | MinusOne)) -}},{{- end -}}
+			{{ end -}} {{- /* end of range resourceContents */ -}}
+		{{ "\n" }}{{ "\t\t" }}] {{- /* the parenthesis to close children */ -}}
+			{{- end }} {{- /* end of l */ -}}
+		{{- end }} {{- /* end of withContent */ -}}
+{{ "\n" }}{{ "\t"}}}{{ if (lt $index ($resourceCounter | MinusOne)) }},{{ end }}
+	{{ end }} {{- /* end of if resource */ -}}
+{{- end -}} {{- /* end of range resources */ -}}
+{{ "\n" -}}]; {{- /* the parenthesis to close  menu */ -}}
+{{ "\n\n"}}export { menu }
