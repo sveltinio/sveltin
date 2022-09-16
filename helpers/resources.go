@@ -92,7 +92,7 @@ func GetAllRoutes(fs afero.Fs, path string) []string {
 	for _, file := range entries {
 		routes = append(routes, strings.Replace(file, "/", "", 1))
 	}
-	return routes
+	return common.Unique(routes)
 }
 
 // GetResourceContentMap returns a map of resources and relative contents.
