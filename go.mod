@@ -3,17 +3,17 @@ module github.com/sveltinio/sveltin
 go 1.17
 
 require (
-	github.com/charmbracelet/bubbles v0.13.0
-	github.com/charmbracelet/lipgloss v0.5.0
+	github.com/charmbracelet/bubbles v0.14.0
+	github.com/charmbracelet/lipgloss v0.6.0
 	github.com/gosimple/slug v1.12.0
-	github.com/jlaffaye/ftp v0.0.0-20220904184306-99be0634ab9a
+	github.com/jlaffaye/ftp v0.1.0
 	github.com/matryer/is v1.4.0
 	github.com/spf13/afero v1.9.2
 	github.com/spf13/cobra v1.5.0
-	github.com/spf13/viper v1.12.0
-	github.com/sveltinio/prompti v0.0.0-20220821225459-9046be698387
-	github.com/sveltinio/yinlog v0.0.0-20220821232519-7f4740f328e2
-	github.com/vbauerster/mpb/v8 v8.0.0
+	github.com/spf13/viper v1.13.0
+	github.com/sveltinio/prompti v0.0.0-20220908083908-d9b8e9284fa8
+	github.com/sveltinio/yinlog v0.0.0-20220908084102-7b8c5d8cbde9
+	github.com/vbauerster/mpb/v8 v8.0.2
 	golang.org/x/text v0.3.7
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -42,16 +42,16 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.11.1-0.20220212125758-44cd13922739 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sahilm/fuzzy v0.1.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/subosito/gotenv v1.3.0 // indirect
+	github.com/subosito/gotenv v1.4.1 // indirect
 	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
-	gopkg.in/ini.v1 v1.66.4 // indirect
+	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
