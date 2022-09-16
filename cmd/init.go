@@ -28,6 +28,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/npmc"
 	"github.com/sveltinio/sveltin/internal/shell"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -97,8 +98,10 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: env.production
 	dotEnvTplData := &config.TemplateData{
-		Name:    DotEnvProdFile,
-		BaseURL: fmt.Sprintf("http://%s.com", projectName),
+		Name: DotEnvProdFile,
+		Vite: &tpltypes.ViteData{
+			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+		},
 	}
 	f := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 
@@ -122,9 +125,15 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Info("Setting up the CSS Lib")
 	tplData := config.TemplateData{
 		ProjectName: projectName,
-		NPMClient:   npmClient.ToString(),
-		PortNumber:  withPortNumber,
-		Theme:       themeData,
+		NPMClient: &tpltypes.NPMClientData{
+			Name:    npmClient.Name,
+			Version: npmClient.Version,
+			Info:    npmClient.ToString(),
+		},
+		Vite: &tpltypes.ViteData{
+			Port: withPortNumber,
+		},
+		Theme: themeData,
 	}
 	err = setupCSSLib(&resources.SveltinFS, cfg, &tplData)
 	utils.ExitIfError(err)
@@ -146,7 +155,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	}
 
 	// NEXT STEPS
-	if themeData.ID != config.ExistingTheme {
+	if themeData.ID != tpltypes.ExistingTheme {
 		common.PrintNextStepsHelperForNewProject(projectConfigSummary)
 	} else {
 		common.PrintNextStepsHelperForNewProjectWithExistingTheme(projectConfigSummary)
@@ -225,8 +234,8 @@ func promptCSSLibName(cssLibName string) (string, error) {
 
 func promptThemeSelection(themeFlag string) (string, error) {
 	entries := []list.Item{
-		choose.Item{Name: config.BlankTheme, Desc: "Create a new theme"},
-		choose.Item{Name: config.SveltinTheme, Desc: "Sveltin default theme"},
+		choose.Item{Name: tpltypes.BlankTheme, Desc: "Create a new theme"},
+		choose.Item{Name: tpltypes.SveltinTheme, Desc: "Sveltin default theme"},
 	}
 	switch themeFlagLenght := len(themeFlag); {
 	case themeFlagLenght == 0:
@@ -288,9 +297,9 @@ func promptNPMClient(items []string) (string, error) {
 
 //=============================================================================
 
-func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName string) (*config.ThemeData, error) {
+func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName string) (*tpltypes.ThemeData, error) {
 	switch themeSelection {
-	case config.BlankTheme:
+	case tpltypes.BlankTheme:
 		defaultThemeName := strings.Join([]string{projectName, "theme"}, "_")
 		newThemePromptContent := &input.Config{
 			Initial:     defaultThemeName,
@@ -301,22 +310,22 @@ func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName stri
 		if err != nil {
 			return nil, err
 		}
-		return &config.ThemeData{
-			ID:     config.BlankTheme,
+		return &tpltypes.ThemeData{
+			ID:     tpltypes.BlankTheme,
 			IsNew:  true,
 			Name:   themeName,
 			CSSLib: cssLibName,
 		}, nil
-	case config.SveltinTheme:
-		return &config.ThemeData{
-			ID:     config.SveltinTheme,
+	case tpltypes.SveltinTheme:
+		return &tpltypes.ThemeData{
+			ID:     tpltypes.SveltinTheme,
 			IsNew:  false,
 			Name:   "sveltin_theme",
 			CSSLib: cssLibName,
 		}, nil
-	case config.ExistingTheme:
-		return &config.ThemeData{
-			ID:     config.ExistingTheme,
+	case tpltypes.ExistingTheme:
+		return &tpltypes.ThemeData{
+			ID:     tpltypes.ExistingTheme,
 			IsNew:  false,
 			CSSLib: cssLibName,
 		}, nil
@@ -326,15 +335,15 @@ func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName stri
 			if err != nil {
 				return nil, err
 			}
-			return &config.ThemeData{
-				ID:     config.ExistingTheme,
+			return &tpltypes.ThemeData{
+				ID:     tpltypes.ExistingTheme,
 				IsNew:  false,
 				CSSLib: cssLibName,
 			}, nil
 		}
 
-		return &config.ThemeData{
-			ID:     config.BlankTheme,
+		return &tpltypes.ThemeData{
+			ID:     tpltypes.BlankTheme,
 			IsNew:  true,
 			Name:   getNewThemeName(themeFlagValue, projectName),
 			CSSLib: cssLibName,
@@ -390,7 +399,7 @@ func isInitGitRepo(gitFlagValue bool) bool {
 
 //=============================================================================
 
-func makeProjectFolderStructure(folderName string, projectName string, themeData *config.ThemeData) (*composer.Folder, error) {
+func makeProjectFolderStructure(folderName string, projectName string, themeData *tpltypes.ThemeData) (*composer.Folder, error) {
 	switch folderName {
 	case ConfigFolder:
 		return createProjectConfigLocalFolder(projectName), nil
@@ -399,7 +408,7 @@ func makeProjectFolderStructure(folderName string, projectName string, themeData
 	case RoutesFolder:
 		return createProjectRoutesLocalFolder(themeData), nil
 	case ThemesFolder:
-		if themeData.IsNew || themeData.ID == config.SveltinTheme {
+		if themeData.IsNew || themeData.ID == tpltypes.SveltinTheme {
 			return createProjectThemeLocalFolder(themeData), nil
 		}
 		return nil, nil
@@ -429,7 +438,7 @@ func createProjectContentLocalFolder() *composer.Folder {
 	return composer.NewFolder(ContentFolder)
 }
 
-func createProjectRoutesLocalFolder(themeData *config.ThemeData) *composer.Folder {
+func createProjectRoutesLocalFolder(themeData *tpltypes.ThemeData) *composer.Folder {
 	// GET FOLDER: src/routes folder
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
@@ -445,7 +454,7 @@ func createProjectRoutesLocalFolder(themeData *config.ThemeData) *composer.Folde
 	return routesFolder
 }
 
-func createProjectThemeLocalFolder(themeData *config.ThemeData) *composer.Folder {
+func createProjectThemeLocalFolder(themeData *tpltypes.ThemeData) *composer.Folder {
 	// NEW FOLDER: themes
 	themesFolder := composer.NewFolder(ThemesFolder)
 
@@ -475,7 +484,7 @@ func createProjectThemeLocalFolder(themeData *config.ThemeData) *composer.Folder
 		Name:       utils.ToMDFile("readme", true),
 		TemplateID: "readme",
 		TemplateData: &config.TemplateData{
-			Name: themeData.Name,
+			Theme: themeData,
 		},
 	}
 	newThemeFolder.Add(readMeFile)

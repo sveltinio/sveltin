@@ -1,8 +1,8 @@
 ---
-title: {{ .Name | ToTitle }}
+title: {{ .Page.Name | ToTitle }}
 ---
 
-{{ $pageName := .Name | ToVariableName }}
+{{- $pageName := .Page.Name | ToVariableName -}}
 <script lang="ts">
 	import { website } from '$config/website.js';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';
@@ -11,7 +11,7 @@ title: {{ .Name | ToTitle }}
 	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	const {{ $pageName }}Page: IWebPageMetadata = {
-		url: getPageUrl('{{ .Name }}', website),
+		url: getPageUrl('{{ .Page.Name }}', website),
 		title: title,
 		description: website.seoDescription,
 		keywords: (website.keywords) ? website.keywords : '',
@@ -33,7 +33,7 @@ title: {{ .Name | ToTitle }}
 <section class="page">
 	<div class="content">
 		<div class="centered">
-			<h1>This is the {{ .Name | Capitalize }} page</h1>
+			<h1>This is the {{ .Page.Name | Capitalize }} page</h1>
 		</div>
 	</div>
 </section>

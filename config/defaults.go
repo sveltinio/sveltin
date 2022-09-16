@@ -11,6 +11,8 @@ package config
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 )
 
 // IConfig is the interface defining the methods to be implemented.
@@ -38,10 +40,10 @@ type IConfig interface {
 
 // SveltinConfig is the struct used the map the YAML file.
 type SveltinConfig struct {
-	Pages Pages `mapstructure:"pages"`
-	Paths Paths `mapstructure:"paths"`
-	API   API   `mapstructure:"api"`
-	Theme Theme `mapstructure:"theme"`
+	Pages Pages          `mapstructure:"pages"`
+	Paths Paths          `mapstructure:"paths"`
+	API   API            `mapstructure:"api"`
+	Theme tpltypes.Theme `mapstructure:"theme"`
 }
 
 // GetProjectRoot returns a string representing the current working directory.

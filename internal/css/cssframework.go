@@ -17,6 +17,7 @@ import (
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 )
 
@@ -38,14 +39,14 @@ func (cssLib *CSSLib) Setup(isNewProject bool) error {
 
 	// When creating a fresh new Project (sveltin new <project_name>)
 	switch cssLib.TplData.Theme.ID {
-	case config.BlankTheme:
+	case tpltypes.BlankTheme:
 		return makeUnstyled(cssLib)
-	case config.SveltinTheme:
+	case tpltypes.SveltinTheme:
 		return makeSveltinStyled(cssLib)
-	case config.ExistingTheme:
+	case tpltypes.ExistingTheme:
 		return makeTheme(cssLib)
 	default:
-		return sveltinerr.NewOptionNotValidError(cssLib.TplData.Theme.Name, config.AvailableThemes[:])
+		return sveltinerr.NewOptionNotValidError(cssLib.TplData.Theme.Name, tpltypes.AvailableThemes[:])
 	}
 }
 

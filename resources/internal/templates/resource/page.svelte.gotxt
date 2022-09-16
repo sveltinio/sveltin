@@ -1,4 +1,4 @@
-{{ $varName := .ResourceData.Name | ToVariableName | ReplaceIfNested }}
+{{ $varName := .Resource.Name | ToVariableName | ReplaceIfNested }}
 <script lang="ts">
 	import type { PageData } from './$types';
 	import type { Sveltin } from 'src/sveltin';
@@ -15,7 +15,7 @@
 	$: {{ $varName }}IndexPage = {
 		url: getPageUrl(resourceName, website),
 		title: website.name,
-		description: 'Here you can find the list of all available {{ .ResourceData.Name }}.',
+		description: 'Here you can find the list of all available {{ .Resource.Name }}.',
 		keywords: (website.keywords) ? website.keywords : '',
 		image: getFavicon(website),
 		opengraph: {

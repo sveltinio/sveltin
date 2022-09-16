@@ -1,4 +1,4 @@
-import { getSingle } from '$lib/{{ .ResourceData.Name }}/load{{ .ResourceData.Name | ToVariableName | Capitalize }}';
+import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -10,10 +10,10 @@ export async function load({ params }) {
 			actual: current,
 			before: previous,
 			after: next,
-			{{if .ResourceData.Group}}
-			mdsvexComponent: (await import(`../../../../../content/{{ .ResourceData.Name }}/${slug}/index.svx`)).default
+			{{if .Resource.Group}}
+			mdsvexComponent: (await import(`../../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
 			{{else}}
-			mdsvexComponent: (await import(`../../../../content/{{ .ResourceData.Name }}/${slug}/index.svx`)).default
+			mdsvexComponent: (await import(`../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
 			{{end}}
 		};
 	}

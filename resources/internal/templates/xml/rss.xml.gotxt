@@ -7,16 +7,16 @@
 	xmlns:xhtml="https://www.w3.org/1999/xhtml"
 	xmlns:mobile="https://www.google.com/schemas/sitemap-mobile/1.0"
 >
-	{{- $baseURL := .NoPageData.Config.BaseURL -}}
-	{{- $changeFreq := .NoPageData.Config.SitemapChangeFreq -}}
-	{{- $priority := .NoPageData.Config.SitemapPriority -}}
-	{{ $contentValues := .NoPageData.Items.Content }}
+	{{- $baseURL := .NoPage.Config.BaseURL -}}
+	{{- $changeFreq := .NoPage.Config.SitemapChangeFreq -}}
+	{{- $priority := .NoPage.Config.SitemapPriority -}}
+	{{ $contentValues := .NoPage.Items.Content }}
 	<url>
 		<loc>{{ $baseURL }}</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>
 		<priority>{{ $priority }}</priority>
 	</url>
-{{- range $resource := .NoPageData.Items.Resources -}}
+{{- range $resource := .NoPage.Items.Resources -}}
 {{ if $resource }}
 	<url>
 		<loc>{{ $baseURL }}/{{ $resource }}/</loc>

@@ -24,6 +24,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -111,7 +112,7 @@ func init() {
 
 //=============================================================================
 
-func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.SveltinConfig) (*config.TemplateData, error) {
+func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.SveltinConfig) (*tpltypes.ContentData, error) {
 	contentType := Blank
 	if isSample {
 		contentType = Sample
@@ -133,7 +134,7 @@ func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.Sv
 			return nil, err
 		}
 
-		return &config.TemplateData{
+		return &tpltypes.ContentData{
 			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
 			Resource: contentResource,
@@ -148,7 +149,7 @@ func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.Sv
 			return nil, err
 		}
 
-		return &config.TemplateData{
+		return &tpltypes.ContentData{
 			Name:     utils.ToSlug(contentName),
 			Type:     contentType,
 			Resource: contentResource,
@@ -176,7 +177,7 @@ func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
 
 //=============================================================================
 
-func makeContentFolderStructure(folderName string, contentData *config.TemplateData) (*composer.Folder, error) {
+func makeContentFolderStructure(folderName string, contentData *tpltypes.ContentData) (*composer.Folder, error) {
 	switch folderName {
 	case ContentFolder:
 		return createContentLocalFolder(contentData), nil
@@ -191,28 +192,22 @@ func makeContentFolderStructure(folderName string, contentData *config.TemplateD
 
 //=============================================================================
 
-func createContentLocalFolder(contentData *config.TemplateData) *composer.Folder {
+func createContentLocalFolder(contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: content
 	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
 
 	// NEW FOLDER content/<resource_name>/<content_name>
-	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData.Name, contentData.Resource)
+	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData)
 
 	// NEW FILE: content/<resource_name>/<content_name>/index.svx
-	contentFile := &composer.File{
-		Name:       cfg.pathMaker.GetResourceContentFilename(),
-		TemplateID: contentData.Type,
-		TemplateData: &config.TemplateData{
-			Name: contentData.Name,
-		},
-	}
+	contentFile := cfg.fsManager.NewResourceContentFile(contentData)
 
 	resourceContentFolder.Add(contentFile)
 	contentFolder.Add(resourceContentFolder)
 	return contentFolder
 }
 
-func createStaticFolderStructure(contentData *config.TemplateData) *composer.Folder {
+func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 	// NEW FOLDER static/resources

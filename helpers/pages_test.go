@@ -9,6 +9,7 @@ import (
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"gopkg.in/yaml.v3"
 )
 
@@ -19,15 +20,18 @@ func TestPublicPageFilename(t *testing.T) {
 	}{
 		{
 			pageData: &config.TemplateData{
-				Name: "index",
-				Type: "svelte",
+				Page: &tpltypes.PageData{
+					Name: "index",
+					Type: "svelte"},
 			},
 			want: "+page.svelte",
 		},
 		{
 			pageData: &config.TemplateData{
-				Name: "about",
-				Type: "markdown",
+				Page: &tpltypes.PageData{
+					Name: "about",
+					Type: "markdown",
+				},
 			},
 			want: "+page.svx",
 		},
@@ -35,7 +39,7 @@ func TestPublicPageFilename(t *testing.T) {
 
 	for _, tc := range tests {
 		is := is.New(t)
-		is.Equal(PublicPageFilename(tc.pageData.Type), tc.want)
+		is.Equal(PublicPageFilename(tc.pageData.Page.Type), tc.want)
 	}
 }
 

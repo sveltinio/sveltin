@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	{{- $baseURL := .NoPageData.Config.BaseURL -}}
-	{{- $changeFreq := .NoPageData.Config.SitemapChangeFreq -}}
-	{{- $priority := .NoPageData.Config.SitemapPriority -}}
-	{{- $resources := .NoPageData.Items.Resources -}}
-	{{ $contentValues := .NoPageData.Items.Content }}
+	{{- $baseURL := .NoPage.Config.BaseURL -}}
+	{{- $changeFreq := .NoPage.Config.SitemapChangeFreq -}}
+	{{- $priority := .NoPage.Config.SitemapPriority -}}
+	{{- $resources := .NoPage.Items.Resources -}}
+	{{ $contentValues := .NoPage.Items.Content }}
 	<url>
 		<loc>{{ $baseURL }}</loc>
 		<changefreq>{{ $changeFreq }}</changefreq>

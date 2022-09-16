@@ -1,5 +1,5 @@
 <script lang="ts">
-	{{if .ResourceData.Group}}import '../../app.css'; {{else}}import '../app.css'; {{end}}
+	{{if .Resource.Group}}import '../../app.css'; {{else}}import '../app.css'; {{end}}
 </script>
 
 <slot />

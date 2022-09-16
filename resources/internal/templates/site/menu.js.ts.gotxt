@@ -1,7 +1,7 @@
-{{- $resources := .MenuData.Items.Resources -}}
+{{- $resources := .Menu.Items.Resources -}}
 {{- $resourceCounter := len $resources -}}
-{{- $contentValues := .MenuData.Items.Content -}}
-{{- $withContent := .MenuData.WithContent -}}
+{{- $contentValues := .Menu.Items.Content -}}
+{{- $withContent := .Menu.WithContent -}}
 
 import type { IMenuItem } from '@sveltinio/seo/types';
 const menu: Array<IMenuItem> = [

@@ -47,9 +47,9 @@ func (b *MetadataContentBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[ApiMetadataIndex]
 		return nil
 	case ApiFolder:
-		if b.TemplateData.Type == "single" {
+		if b.TemplateData.Metadata.Type == "single" {
 			b.PathToTplFile = b.EmbeddedResources[ApiMetadataSingle]
-		} else if b.TemplateData.Type == "list" {
+		} else if b.TemplateData.Metadata.Type == "list" {
 			b.PathToTplFile = b.EmbeddedResources[ApiMetadataList]
 		}
 		return nil
@@ -69,9 +69,9 @@ func (b *MetadataContentBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[SlugEndpoint]
 		return nil
 	case Lib:
-		if b.TemplateData.Type == "single" {
+		if b.TemplateData.Metadata.Type == "single" {
 			b.PathToTplFile = b.EmbeddedResources[LibSingle]
-		} else if b.TemplateData.Type == "list" {
+		} else if b.TemplateData.Metadata.Type == "list" {
 			b.PathToTplFile = b.EmbeddedResources[LibList]
 		}
 		return nil

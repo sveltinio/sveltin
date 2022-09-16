@@ -196,9 +196,9 @@ func createResourceLibLocalFolder(resourceData *tpltypes.ResourceData) *composer
 		Name:       utils.ToLibFile(resourceData.Name),
 		TemplateID: LibFolder,
 		TemplateData: &config.TemplateData{
-			Name:         resourceData.Name,
-			ResourceData: resourceData,
-			Config:       cfg.sveltin,
+			Name:     resourceData.Name,
+			Resource: resourceData,
+			Config:   cfg.sveltin,
 		},
 	}
 	resourceLibFolder.Add(libFile)
@@ -217,8 +217,8 @@ func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *compo
 		Name:       "string.js",
 		TemplateID: StringMatcher,
 		TemplateData: &config.TemplateData{
-			ResourceData: resourceData,
-			Config:       cfg.sveltin,
+			Resource: resourceData,
+			Config:   cfg.sveltin,
 		},
 	}
 	// Add file to folder
@@ -229,9 +229,9 @@ func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *compo
 		Name:       "slug.js",
 		TemplateID: GenericMatcher,
 		TemplateData: &config.TemplateData{
-			Name:         "slug",
-			ResourceData: resourceData,
-			Config:       cfg.sveltin,
+			Name:     "slug",
+			Resource: resourceData,
+			Config:   cfg.sveltin,
 		},
 	}
 	// Add file to folder
@@ -253,9 +253,9 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:         resourceData.Name,
-				ResourceData: resourceData,
-				Config:       cfg.sveltin,
+				Name:     resourceData.Name,
+				Resource: resourceData,
+				Config:   cfg.sveltin,
 			},
 		}
 		resourceRoutesFolder.Add(f)
@@ -273,9 +273,9 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:         resourceData.Name,
-				ResourceData: resourceData,
-				Config:       cfg.sveltin,
+				Name:     resourceData.Name,
+				Resource: resourceData,
+				Config:   cfg.sveltin,
 			},
 		}
 		slugFolder.Add(f)
@@ -308,9 +308,9 @@ func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *co
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiIndexFile,
 		TemplateData: &config.TemplateData{
-			Name:         resourceData.Name,
-			ResourceData: resourceData,
-			Config:       cfg.sveltin,
+			Name:     resourceData.Name,
+			Resource: resourceData,
+			Config:   cfg.sveltin,
 		},
 	}
 	resourceAPIFolder.Add(apiFile)
@@ -322,9 +322,9 @@ func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *co
 		Name:       cfg.sveltin.GetAPIFilename(),
 		TemplateID: ApiSlugFile,
 		TemplateData: &config.TemplateData{
-			Name:         resourceData.Name,
-			ResourceData: resourceData,
-			Config:       cfg.sveltin,
+			Name:     resourceData.Name,
+			Resource: resourceData,
+			Config:   cfg.sveltin,
 		},
 	}
 	slugStringFolder.Add(apiSlugFile)

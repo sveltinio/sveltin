@@ -19,7 +19,7 @@ const config = defineConfig({
 		),
 	},
 	server: {
-		port: {{ .PortNumber }},
+		port: {{ .Vite.Port }},
 		fs: {
 			// Allow serving files from one level up to the project root
 			// Alternatevaly set server.fs.strict to false

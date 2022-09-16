@@ -14,6 +14,7 @@ import (
 
 	"github.com/sveltinio/sveltin/config"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -68,7 +69,7 @@ func (b *ProjectBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[ThemeConfig]
 		return nil
 	case IndexPage:
-		if b.TemplateData.Theme.ID == config.ExistingTheme {
+		if b.TemplateData.Theme.ID == tpltypes.ExistingTheme {
 			b.PathToTplFile = b.EmbeddedResources[IndexNoThemePage]
 		} else {
 			b.PathToTplFile = b.EmbeddedResources[IndexPage]

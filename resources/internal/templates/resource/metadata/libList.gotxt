@@ -1,5 +1,5 @@
-{{ $resourceName := .Resource | ToVariableName | Capitalize }}
-{{ $mdName := .Name | ToSnakeCase }}
+{{- $resourceName := .Metadata.Resource | ToVariableName | Capitalize -}}
+{{- $mdName := .Metadata.Name | ToSnakeCase -}}
 import type { Sveltin } from 'src/sveltin';
 import { groupedByMany } from '$lib/utils/collections.js';
 import { list } from './load{{ $resourceName }}';
