@@ -73,8 +73,8 @@ func (s *SveltinFSManager) NewResourceContentFile(name string, template string) 
 	}
 }
 
-// NewPublicPage returns a pointer to a new 'public page' File.
-func (s *SveltinFSManager) NewPublicPage(name string, language string) *composer.File {
+// NewPublicPageFile returns a pointer to a new 'public page' File.
+func (s *SveltinFSManager) NewPublicPageFile(name string, language string) *composer.File {
 	return &composer.File{
 		Name:       helpers.PublicPageFilename(language),
 		TemplateID: language,
