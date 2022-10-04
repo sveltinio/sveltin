@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## [v0.10.1](https://github.com/sveltinio/sveltin/releases/tag/v0.10.1) (2022-10-04)
+
+[Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.10.0...v0.10.1)
+
+### Fixed Bugs
+
+- set prerender to false for api index and slug files
+
+### Chores
+
+- sveltekit updated to next.508
+- remove unused file (config/templates.go)
+- go deps updated
+- npm deps updated
+
+### Pull Requests
+
+- Merge pull request [#122](https://github.com/sveltinio/sveltin/issues/122) from deps-update
+- Merge pull request [#123](https://github.com/sveltinio/sveltin/issues/123) from fix-api-prerender
+- Merge pull request [#124](https://github.com/sveltinio/sveltin/issues/124) from kit-508
+
 ## [v0.10.0](https://github.com/sveltinio/sveltin/releases/tag/v0.10.0) (2022-09-16)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.9.1...v0.10.0)
