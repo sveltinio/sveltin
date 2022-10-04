@@ -8,7 +8,7 @@ import (
 
 const (
 	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.10.0"
+	CliVersion string = "0.10.1"
 )
 
 func init() {
