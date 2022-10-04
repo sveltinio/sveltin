@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/charmbracelet/bubbles v0.14.0
 	github.com/charmbracelet/lipgloss v0.6.0
-	github.com/gosimple/slug v1.12.0
+	github.com/gosimple/slug v1.13.0
 	github.com/jlaffaye/ftp v0.1.0
 	github.com/matryer/is v1.4.0
 	github.com/spf13/afero v1.9.2
@@ -13,7 +13,7 @@ require (
 	github.com/spf13/viper v1.13.0
 	github.com/sveltinio/prompti v0.0.0-20220908083908-d9b8e9284fa8
 	github.com/sveltinio/yinlog v0.0.0-20220908084102-7b8c5d8cbde9
-	github.com/vbauerster/mpb/v8 v8.0.2
+	github.com/vbauerster/mpb/v8 v8.1.2
 	golang.org/x/text v0.3.7
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -35,7 +35,7 @@ require (
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
-	github.com/mattn/go-runewidth v0.0.13 // indirect
+	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/muesli/ansi v0.0.0-20211018074035-2e021307bc4b // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
@@ -50,7 +50,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
-	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
+	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
