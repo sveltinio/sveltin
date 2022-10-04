@@ -36,7 +36,7 @@
 
 ### Pull Requests
 
-- Merge pull request [#119](https://github.com/sveltinio/sveltin/issues/119) from kit-advanced-layout
+- Merge pull request [#120](https://github.com/sveltinio/sveltin/issues/120) from kit-advanced-layout
 
 ## [v0.9.1](https://github.com/sveltinio/sveltin/releases/tag/v0.9.1) (2022-09-06)
 
