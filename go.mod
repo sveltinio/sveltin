@@ -5,16 +5,16 @@ go 1.17
 require (
 	github.com/charmbracelet/bubbles v0.14.0
 	github.com/charmbracelet/lipgloss v0.6.0
-	github.com/gosimple/slug v1.13.0
+	github.com/gosimple/slug v1.13.1
 	github.com/jlaffaye/ftp v0.1.0
 	github.com/matryer/is v1.4.0
 	github.com/spf13/afero v1.9.2
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.13.0
 	github.com/sveltinio/prompti v0.0.0-20220908083908-d9b8e9284fa8
 	github.com/sveltinio/yinlog v0.0.0-20220908084102-7b8c5d8cbde9
-	github.com/vbauerster/mpb/v8 v8.1.2
-	golang.org/x/text v0.3.7
+	github.com/vbauerster/mpb/v8 v8.1.4
+	golang.org/x/text v0.4.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -30,7 +30,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
@@ -50,7 +50,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
-	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
+	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
