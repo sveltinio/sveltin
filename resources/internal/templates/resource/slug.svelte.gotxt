@@ -46,11 +46,17 @@
 <article class="artifact-container">
 	<div class="content">
 		<h1>{current.metadata.title}</h1>
-		{#if current.metadata.created_at}
-			<h3>
-				<time datetime={new Date(current.metadata.created_at).toISOString()} />
-			</h3>
-		{/if}
+		<div class="entry-meta">
+			{#if current.metadata.created_at}
+				Created On <span> {current.metadata.created_at}</span>
+			{/if}
+			{#if current.metadata.created_at}
+				Updated On <span> {current.metadata.created_at}</span>
+			{/if}
+			{#if current.metadata.readingTime}
+				<span>{current.metadata.readingTime.text}</span>
+			{/if}
+		</div>
 		{#if current.metadata.cover}
 			<div class="cover">
 				<img
@@ -78,6 +84,32 @@
 
 
 <style>
+	.entry-meta {
+		color: #475569;
+		letter-spacing: 0.025em;
+		font-size: 1rem; /* 16px */
+		line-height: 1.5rem; /* 24px */
+		margin-bottom: 10px;
+	}
+
+	.entry-meta > span {
+		display: inline-block;
+		vertical-align: middle;
+		position: relative;
+		text-transform: capitalize;
+	}
+
+	.entry-meta > span:not(:last-child)::after {
+		content: '';
+		background: #a5a8b2;
+		width: 5px;
+		height: 5px;
+		margin: 0 10px;
+		border-radius: 100%;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
 	.cover {
 		position: relative;
 		padding-bottom: calc(9 / 16 * 100%);
