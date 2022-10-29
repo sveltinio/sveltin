@@ -1,7 +1,5 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { IWebPageMetadata } from '@sveltinio/seo/types';
-	import type { Sveltin } from 'src/sveltin';
 	import { website } from '$config/website.js';
 	import { TOC, PrevNextButtons } from '@sveltinio/widgets';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
