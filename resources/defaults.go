@@ -41,6 +41,7 @@ var SveltinProjectFS = map[string]string{
 	"init_menu":     "internal/templates/site/init_menu.js.ts.gotxt",
 	"menu":          "internal/templates/site/menu.js.ts.gotxt",
 	"dotenv":        "internal/templates/misc/env.gotxt",
+	"mdsvex":        "internal/templates/misc/mdsvex.config.js",
 	"readme":        "internal/templates/misc/README.md.gotxt",
 	"license":       "internal/templates/misc/LICENSE.gotxt",
 	"index":         "internal/templates/themes/index.svelte.gotxt",

@@ -9,9 +9,12 @@
 package fsm
 
 import (
+	"embed"
 	"path/filepath"
 	"strings"
 
+	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/composer"
@@ -135,4 +138,14 @@ func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.Tem
 		TemplateID:   "dotenv",
 		TemplateData: tplData,
 	}
+}
+
+// CopyFileFromEmbed move file from embedded FS to the output folder.
+func (s *SveltinFSManager) CopyFileFromEmbed(efs *embed.FS, fs afero.Fs, embeddedResourcesMap map[string]string, embeddedFileID, output string) error {
+	sourceFile := embeddedResourcesMap[embeddedFileID]
+	saveAs := filepath.Join(output, filepath.Base(sourceFile))
+	if err := common.MoveFile(efs, fs, sourceFile, saveAs, false); err != nil {
+		return err
+	}
+	return nil
 }

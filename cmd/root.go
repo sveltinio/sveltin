@@ -74,6 +74,7 @@ const (
 	SlugFile          string = "slug"
 	SlugEndpointFile  string = "slugendpoint"
 	SlugLayoutFile    string = "sluglayout"
+	MDsveXFile        string = "mdsvex"
 	SettingsFile      string = ".sveltin-settings.yaml"
 	DotEnvProdFile    string = ".env.production"
 )
