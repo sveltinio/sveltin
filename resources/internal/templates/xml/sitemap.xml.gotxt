@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	{{- $baseURL := .NoPage.Config.BaseURL -}}
-	{{- $changeFreq := .NoPage.Config.SitemapChangeFreq -}}
-	{{- $priority := .NoPage.Config.SitemapPriority -}}
+	{{- $baseURL := .NoPage.Data.BaseURL -}}
+	{{- $changeFreq := .NoPage.Data.SitemapChangeFreq -}}
+	{{- $priority := .NoPage.Data.SitemapPriority -}}
 	{{- $resources := .NoPage.Items.Resources -}}
 	{{ $contentValues := .NoPage.Items.Content }}
 	<url>

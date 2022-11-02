@@ -8,8 +8,8 @@
 // Package tpltypes ...
 package tpltypes
 
-// ProjectData is the struct used to map the env.production file props.
-type ProjectData struct {
+// EnvProductionData is the struct used to map the env.production file props.
+type EnvProductionData struct {
 	BaseURL              string `mapstructure:"VITE_PUBLIC_BASE_PATH"`
 	SitemapChangeFreq    string `mapstructure:"sitemapChangeFreq"`
 	SitemapPriority      string `mapstructure:"sitemapPriority"`

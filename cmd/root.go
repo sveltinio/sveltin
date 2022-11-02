@@ -32,7 +32,7 @@ import (
 type appConfig struct {
 	log         *logger.Logger
 	settings    *config.SveltinSettings
-	project     tpltypes.ProjectData
+	prodData    tpltypes.EnvProductionData
 	pathMaker   *pathmaker.SveltinPathMaker
 	fsManager   *fsm.SveltinFSManager
 	startersMap map[string]config.StarterTemplate
@@ -129,7 +129,7 @@ func initAppConfig() {
 	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.settings)
 	cfg.fsManager = fsm.NewSveltinFSManager(cfg.pathMaker)
 	cfg.startersMap = helpers.InitStartersTemplatesMap()
-	cfg.project, _ = loadEnvFile(DotEnvProdFile)
+	cfg.prodData, _ = loadEnvFile(DotEnvProdFile)
 	cfg.fs = afero.NewOsFs()
 }
 
@@ -140,7 +140,7 @@ func loadSveltinSettings() {
 	}
 }
 
-func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
+func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error) {
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
 	viper.SetConfigName(filename)
@@ -152,7 +152,7 @@ func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
 		return
 	}
 
-	err = viper.Unmarshal(&config)
+	err = viper.Unmarshal(&tplData)
 	return
 }
 

@@ -88,21 +88,21 @@ func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData) *compo
 }
 
 // NewNoPageFile returns a pointer to a 'no-public page' File.
-func (s *SveltinFSManager) NewNoPageFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string) *composer.File {
+func (s *SveltinFSManager) NewNoPageFile(name string, prodData *tpltypes.EnvProductionData, resources []string, contents map[string][]string) *composer.File {
 	return &composer.File{
 		Name:       name + ".xml",
 		TemplateID: name,
 		TemplateData: &config.TemplateData{
 			NoPage: &tpltypes.NoPageData{
-				Config: projectConfig,
-				Items:  helpers.NewNoPageItems(resources, contents),
+				Data:  prodData,
+				Items: helpers.NewNoPageItems(resources, contents),
 			},
 		},
 	}
 }
 
 // NewMenuFile returns a pointer to a 'no-public page' File.
-func (s *SveltinFSManager) NewMenuFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string, withContentFlag bool) *composer.File {
+func (s *SveltinFSManager) NewMenuFile(name string, prodData *tpltypes.EnvProductionData, resources []string, contents map[string][]string, withContentFlag bool) *composer.File {
 	return &composer.File{
 		Name:       name + ".js.ts",
 		TemplateID: name,

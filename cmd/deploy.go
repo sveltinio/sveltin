@@ -64,15 +64,15 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	}
 
 	ftpConnectionConfig := &ftpfs.FTPConnectionConfig{
-		Host:     cfg.project.FTPHost,
-		Port:     cfg.project.FTPPort,
-		User:     cfg.project.FTPUser,
-		Password: cfg.project.FTPPassword,
-		Timeout:  cfg.project.FTPDialTimeout,
-		IsEPSV:   cfg.project.FTPEPSVMode,
+		Host:     cfg.prodData.FTPHost,
+		Port:     cfg.prodData.FTPPort,
+		User:     cfg.prodData.FTPUser,
+		Password: cfg.prodData.FTPPassword,
+		Timeout:  cfg.prodData.FTPDialTimeout,
+		IsEPSV:   cfg.prodData.FTPEPSVMode,
 	}
 	ftpConn := ftpfs.NewFTPServerConnection(ftpConnectionConfig)
-	ftpConn.SetRootFolder(cfg.project.FTPServerFolder)
+	ftpConn.SetRootFolder(cfg.prodData.FTPServerFolder)
 
 	err := ftpfs.DialAction(&ftpConn).Run()
 	utils.ExitIfError(err)
@@ -110,7 +110,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 
 		// Create the folders structure
 		cfg.log.Info("Creating remote folders structure")
-		foldersList := walkLocal(cfg.fs, EntryTypeFolder, cfg.project.SvelteKitBuildFolder)
+		foldersList := walkLocal(cfg.fs, EntryTypeFolder, cfg.prodData.SvelteKitBuildFolder)
 		err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
 		utils.ExitIfError(err)
 
@@ -120,8 +120,8 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 
 		// upload files
 		cfg.log.Info("Uploading files to the remote folders")
-		filesList := walkLocal(cfg.fs, EntryTypeFile, cfg.project.SvelteKitBuildFolder)
-		err = ftpfs.UploadAction(&ftpConn, cfg.fs, cfg.project.SvelteKitBuildFolder, filesList, isDryRun).Run()
+		filesList := walkLocal(cfg.fs, EntryTypeFile, cfg.prodData.SvelteKitBuildFolder)
+		err = ftpfs.UploadAction(&ftpConn, cfg.fs, cfg.prodData.SvelteKitBuildFolder, filesList, isDryRun).Run()
 		utils.ExitIfError(err)
 
 		// prevent the remote FTP server to close the idle connection

@@ -49,7 +49,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: static/rss.xml
 	cfg.log.Info("Saving the file to the static folder")
-	rssFile := cfg.fsManager.NewNoPageFile("rss", &cfg.project, allRoutes, contents)
+	rssFile := cfg.fsManager.NewNoPageFile("rss", &cfg.prodData, allRoutes, contents)
 	staticFolder.Add(rssFile)
 
 	// SET FOLDER STRUCTURE

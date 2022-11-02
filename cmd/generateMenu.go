@@ -55,7 +55,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 
 	// ADD FILE: config/menu.js
 	cfg.log.Info("Saving the menu.js.ts file")
-	menuFile := cfg.fsManager.NewMenuFile("menu", &cfg.project, allRoutes, contents, withContentFlag)
+	menuFile := cfg.fsManager.NewMenuFile("menu", &cfg.prodData, allRoutes, contents, withContentFlag)
 	configFolder.Add(menuFile)
 
 	// SET FOLDER STRUCTURE
