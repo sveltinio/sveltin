@@ -14,15 +14,15 @@ import (
 func TestPages(t *testing.T) {
 	is := is.New(t)
 
-	var conf config.SveltinConfig
+	var settings config.SveltinSettings
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &conf)
+	err = yaml.Unmarshal(yamlFile, &settings)
 	is.NoErr(err)
 
-	pathMaker := NewSveltinPathMaker(&conf)
+	pathMaker := NewSveltinPathMaker(&settings)
 
 	artifact := "posts"
 	is.Equal(filepath.Join("index.svx"), pathMaker.GetResourceContentFilename())

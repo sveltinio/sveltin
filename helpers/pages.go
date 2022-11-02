@@ -14,18 +14,18 @@ import (
 )
 
 // GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
-func GetResourceRouteFilename(txt string, c *config.SveltinConfig) string {
+func GetResourceRouteFilename(txt string, s *config.SveltinSettings) string {
 	switch txt {
 	case "index":
-		return c.GetIndexPageFilename()
+		return s.GetIndexPageFilename()
 	case "indexendpoint":
-		return c.GetIndexEndpointFilename()
+		return s.GetIndexEndpointFilename()
 	case "slug":
-		return c.GetSlugPageFilename()
+		return s.GetSlugPageFilename()
 	case "slugendpoint":
-		return c.GetSlugEndpointFilename()
+		return s.GetSlugEndpointFilename()
 	case "sluglayout":
-		return c.GetSlugLayoutFilename()
+		return s.GetSlugLayoutFilename()
 	default:
 		return ""
 	}

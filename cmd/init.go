@@ -379,19 +379,19 @@ func getSelectedNPMClient() npmc.NPMClient {
 func setupCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
 	case VanillaCSS:
-		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.sveltin, tplData)
+		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
 		return vanillaCSS.Setup(true)
 	case Scss:
-		scss := css.NewScss(efs, cfg.fs, cfg.sveltin, tplData)
+		scss := css.NewScss(efs, cfg.fs, cfg.settings, tplData)
 		return scss.Setup(true)
 	case TailwindCSS:
-		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.sveltin, tplData)
+		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.settings, tplData)
 		return tailwind.Setup(true)
 	case Bulma:
-		bulma := css.NewBulma(efs, cfg.fs, cfg.sveltin, tplData)
+		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
 		return bulma.Setup(true)
 	case Bootstrap:
-		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.sveltin, tplData)
+		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.settings, tplData)
 		return boostrap.Setup(true)
 	default:
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
@@ -449,7 +449,7 @@ func createProjectRoutesLocalFolder(themeData *tpltypes.ThemeData) *composer.Fol
 
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       helpers.GetResourceRouteFilename(IndexFile, cfg.sveltin),
+		Name:       helpers.GetResourceRouteFilename(IndexFile, cfg.settings),
 		TemplateID: IndexFile,
 		TemplateData: &config.TemplateData{
 			Theme: themeData,
@@ -476,7 +476,7 @@ func createProjectThemeLocalFolder(themeData *tpltypes.ThemeData) *composer.Fold
 
 	// ADD FILE themes/<theme_name>/theme.config.js
 	configFile := &composer.File{
-		Name:       cfg.sveltin.GetThemeConfigFilename(),
+		Name:       cfg.settings.GetThemeConfigFilename(),
 		TemplateID: "theme_config",
 		TemplateData: &config.TemplateData{
 			Theme: themeData,

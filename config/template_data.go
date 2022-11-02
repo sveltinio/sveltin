@@ -14,7 +14,7 @@ import "github.com/sveltinio/sveltin/internal/tpltypes"
 type TemplateData struct {
 	ProjectName string
 	Name        string
-	Config      *SveltinConfig
+	Settings    *SveltinSettings
 	NPMClient   *tpltypes.NPMClientData
 	Vite        *tpltypes.ViteData
 	Page        *tpltypes.PageData

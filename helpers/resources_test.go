@@ -14,27 +14,27 @@ import (
 )
 
 func TestGetResources(t *testing.T) {
-	var conf config.SveltinConfig
+	var settings config.SveltinSettings
 	is := is.New(t)
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &conf)
+	err = yaml.Unmarshal(yamlFile, &settings)
 	is.NoErr(err)
 
-	is.Equal(filepath.Join("content"), conf.GetContentPath())
+	is.Equal(filepath.Join("content"), settings.GetContentPath())
 
 	memFs := afero.NewMemMapFs()
-	is.NoErr(common.MkDir(memFs, conf.GetContentPath()))
+	is.NoErr(common.MkDir(memFs, settings.GetContentPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r)))
+		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
 	}
 
-	resources := GetAllResources(memFs, conf.GetContentPath())
+	resources := GetAllResources(memFs, settings.GetContentPath())
 	is.Equal(3, len(resources))
 
 	tests := []struct {
@@ -52,37 +52,37 @@ func TestGetResources(t *testing.T) {
 
 func TestGetResourceContentMap(t *testing.T) {
 
-	var conf config.SveltinConfig
+	var settings config.SveltinSettings
 	is := is.New(t)
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &conf)
+	err = yaml.Unmarshal(yamlFile, &settings)
 	is.NoErr(err)
 
-	is.Equal(filepath.Join("content"), conf.GetContentPath())
+	is.Equal(filepath.Join("content"), settings.GetContentPath())
 
 	memFs := afero.NewMemMapFs()
-	is.NoErr(common.MkDir(memFs, conf.GetContentPath()))
+	is.NoErr(common.MkDir(memFs, settings.GetContentPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r)))
+		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
 	}
 
-	resources := GetAllResources(memFs, conf.GetContentPath())
+	resources := GetAllResources(memFs, settings.GetContentPath())
 	is.Equal(3, len(resources))
 
 	// Create dummy folders for content
 	dummyContents := []string{"first", "second", "third"}
 	for _, r := range dummyResources {
 		for _, c := range dummyContents {
-			is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r, c)))
+			is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r, c)))
 		}
 	}
-	retrievedContents := GetResourceContentMap(memFs, resources, conf.GetContentPath())
+	retrievedContents := GetResourceContentMap(memFs, resources, settings.GetContentPath())
 
 	for res, content := range retrievedContents {
 		is.True(common.Contains(resources, res))
@@ -95,41 +95,41 @@ func TestGetResourceContentMap(t *testing.T) {
 
 func TestGetResourceMetadataMap(t *testing.T) {
 	pwd, _ := os.Getwd()
-	var conf config.SveltinConfig
+	var settings config.SveltinSettings
 	is := is.New(t)
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &conf)
+	err = yaml.Unmarshal(yamlFile, &settings)
 	is.NoErr(err)
 
-	is.Equal(filepath.Join("content"), conf.GetContentPath())
+	is.Equal(filepath.Join("content"), settings.GetContentPath())
 
-	is.Equal(filepath.Join("src", "routes"), conf.GetRoutesPath())
+	is.Equal(filepath.Join("src", "routes"), settings.GetRoutesPath())
 
 	memFs := afero.NewMemMapFs()
-	is.NoErr(common.MkDir(memFs, conf.GetRoutesPath()))
+	is.NoErr(common.MkDir(memFs, settings.GetRoutesPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetContentPath(), r)))
-		is.NoErr(common.MkDir(memFs, filepath.Join(conf.GetRoutesPath(), r)))
+		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
+		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetRoutesPath(), r)))
 	}
 
-	resources := GetAllResources(memFs, conf.GetContentPath())
+	resources := GetAllResources(memFs, settings.GetContentPath())
 	is.Equal(3, len(resources))
 
 	// Create dummy folders for resources
 	dummyMetadata := []string{"author", "category"}
 	for _, r := range resources {
 		for _, m := range dummyMetadata {
-			is.NoErr(common.MkDir(memFs, filepath.Join(pwd, conf.GetRoutesPath(), r, m)))
+			is.NoErr(common.MkDir(memFs, filepath.Join(pwd, settings.GetRoutesPath(), r, m)))
 		}
 	}
 
-	retrievedMetadata := GetResourceMetadataMap(memFs, resources, conf.GetRoutesPath())
+	retrievedMetadata := GetResourceMetadataMap(memFs, resources, settings.GetRoutesPath())
 
 	for res, metadata := range retrievedMetadata {
 		is.True(common.Contains(dummyResources, res))

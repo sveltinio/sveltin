@@ -16,12 +16,12 @@ import (
 )
 
 // NewBootstrap returns a pointer to a CSSLib struct for Bootstrap.
-func NewBootstrap(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) *CSSLib {
+func NewBootstrap(efs *embed.FS, fs afero.Fs, settings *config.SveltinSettings, tplData *config.TemplateData) *CSSLib {
 	return &CSSLib{
-		Name:    Bootstrap,
-		EFS:     efs,
-		FS:      fs,
-		Config:  conf,
-		TplData: tplData,
+		Name:     Bootstrap,
+		EFS:      efs,
+		FS:       fs,
+		Settings: settings,
+		TplData:  tplData,
 	}
 }

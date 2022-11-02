@@ -38,8 +38,8 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Generating the sitemap file"))
 
 	cfg.log.Info("Getting list of all resources contents")
-	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
-	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.settings.GetContentPath())
 
 	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())

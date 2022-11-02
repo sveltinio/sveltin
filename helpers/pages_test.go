@@ -73,17 +73,17 @@ func TestGetResourceRouteFilename(t *testing.T) {
 	}
 }
 
-func loadConfigFile(filepath string) config.SveltinConfig {
-	var conf config.SveltinConfig
+func loadConfigFile(filepath string) config.SveltinSettings {
+	var settings config.SveltinSettings
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath)
 	if err != nil {
 		os.Exit(0)
 	}
-	err = yaml.Unmarshal(yamlFile, &conf)
+	err = yaml.Unmarshal(yamlFile, &settings)
 	if err != nil {
 		os.Exit(0)
 	}
-	return conf
+	return settings
 }

@@ -184,19 +184,19 @@ func promptThemeName(inputs []string) (string, error) {
 func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
 	case VanillaCSS:
-		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.sveltin, tplData)
+		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
 		return vanillaCSS.Setup(false)
 	case Scss:
-		scss := css.NewScss(efs, cfg.fs, cfg.sveltin, tplData)
+		scss := css.NewScss(efs, cfg.fs, cfg.settings, tplData)
 		return scss.Setup(false)
 	case TailwindCSS:
-		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.sveltin, tplData)
+		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.settings, tplData)
 		return tailwind.Setup(false)
 	case Bulma:
-		bulma := css.NewBulma(efs, cfg.fs, cfg.sveltin, tplData)
+		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
 		return bulma.Setup(false)
 	case Bootstrap:
-		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.sveltin, tplData)
+		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.settings, tplData)
 		return boostrap.Setup(false)
 	default:
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})

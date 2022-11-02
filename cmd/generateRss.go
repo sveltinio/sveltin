@@ -39,7 +39,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Info("Getting list of all resources contents")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
-	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.settings.GetContentPath())
 
 	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())

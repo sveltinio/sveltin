@@ -31,7 +31,7 @@ import (
 
 type appConfig struct {
 	log         *logger.Logger
-	sveltin     *config.SveltinConfig
+	settings    *config.SveltinSettings
 	project     tpltypes.ProjectData
 	pathMaker   *pathmaker.SveltinPathMaker
 	fsManager   *fsm.SveltinFSManager
@@ -113,17 +113,10 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(loadSveltinConfig, initAppConfig)
+	cobra.OnInitialize(loadSveltinSettings, initAppConfig)
 }
 
 //=============================================================================
-
-func loadSveltinConfig() {
-	err := yaml.Unmarshal(YamlConfig, &cfg.sveltin)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func initAppConfig() {
 	cfg.log = logger.New()
@@ -133,11 +126,18 @@ func initAppConfig() {
 		Labels:    false,
 		Icons:     true,
 	})
-	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.sveltin)
+	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.settings)
 	cfg.fsManager = fsm.NewSveltinFSManager(cfg.pathMaker)
 	cfg.startersMap = helpers.InitStartersTemplatesMap()
 	cfg.project, _ = loadEnvFile(DotEnvProdFile)
 	cfg.fs = afero.NewOsFs()
+}
+
+func loadSveltinSettings() {
+	err := yaml.Unmarshal(YamlConfig, &cfg.settings)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
@@ -145,7 +145,6 @@ func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
 	viper.AddConfigPath(currentDir)
 	viper.SetConfigName(filename)
 	viper.SetConfigType("env")
-
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()

@@ -22,8 +22,8 @@ import (
 )
 
 // ResourceExists return nil if a Resource identified by name exists.
-func ResourceExists(fs afero.Fs, name string, c *config.SveltinConfig) error {
-	availableResources := GetAllResources(fs, c.GetContentPath())
+func ResourceExists(fs afero.Fs, name string, s *config.SveltinSettings) error {
+	availableResources := GetAllResources(fs, s.GetContentPath())
 	if !common.Contains(availableResources, name) {
 		return sveltinerr.NewResourceNotFoundError()
 	}
