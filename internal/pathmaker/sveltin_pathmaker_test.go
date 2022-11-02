@@ -2,13 +2,14 @@
 package pathmaker
 
 import (
+	"bytes"
 	"path/filepath"
 	"testing"
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
+	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
-	"gopkg.in/yaml.v3"
 )
 
 func TestPages(t *testing.T) {
@@ -19,7 +20,11 @@ func TestPages(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	pathMaker := NewSveltinPathMaker(&settings)

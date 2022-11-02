@@ -1,13 +1,15 @@
 package config
 
 import (
+	"bytes"
+	"log"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
-	"gopkg.in/yaml.v3"
+	"github.com/spf13/viper"
 )
 
 func TestPages(t *testing.T) {
@@ -18,7 +20,12 @@ func TestPages(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	is.Equal("index.svx", settings.GetContentPageFilename())
@@ -34,7 +41,12 @@ func TestPaths(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	pwd, _ := os.Getwd()
@@ -70,8 +82,20 @@ func TestAPIs(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	if err != nil {
+		return
+	}
+
+	err = viper.Unmarshal(&settings)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/*err = yaml.Unmarshal(yamlFile, &settings)
 	is.NoErr(err)
+	*/
 
 	is.Equal("v1", settings.GetAPIVersion())
 	is.Equal("+server.ts", settings.GetAPIFilename())

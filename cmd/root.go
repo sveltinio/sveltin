@@ -9,6 +9,7 @@
 package cmd
 
 import (
+	"bytes"
 	"log"
 	"os"
 	"path/filepath"
@@ -24,7 +25,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	logger "github.com/sveltinio/yinlog"
-	"gopkg.in/yaml.v3"
 )
 
 //=============================================================================
@@ -134,10 +134,22 @@ func initAppConfig() {
 }
 
 func loadSveltinSettings() {
-	err := yaml.Unmarshal(YamlConfig, &cfg.settings)
+	/*err := yaml.Unmarshal(YamlConfig, &cfg.settings)
+	if err != nil {
+		log.Fatal(err)
+	}*/
+
+	viper.SetConfigType("yaml")
+	err := viper.ReadConfig(bytes.NewBuffer(YamlConfig))
+	if err != nil {
+		return
+	}
+
+	err = viper.Unmarshal(&cfg.settings)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error) {

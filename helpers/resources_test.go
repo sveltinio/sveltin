@@ -2,15 +2,16 @@
 package helpers
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
+	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
-	"gopkg.in/yaml.v3"
 )
 
 func TestGetResources(t *testing.T) {
@@ -20,7 +21,12 @@ func TestGetResources(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	is.Equal(filepath.Join("content"), settings.GetContentPath())
@@ -58,7 +64,12 @@ func TestGetResourceContentMap(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	is.Equal(filepath.Join("content"), settings.GetContentPath())
@@ -101,7 +112,12 @@ func TestGetResourceMetadataMap(t *testing.T) {
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &settings)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	is.Equal(filepath.Join("content"), settings.GetContentPath())
