@@ -25,6 +25,7 @@ const (
 	notImplementYetError
 	notValidProjectError
 	notEmptyProjectError
+	notLatestVersionError
 	notValidURLError
 	notValidGitHubURLError
 	notValidGitHubRepoError
@@ -120,6 +121,23 @@ Are you sure you are running the sveltin command from within a valid project dir
 	err := fmt.Errorf(`no package.json file!%s `, msg)
 
 	return newSveltinError(notValidProjectError, "NotValidProjectError", "Sveltin Project Not Found", msg, err)
+}
+
+// NewNotLatestVersionError ...
+func NewNotLatestVersionError(pathToFile string) error {
+	placeholderText := `
+
+Your project is not based on the latest Sveltin version.
+
+sveltin.config.json file not found within the current directory (%s).
+
+Run "sveltin upgrade" first to ensure latest features are included with your project
+`
+
+	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
+	err := fmt.Errorf(`sveltin.config.json!%s `, msg)
+
+	return newSveltinError(notLatestVersionError, "NotLatestVersionError", "Not Latest Sveltin Version", msg, err)
 }
 
 // NewNotEmptyProjectError ...
