@@ -124,7 +124,7 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	err = setupThemeCSSLib(&resources.SveltinFS, cfg, &tplData)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
 	projectConfigSummary := common.UserProjectConfig{

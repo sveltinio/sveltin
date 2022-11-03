@@ -67,7 +67,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func menuCmdFlags(cmd *cobra.Command) {

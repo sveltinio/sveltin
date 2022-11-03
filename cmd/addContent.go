@@ -98,7 +98,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func contentCmdFlags(cmd *cobra.Command) {

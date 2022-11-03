@@ -134,7 +134,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 
 		// LOG SUMMARY TO THE STDOUT
 		common.PrintHelperTextDeploySummary(len(foldersList), len(filesList))
-		cfg.log.Success("Done")
+		cfg.log.Success("Done\n")
 	}
 }
 

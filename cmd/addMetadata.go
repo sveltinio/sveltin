@@ -108,7 +108,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
 	common.PrintHelperTextNewMetadata(metadataTemplateData)
