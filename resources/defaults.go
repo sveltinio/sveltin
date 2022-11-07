@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package resources ...
+// Package resources provides access to files embedded in the running Sveltin program.
 package resources
 
 import "embed"
