@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package pathmaker ...
+// Package pathmaker defines utility functions used to navigate through the project structure.
 package pathmaker
 
 import (
