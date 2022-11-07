@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package builder ...
+// Package builder implements the Builder design pattern used to generate all sveltin's artifacts (project, page, metadata, etc.)
 package builder
 
 // Director defines the order in which to execute the building steps.
