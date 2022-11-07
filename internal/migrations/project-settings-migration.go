@@ -120,7 +120,10 @@ func addProjectSettingsFile(m *AddProjectSettingsMigration) error {
 }
 
 func makeThemeData(m *AddProjectSettingsMigration) (*tpltypes.ThemeData, error) {
-	const sveltinStr string = "sveltin"
+	const (
+		blankThemeId   string = "blank"
+		sveltinThemeId string = "sveltin"
+	)
 
 	themeData := &tpltypes.ThemeData{}
 	files, err := afero.ReadDir(m.Fs, m.PathMaker.GetThemesFolder())
@@ -130,10 +133,10 @@ func makeThemeData(m *AddProjectSettingsMigration) (*tpltypes.ThemeData, error) 
 
 	for _, file := range files {
 		if file.IsDir() {
-			if strings.HasPrefix(file.Name(), sveltinStr) {
-				themeData.ID = sveltinStr
+			if strings.HasPrefix(file.Name(), sveltinThemeId) {
+				themeData.ID = sveltinThemeId
 			} else {
-				themeData.ID = "Blank"
+				themeData.ID = blankThemeId
 			}
 			themeData.Name = file.Name()
 		}
