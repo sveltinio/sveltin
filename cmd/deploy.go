@@ -49,8 +49,8 @@ var deployCmd = &cobra.Command{
 
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands from a not valid directory.
-	isValidProject()
+	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
+	isValidProject(true)
 
 	cfg.log.Plain(markup.H1("Deploy your website to the FTP server"))
 

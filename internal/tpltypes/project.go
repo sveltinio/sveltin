@@ -25,17 +25,18 @@ type EnvProductionData struct {
 
 // ProjectSettings is the struct used to map the sveltin.config.json file props.
 type ProjectSettings struct {
-	CLI   CLIInfoData   `mapstructure:"sveltin"`
-	Theme ThemeInfoData `mapstructure:"theme"`
+	CLI   CLIInfoData   `mapstructure:"sveltin" json:"sveltin" validate:"required"`
+	Theme ThemeInfoData `mapstructure:"theme" json:"theme" validate:"required"`
 }
 
 // CLIInfoData is the struct used to map the sveltin cli props.
 type CLIInfoData struct {
-	Version string `mapstructure:"version"`
+	Version string `mapstructure:"version" json:"version" validate:"required,semver"`
 }
 
 // ThemeInfoData is the struct used to map the theme props.
 type ThemeInfoData struct {
-	Name  string `mapstructure:"name"`
-	Style string `mapstructure:"style"`
+	Style  string `mapstructure:"style" json:"style" validate:"required,oneof='blank' 'sveltin'"`
+	Name   string `mapstructure:"name" json:"name" validate:"required"`
+	CSSLib string `mapstructure:"cssLib" json:"cssLib" validate:"required,oneof='bootstrap' 'bulma' 'scss' 'tailwindcss' 'vanillacss'"`
 }

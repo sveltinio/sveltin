@@ -10,10 +10,10 @@ package cmd
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"path/filepath"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -145,7 +145,7 @@ func loadSveltinSettings() {
 
 	err = viper.Unmarshal(&cfg.settings)
 	if err != nil {
-		log.Fatal(err)
+		cfg.log.Fatal(err.Error())
 	}
 
 }
@@ -162,6 +162,12 @@ func loadProjectSettings(filename string) (prjConfig tpltypes.ProjectSettings, e
 	}
 
 	err = viper.Unmarshal(&prjConfig)
+
+	validate := validator.New()
+	if err := validate.Struct(&prjConfig); err != nil {
+		nErr := sveltinerr.NewNotValidProjectSettingsError(err)
+		cfg.log.Fatalf("%s\n", nErr)
+	}
 	return
 }
 
@@ -181,17 +187,28 @@ func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error
 	return
 }
 
-// isValidProject returns error if cannot find the package.json file within the current folder.
-func isValidProject() {
+/** isValidProject returns an error if sveltin cannot find:
+ * - package.json file within the current folder
+ * - sveltin.config.json within the current folder
+ */
+func isValidProject(checkIfLatestVersion bool) {
 	cwd, _ := os.Getwd()
-	pathToPkgJSON := filepath.Join(cwd, "package.json")
-	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
+	pathToFile := filepath.Join(cwd, "package.json")
+	exists, _ := afero.Exists(cfg.fs, pathToFile)
 	if !exists {
-		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)
-		//log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
-		log.Fatalf("\n%s", err.Error())
-		//os.Exit(0)
+		err := sveltinerr.NewNotValidProjectError(pathToFile)
+		cfg.log.Fatalf("\n%s", err.Error())
 	}
+
+	if checkIfLatestVersion {
+		pathToFile = filepath.Join(cwd, ProjectSettingsFile)
+		exists, _ = afero.Exists(cfg.fs, pathToFile)
+		if !exists {
+			err := sveltinerr.NewNotLatestVersionError(pathToFile)
+			cfg.log.Fatalf("\n%s", err.Error())
+		}
+	}
+
 }
 
 //=============================================================================

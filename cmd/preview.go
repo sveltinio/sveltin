@@ -33,8 +33,8 @@ It wraps vite preview command.`,
 
 // RunPreviewCmd is the actual work function.
 func RunPreviewCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands from a not valid directory.
-	isValidProject()
+	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
+	isValidProject(true)
 
 	cfg.log.Plain(markup.H1("Preview your Sveltin project"))
 

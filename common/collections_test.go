@@ -72,7 +72,7 @@ func TestCheckMinMaxArgsBoundaries(t *testing.T) {
 
 		err := CheckMinMaxArgs(tc.items, tc.min, tc.max)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(16, int(re.Code))
+		is.Equal(17, int(re.Code))
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
 		is.Equal(`This command expects at least `+strconv.Itoa(tc.min)+` argument.
 Please check the help: sveltin [command] -h`, re.Message)
@@ -93,7 +93,7 @@ func TestNotValidCheckMinMaxArgs(t *testing.T) {
 
 		err := CheckMinMaxArgs(tc.items, tc.min, tc.max)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(16, int(re.Code))
+		is.Equal(17, int(re.Code))
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
 		is.Equal(`This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
 Please check the help: sveltin [command] -h`, re.Message)
@@ -132,7 +132,7 @@ func TestCheckMinMaxArgsWithMaxEqualsZero(t *testing.T) {
 
 		err := CheckMaxArgs(tc.items, tc.max)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(16, int(re.Code))
+		is.Equal(17, int(re.Code))
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
 		is.Equal(`This command expects no arguments. Please check the help: sveltin [command] -h`, re.Message)
 	}
@@ -151,7 +151,7 @@ func TestCheckMinMaxArgsWithNumOfArgsGreaterThanMax(t *testing.T) {
 
 		err := CheckMaxArgs(tc.items, tc.max)
 		re := err.(*sveltinerr.SveltinError)
-		is.Equal(16, int(re.Code))
+		is.Equal(17, int(re.Code))
 		is.Equal("NumOfArgsNotValidErrorWithMessage", re.Name)
 		is.Equal(`This command expects maximum `+strconv.Itoa(tc.max)+` arguments.
 Please check the help: sveltin [command] -h`, re.Message)
