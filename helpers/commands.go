@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package helpers ...
+// Package helpers contains helper functions used across commands.
 package helpers
 
 import (
