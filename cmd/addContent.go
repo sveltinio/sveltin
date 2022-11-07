@@ -75,7 +75,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject()
 
-	contentData, err := promptContentName(cfg.fs, args, withSampleContent, cfg.sveltin)
+	contentData, err := promptContentName(cfg.fs, args, withSampleContent, cfg.settings)
 	utils.ExitIfError(err)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
@@ -98,7 +98,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func contentCmdFlags(cmd *cobra.Command) {
@@ -112,7 +112,7 @@ func init() {
 
 //=============================================================================
 
-func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.SveltinConfig) (*tpltypes.ContentData, error) {
+func promptContentName(fs afero.Fs, inputs []string, isSample bool, s *config.SveltinSettings) (*tpltypes.ContentData, error) {
 	contentType := Blank
 	if isSample {
 		contentType = Sample
@@ -129,7 +129,7 @@ func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.Sv
 			return nil, err
 		}
 
-		contentResource, err := promptResourceList(fs, c)
+		contentResource, err := promptResourceList(fs, s)
 		if err != nil {
 			return nil, err
 		}
@@ -144,7 +144,7 @@ func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.Sv
 		contentResource, contentName := path.Split(name)
 		contentResource = strings.ReplaceAll(contentResource, "/", "")
 
-		err := helpers.ResourceExists(fs, contentResource, cfg.sveltin)
+		err := helpers.ResourceExists(fs, contentResource, cfg.settings)
 		if err != nil {
 			return nil, err
 		}
@@ -160,8 +160,8 @@ func promptContentName(fs afero.Fs, inputs []string, isSample bool, c *config.Sv
 	}
 }
 
-func promptResourceList(fs afero.Fs, c *config.SveltinConfig) (string, error) {
-	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
+func promptResourceList(fs afero.Fs, s *config.SveltinSettings) (string, error) {
+	availableResources := helpers.GetAllResources(fs, s.GetContentPath())
 
 	entries := choose.ToListItem(availableResources)
 	resourcePromptContent := &choose.Config{

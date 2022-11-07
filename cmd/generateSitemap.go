@@ -38,8 +38,8 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Generating the sitemap file"))
 
 	cfg.log.Info("Getting list of all resources contents")
-	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
-	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.settings.GetContentPath())
 
 	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
@@ -49,7 +49,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: static/rss.xml
 	cfg.log.Info("Saving the file to the static folder")
-	sitemapFile := cfg.fsManager.NewNoPageFile("sitemap", &cfg.project, allRoutes, contents)
+	sitemapFile := cfg.fsManager.NewNoPageFile("sitemap", &cfg.prodData, allRoutes, contents)
 	staticFolder.Add(sitemapFile)
 
 	// SET FOLDER STRUCTURE
@@ -61,7 +61,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func init() {

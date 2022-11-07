@@ -16,12 +16,12 @@ import (
 )
 
 // NewScss returns a pointer to a CSSLib struct for Scss.
-func NewScss(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) *CSSLib {
+func NewScss(efs *embed.FS, fs afero.Fs, settings *config.SveltinSettings, tplData *config.TemplateData) *CSSLib {
 	return &CSSLib{
-		Name:    Scss,
-		EFS:     efs,
-		FS:      fs,
-		Config:  conf,
-		TplData: tplData,
+		Name:     Scss,
+		EFS:      efs,
+		FS:       fs,
+		Settings: settings,
+		TplData:  tplData,
 	}
 }

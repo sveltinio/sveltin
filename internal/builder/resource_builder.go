@@ -56,13 +56,21 @@ func (b *ResourceContentBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[GenericMatcher]
 		return nil
 	case Index:
-		b.PathToTplFile = b.EmbeddedResources[Index]
+		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+			b.PathToTplFile = b.EmbeddedResources[IndexThemeBlank]
+		} else {
+			b.PathToTplFile = b.EmbeddedResources[IndexThemeSveltin]
+		}
 		return nil
 	case IndexEndpoint:
 		b.PathToTplFile = b.EmbeddedResources[IndexEndpoint]
 		return nil
 	case Slug:
-		b.PathToTplFile = b.EmbeddedResources[Slug]
+		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+			b.PathToTplFile = b.EmbeddedResources[SlugThemeBlank]
+		} else {
+			b.PathToTplFile = b.EmbeddedResources[SlugThemeSveltin]
+		}
 		return nil
 	case SlugEndpoint:
 		b.PathToTplFile = b.EmbeddedResources[SlugEndpoint]

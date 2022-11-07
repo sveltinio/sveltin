@@ -7,9 +7,9 @@
 	xmlns:xhtml="https://www.w3.org/1999/xhtml"
 	xmlns:mobile="https://www.google.com/schemas/sitemap-mobile/1.0"
 >
-	{{- $baseURL := .NoPage.Config.BaseURL -}}
-	{{- $changeFreq := .NoPage.Config.SitemapChangeFreq -}}
-	{{- $priority := .NoPage.Config.SitemapPriority -}}
+	{{- $baseURL := .NoPage.Data.BaseURL -}}
+	{{- $changeFreq := .NoPage.Data.SitemapChangeFreq -}}
+	{{- $priority := .NoPage.Data.SitemapPriority -}}
 	{{ $contentValues := .NoPage.Items.Content }}
 	<url>
 		<loc>{{ $baseURL }}</loc>

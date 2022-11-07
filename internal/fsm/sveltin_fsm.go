@@ -77,32 +77,33 @@ func (s *SveltinFSManager) NewResourceContentFile(contentData *tpltypes.ContentD
 }
 
 // NewPublicPageFile returns a pointer to a new 'public page' File.
-func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData) *composer.File {
+func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData, projectSettings *tpltypes.ProjectSettings) *composer.File {
 	return &composer.File{
 		Name:       helpers.PublicPageFilename(pageData.Type),
 		TemplateID: pageData.Type,
 		TemplateData: &config.TemplateData{
-			Page: pageData,
+			Page:            pageData,
+			ProjectSettings: projectSettings,
 		},
 	}
 }
 
 // NewNoPageFile returns a pointer to a 'no-public page' File.
-func (s *SveltinFSManager) NewNoPageFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string) *composer.File {
+func (s *SveltinFSManager) NewNoPageFile(name string, prodData *tpltypes.EnvProductionData, resources []string, contents map[string][]string) *composer.File {
 	return &composer.File{
 		Name:       name + ".xml",
 		TemplateID: name,
 		TemplateData: &config.TemplateData{
 			NoPage: &tpltypes.NoPageData{
-				Config: projectConfig,
-				Items:  helpers.NewNoPageItems(resources, contents),
+				Data:  prodData,
+				Items: helpers.NewNoPageItems(resources, contents),
 			},
 		},
 	}
 }
 
 // NewMenuFile returns a pointer to a 'no-public page' File.
-func (s *SveltinFSManager) NewMenuFile(name string, projectConfig *tpltypes.ProjectData, resources []string, contents map[string][]string, withContentFlag bool) *composer.File {
+func (s *SveltinFSManager) NewMenuFile(name string, prodData *tpltypes.EnvProductionData, resources []string, contents map[string][]string, withContentFlag bool) *composer.File {
 	return &composer.File{
 		Name:       name + ".js.ts",
 		TemplateID: name,
@@ -136,6 +137,15 @@ func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.Tem
 	return &composer.File{
 		Name:         tplData.Name,
 		TemplateID:   "dotenv",
+		TemplateData: tplData,
+	}
+}
+
+// NewJSONConfigFile returns a pointer to a new '.json' File.
+func (s *SveltinFSManager) NewJSONConfigFile(tplData *config.TemplateData) *composer.File {
+	return &composer.File{
+		Name:         tplData.Name,
+		TemplateID:   "project_settings",
 		TemplateData: tplData,
 	}
 }

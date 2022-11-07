@@ -9,6 +9,7 @@
 package cmd
 
 import (
+	"bytes"
 	"log"
 	"os"
 	"path/filepath"
@@ -24,19 +25,19 @@ import (
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	logger "github.com/sveltinio/yinlog"
-	"gopkg.in/yaml.v3"
 )
 
 //=============================================================================
 
 type appConfig struct {
-	log         *logger.Logger
-	sveltin     *config.SveltinConfig
-	project     tpltypes.ProjectData
-	pathMaker   *pathmaker.SveltinPathMaker
-	fsManager   *fsm.SveltinFSManager
-	startersMap map[string]config.StarterTemplate
-	fs          afero.Fs
+	log             *logger.Logger
+	settings        *config.SveltinSettings
+	projectSettings tpltypes.ProjectSettings
+	prodData        tpltypes.EnvProductionData
+	pathMaker       *pathmaker.SveltinPathMaker
+	fsManager       *fsm.SveltinFSManager
+	startersMap     map[string]config.StarterTemplate
+	fs              afero.Fs
 }
 
 //=============================================================================
@@ -64,19 +65,20 @@ const (
 
 // File names for a Sveltin project structure.
 const (
-	StringMatcher     string = "string_matcher"
-	GenericMatcher    string = "generic_matcher"
-	ApiIndexFile      string = "api_index"
-	ApiMetadataIndex  string = "api_metadata_index"
-	ApiSlugFile       string = "api_slug"
-	IndexFile         string = "index"
-	IndexEndpointFile string = "indexendpoint"
-	SlugFile          string = "slug"
-	SlugEndpointFile  string = "slugendpoint"
-	SlugLayoutFile    string = "sluglayout"
-	MDsveXFile        string = "mdsvex"
-	SettingsFile      string = ".sveltin-settings.yaml"
-	DotEnvProdFile    string = ".env.production"
+	StringMatcher       string = "string_matcher"
+	GenericMatcher      string = "generic_matcher"
+	ApiIndexFile        string = "api_index"
+	ApiMetadataIndex    string = "api_metadata_index"
+	ApiSlugFile         string = "api_slug"
+	IndexFile           string = "index"
+	IndexEndpointFile   string = "indexendpoint"
+	SlugFile            string = "slug"
+	SlugEndpointFile    string = "slugendpoint"
+	SlugLayoutFile      string = "sluglayout"
+	MDsveXFile          string = "mdsvex"
+	ProjectSettingsFile string = "sveltin.config.json"
+	DefaultsConfigFile  string = "defaults.js.ts"
+	DotEnvProdFile      string = ".env.production"
 )
 
 var (
@@ -113,17 +115,10 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(loadSveltinConfig, initAppConfig)
+	cobra.OnInitialize(loadSveltinSettings, initAppConfig)
 }
 
 //=============================================================================
-
-func loadSveltinConfig() {
-	err := yaml.Unmarshal(YamlConfig, &cfg.sveltin)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func initAppConfig() {
 	cfg.log = logger.New()
@@ -133,19 +128,48 @@ func initAppConfig() {
 		Labels:    false,
 		Icons:     true,
 	})
-	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.sveltin)
+	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.settings)
 	cfg.fsManager = fsm.NewSveltinFSManager(cfg.pathMaker)
 	cfg.startersMap = helpers.InitStartersTemplatesMap()
-	cfg.project, _ = loadEnvFile(DotEnvProdFile)
+	cfg.projectSettings, _ = loadProjectSettings(ProjectSettingsFile)
+	cfg.prodData, _ = loadEnvFile(DotEnvProdFile)
 	cfg.fs = afero.NewOsFs()
 }
 
-func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
+func loadSveltinSettings() {
+	viper.SetConfigType("yaml")
+	err := viper.ReadConfig(bytes.NewBuffer(YamlConfig))
+	if err != nil {
+		return
+	}
+
+	err = viper.Unmarshal(&cfg.settings)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func loadProjectSettings(filename string) (prjConfig tpltypes.ProjectSettings, err error) {
+	currentDir, _ := os.Getwd()
+	viper.AddConfigPath(currentDir)
+	viper.SetConfigName(filename)
+	viper.SetConfigType("json")
+
+	err = viper.ReadInConfig()
+	if err != nil {
+		return
+	}
+
+	err = viper.Unmarshal(&prjConfig)
+	return
+}
+
+func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error) {
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
 	viper.SetConfigName(filename)
 	viper.SetConfigType("env")
-
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()
@@ -153,14 +177,14 @@ func loadEnvFile(filename string) (config tpltypes.ProjectData, err error) {
 		return
 	}
 
-	err = viper.Unmarshal(&config)
+	err = viper.Unmarshal(&tplData)
 	return
 }
 
 // isValidProject returns error if cannot find the package.json file within the current folder.
 func isValidProject() {
-	pwd, _ := os.Getwd()
-	pathToPkgJSON := filepath.Join(pwd, "package.json")
+	cwd, _ := os.Getwd()
+	pathToPkgJSON := filepath.Join(cwd, "package.json")
 	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
 	if !exists {
 		err := sveltinerr.NewNotValidProjectError(pathToPkgJSON)

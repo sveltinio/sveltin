@@ -47,11 +47,11 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
 	utils.ExitIfError(err)
 
-	os.Setenv("VITE_PUBLIC_BASE_PATH", cfg.project.BaseURL)
+	os.Setenv("VITE_PUBLIC_BASE_PATH", cfg.prodData.BaseURL)
 	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func init() {

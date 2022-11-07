@@ -17,13 +17,13 @@ import (
 
 // SveltinPathMaker is the main struct to deal with path within a Sveltin/SvelteKit project structure.
 type SveltinPathMaker struct {
-	c *config.SveltinConfig
+	s *config.SveltinSettings
 }
 
 // NewSveltinPathMaker returns a SveltinPathMaker struct.
-func NewSveltinPathMaker(conf *config.SveltinConfig) *SveltinPathMaker {
+func NewSveltinPathMaker(settings *config.SveltinSettings) *SveltinPathMaker {
 	return &SveltinPathMaker{
-		c: conf,
+		s: settings,
 	}
 }
 
@@ -32,92 +32,92 @@ func NewSveltinPathMaker(conf *config.SveltinConfig) *SveltinPathMaker {
 // GetProjectRoot returns a string representing the path to the sveltin project folder
 // relative to the current working directory.
 func (maker *SveltinPathMaker) GetProjectRoot(project string) string {
-	return filepath.Join(maker.c.GetProjectRoot(), project)
+	return filepath.Join(maker.s.GetProjectRoot(), project)
 }
 
 // GetProjectConfigFolder returns a string representing the path to the 'config' folder
 // for a sveltin project relative to the current working directory.
 func (maker *SveltinPathMaker) GetProjectConfigFolder(project string) string {
-	return filepath.Join(maker.c.GetProjectRoot(), project, maker.c.Paths.Config)
+	return filepath.Join(maker.s.GetProjectRoot(), project, maker.s.Paths.Config)
 }
 
 // GetProjectContentFolder returns a string representing the path to the 'content' folder
 // for a sveltin project relative to the current working directory.
 func (maker *SveltinPathMaker) GetProjectContentFolder(project string) string {
-	return filepath.Join(maker.c.GetProjectRoot(), project, maker.c.Paths.Content)
+	return filepath.Join(maker.s.GetProjectRoot(), project, maker.s.Paths.Content)
 }
 
 // GetProjectThemesFolder returns a string representing the path to the 'themes' folder
 // for a sveltin project relative to the current working directory.
 func (maker *SveltinPathMaker) GetProjectThemesFolder(project string) string {
-	return filepath.Join(maker.c.GetProjectRoot(), project, maker.c.Paths.Themes)
+	return filepath.Join(maker.s.GetProjectRoot(), project, maker.s.Paths.Themes)
 }
 
 // ------------------ FOLDERS ------------------
 
 // GetRootFolder returns a string representing the path to the project root folder.
 func (maker *SveltinPathMaker) GetRootFolder() string {
-	return maker.c.GetProjectRoot()
+	return maker.s.GetProjectRoot()
 }
 
 // GetConfigFolder returns a string representing the path to the 'config' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetConfigFolder() string {
-	return maker.c.GetConfigPath()
+	return maker.s.GetConfigPath()
 }
 
 // GetContentFolder returns a string representing the path to the 'content' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetContentFolder() string {
-	return maker.c.GetContentPath()
+	return maker.s.GetContentPath()
 }
 
 // GetRoutesFolder returns a string representing the path to the 'src/routes' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetRoutesFolder() string {
-	return maker.c.GetRoutesPath()
+	return maker.s.GetRoutesPath()
 }
 
 // GetLibFolder returns a string representing the path to the 'src/lib' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetLibFolder() string {
-	return maker.c.GetLibPath()
+	return maker.s.GetLibPath()
 }
 
 // GetParamsFolder returns a string representing the path to the 'src/params' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetParamsFolder() string {
-	return maker.c.GetParamsPath()
+	return maker.s.GetParamsPath()
 }
 
 // GetAPIFolder returns a string representing the path to the 'src/routes/api' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetAPIFolder() string {
-	return filepath.Join(maker.c.GetAPIPath(), maker.c.GetAPIVersion())
+	return filepath.Join(maker.s.GetAPIPath(), maker.s.GetAPIVersion())
 }
 
 // GetStaticFolder returns a string representing the path to the 'static' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetStaticFolder() string {
-	return maker.c.GetStaticPath()
+	return maker.s.GetStaticPath()
 }
 
 // GetThemesFolder returns a string representing the path to the 'themes' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetThemesFolder() string {
-	return maker.c.GetThemesPath()
+	return maker.s.GetThemesPath()
 }
 
 // GetThemeComponentsFolder returns a string representing the path to the 'themes/<theme>/components'
 // folder for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetThemeComponentsFolder() string {
-	return maker.c.GetThemeComponentsPath()
+	return maker.s.GetThemeComponentsPath()
 }
 
 // GetThemePartialsFolder returns a string representing the path to the 'themes/<theme>/partials'
 // folder for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetThemePartialsFolder() string {
-	return maker.c.GetThemePartialsPath()
+	return maker.s.GetThemePartialsPath()
 }
 
 // ------------------ EXISTING RESOURCES ------------------
@@ -125,19 +125,19 @@ func (maker *SveltinPathMaker) GetThemePartialsFolder() string {
 // GetPathToPublicPages returns a string representing the path to the 'src/routes' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetPathToPublicPages() string {
-	return filepath.Join(maker.c.GetProjectRoot(), maker.c.GetRoutesPath())
+	return filepath.Join(maker.s.GetProjectRoot(), maker.s.GetRoutesPath())
 }
 
 // GetPathToRoutes returns a string representing the path to the 'src/routes' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetPathToRoutes() string {
-	return filepath.Join(maker.c.GetProjectRoot(), maker.c.GetRoutesPath())
+	return filepath.Join(maker.s.GetProjectRoot(), maker.s.GetRoutesPath())
 }
 
 // GetPathToExistingResources returns a string representing the path to the 'content' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetPathToExistingResources() string {
-	return filepath.Join(maker.c.GetProjectRoot(), maker.c.GetContentPath())
+	return filepath.Join(maker.s.GetProjectRoot(), maker.s.GetContentPath())
 }
 
 // ------------------ FILES ------------------
@@ -151,5 +151,5 @@ func (maker *SveltinPathMaker) GetResourceLibFilename(artifact string) string {
 // GetResourceContentFilename returns a string representing the filename
 // for a resource content page.
 func (maker *SveltinPathMaker) GetResourceContentFilename() string {
-	return maker.c.GetContentPageFilename()
+	return maker.s.GetContentPageFilename()
 }

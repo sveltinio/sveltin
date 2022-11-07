@@ -16,12 +16,12 @@ import (
 )
 
 // NewBulma returns a pointer to a CSSLib struct for Bulma.
-func NewBulma(efs *embed.FS, fs afero.Fs, conf *config.SveltinConfig, tplData *config.TemplateData) *CSSLib {
+func NewBulma(efs *embed.FS, fs afero.Fs, settings *config.SveltinSettings, tplData *config.TemplateData) *CSSLib {
 	return &CSSLib{
-		Name:    Bulma,
-		EFS:     efs,
-		FS:      fs,
-		Config:  conf,
-		TplData: tplData,
+		Name:     Bulma,
+		EFS:      efs,
+		FS:       fs,
+		Settings: settings,
+		TplData:  tplData,
 	}
 }

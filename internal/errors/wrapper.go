@@ -25,6 +25,7 @@ const (
 	notImplementYetError
 	notValidProjectError
 	notEmptyProjectError
+	notLatestVersionError
 	notValidURLError
 	notValidGitHubURLError
 	notValidGitHubRepoError
@@ -109,11 +110,12 @@ func NewNotImplementYetError() error {
 // NewNotValidProjectError ...
 func NewNotValidProjectError(pathToFile string) error {
 	placeholderText := `
+This is related to sveltin not being able to find
+the package.json file within the current directory:
 
-This is related to sveltin not being able to find the package.json file
-within the current directory (%s).
+"%s"
 
-Are you sure you are running the sveltin command from within a valid project directory?
+Ensure you are running the command from a valid project.
 `
 
 	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
@@ -122,14 +124,34 @@ Are you sure you are running the sveltin command from within a valid project dir
 	return newSveltinError(notValidProjectError, "NotValidProjectError", "Sveltin Project Not Found", msg, err)
 }
 
+// NewNotLatestVersionError ...
+func NewNotLatestVersionError(pathToFile string) error {
+	placeholderText := `
+Your project is not based on the latest Sveltin version.
+
+Something missing within the current project:
+
+"%s"
+
+Run "sveltin upgrade" first.
+`
+
+	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
+	err := fmt.Errorf(`sveltin.config.json!%s `, msg)
+
+	return newSveltinError(notLatestVersionError, "NotLatestVersionError", "Not Latest Sveltin Version", msg, err)
+}
+
 // NewNotEmptyProjectError ...
 func NewNotEmptyProjectError(pathToFile string) error {
 	placeholderText := `
 
-This is related to sveltin and an existing package.json file
-within the current directory (%s).
+This is related to sveltin and an existing
+package.json file within the current directory:
 
-Are you sure you are running the new theme command from within a not existing project directory?
+"%s"
+
+Ensure you are running the new theme command from a not existing project.
 `
 
 	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))

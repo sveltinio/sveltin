@@ -2,27 +2,32 @@
 package pathmaker
 
 import (
+	"bytes"
 	"path/filepath"
 	"testing"
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
+	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
-	"gopkg.in/yaml.v3"
 )
 
 func TestPages(t *testing.T) {
 	is := is.New(t)
 
-	var conf config.SveltinConfig
+	var settings config.SveltinSettings
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &conf)
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
 	is.NoErr(err)
 
-	pathMaker := NewSveltinPathMaker(&conf)
+	err = viper.Unmarshal(&settings)
+	is.NoErr(err)
+
+	pathMaker := NewSveltinPathMaker(&settings)
 
 	artifact := "posts"
 	is.Equal(filepath.Join("index.svx"), pathMaker.GetResourceContentFilename())

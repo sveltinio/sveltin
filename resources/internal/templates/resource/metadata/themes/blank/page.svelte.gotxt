@@ -1,0 +1,29 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { base } from '$app/paths';
+
+	export let data: PageData;
+	$: ({ metadata } = data);
+</script>
+{{ $mdName := .Metadata.Name | ToVariableName}}
+<div>
+	<div>
+		<h1>Grouped by {{ .Metadata.Name | Capitalize }}</h1>
+		{#if metadata.length != 0}
+			{#each metadata as {{ $mdName}} }
+			<h2>
+				<a data-sveltekit-prefetch href="{base}/{{.Metadata.Resource}}/{{ .Metadata.Name }}/{ {{ $mdName }}.name}">{ {{ $mdName }}.name}</a>
+			</h2>
+			<ul>
+				{#each {{ $mdName }}.items as item}
+					<li><a data-sveltekit-prefetch href="{base}/{{.Metadata.Resource}}/{item.slug}">{item.title}</a></li>
+				{/each}
+			</ul>
+			{/each}
+		{:else}
+			<h2 class="message warning">
+			Please, check all your content ensuring the YAML frontmatter contains "<i>{{ .Metadata.Name | ToVariableName}}</i>".
+			</h2>
+		{/if}
+	</div>
+</div>

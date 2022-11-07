@@ -44,10 +44,18 @@ func (b *PublicPageContentBuilder) SetEmbeddedResources(res map[string]string) {
 func (b *PublicPageContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
 	case Svelte:
-		b.PathToTplFile = b.EmbeddedResources[Svelte]
+		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+			b.PathToTplFile = b.EmbeddedResources[SvelteThemeBlank]
+		} else {
+			b.PathToTplFile = b.EmbeddedResources[SvelteThemeSveltin]
+		}
 		return nil
 	case Markdown:
-		b.PathToTplFile = b.EmbeddedResources[Markdown]
+		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+			b.PathToTplFile = b.EmbeddedResources[MarkdownThemeBlank]
+		} else {
+			b.PathToTplFile = b.EmbeddedResources[MarkdownThemeSveltin]
+		}
 		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")

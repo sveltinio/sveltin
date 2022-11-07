@@ -39,7 +39,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 
 	cfg.log.Info("Getting list of all resources contents")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
-	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.settings.GetContentPath())
 
 	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
@@ -49,7 +49,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: static/rss.xml
 	cfg.log.Info("Saving the file to the static folder")
-	rssFile := cfg.fsManager.NewNoPageFile("rss", &cfg.project, allRoutes, contents)
+	rssFile := cfg.fsManager.NewNoPageFile("rss", &cfg.prodData, allRoutes, contents)
 	staticFolder.Add(rssFile)
 
 	// SET FOLDER STRUCTURE
@@ -61,7 +61,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func init() {

@@ -111,7 +111,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
 	common.PrintHelperTextNewResource(resourceName)
@@ -198,7 +198,7 @@ func createResourceLibLocalFolder(resourceData *tpltypes.ResourceData) *composer
 		TemplateData: &config.TemplateData{
 			Name:     resourceData.Name,
 			Resource: resourceData,
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 		},
 	}
 	resourceLibFolder.Add(libFile)
@@ -218,7 +218,7 @@ func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *compo
 		TemplateID: StringMatcher,
 		TemplateData: &config.TemplateData{
 			Resource: resourceData,
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 		},
 	}
 	// Add file to folder
@@ -231,7 +231,7 @@ func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *compo
 		TemplateData: &config.TemplateData{
 			Name:     "slug",
 			Resource: resourceData,
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 		},
 	}
 	// Add file to folder
@@ -250,12 +250,13 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 	cfg.log.Info("Routes")
 	for _, item := range []string{IndexFile, IndexEndpointFile} {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:     resourceData.Name,
-				Resource: resourceData,
-				Config:   cfg.sveltin,
+				Name:            resourceData.Name,
+				Resource:        resourceData,
+				Settings:        cfg.settings,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		resourceRoutesFolder.Add(f)
@@ -270,12 +271,13 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 	}
 	for _, item := range slugFiles {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:     resourceData.Name,
-				Resource: resourceData,
-				Config:   cfg.sveltin,
+				Name:            resourceData.Name,
+				Resource:        resourceData,
+				Settings:        cfg.settings,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		slugFolder.Add(f)
@@ -305,12 +307,12 @@ func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *co
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/+server.ts
 	apiFile := &composer.File{
-		Name:       cfg.sveltin.GetAPIFilename(),
+		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiIndexFile,
 		TemplateData: &config.TemplateData{
 			Name:     resourceData.Name,
 			Resource: resourceData,
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 		},
 	}
 	resourceAPIFolder.Add(apiFile)
@@ -319,12 +321,12 @@ func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *co
 	slugStringFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", "slug", "=", "string", "]"))
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[slug=string]/+server.ts
 	apiSlugFile := &composer.File{
-		Name:       cfg.sveltin.GetAPIFilename(),
+		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiSlugFile,
 		TemplateData: &config.TemplateData{
 			Name:     resourceData.Name,
 			Resource: resourceData,
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 		},
 	}
 	slugStringFolder.Add(apiSlugFile)

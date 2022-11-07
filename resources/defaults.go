@@ -35,26 +35,29 @@ type SveltinFSItem map[string]string
 
 // SveltinProjectFS is the map for the project template files.
 var SveltinProjectFS = map[string]string{
-	"defaults":      "internal/templates/site/defaults.js.ts.gotxt",
-	"externals":     "internal/templates/site/externals.js.ts.gotxt",
-	"website":       "internal/templates/site/website.js.ts.gotxt",
-	"init_menu":     "internal/templates/site/init_menu.js.ts.gotxt",
-	"menu":          "internal/templates/site/menu.js.ts.gotxt",
-	"dotenv":        "internal/templates/misc/env.gotxt",
-	"mdsvex":        "internal/templates/misc/mdsvex.config.js",
-	"readme":        "internal/templates/misc/README.md.gotxt",
-	"license":       "internal/templates/misc/LICENSE.gotxt",
-	"index":         "internal/templates/themes/index.svelte.gotxt",
-	"index_notheme": "internal/templates/themes/index.notheme.svelte.gotxt",
-	"theme_config":  "internal/templates/themes/theme.config.js.gotxt",
+	"defaults":         "internal/templates/site/defaults.js.ts.gotxt",
+	"externals":        "internal/templates/site/externals.js.ts.gotxt",
+	"website":          "internal/templates/site/website.js.ts.gotxt",
+	"init_menu":        "internal/templates/site/init_menu.js.ts.gotxt",
+	"menu":             "internal/templates/site/menu.js.ts.gotxt",
+	"dotenv":           "internal/templates/misc/env.gotxt",
+	"project_settings": "internal/templates/misc/sveltin.config.json.gotxt",
+	"mdsvex":           "internal/templates/misc/mdsvex.config.js",
+	"readme":           "internal/templates/misc/README.md.gotxt",
+	"license":          "internal/templates/misc/LICENSE.gotxt",
+	"index":            "internal/templates/themes/index.svelte.gotxt",
+	"index_notheme":    "internal/templates/themes/index.notheme.svelte.gotxt",
+	"theme_config":     "internal/templates/themes/theme.config.js.gotxt",
 }
 
 // SveltinResourceFS is the map for the resource template files.
 var SveltinResourceFS = map[string]string{
 	"lib":           "internal/templates/resource/lib.gotxt",
-	"index":         "internal/templates/resource/page.svelte.gotxt",
+	"index_blank":   "internal/templates/resource/themes/blank/page.svelte.gotxt",
+	"index_sveltin": "internal/templates/resource/themes/sveltin/page.svelte.gotxt",
 	"indexendpoint": "internal/templates/resource/page.server.ts.gotxt",
-	"slug":          "internal/templates/resource/slug.svelte.gotxt",
+	"slug_blank":    "internal/templates/resource/themes/blank/slug.svelte.gotxt",
+	"slug_sveltin":  "internal/templates/resource/themes/sveltin/slug.svelte.gotxt",
 	"slugendpoint":  "internal/templates/resource/slug.ts.gotxt",
 	"sluglayout":    "internal/templates/resource/layout.svelte.gotxt",
 }
@@ -78,16 +81,20 @@ var SveltinMatchersFS = map[string]string{
 var SveltinMetadataFS = map[string]string{
 	"lib_single":    "internal/templates/resource/metadata/libSingle.gotxt",
 	"lib_list":      "internal/templates/resource/metadata/libList.gotxt",
-	"index":         "internal/templates/resource/metadata/page.svelte.gotxt",
+	"index_blank":   "internal/templates/resource/metadata/themes/blank/page.svelte.gotxt",
+	"index_sveltin": "internal/templates/resource/metadata/themes/sveltin/page.svelte.gotxt",
 	"indexendpoint": "internal/templates/resource/metadata/page.server.ts.gotxt",
-	"slug":          "internal/templates/resource/metadata/slug.svelte.gotxt",
+	"slug_blank":    "internal/templates/resource/metadata/themes/blank/slug.svelte.gotxt",
+	"slug_sveltin":  "internal/templates/resource/metadata/themes/sveltin/slug.svelte.gotxt",
 	"slugendpoint":  "internal/templates/resource/metadata/slug.ts.gotxt",
 }
 
 // SveltinPageFS is the map for the page template files.
 var SveltinPageFS = map[string]string{
-	"svelte":   "internal/templates/page/page.svelte.gotxt",
-	"markdown": "internal/templates/page/page.svx.gotxt",
+	"svelte_blank":     "internal/templates/page/themes/blank/page.svelte.gotxt",
+	"svelte_sveltin":   "internal/templates/page/themes/sveltin/page.svelte.gotxt",
+	"markdown_blank":   "internal/templates/page/themes/blank/page.svx.gotxt",
+	"markdown_sveltin": "internal/templates/page/themes/sveltin/page.svx.gotxt",
 }
 
 // SveltinContentFS is the map for the content template files.

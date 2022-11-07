@@ -15,7 +15,7 @@ require (
 	github.com/sveltinio/yinlog v0.0.0-20220908084102-7b8c5d8cbde9
 	github.com/vbauerster/mpb/v8 v8.1.4
 	golang.org/x/text v0.4.0
-	gopkg.in/yaml.v3 v3.0.1
+
 )
 
 require (
@@ -54,4 +54,5 @@ require (
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

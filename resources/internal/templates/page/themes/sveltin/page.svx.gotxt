@@ -1,8 +1,7 @@
 ---
 title: {{ .Page.Name | ToTitle }}
 ---
-
-{{- $pageName := .Page.Name | ToVariableName -}}
+{{ $pageName := .Page.Name | ToVariableName }}
 <script lang="ts">
 	import { website } from '$config/website.js';
 	import type { IWebPageMetadata } from '@sveltinio/seo/types';

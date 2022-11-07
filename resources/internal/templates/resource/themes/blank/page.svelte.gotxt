@@ -1,0 +1,61 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { page } from '$app/stores';
+	import { website } from '$config/website.js';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
+
+	export let data: PageData;
+	$: ({ resourceName, items } = data);
+
+	$: postsIndexPage = {
+		url: getPageUrl(resourceName, website),
+		title: website.name,
+		description: 'Here you can find the list of all available posts.',
+		keywords: website.keywords ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Website
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
+
+	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
+</script>
+
+<PageMetaTags data={postsIndexPage} />
+<JsonLdWebPage data={postsIndexPage} />
+<JsonLdBreadcrumbs
+	baseURL={website.baseURL}
+	parent={resourceName}
+	currentTitle={postsIndexPage.title}
+/>
+
+<section>
+	<div>
+		{#if items.length != 0}
+			<h1>{ToTitle(resourceName)}</h1>
+			<ul>
+				{#each items as item}
+					<li>
+						<div>
+							<a href={item.metadata.slug}>{item.metadata.title}</a>
+							<p>{item.metadata.headline}</p>
+						</div>
+					</li>
+				{/each}
+			</ul>
+		{:else}
+			<h2 class="message warning">
+				Nothing to show here! Create some content first and reload the page:
+				<span
+					><pre><code class="text-default">sveltin new content {pathname}/getting-started</code
+						></pre></span
+				>
+			</h2>
+		{/if}
+	</div>
+</section>

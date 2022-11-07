@@ -44,8 +44,8 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Generating the menu structure file"))
 
 	cfg.log.Info("Getting list of all resources contents")
-	existingResources := helpers.GetAllResources(cfg.fs, cfg.sveltin.GetContentPath())
-	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.sveltin.GetContentPath())
+	existingResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
+	contents := helpers.GetResourceContentMap(cfg.fs, existingResources, cfg.settings.GetContentPath())
 
 	cfg.log.Info("Getting list of all routes")
 	allRoutes := helpers.GetAllRoutes(cfg.fs, cfg.pathMaker.GetPathToRoutes())
@@ -55,7 +55,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 
 	// ADD FILE: config/menu.js
 	cfg.log.Info("Saving the menu.js.ts file")
-	menuFile := cfg.fsManager.NewMenuFile("menu", &cfg.project, allRoutes, contents, withContentFlag)
+	menuFile := cfg.fsManager.NewMenuFile("menu", &cfg.prodData, allRoutes, contents, withContentFlag)
 	configFolder.Add(menuFile)
 
 	// SET FOLDER STRUCTURE
@@ -67,7 +67,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func menuCmdFlags(cmd *cobra.Command) {

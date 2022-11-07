@@ -80,7 +80,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// NEW FOLDER: src/routes/<page_name>
 	pageFolder := composer.NewFolder(pageName)
 	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
-	pageFile := cfg.fsManager.NewPublicPageFile(pageData)
+	pageFile := cfg.fsManager.NewPublicPageFile(pageData, &cfg.projectSettings)
 	utils.ExitIfError(err)
 
 	// ADD TO THE ROUTES FOLDER
@@ -95,7 +95,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	sfs := factory.NewPageArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 }
 
 func pageCmdFlags(cmd *cobra.Command) {

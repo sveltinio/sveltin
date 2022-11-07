@@ -32,9 +32,9 @@ func TestSveltinSiteFS(t *testing.T) {
 func TestSveltinResourceFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("internal/templates/resource/lib.gotxt", SveltinResourceFS["lib"])
-	is.Equal("internal/templates/resource/page.svelte.gotxt", SveltinResourceFS["index"])
+	is.Equal("internal/templates/resource/themes/blank/page.svelte.gotxt", SveltinResourceFS["index_blank"])
 	is.Equal("internal/templates/resource/page.server.ts.gotxt", SveltinResourceFS["indexendpoint"])
-	is.Equal("internal/templates/resource/slug.svelte.gotxt", SveltinResourceFS["slug"])
+	is.Equal("internal/templates/resource/themes/sveltin/slug.svelte.gotxt", SveltinResourceFS["slug_sveltin"])
 	is.Equal("internal/templates/resource/slug.ts.gotxt", SveltinResourceFS["slugendpoint"])
 }
 
@@ -50,16 +50,16 @@ func TestSveltinAPIFS(t *testing.T) {
 func TestSveltinMetadataFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("internal/templates/resource/metadata/libList.gotxt", SveltinMetadataFS["lib_list"])
-	is.Equal("internal/templates/resource/metadata/page.svelte.gotxt", SveltinMetadataFS["index"])
+	is.Equal("internal/templates/resource/metadata/themes/blank/page.svelte.gotxt", SveltinMetadataFS["index_blank"])
 	is.Equal("internal/templates/resource/metadata/page.server.ts.gotxt", SveltinMetadataFS["indexendpoint"])
-	is.Equal("internal/templates/resource/metadata/slug.svelte.gotxt", SveltinMetadataFS["slug"])
+	is.Equal("internal/templates/resource/metadata/themes/sveltin/slug.svelte.gotxt", SveltinMetadataFS["slug_sveltin"])
 	is.Equal("internal/templates/resource/metadata/slug.ts.gotxt", SveltinMetadataFS["slugendpoint"])
 }
 
 func TestSveltinPageFS(t *testing.T) {
 	is := is.New(t)
-	is.Equal("internal/templates/page/page.svelte.gotxt", SveltinPageFS["svelte"])
-	is.Equal("internal/templates/page/page.svx.gotxt", SveltinPageFS["markdown"])
+	is.Equal("internal/templates/page/themes/blank/page.svelte.gotxt", SveltinPageFS["svelte_blank"])
+	is.Equal("internal/templates/page/themes/sveltin/page.svx.gotxt", SveltinPageFS["markdown_sveltin"])
 }
 
 func TestSveltinContentFS(t *testing.T) {

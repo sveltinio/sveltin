@@ -8,8 +8,8 @@
 // Package tpltypes ...
 package tpltypes
 
-// ProjectData is the struct used to map the env.production file props.
-type ProjectData struct {
+// EnvProductionData is the struct used to map the env.production file props.
+type EnvProductionData struct {
 	BaseURL              string `mapstructure:"VITE_PUBLIC_BASE_PATH"`
 	SitemapChangeFreq    string `mapstructure:"sitemapChangeFreq"`
 	SitemapPriority      string `mapstructure:"sitemapPriority"`
@@ -21,4 +21,21 @@ type ProjectData struct {
 	FTPServerFolder      string `mapstructure:"FTP_SERVER_FOLDER"`
 	FTPDialTimeout       int    `mapstructure:"FTP_DIAL_TIMEOUT"`
 	FTPEPSVMode          bool   `mapstructure:"FTP_EPSV"`
+}
+
+// ProjectSettings is the struct used to map the sveltin.config.json file props.
+type ProjectSettings struct {
+	CLI   CLIInfoData   `mapstructure:"sveltin"`
+	Theme ThemeInfoData `mapstructure:"theme"`
+}
+
+// CLIInfoData is the struct used to map the sveltin cli props.
+type CLIInfoData struct {
+	Version string `mapstructure:"version"`
+}
+
+// ThemeInfoData is the struct used to map the theme props.
+type ThemeInfoData struct {
+	Name  string `mapstructure:"name"`
+	Style string `mapstructure:"style"`
 }

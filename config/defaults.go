@@ -38,8 +38,8 @@ type IConfig interface {
 	GetContentPageFilename() string
 }
 
-// SveltinConfig is the struct used the map the YAML file.
-type SveltinConfig struct {
+// SveltinSettings is the struct used the map the YAML file.
+type SveltinSettings struct {
 	Pages Pages          `mapstructure:"pages"`
 	Paths Paths          `mapstructure:"paths"`
 	API   API            `mapstructure:"api"`
@@ -47,129 +47,129 @@ type SveltinConfig struct {
 }
 
 // GetProjectRoot returns a string representing the current working directory.
-func (c *SveltinConfig) GetProjectRoot() string {
+func (c *SveltinSettings) GetProjectRoot() string {
 	pwd, _ := os.Getwd()
 	return pwd
 }
 
 // GetBuildPath returns a string representing the path to the 'build' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetBuildPath() string {
+func (c *SveltinSettings) GetBuildPath() string {
 	return filepath.Join(c.GetProjectRoot(), c.Paths.Build)
 }
 
 // GetConfigPath returns a string representing the path to the 'config' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetConfigPath() string {
+func (c *SveltinSettings) GetConfigPath() string {
 	return c.Paths.Config
 }
 
 // GetContentPath returns a string representing the path to the 'content' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetContentPath() string {
+func (c *SveltinSettings) GetContentPath() string {
 	return c.Paths.Content
 }
 
 // GetStaticPath returns a string representing the path to the 'static' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetStaticPath() string {
+func (c *SveltinSettings) GetStaticPath() string {
 	return c.Paths.Static
 }
 
 // GetSrcPath returns a string representing the path to the 'src' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetSrcPath() string {
+func (c *SveltinSettings) GetSrcPath() string {
 	return c.Paths.Src
 }
 
 // GetLibPath returns a string representing the path to the 'src/lib' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetLibPath() string {
+func (c *SveltinSettings) GetLibPath() string {
 	return filepath.Join(c.GetSrcPath(), c.Paths.Lib)
 }
 
 // GetParamsPath returns a string representing the path to the 'src/params' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetParamsPath() string {
+func (c *SveltinSettings) GetParamsPath() string {
 	return filepath.Join(c.GetSrcPath(), c.Paths.Params)
 }
 
 // GetRoutesPath returns a string representing the path to the 'src/routes' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetRoutesPath() string {
+func (c *SveltinSettings) GetRoutesPath() string {
 	return filepath.Join(c.GetSrcPath(), c.Paths.Routes)
 }
 
 // GetAPIPath returns a string representing the path to the 'src/routes/api' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetAPIPath() string {
+func (c *SveltinSettings) GetAPIPath() string {
 	return filepath.Join(c.GetRoutesPath(), c.Paths.API)
 }
 
 // GetAPIVersion returns a string representing the path to the 'src/routes/api/v1'
 // folder relative to the current working directory.
-func (c *SveltinConfig) GetAPIVersion() string {
+func (c *SveltinSettings) GetAPIVersion() string {
 	return c.API.Version
 }
 
 // GetAPIFilename returns a string representing the path to the 'src/routes/api/v1/<resource>/index.ts'
 // folder relative to the current working directory.
-func (c *SveltinConfig) GetAPIFilename() string {
+func (c *SveltinSettings) GetAPIFilename() string {
 	return c.API.Filename
 }
 
 // GetThemesPath returns a string representing the path to the 'themes' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetThemesPath() string {
+func (c *SveltinSettings) GetThemesPath() string {
 	return filepath.Join(c.GetProjectRoot(), c.Paths.Themes)
 }
 
 // GetThemeConfigFilename returns a string representing the path to the 'themes/theme.config.js'
 // file relative to the current working directory.
-func (c *SveltinConfig) GetThemeConfigFilename() string {
+func (c *SveltinSettings) GetThemeConfigFilename() string {
 	return c.Theme.File
 }
 
 // GetThemeComponentsPath returns a string representing the path to the 'themes/<theme>/components'
 // folder relative to the current working directory.
-func (c *SveltinConfig) GetThemeComponentsPath() string {
+func (c *SveltinSettings) GetThemeComponentsPath() string {
 	return c.Theme.Components
 }
 
 // GetThemePartialsPath returns a string representing the path to the 'themes/<theme>/partials'
 // folder relative to the current working directory.
-func (c *SveltinConfig) GetThemePartialsPath() string {
+func (c *SveltinSettings) GetThemePartialsPath() string {
 	return c.Theme.Partials
 }
 
 // GetIndexPageFilename returns a string representing the path to the 'index'
 // file relative to the current working directory.
-func (c *SveltinConfig) GetIndexPageFilename() string {
+func (c *SveltinSettings) GetIndexPageFilename() string {
 	return c.Pages.Index
 }
 
 // GetIndexEndpointFilename returns '+page.svelte' file.
-func (c *SveltinConfig) GetIndexEndpointFilename() string {
+func (c *SveltinSettings) GetIndexEndpointFilename() string {
 	return c.Pages.IndexEndpoint
 }
 
 // GetSlugPageFilename returns '+page.svelte' filename for the slug.
-func (c *SveltinConfig) GetSlugPageFilename() string {
+func (c *SveltinSettings) GetSlugPageFilename() string {
 	return c.Pages.Slug
 }
 
 // GetSlugEndpointFilename returns '+page.ts' as filename for the slug.
-func (c *SveltinConfig) GetSlugEndpointFilename() string {
+func (c *SveltinSettings) GetSlugEndpointFilename() string {
 	return c.Pages.SlugEndpoint
 }
 
 // GetSlugLayoutFilename returns '+layout.svelte' as filename for the slug.
-func (c *SveltinConfig) GetSlugLayoutFilename() string {
+func (c *SveltinSettings) GetSlugLayoutFilename() string {
 	return c.Pages.SlugLayout
 }
 
 // GetContentPageFilename returns a string representing the path to the 'content' folder
 // relative to the current working directory.
-func (c *SveltinConfig) GetContentPageFilename() string {
+func (c *SveltinSettings) GetContentPageFilename() string {
 	return c.Pages.Content
 }

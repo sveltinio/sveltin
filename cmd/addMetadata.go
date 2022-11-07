@@ -66,7 +66,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	mdName, err := promptMetadataName(args)
 	utils.ExitIfError(err)
 
-	mdResource, err := promptResource(cfg.fs, resourceName, cfg.sveltin)
+	mdResource, err := promptResource(cfg.fs, resourceName, cfg.settings)
 	utils.ExitIfError(err)
 
 	mdType, err := promptMetadataType(metadataType)
@@ -108,7 +108,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
 	common.PrintHelperTextNewMetadata(metadataTemplateData)
@@ -126,8 +126,8 @@ func init() {
 
 //=============================================================================
 
-func promptResource(fs afero.Fs, mdResourceFlag string, c *config.SveltinConfig) (string, error) {
-	availableResources := helpers.GetAllResources(fs, c.GetContentPath())
+func promptResource(fs afero.Fs, mdResourceFlag string, s *config.SveltinSettings) (string, error) {
+	availableResources := helpers.GetAllResources(fs, s.GetContentPath())
 
 	options := choose.ToListItem(availableResources)
 
@@ -232,7 +232,7 @@ func createOrAddContentForMetadataToLibLocalFolder(metadataData *tpltypes.Metada
 		Name:       cfg.pathMaker.GetResourceLibFilename(metadataData.Name),
 		TemplateID: LibFolder,
 		TemplateData: &config.TemplateData{
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 			Metadata: metadataData,
 		},
 	}
@@ -257,7 +257,7 @@ func createOrAddContentForMetadataToParamsLocalFolder(metadataData *tpltypes.Met
 		Name:       fmt.Sprintf("%s%s", utils.ToSnakeCase(metadataData.Name), ".js"),
 		TemplateID: GenericMatcher,
 		TemplateData: &config.TemplateData{
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 			Metadata: metadataData,
 		},
 	}
@@ -275,11 +275,12 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.server.ts}
 	for _, item := range []string{IndexFile, IndexEndpointFile} {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Config:   cfg.sveltin,
-				Metadata: metadataData,
+				Settings:        cfg.settings,
+				Metadata:        metadataData,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		resourceMedatadaRoutesFolder.Add(f)
@@ -290,11 +291,12 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
 	for _, item := range []string{SlugFile, SlugEndpointFile} {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.sveltin),
+			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Config:   cfg.sveltin,
-				Metadata: metadataData,
+				Settings:        cfg.settings,
+				Metadata:        metadataData,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		slugFolder.Add(f)
@@ -325,10 +327,10 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataData *tpltypes.Metada
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/+server.ts
 	resourceMetadataIndexAPIFile := &composer.File{
-		Name:       cfg.sveltin.GetAPIFilename(),
+		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiMetadataIndex,
 		TemplateData: &config.TemplateData{
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 			Metadata: metadataData,
 		},
 	}
@@ -340,10 +342,10 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataData *tpltypes.Metada
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/<metadata_name>/[slug=string]/+server.ts
 	resourceMetadataNameIndexAPIFile := &composer.File{
-		Name:       cfg.sveltin.GetAPIFilename(),
+		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiFolder,
 		TemplateData: &config.TemplateData{
-			Config:   cfg.sveltin,
+			Settings: cfg.settings,
 			Metadata: metadataData,
 		},
 	}

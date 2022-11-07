@@ -2,6 +2,7 @@
 package helpers
 
 import (
+	"bytes"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -9,21 +10,26 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
+	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
-	"gopkg.in/yaml.v3"
 )
 
 func TestTemplates(t *testing.T) {
 	is := is.New(t)
 
-	var conf config.SveltinConfig
+	var settings config.SveltinSettings
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath.Join("..", "resources", "sveltin.yaml"))
 	is.NoErr(err)
-	err = yaml.Unmarshal(yamlFile, &conf)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
+	is.NoErr(err)
+
+	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
 	pathToTplFile := resources.SveltinProjectFS["theme_config"]

@@ -2,15 +2,17 @@
 package helpers
 
 import (
+	"bytes"
+	"log"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
+	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
-	"gopkg.in/yaml.v3"
 )
 
 func TestPublicPageFilename(t *testing.T) {
@@ -73,17 +75,24 @@ func TestGetResourceRouteFilename(t *testing.T) {
 	}
 }
 
-func loadConfigFile(filepath string) config.SveltinConfig {
-	var conf config.SveltinConfig
+func loadConfigFile(filepath string) config.SveltinSettings {
+	var settings config.SveltinSettings
 	osFs := afero.NewOsFs()
 
 	yamlFile, err := afero.ReadFile(osFs, filepath)
 	if err != nil {
 		os.Exit(0)
 	}
-	err = yaml.Unmarshal(yamlFile, &conf)
+
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer(yamlFile))
 	if err != nil {
-		os.Exit(0)
+		log.Fatal(err)
 	}
-	return conf
+
+	err = viper.Unmarshal(&settings)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return settings
 }
