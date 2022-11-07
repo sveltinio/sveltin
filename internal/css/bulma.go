@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package css ...
 package css
 
 import (
