@@ -1,0 +1,10 @@
+{
+	"sveltin": {
+		"version": "{{ .Misc.Info }}"
+	},
+	"theme": {
+		"style": "{{ .Theme.ID }}",
+		"name": "{{ .Theme.Name }}",
+		"cssLib": "{{ .Theme.CSSLib }}"
+	}
+}

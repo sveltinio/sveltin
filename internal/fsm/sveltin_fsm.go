@@ -77,12 +77,13 @@ func (s *SveltinFSManager) NewResourceContentFile(contentData *tpltypes.ContentD
 }
 
 // NewPublicPageFile returns a pointer to a new 'public page' File.
-func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData) *composer.File {
+func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData, projectSettings *tpltypes.ProjectSettings) *composer.File {
 	return &composer.File{
 		Name:       helpers.PublicPageFilename(pageData.Type),
 		TemplateID: pageData.Type,
 		TemplateData: &config.TemplateData{
-			Page: pageData,
+			Page:            pageData,
+			ProjectSettings: projectSettings,
 		},
 	}
 }
@@ -136,6 +137,15 @@ func (s *SveltinFSManager) NewDotEnvFile(projectName string, tplData *config.Tem
 	return &composer.File{
 		Name:         tplData.Name,
 		TemplateID:   "dotenv",
+		TemplateData: tplData,
+	}
+}
+
+// NewJSONConfigFile returns a pointer to a new '.json' File.
+func (s *SveltinFSManager) NewJSONConfigFile(tplData *config.TemplateData) *composer.File {
+	return &composer.File{
+		Name:         tplData.Name,
+		TemplateID:   "project_settings",
 		TemplateData: tplData,
 	}
 }

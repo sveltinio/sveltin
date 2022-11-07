@@ -98,3 +98,52 @@ func RetrievePackageManagerFromPkgJSON(appFS afero.Fs, pathToPkgJSON string) (np
 	}
 	return npmc.NPMClient{}, sveltinerr.NewPackageManagerKeyNotFoundOnPackageJSONFile()
 }
+
+// RetrieveCSSLib returns the css lib name used by the project.
+func RetrieveCSSLib(appFS afero.Fs, pathToPkgJSON string) (string, error) {
+	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJSON)
+	if err != nil {
+		return "", err
+	}
+	pkgParsed := npmc.Parse(pkgFileContent)
+
+	if isTailwindCSS(pkgParsed) {
+		return "tailwindcss", nil
+	} else if isBootstrap(pkgParsed) {
+		return "bootstrap", nil
+	} else if isBulma(pkgParsed) {
+		return "bulma", nil
+	} else if isSass(pkgParsed) {
+		return "sass", nil
+	} else {
+		return "vanillacss", nil
+	}
+}
+
+func isTailwindCSS(p *npmc.PackageJSON) bool {
+	if _, exists := p.DevDependencies["tailwindcss"]; exists {
+		return true
+	}
+	return false
+}
+
+func isBootstrap(p *npmc.PackageJSON) bool {
+	if _, exists := p.DevDependencies["bootstrap"]; exists {
+		return true
+	}
+	return false
+}
+
+func isBulma(p *npmc.PackageJSON) bool {
+	if _, exists := p.DevDependencies["bulma"]; exists {
+		return true
+	}
+	return false
+}
+
+func isSass(p *npmc.PackageJSON) bool {
+	if _, exists := p.DevDependencies["tailwindcss"]; exists {
+		return true
+	}
+	return false
+}

@@ -22,3 +22,20 @@ type EnvProductionData struct {
 	FTPDialTimeout       int    `mapstructure:"FTP_DIAL_TIMEOUT"`
 	FTPEPSVMode          bool   `mapstructure:"FTP_EPSV"`
 }
+
+// ProjectSettings is the struct used to map the sveltin.config.json file props.
+type ProjectSettings struct {
+	CLI   CLIInfoData   `mapstructure:"sveltin"`
+	Theme ThemeInfoData `mapstructure:"theme"`
+}
+
+// CLIInfoData is the struct used to map the sveltin cli props.
+type CLIInfoData struct {
+	Version string `mapstructure:"version"`
+}
+
+// ThemeInfoData is the struct used to map the theme props.
+type ThemeInfoData struct {
+	Name  string `mapstructure:"name"`
+	Style string `mapstructure:"style"`
+}

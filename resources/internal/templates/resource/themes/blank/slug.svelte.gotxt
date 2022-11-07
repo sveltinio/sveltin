@@ -1,0 +1,96 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { website } from '$config/website.js';
+	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
+
+	export let data: PageData;
+	$: ({ actual, before, after, mdsvexComponent } = data);
+
+	$: current = actual;
+	$: previous = before;
+	$: next = after;
+
+	$: slugPageData = {
+		url: getSlugPageUrl(current, website),
+		title: current.metadata.title,
+		description: current.metadata.headline,
+		keywords: website.keywords ? website.keywords : '',
+		author: current.metadata.author,
+		image: getCoverImagePath(current, website),
+		opengraph: {
+			type: OpenGraphType.Article,
+			article: {
+				published_at: current.metadata.created_at,
+				modified_at: current.metadata.updated_at
+			}
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
+</script>
+
+<PageMetaTags data={slugPageData} />
+<JsonLdWebPage data={slugPageData} />
+<JsonLdBreadcrumbs
+	baseURL={website.baseURL}
+	parent={current.resource}
+	currentTitle={slugPageData.title}
+/>
+
+<article>
+	<div style="padding: 20px">
+		<h1>{current.metadata.title}</h1>
+		<div>
+			{#if current.metadata.created_at}
+				<p>Created On: <span> {current.metadata.created_at}</span></p>
+			{/if}
+			{#if current.metadata.created_at}
+				<p>Updated On: <span> {current.metadata.created_at}</span></p>
+			{/if}
+			{#if current.metadata.readingTime}
+				<p><span>{current.metadata.readingTime.text}</span></p>
+			{/if}
+		</div>
+		{#if current.metadata.cover}
+			<div>
+				<img
+					src={`/resources/${current.resource}/${current.metadata.slug}/${current.metadata.cover}`}
+					title={`cover for ${current.metadata.title}`}
+					alt={`cover for ${current.metadata.title}`}
+				/>
+			</div>
+		{/if}
+		<div>
+			<h2 style="margin-top: 20px;">Table of Contents</h2>
+			<nav>
+				<ul>
+					{#each current.metadata.headings as item}
+						<li id={`toc_item_${item.id}}`}>
+							<a class="mdsvextoc-list-item-link parent" href={`#${item.id}`}>{item.title}</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
+
+			<div class="markdown-body">
+				<svelte:component this={mdsvexComponent} />
+			</div>
+		</div>
+
+		<div>
+			{#if previous.metadata.title}
+				<p>
+					Prev: <a href={`/${previous.resource}/${previous.metadata.slug}`}>
+						{previous.metadata.title}</a
+					>
+				</p>
+			{/if}
+			{#if next.metadata.title}
+				<p>Next:<a href={`/${next.resource}/${next.metadata.slug}`}> {next.metadata.title}</a></p>
+			{/if}
+		</div>
+	</div>
+</article>

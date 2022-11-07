@@ -1,0 +1,34 @@
+---
+title: {{ .Page.Name | ToTitle | Capitalize }}
+---
+{{ $pageName := .Page.Name | ToVariableName }}
+<script lang="ts">
+	import { website } from '$config/website.js';
+	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+
+	const {{ $pageName }}Page: IWebPageMetadata = {
+		url: getPageUrl('{{ .Page.Name }}', website),
+		title: title,
+		description: website.seoDescription,
+		keywords: (website.keywords) ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
+</script>
+
+<PageMetaTags data={ {{ $pageName }}Page } />
+<JsonLdWebPage data={ {{ $pageName }}Page } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ {{ $pageName }}Page.title} />
+
+<!-- Page markup-->
+
+# This is the {title} page
+

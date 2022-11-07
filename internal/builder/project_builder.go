@@ -59,6 +59,9 @@ func (b *ProjectBuilder) setPathToTplFile() error {
 	case DotEnv:
 		b.PathToTplFile = b.EmbeddedResources[DotEnv]
 		return nil
+	case ProjectSettings:
+		b.PathToTplFile = b.EmbeddedResources[ProjectSettings]
+		return nil
 	case Readme:
 		b.PathToTplFile = b.EmbeddedResources[Readme]
 		return nil

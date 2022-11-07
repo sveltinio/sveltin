@@ -111,7 +111,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done")
+	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
 	common.PrintHelperTextNewResource(resourceName)
@@ -253,9 +253,10 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:     resourceData.Name,
-				Resource: resourceData,
-				Settings: cfg.settings,
+				Name:            resourceData.Name,
+				Resource:        resourceData,
+				Settings:        cfg.settings,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		resourceRoutesFolder.Add(f)
@@ -273,9 +274,10 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Name:     resourceData.Name,
-				Resource: resourceData,
-				Settings: cfg.settings,
+				Name:            resourceData.Name,
+				Resource:        resourceData,
+				Settings:        cfg.settings,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		slugFolder.Add(f)

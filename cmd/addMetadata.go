@@ -278,8 +278,9 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Settings: cfg.settings,
-				Metadata: metadataData,
+				Settings:        cfg.settings,
+				Metadata:        metadataData,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		resourceMedatadaRoutesFolder.Add(f)
@@ -293,8 +294,9 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
-				Settings: cfg.settings,
-				Metadata: metadataData,
+				Settings:        cfg.settings,
+				Metadata:        metadataData,
+				ProjectSettings: &cfg.projectSettings,
 			},
 		}
 		slugFolder.Add(f)

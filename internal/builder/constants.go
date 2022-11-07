@@ -16,6 +16,7 @@ const (
 	Menu             string = "menu"
 	InitMenu         string = "init_menu"
 	DotEnv           string = "dotenv"
+	ProjectSettings  string = "project_settings"
 	Readme           string = "readme"
 	License          string = "license"
 	ThemeConfig      string = "theme_config"
@@ -31,10 +32,18 @@ const (
 
 	//=============================================================================
 
-	// Svelte set svelte as the language used to scaffold a new page
+	// Svelte set svelte as the language used to scaffold a new page.
 	Svelte string = "svelte"
-	// Markdown set markdown as the language used to scaffold a new page
+	// SvelteThemeBlank set svelte as the language used to scaffold a new page when new theme.
+	SvelteThemeBlank = "svelte_blank"
+	// SvelteThemeSveltin set svelte as the language used to scaffold a new page when sveltin theme.
+	SvelteThemeSveltin = "svelte_sveltin"
+	// Markdown set markdown as the language used to scaffold a new page.
 	Markdown string = "markdown"
+	// MarkdownThemeBlank set markdown as the language used to scaffold a new page when new theme.
+	MarkdownThemeBlank string = "markdown_blank"
+	// MarkdownThemeSveltin set markdown as the language used to scaffold a new page when sveltin theme.
+	MarkdownThemeSveltin string = "markdown_sveltin"
 
 	//=============================================================================
 
@@ -67,10 +76,18 @@ const (
 
 	// Index is the string for the 'index' file.
 	Index string = "index"
+	// IndexThemeBlank is the string for the 'index' file when new theme.
+	IndexThemeBlank string = "index_blank"
+	// IndexThemeSveltin is the string for the 'index' file when sveltin theme.
+	IndexThemeSveltin string = "index_sveltin"
 	// IndexEndpoint is the string for the 'index.ts' file.
 	IndexEndpoint string = "indexendpoint"
 	// Slug is the string for the 'slug' file.
 	Slug string = "slug"
+	// SlugThemeBlank is the string for the 'slug' file when new theme.
+	SlugThemeBlank string = "slug_blank"
+	// SlugThemeSveltin is the string for the 'slug' file when sveltin theme.
+	SlugThemeSveltin string = "slug_sveltin"
 	// SlugEndpoint is the string for the 'slug' file.
 	SlugEndpoint string = "slugendpoint"
 	// SlugLayout is the string from the 'layout' file
