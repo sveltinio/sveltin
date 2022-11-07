@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package common ...
+// Package common contains utility functions for collections, maps and filesystem.
 package common
 
 import (
