@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package cmd ...
 package cmd
 
 import (
@@ -57,8 +56,8 @@ This command allows you to select between a svelte component page and a markdown
 
 // NewPageCmdRun is the actual work function.
 func NewPageCmdRun(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands from a not valid directory.
-	isValidProject()
+	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
+	isValidProject(true)
 
 	pageName, err := promptPageName(args)
 	utils.ExitIfError(err)

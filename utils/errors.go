@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package utils ...
+// Package utils contains utility function for errors, node package manager, text, progressbar, github.
 package utils
 
 import (

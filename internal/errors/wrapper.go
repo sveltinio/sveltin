@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package sveltinerr ...
+// Package sveltinerr contains all the utility functions to map errors in Sveltin.
 package sveltinerr
 
 import (
@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/go-playground/validator/v10"
 )
 
 // ErrorType represents a specific error.
@@ -24,8 +25,9 @@ const (
 	defaultError ErrorType = iota + 1
 	notImplementYetError
 	notValidProjectError
-	notEmptyProjectError
 	notLatestVersionError
+	notEmptyProjectError
+	notValidProjectSettingsError
 	notValidURLError
 	notValidGitHubURLError
 	notValidGitHubRepoError
@@ -145,7 +147,6 @@ Run "sveltin upgrade" first.
 // NewNotEmptyProjectError ...
 func NewNotEmptyProjectError(pathToFile string) error {
 	placeholderText := `
-
 This is related to sveltin and an existing
 package.json file within the current directory:
 
@@ -157,6 +158,27 @@ Ensure you are running the new theme command from a not existing project.
 	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
 	err := fmt.Errorf(`an existing package.json file found!%s `, msg)
 	return newSveltinError(notEmptyProjectError, "NotEmptyProjectError", "Existing Project Found", msg, err)
+}
+
+// NewNotValidProjectSettingsError ...
+func NewNotValidProjectSettingsError(err error) error {
+	var ve validator.ValidationErrors
+	var errorMsg []string
+	if errors.As(err, &ve) {
+		for _, fieldErr := range ve {
+			formatErrorMsg := fmt.Sprintf("- Field: %s -> %s", strings.ToLower(fieldErr.Field()), messageTag(fieldErr.Tag()))
+			errorMsg = append(errorMsg, formatErrorMsg)
+		}
+	}
+
+	placeholderText := `
+Missing required attributes! Check your "sveltin.config.json" file!
+
+%s`
+
+	msg := fmt.Sprintf(placeholderText, strings.Join(errorMsg, "\n"))
+	nErr := fmt.Errorf(`%s`, msg)
+	return newSveltinError(notValidProjectSettingsError, "NotValidProjectSettingsError", "Project Settings Validation Error", msg, nErr)
 }
 
 // NewNotValidURL ...
@@ -311,4 +333,19 @@ Here is the string representing the command line executed:
 func NewExecSystemCommandErrorWithMsg(err error) error {
 	errN := errors.New("cannot exec the system command. please, check it and its arguments: " + err.Error())
 	return newSveltinError(execSystemCommandErrorWithMsg, "ExecSystemCommandErrorWithMsg", "System Command Execution Failure", errN.Error(), errN)
+}
+
+//=============================================================================
+
+func messageTag(tag string) string {
+	switch tag {
+	case "required":
+		return "This field is required"
+	case "semver":
+		return "Invalid value: not adhere to the semantic version format"
+	case "oneof":
+		return "Invalid value: not a valid options"
+	default:
+		return tag
+	}
 }

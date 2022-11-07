@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package ftpfs ...
 package ftpfs
 
 import "github.com/spf13/afero"

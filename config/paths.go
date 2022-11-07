@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package config ...
 package config
 
 // Paths is the struct mapping the folders structure for a sveltin project.

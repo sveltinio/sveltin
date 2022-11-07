@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package markup ...
+// Package markup defines styles and colors used to print messages on the shell as if they were HTML tags.
 package markup
 
 import (

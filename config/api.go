@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package config ...
 package config
 
 // API represents the API folder structure in a Sveltin project.

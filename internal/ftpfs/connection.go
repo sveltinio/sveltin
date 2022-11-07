@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package ftpfs ...
+// Package ftpfs handle connections and operations to deal with an FTP server.
 package ftpfs
 
 import (

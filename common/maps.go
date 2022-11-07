@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package common ...
 package common
 
 // UnionMap returns a map joining elements from the inputs.

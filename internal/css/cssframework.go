@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package css ...
+// Package css implements the Template Method design pattern to allow the project setup based on the selected CSSLib.
 package css
 
 import (

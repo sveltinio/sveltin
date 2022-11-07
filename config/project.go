@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package config ...
 package config
 
 // ProjectConfig is the struct used to map the env.production file props.

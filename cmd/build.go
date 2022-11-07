@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package cmd ...
 package cmd
 
 import (
@@ -38,8 +37,8 @@ your production environment
 
 // RunBuildCmd is the actual work function.
 func RunBuildCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands from a not valid directory.
-	isValidProject()
+	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
+	isValidProject(true)
 
 	cfg.log.Plain(markup.H1("Building the Sveltin project"))
 
