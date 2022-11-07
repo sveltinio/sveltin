@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package cmd ...
+// Package cmd contains all the commands and subcommands for sveltin.
 package cmd
 
 import (
