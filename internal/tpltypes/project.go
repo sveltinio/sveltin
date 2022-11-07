@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package tpltypes ...
+// Package tpltypes defines structs used to define data shared with template files.
 package tpltypes
 
 // EnvProductionData is the struct used to map the env.production file props.

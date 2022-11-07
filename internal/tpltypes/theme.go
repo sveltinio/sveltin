@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package tpltypes ...
 package tpltypes
 
 // names for the available thems options.
