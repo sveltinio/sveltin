@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package composer ...
+// Package composer implements the Composite design pattern used to manage files and folder structure for sveltin projects and artifacts.
 package composer
 
 import (
