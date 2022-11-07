@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package npmc ...
+// Package npmc defines the parser, the writer and utility functions for the package.json file.
 package npmc
 
 import (
