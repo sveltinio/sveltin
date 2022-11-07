@@ -5,7 +5,7 @@
  * that can be found in the LICENSE file.
  */
 
-// Package shell ...
+// Package shell defines OS level ways to interact with node package managers and git command.
 package shell
 
 import "context"
