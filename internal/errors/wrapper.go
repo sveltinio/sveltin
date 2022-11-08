@@ -203,8 +203,8 @@ func NewNotValidGitHubRepoURL(input string) error {
 }
 
 // NewFileNotFoundError ...
-func NewFileNotFoundError() error {
-	err := errors.New("please, check the file path")
+func NewFileNotFoundError(pathToFile string) error {
+	err := fmt.Errorf("file not found! Please, check the file path:\n\n%s", pathToFile)
 	return newSveltinError(fileNotFoundError, "FileNotFoundError", "File Not Found", err.Error(), err)
 }
 
