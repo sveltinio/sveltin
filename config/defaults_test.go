@@ -56,15 +56,15 @@ func TestPaths(t *testing.T) {
 		want string
 	}{
 		{path: settings.GetBuildPath(), want: filepath.Join(pwd, "build")},
-		{path: settings.GetConfigPath(), want: filepath.Join("config")},
-		{path: settings.GetContentPath(), want: filepath.Join("content")},
-		{path: settings.GetStaticPath(), want: filepath.Join("static")},
-		{path: settings.GetSrcPath(), want: filepath.Join("src")},
+		{path: settings.GetConfigPath(), want: "config"},
+		{path: settings.GetContentPath(), want: "content"},
+		{path: settings.GetStaticPath(), want: "static"},
+		{path: settings.GetSrcPath(), want: "src"},
 		{path: settings.GetRoutesPath(), want: filepath.Join("src", "routes")},
 		{path: settings.GetLibPath(), want: filepath.Join("src", "lib")},
 		{path: settings.GetParamsPath(), want: filepath.Join("src", "params")},
 		{path: settings.GetAPIPath(), want: filepath.Join("src", "routes", "api")},
-		{path: settings.GetThemesPath(), want: filepath.Join(pwd, "themes")},
+		{path: settings.GetThemesPath(), want: "themes"},
 	}
 
 	for _, tc := range tests {

@@ -121,7 +121,7 @@ func (c *SveltinSettings) GetAPIFilename() string {
 // GetThemesPath returns a string representing the path to the 'themes' folder
 // relative to the current working directory.
 func (c *SveltinSettings) GetThemesPath() string {
-	return filepath.Join(c.GetProjectRoot(), c.Paths.Themes)
+	return c.Paths.Themes
 }
 
 // GetThemeConfigFilename returns a string representing the path to the 'themes/theme.config.js'
