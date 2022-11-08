@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"path/filepath"
 	"testing"
 
@@ -151,7 +152,11 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(10, int(re.Code))
-		is.Equal("please, check the file path", re.Message)
+		placeholderText := `file not found! Please, check the file path:
+
+%s`
+		msg := fmt.Sprintf(placeholderText, tc.pathToFile)
+		is.Equal(msg, re.Message)
 
 	}
 

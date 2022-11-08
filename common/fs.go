@@ -39,7 +39,7 @@ func DirExists(fs afero.Fs, path string) bool {
 func FileExists(fs afero.Fs, path string) (bool, error) {
 	exists, _ := afero.Exists(fs, path)
 	if !exists {
-		return false, sveltinerr.NewFileNotFoundError()
+		return false, sveltinerr.NewFileNotFoundError(path)
 	}
 
 	isDir, _ := afero.IsDir(fs, path)
@@ -91,7 +91,7 @@ func MoveFile(efs *embed.FS, fs afero.Fs, sourceFile string, saveTo string, back
 func CopyFileFromEmbeddedFS(efs *embed.FS, fs afero.Fs, pathToFile string, saveTo string) error {
 	content, err := efs.ReadFile(pathToFile)
 	if err != nil {
-		return sveltinerr.NewFileNotFoundError()
+		return sveltinerr.NewFileNotFoundError(pathToFile)
 	}
 	pathToSaveFile := filepath.Join(saveTo)
 	if err := WriteToDisk(fs, pathToSaveFile, bytes.NewReader(content)); err != nil {

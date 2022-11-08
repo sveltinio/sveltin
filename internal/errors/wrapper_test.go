@@ -17,7 +17,7 @@ func TestErrors(t *testing.T) {
 	is.Equal(1, int(re.Code))
 	is.Equal("DefaultError", re.Name)
 
-	errVar = NewFileNotFoundError()
+	errVar = NewFileNotFoundError("test.example")
 	re = errVar.(*SveltinError)
 	is.Equal("FileNotFoundError", re.Name)
 
