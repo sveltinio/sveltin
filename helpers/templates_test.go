@@ -57,9 +57,11 @@ func TestExecSveltinTpl(t *testing.T) {
 	tplConfig := BuildTemplate(pathToTplFile, nil, &data)
 	retrievedContent := tplConfig.Run(&resources.SveltinFS)
 
-	validContent := `// theme.config.js file for your sveltin theme
-const config = {
-   name: 'white',
+	validContent := `import { theme } from '../../sveltin.config.json';
+
+// theme.config.js file for your sveltin theme
+const themeConfig = {
+   name: theme.name,
    version: '0.1',
    license: 'MIT',
    licenselink: 'https://github.com/yourname/yourtheme/blob/master/LICENSE',
@@ -73,7 +75,7 @@ const config = {
    },
 };
 
-export default config
+export { themeConfig }
 `
 	is.Equal(validContent, string(retrievedContent))
 }
