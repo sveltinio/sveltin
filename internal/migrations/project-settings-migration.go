@@ -49,7 +49,6 @@ func (m AddProjectSettingsMigration) Execute() error {
 
 func (m *AddProjectSettingsMigration) up() error {
 	if !m.Mediator.canRun(m) {
-		//m.Logger.Important("AddProjectSettingsMigration: awaiting")
 		return nil
 	}
 
@@ -58,7 +57,7 @@ func (m *AddProjectSettingsMigration) up() error {
 		m.Logger.Info(fmt.Sprintf("Creating %s file", filepath.Base(m.Data.PathToFile)))
 		return addProjectSettingsFile(m)
 	} else if exists && m.Data.ProjectCliVersion != m.Data.CliVersion {
-		m.Logger.Info(fmt.Sprintf("Bump sveltin cli version in %s", filepath.Base(m.Data.PathToFile)))
+		m.Logger.Info(fmt.Sprintf("Bumping Sveltin CLI version in %s", filepath.Base(m.Data.PathToFile)))
 		return updateFileContent(m)
 	}
 
@@ -66,7 +65,6 @@ func (m *AddProjectSettingsMigration) up() error {
 }
 
 func (m *AddProjectSettingsMigration) down() error {
-	//m.Logger.Plain("AddProjectSettingsMigration: down")
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
@@ -74,7 +72,6 @@ func (m *AddProjectSettingsMigration) down() error {
 }
 
 func (m *AddProjectSettingsMigration) allowUp() error {
-	//m.Logger.Plain("AddProjectSettingsMigration: allowUp")
 	if err := m.up(); err != nil {
 		return err
 	}
