@@ -17,7 +17,6 @@ import (
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/sveltin/utils"
 	"github.com/sveltinio/yinlog"
 )
 
@@ -44,29 +43,30 @@ func (m UpdateDefaultsConfigMigration) Execute() error {
 
 func (m *UpdateDefaultsConfigMigration) up() error {
 	if !m.Mediator.canRun(m) {
-		//m.Logger.Important("DefaultsConfigMigration: awaiting")
 		return nil
 	}
 
 	exists, err := common.FileExists(m.Fs, m.Data.PathToFile)
-	utils.ExitIfError(err)
+	if err != nil {
+		return err
+	}
+
 	if exists {
 		// regex for semantic versioning - https://ihateregex.io/expr/semver/
 		pattern := regexp.MustCompile(`(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`)
 
-		if isMigrationRequired(m, pattern) {
+		if isDefaultsConfigMigrationRequired(m, pattern) {
 			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
-			err := migrateConfigFile(m, pattern)
-			utils.ExitIfError(err)
+			if err := updateConfigFile(m, pattern); err != nil {
+				return err
+			}
 		}
 	}
 
-	//m.Logger.Plain("DefaultsConfigMigration: Up")
 	return nil
 }
 
 func (m *UpdateDefaultsConfigMigration) down() error {
-	//m.Logger.Plain("UpdateDefaultsConfigMigration: down")
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
@@ -74,7 +74,6 @@ func (m *UpdateDefaultsConfigMigration) down() error {
 }
 
 func (m *UpdateDefaultsConfigMigration) allowUp() error {
-	//m.Logger.Plain("UpdateDefaultsConfigMigration: allowUp")
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -83,9 +82,11 @@ func (m *UpdateDefaultsConfigMigration) allowUp() error {
 
 //=============================================================================
 
-func isMigrationRequired(m *UpdateDefaultsConfigMigration, pattern *regexp.Regexp) bool {
+func isDefaultsConfigMigrationRequired(m *UpdateDefaultsConfigMigration, pattern *regexp.Regexp) bool {
 	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
-	utils.ExitIfError(err)
+	if err != nil {
+		return false
+	}
 
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
@@ -97,9 +98,11 @@ func isMigrationRequired(m *UpdateDefaultsConfigMigration, pattern *regexp.Regex
 	return false
 }
 
-func migrateConfigFile(m *UpdateDefaultsConfigMigration, pattern *regexp.Regexp) error {
+func updateConfigFile(m *UpdateDefaultsConfigMigration, pattern *regexp.Regexp) error {
 	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
-	utils.ExitIfError(err)
+	if err != nil {
+		return err
+	}
 
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
