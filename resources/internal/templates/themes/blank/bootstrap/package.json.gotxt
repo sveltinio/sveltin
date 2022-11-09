@@ -23,7 +23,6 @@
 		"@sveltinio/media-content": "^0.3.2",
 		"@sveltinio/seo": "^0.1.7",
 		"@sveltinio/services": "^0.3.1",
-		"@sveltinio/widgets": "^0.1.7",
 		"@types/gtag.js": "^0.0.12",
 		"@types/lodash-es": "^4.17.6",
 		@types/node": "^18.11.9",
