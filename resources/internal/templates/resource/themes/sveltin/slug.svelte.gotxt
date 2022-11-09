@@ -46,10 +46,14 @@
 		<h1>{current.metadata.title}</h1>
 		<div class="entry-meta">
 			{#if current.metadata.created_at}
-				Created On <span> {current.metadata.created_at}</span>
+				<time datetime={current.metadata.created_at}>
+					Created At {current.metadata.created_at}
+				</time>
 			{/if}
-			{#if current.metadata.created_at}
-				Updated On <span> {current.metadata.created_at}</span>
+			{#if current.metadata.updated_at}
+				<time datetime={current.metadata.updated_at}>
+					Updated On {current.metadata.updated_at}
+				</time>
 			{/if}
 			{#if current.metadata.readingTime}
 				<span>{current.metadata.readingTime.text}</span>
@@ -90,14 +94,14 @@
 		margin-bottom: 10px;
 	}
 
-	.entry-meta > span {
+	.entry-meta > time {
 		display: inline-block;
 		vertical-align: middle;
 		position: relative;
 		text-transform: capitalize;
 	}
 
-	.entry-meta > span:not(:last-child)::after {
+	.entry-meta > time:not(:last-child)::after {
 		content: '';
 		background: #a5a8b2;
 		width: 5px;
