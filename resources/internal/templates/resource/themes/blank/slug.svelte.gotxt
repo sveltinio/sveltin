@@ -45,10 +45,14 @@
 		<h1>{current.metadata.title}</h1>
 		<div>
 			{#if current.metadata.created_at}
-				<p>Created On: <span> {current.metadata.created_at}</span></p>
+				<time datetime={current.metadata.created_at}>
+					Created At {current.metadata.created_at}
+				</time>
 			{/if}
-			{#if current.metadata.created_at}
-				<p>Updated On: <span> {current.metadata.created_at}</span></p>
+			{#if current.metadata.updated_at}
+				<time datetime={current.metadata.updated_at}>
+					Updated On {current.metadata.updated_at}
+				</time>
 			{/if}
 			{#if current.metadata.readingTime}
 				<p><span>{current.metadata.readingTime.text}</span></p>
