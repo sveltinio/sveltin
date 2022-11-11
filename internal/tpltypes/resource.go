@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// ResourceData is the struct representing the user configs for the new resource.
+// ResourceData is the struct representing the user selections for new resource.
 type ResourceData struct {
 	Name       string
 	Group      string

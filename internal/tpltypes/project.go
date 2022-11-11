@@ -23,7 +23,7 @@ type EnvProductionData struct {
 	FTPEPSVMode          bool   `mapstructure:"FTP_EPSV"`
 }
 
-// ProjectSettings is the struct used to map the sveltin.config.json file props.
+// ProjectSettings is the struct used to map the sveltin.json file props.
 type ProjectSettings struct {
 	CLI   CLIInfoData   `mapstructure:"sveltin" json:"sveltin" validate:"required"`
 	Theme ThemeInfoData `mapstructure:"theme" json:"theme" validate:"required"`

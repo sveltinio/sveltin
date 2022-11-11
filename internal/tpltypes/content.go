@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// ContentData is the struct representing the user configs for the new resource.
+// ContentData is the struct representing the user selection for new content.
 type ContentData struct {
 	Name     string
 	Resource string

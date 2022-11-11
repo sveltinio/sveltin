@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// ViteData is the struct representing the user configs for the new resource.
+// ViteData is the struct representing Vite info for the project.
 type ViteData struct {
 	BaseURL string
 	Port    string
