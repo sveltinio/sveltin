@@ -76,7 +76,7 @@ const (
 	SlugEndpointFile    string = "slugendpoint"
 	SlugLayoutFile      string = "sluglayout"
 	MDsveXFile          string = "mdsvex"
-	ProjectSettingsFile string = "sveltin.config.json"
+	ProjectSettingsFile string = "sveltin.json"
 	DefaultsConfigFile  string = "defaults.js.ts"
 	DotEnvProdFile      string = ".env.production"
 )
@@ -189,7 +189,7 @@ func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error
 
 /** isValidProject returns an error if sveltin cannot find:
  * - package.json file within the current folder
- * - sveltin.config.json within the current folder
+ * - sveltin.json within the current folder
  */
 func isValidProject(checkIfLatestVersion bool) {
 	cwd, _ := os.Getwd()

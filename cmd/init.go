@@ -104,7 +104,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	}
 	envFile := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 
-	// NEW FILE: .sveltin.config.json
+	// NEW FILE: .sveltin.json
 	sveltinConfigTplData := &config.TemplateData{
 		Name: ProjectSettingsFile,
 		Misc: &tpltypes.MiscFileData{
