@@ -28,7 +28,8 @@ type Theme struct {
 type ThemeData struct {
 	ID     string
 	IsNew  bool
-	Name   string
-	CSSLib string
 	URL    string
+	Style  string `mapstructure:"style" json:"style" validate:"required,oneof='blank' 'sveltin'"`
+	Name   string `mapstructure:"name" json:"name" validate:"required"`
+	CSSLib string `mapstructure:"cssLib" json:"cssLib" validate:"required,oneof='bootstrap' 'bulma' 'scss' 'tailwindcss' 'vanillacss'"`
 }

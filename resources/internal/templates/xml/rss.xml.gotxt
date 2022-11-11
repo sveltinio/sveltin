@@ -8,8 +8,8 @@
 	xmlns:mobile="https://www.google.com/schemas/sitemap-mobile/1.0"
 >
 	{{- $baseURL := .NoPage.Data.BaseURL -}}
-	{{- $changeFreq := .NoPage.Data.SitemapChangeFreq -}}
-	{{- $priority := .NoPage.Data.SitemapPriority -}}
+	{{- $changeFreq := .NoPage.Data.Sitemap.ChangeFreq -}}
+	{{- $priority := .NoPage.Data.Sitemap.Priority -}}
 	{{ $contentValues := .NoPage.Items.Content }}
 	<url>
 		<loc>{{ $baseURL }}</loc>

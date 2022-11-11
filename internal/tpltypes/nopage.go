@@ -9,7 +9,7 @@ package tpltypes
 
 // NoPageData is the struct representing a no-public page (sitemap and rss) for a sveltin project.
 type NoPageData struct {
-	Data  *EnvProductionData
+	Data  *ProjectSettings
 	Items *NoPageItems
 }
 
