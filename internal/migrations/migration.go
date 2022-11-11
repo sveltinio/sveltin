@@ -44,6 +44,8 @@ type MigrationRule struct {
 
 type matcherFunc = func([]byte, string, string) ([]byte, bool)
 
+//=============================================================================
+
 func isMigrationRequired(m Migration, pattern string, matcher matcherFunc) ([]byte, bool) {
 	content, err := afero.ReadFile(m.getFs(), m.getData().PathToFile)
 	if err != nil {
@@ -71,4 +73,15 @@ func applyMigrationRules(rules []*MigrationRule) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+//=============================================================================
+
+func findStringMatcher(content []byte, pattern, line string) ([]byte, bool) {
+	rule := regexp.MustCompile(pattern)
+	matches := rule.FindString(line)
+	if len(matches) > 0 {
+		return content, true
+	}
+	return nil, false
 }

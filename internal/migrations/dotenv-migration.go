@@ -10,6 +10,7 @@ package migrations
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -19,13 +20,15 @@ import (
 	"github.com/sveltinio/yinlog"
 )
 
-// SemVersionPattern is the regexp pattern to identify semantic versioning string - https://ihateregex.io/expr/semver/ .
-const SemVersionPattern = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
+// Patterns used by MigrationRule
+const (
+	SitemapPattern = `^sitemap`
+)
 
 //=============================================================================
 
-// UpdateDefaultsConfigMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateDefaultsConfigMigration struct {
+// UpdateDotEnvMigration is the struct representing the migration update the defaults.js.ts file.
+type UpdateDotEnvMigration struct {
 	Mediator  MigrationMediator
 	Fs        afero.Fs
 	FsManager *fsm.SveltinFSManager
@@ -34,15 +37,15 @@ type UpdateDefaultsConfigMigration struct {
 	Data      *MigrationData
 }
 
-func (m *UpdateDefaultsConfigMigration) getFs() afero.Fs { return m.Fs }
-func (m *UpdateDefaultsConfigMigration) getPathMaker() *pathmaker.SveltinPathMaker {
+func (m *UpdateDotEnvMigration) getFs() afero.Fs { return m.Fs }
+func (m *UpdateDotEnvMigration) getPathMaker() *pathmaker.SveltinPathMaker {
 	return m.PathMaker
 }
-func (m *UpdateDefaultsConfigMigration) getLogger() *yinlog.Logger { return m.Logger }
-func (m *UpdateDefaultsConfigMigration) getData() *MigrationData   { return m.Data }
+func (m *UpdateDotEnvMigration) getLogger() *yinlog.Logger { return m.Logger }
+func (m *UpdateDotEnvMigration) getData() *MigrationData   { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails.
-func (m UpdateDefaultsConfigMigration) Execute() error {
+func (m UpdateDotEnvMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -52,7 +55,8 @@ func (m UpdateDefaultsConfigMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) up() error {
+func (m *UpdateDotEnvMigration) up() error {
+
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -63,9 +67,9 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 	}
 
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, SemVersionPattern, findStringMatcher); ok {
+		if fileContent, ok := isMigrationRequired(m, SitemapPattern, findStringMatcher); ok {
 			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
-			if err := updateConfigFile(m, fileContent); err != nil {
+			if err := updateDotEnvFile(m, fileContent); err != nil {
 				return err
 			}
 		}
@@ -74,14 +78,14 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) down() error {
+func (m *UpdateDotEnvMigration) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) allowUp() error {
+func (m *UpdateDotEnvMigration) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -90,10 +94,10 @@ func (m *UpdateDefaultsConfigMigration) allowUp() error {
 
 //=============================================================================
 
-func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
+func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*MigrationRule{newSveltinVersionRule(line)}
+		rules := []*MigrationRule{newDotEnvSitemapRule(line)}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -106,7 +110,8 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 		return err
 	}
 
-	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	cleanedOutput := removeMultiEmptyLines(output)
+	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, cleanedOutput, 0644); err != nil {
 		return err
 	}
 	return nil
@@ -114,15 +119,21 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 
 //=============================================================================
 
-func newSveltinVersionRule(line string) *MigrationRule {
+func newDotEnvSitemapRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           SemVersionPattern,
+		Pattern:           SitemapPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
-			return `import { sveltin } from '../sveltin.json';
-
-const sveltinVersion = sveltin.version;`
+			return ""
 		},
 	}
+}
+
+// =============================================================================
+
+func removeMultiEmptyLines(content string) []byte {
+	rule := regexp.MustCompile(`[\n]+`)
+	output := rule.ReplaceAllString(strings.TrimSpace(content), "\n")
+	return []byte(output)
 }

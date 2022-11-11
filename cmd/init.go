@@ -105,13 +105,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	envFile := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
 
 	// NEW FILE: .sveltin.json
-	sveltinConfigTplData := &config.TemplateData{
-		Name: ProjectSettingsFile,
-		Misc: &tpltypes.MiscFileData{
-			Info: CliVersion,
-		},
-		Theme: themeData,
-	}
+	sveltinConfigTplData := newSveltinJsonTplData(projectName, themeData)
 	sveltinJSONConfigFile := cfg.fsManager.NewJSONConfigFile(sveltinConfigTplData)
 
 	// SET FOLDER STRUCTURE
@@ -430,7 +424,24 @@ func makeProjectFolderStructure(folderName string, projectName string, themeData
 	default:
 		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
 		return nil, sveltinerr.NewDefaultError(err)
+	}
+}
 
+func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *config.TemplateData {
+	return &config.TemplateData{
+		Name: ProjectSettingsFile,
+		ProjectSettings: &tpltypes.ProjectSettings{
+			Sveltin: tpltypes.SveltinCLIData{
+				Version: CliVersion,
+			},
+			Name:    projectName,
+			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+			Sitemap: tpltypes.SitemapData{
+				ChangeFreq: "monthly",
+				Priority:   0.5,
+			},
+			Theme: *themeData,
+		},
 	}
 }
 

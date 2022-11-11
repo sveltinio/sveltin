@@ -48,7 +48,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: static/rss.xml
 	cfg.log.Info("Saving the file to the static folder")
-	sitemapFile := cfg.fsManager.NewNoPageFile("sitemap", &cfg.prodData, allRoutes, contents)
+	sitemapFile := cfg.fsManager.NewNoPageFile("sitemap", &cfg.projectSettings, allRoutes, contents)
 	staticFolder.Add(sitemapFile)
 
 	// SET FOLDER STRUCTURE

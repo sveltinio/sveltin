@@ -24,6 +24,7 @@ const (
 	ProjectSettingsMigrationID string = "projectSettings"
 	DefaultsConfigMigrationID  string = "defaultsConfig"
 	ThemeConfigMigrationID     string = "themeConfig"
+	DotEnvMigrationID          string = "dotenv"
 )
 
 //=============================================================================
@@ -68,6 +69,12 @@ func RunUpgradeCmd(cmd *cobra.Command, args []string) {
 	err = updateThemeConfigMigration.Execute()
 	utils.ExitIfError(err)
 
+	// File: <project_root>/.env.production
+	pathToDotEnvFile := path.Join(cwd, DotEnvProdFile)
+	updateDotEnvMigration := handleMigration(DotEnvMigrationID, migrationManager, cfg, pathToDotEnvFile)
+	err = updateDotEnvMigration.Execute()
+	utils.ExitIfError(err)
+
 	cfg.log.Success(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion))
 }
 
@@ -85,6 +92,8 @@ func handleMigration(migrationType string, migrationManager *migrations.Migratio
 		return newUpdateDefaultsConfigMigration(migrationManager, config, pathToFile)
 	case ThemeConfigMigrationID:
 		return newUpdateThemeConfigMigration(migrationManager, config, pathToFile)
+	case DotEnvMigrationID:
+		return newDotEnvMigration(migrationManager, config, pathToFile)
 	default:
 		return nil
 	}
@@ -100,7 +109,7 @@ func newAddProjectSettingsMigration(migrationManager *migrations.MigrationManage
 		Data: &migrations.MigrationData{
 			PathToFile:        pathTofile,
 			CliVersion:        CliVersion,
-			ProjectCliVersion: config.projectSettings.CLI.Version,
+			ProjectCliVersion: config.projectSettings.Sveltin.Version,
 		},
 	}
 }
@@ -115,7 +124,7 @@ func newUpdateDefaultsConfigMigration(migrationManager *migrations.MigrationMana
 		Data: &migrations.MigrationData{
 			PathToFile:        pathTofile,
 			CliVersion:        CliVersion,
-			ProjectCliVersion: config.projectSettings.CLI.Version,
+			ProjectCliVersion: config.projectSettings.Sveltin.Version,
 		},
 	}
 }
@@ -130,7 +139,22 @@ func newUpdateThemeConfigMigration(migrationManager *migrations.MigrationManager
 		Data: &migrations.MigrationData{
 			PathToFile:        pathTofile,
 			CliVersion:        CliVersion,
-			ProjectCliVersion: config.projectSettings.CLI.Version,
+			ProjectCliVersion: config.projectSettings.Sveltin.Version,
+		},
+	}
+}
+
+func newDotEnvMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.UpdateDotEnvMigration {
+	return &migrations.UpdateDotEnvMigration{
+		Mediator:  migrationManager,
+		Fs:        config.fs,
+		FsManager: config.fsManager,
+		PathMaker: config.pathMaker,
+		Logger:    config.log,
+		Data: &migrations.MigrationData{
+			PathToFile:        pathTofile,
+			CliVersion:        CliVersion,
+			ProjectCliVersion: config.projectSettings.Sveltin.Version,
 		},
 	}
 }

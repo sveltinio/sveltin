@@ -10,7 +10,6 @@ package migrations
 import (
 	"fmt"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -59,7 +58,7 @@ func (m *UpdateThemeConfigMigration) up() error {
 	}
 
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, "const config = {", testAsOne); ok {
+		if fileContent, ok := isMigrationRequired(m, "const config = {", findStringMatcher); ok {
 			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
 			if err := updateThemeFile(m, fileContent); err != nil {
 				return err
@@ -85,15 +84,6 @@ func (m *UpdateThemeConfigMigration) allowUp() error {
 }
 
 //=============================================================================
-
-func testAsOne(content []byte, pattern, line string) ([]byte, bool) {
-	rule := regexp.MustCompile(pattern)
-	matches := rule.FindString(line)
-	if len(matches) > 0 {
-		return content, true
-	}
-	return nil, false
-}
 
 func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")

@@ -1,10 +1,20 @@
+{{- $data := .ProjectSettings -}}
+{{- $sveltin := $data.Sveltin -}}
+{{- $theme := $data.Theme -}}
+{{- $sitemap := $data.Sitemap -}}
 {
-	"sveltin": {
-		"version": "{{ .Misc.Info }}"
-	},
+	"name": "{{ $data.Name }}",
+	"baseurl": "{{ $data.BaseURL }}",
 	"theme": {
-		"style": "{{ .Theme.ID }}",
-		"name": "{{ .Theme.Name }}",
-		"cssLib": "{{ .Theme.CSSLib }}"
+		"style": "{{ $theme.ID }}",
+		"name": "{{ $theme.Name }}",
+		"cssLib": "{{ $theme.CSSLib }}"
+	},
+	"sitemap": {
+		"changeFreq": "{{ $sitemap.ChangeFreq }}",
+		"priority": {{ $sitemap.Priority }}
+	},
+	"sveltin": {
+		"version": "{{ $sveltin.Version }}"
 	}
 }
