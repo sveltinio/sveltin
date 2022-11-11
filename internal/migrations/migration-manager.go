@@ -13,7 +13,7 @@ type MigrationManager struct {
 	migrationQueue []Migration
 }
 
-// NewMigrationManager is the concrete Mediator
+// NewMigrationManager is the concrete Mediator.
 func NewMigrationManager() *MigrationManager {
 	return &MigrationManager{
 		isFree: true,

@@ -12,7 +12,6 @@ import (
 	"os"
 	"path"
 
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
@@ -49,7 +48,7 @@ func RunUpgradeCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1(fmt.Sprintf("Upgrading your project to sveltin v%s", CliVersion)))
 	migrationManager := migrations.NewMigrationManager()
 
-	// FILE: <project_root>/sveltin.config.json
+	// FILE: <project_root>/sveltin.json
 	pathToProjectSettingsFile := path.Join(cwd, ProjectSettingsFile)
 	addProjectSettingsMigration := handleMigration(ProjectSettingsMigrationID, migrationManager, cfg, pathToProjectSettingsFile)
 	err := addProjectSettingsMigration.Execute()
@@ -62,7 +61,9 @@ func RunUpgradeCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// FILE: <project_root>/themes/<theme_name>/theme.config.js
-	pathToThemeConfigFile := path.Join(cwd, cfg.pathMaker.GetThemesFolder(), retrieveThemeName(cfg), cfg.settings.GetThemeConfigFilename())
+	cfg.projectSettings, err = loadProjectSettings(ProjectSettingsFile)
+	utils.ExitIfError(err)
+	pathToThemeConfigFile := path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename())
 	updateThemeConfigMigration := handleMigration(ThemeConfigMigrationID, migrationManager, cfg, pathToThemeConfigFile)
 	err = updateThemeConfigMigration.Execute()
 	utils.ExitIfError(err)
@@ -132,19 +133,4 @@ func newUpdateThemeConfigMigration(migrationManager *migrations.MigrationManager
 			ProjectCliVersion: config.projectSettings.CLI.Version,
 		},
 	}
-}
-
-//=============================================================================
-
-func retrieveThemeName(config appConfig) string {
-	files, err := afero.ReadDir(config.fs, config.pathMaker.GetThemesFolder())
-	utils.ExitIfError(err)
-
-	var themeName string
-	for _, file := range files {
-		if file.IsDir() {
-			themeName = file.Name()
-		}
-	}
-	return themeName
 }

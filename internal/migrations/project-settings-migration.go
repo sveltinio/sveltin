@@ -26,7 +26,7 @@ import (
 	"github.com/sveltinio/yinlog"
 )
 
-// AddProjectSettingsMigration is the struct representing the migration add the sveltin.config.json file.
+// AddProjectSettingsMigration is the struct representing the migration add the sveltin.json file.
 type AddProjectSettingsMigration struct {
 	Mediator  MigrationMediator
 	Fs        afero.Fs
@@ -35,6 +35,13 @@ type AddProjectSettingsMigration struct {
 	Logger    *yinlog.Logger
 	Data      *MigrationData
 }
+
+func (m *AddProjectSettingsMigration) getFs() afero.Fs { return m.Fs }
+func (m *AddProjectSettingsMigration) getPathMaker() *pathmaker.SveltinPathMaker {
+	return m.PathMaker
+}
+func (m *AddProjectSettingsMigration) getLogger() *yinlog.Logger { return m.Logger }
+func (m *AddProjectSettingsMigration) getData() *MigrationData   { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails.
 func (m AddProjectSettingsMigration) Execute() error {
@@ -93,9 +100,9 @@ func addProjectSettingsFile(m *AddProjectSettingsMigration) error {
 	}
 	themeData.CSSLib = cssLibName
 
-	// NEW FILE: .sveltin.config.json
+	// NEW FILE: .sveltin.json
 	sveltinConfigTplData := &config.TemplateData{
-		Name: "sveltin.config.json",
+		Name: "sveltin.json",
 		Misc: &tpltypes.MiscFileData{
 			Info: m.Data.CliVersion,
 		},
@@ -142,12 +149,12 @@ func makeThemeData(m *AddProjectSettingsMigration) (*tpltypes.ThemeData, error) 
 }
 
 func updateFileContent(m *AddProjectSettingsMigration) error {
-	read, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
+	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
-	newContent := bytes.Replace(read, []byte(m.Data.ProjectCliVersion), []byte(m.Data.CliVersion), -1)
+	newContent := bytes.Replace(content, []byte(m.Data.ProjectCliVersion), []byte(m.Data.CliVersion), -1)
 
 	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, newContent, 0666); err != nil {
 		return err

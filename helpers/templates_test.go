@@ -57,7 +57,7 @@ func TestExecSveltinTpl(t *testing.T) {
 	tplConfig := BuildTemplate(pathToTplFile, nil, &data)
 	retrievedContent := tplConfig.Run(&resources.SveltinFS)
 
-	validContent := `import { theme } from '../../sveltin.config.json';
+	validContent := `import { theme } from '../../sveltin.json';
 
 // theme.config.js file for your sveltin theme
 const themeConfig = {

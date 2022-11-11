@@ -10,7 +10,6 @@ package migrations
 import (
 	"fmt"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -19,6 +18,9 @@ import (
 	"github.com/sveltinio/sveltin/internal/pathmaker"
 	"github.com/sveltinio/yinlog"
 )
+
+// SemVersionRegExp is the regexp pattern for semantic versioning - https://ihateregex.io/expr/semver/
+const SemVersionRegExp = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
 
 // UpdateDefaultsConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateDefaultsConfigMigration struct {
@@ -29,6 +31,13 @@ type UpdateDefaultsConfigMigration struct {
 	Logger    *yinlog.Logger
 	Data      *MigrationData
 }
+
+func (m *UpdateDefaultsConfigMigration) getFs() afero.Fs { return m.Fs }
+func (m *UpdateDefaultsConfigMigration) getPathMaker() *pathmaker.SveltinPathMaker {
+	return m.PathMaker
+}
+func (m *UpdateDefaultsConfigMigration) getLogger() *yinlog.Logger { return m.Logger }
+func (m *UpdateDefaultsConfigMigration) getData() *MigrationData   { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails.
 func (m UpdateDefaultsConfigMigration) Execute() error {
@@ -52,12 +61,9 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 	}
 
 	if exists {
-		// regex for semantic versioning - https://ihateregex.io/expr/semver/
-		pattern := regexp.MustCompile(`(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`)
-
-		if isDefaultsConfigMigrationRequired(m, pattern) {
+		if fileContent, ok := isMigrationRequired(m, SemVersionRegExp, testAsOne); ok {
 			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
-			if err := updateConfigFile(m, pattern); err != nil {
+			if err := updateConfigFile(m, fileContent); err != nil {
 				return err
 			}
 		}
@@ -82,40 +88,18 @@ func (m *UpdateDefaultsConfigMigration) allowUp() error {
 
 //=============================================================================
 
-func isDefaultsConfigMigrationRequired(m *UpdateDefaultsConfigMigration, pattern *regexp.Regexp) bool {
-	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
-	if err != nil {
-		return false
-	}
-
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		matches := pattern.FindStringSubmatch(line)
-		if len(matches) > 0 && matches[1] != m.Data.CliVersion {
-			return true
-		}
-	}
-	return false
-}
-
-func updateConfigFile(m *UpdateDefaultsConfigMigration, pattern *regexp.Regexp) error {
-	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
-	if err != nil {
-		return err
-	}
-
+func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		if pattern.MatchString(line) {
-			newContent := `import { sveltin } from '../sveltin.config.json';
-
-const sveltinVersion = sveltin.version;`
-			lines[i] = newContent
+		rules := []*MigrationRule{newSveltinVersionRule(line)}
+		if res, ok := applyMigrationRules(rules); ok {
+			lines[i] = res
+		} else {
+			lines[i] = line
 		}
-
 	}
 	output := strings.Join(lines, "\n")
-	err = m.Fs.Remove(m.Data.PathToFile)
+	err := m.Fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
@@ -124,4 +108,19 @@ const sveltinVersion = sveltin.version;`
 		return err
 	}
 	return nil
+}
+
+//=============================================================================
+
+func newSveltinVersionRule(line string) *MigrationRule {
+	return &MigrationRule{
+		Value:             line,
+		Pattern:           SemVersionRegExp,
+		IsReplaceFullLine: true,
+		GetMatchReplacer: func(string) string {
+			return `import { sveltin } from '../sveltin.json';
+
+const sveltinVersion = sveltin.version;`
+		},
+	}
 }

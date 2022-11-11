@@ -139,7 +139,7 @@ Run "sveltin upgrade" first.
 `
 
 	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
-	err := fmt.Errorf(`sveltin.config.json!%s `, msg)
+	err := fmt.Errorf(`sveltin.json!%s `, msg)
 
 	return newSveltinError(notLatestVersionError, "NotLatestVersionError", "Not Latest Sveltin Version", msg, err)
 }
@@ -172,7 +172,7 @@ func NewNotValidProjectSettingsError(err error) error {
 	}
 
 	placeholderText := `
-Missing required attributes! Check your "sveltin.config.json" file!
+Missing required attributes! Check your "sveltin.json" file!
 
 %s`
 

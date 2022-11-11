@@ -30,6 +30,13 @@ type UpdateThemeConfigMigration struct {
 	Data      *MigrationData
 }
 
+func (m *UpdateThemeConfigMigration) getFs() afero.Fs { return m.Fs }
+func (m *UpdateThemeConfigMigration) getPathMaker() *pathmaker.SveltinPathMaker {
+	return m.PathMaker
+}
+func (m *UpdateThemeConfigMigration) getLogger() *yinlog.Logger { return m.Logger }
+func (m *UpdateThemeConfigMigration) getData() *MigrationData   { return m.Data }
+
 // Execute return error if migration execution over up and down methods fails.
 func (m UpdateThemeConfigMigration) Execute() error {
 	if err := m.up(); err != nil {
@@ -52,10 +59,9 @@ func (m *UpdateThemeConfigMigration) up() error {
 	}
 
 	if exists {
-		pattern := regexp.MustCompile("const config = {")
-		if isThemeConfigMigrationRequired(m, pattern) {
+		if fileContent, ok := isMigrationRequired(m, "const config = {", testAsOne); ok {
 			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
-			if err := updateThemeFile(m); err != nil {
+			if err := updateThemeFile(m, fileContent); err != nil {
 				return err
 			}
 		}
@@ -80,48 +86,33 @@ func (m *UpdateThemeConfigMigration) allowUp() error {
 
 //=============================================================================
 
-func isThemeConfigMigrationRequired(m *UpdateThemeConfigMigration, pattern *regexp.Regexp) bool {
-	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
-	if err != nil {
-		return false
+func testAsOne(content []byte, pattern, line string) ([]byte, bool) {
+	rule := regexp.MustCompile(pattern)
+	matches := rule.FindString(line)
+	if len(matches) > 0 {
+		return content, true
 	}
-
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		matches := pattern.FindString(line)
-		if len(matches) > 0 {
-			return true
-		}
-	}
-	return false
+	return nil, false
 }
 
-func updateThemeFile(m *UpdateThemeConfigMigration) error {
-	content, err := afero.ReadFile(m.Fs, m.Data.PathToFile)
-	if err != nil {
-		return err
-	}
-
+func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string
-		if i != 0 {
-			prevLine = line
+		if i > 0 {
+			prevLine = lines[i-1]
 		}
-		if strings.Contains(line, "const config = {") {
-			newLineContent := `import { theme } from '../../sveltin.config.json';
 
-const themeConfig = {`
-			lines[i] = newLineContent
-		} else if strings.Contains(line, "name:") && !strings.Contains(prevLine, "author") {
-			lines[i] = "  name: theme.name,"
-		} else if strings.Contains(line, "export default config") {
-			lines[i] = "export { themeConfig }"
+		rules := []*MigrationRule{newConstNameRule(line), newExportLineRule(line), newThemeNameRule(line, prevLine)}
+		if res, ok := applyMigrationRules(rules); ok {
+			lines[i] = res
+		} else {
+			lines[i] = line
 		}
 	}
 
 	output := strings.Join(lines, "\n")
-	err = m.Fs.Remove(m.Data.PathToFile)
+	err := m.Fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
@@ -130,4 +121,44 @@ const themeConfig = {`
 		return err
 	}
 	return nil
+}
+
+//=============================================================================
+
+func newConstNameRule(line string) *MigrationRule {
+	return &MigrationRule{
+		Value:             line,
+		Pattern:           "const config = {",
+		IsReplaceFullLine: false,
+		GetMatchReplacer: func(string) string {
+			return `import { theme } from '../../sveltin.json';
+
+const themeConfig = {`
+		},
+	}
+}
+
+func newExportLineRule(line string) *MigrationRule {
+	return &MigrationRule{
+		Value:             line,
+		Pattern:           "export default config",
+		IsReplaceFullLine: false,
+		GetMatchReplacer: func(string) string {
+			return "export { themeConfig }"
+		},
+	}
+}
+
+func newThemeNameRule(line, prevLine string) *MigrationRule {
+	return &MigrationRule{
+		Value:             line,
+		Pattern:           "name:",
+		IsReplaceFullLine: true,
+		GetMatchReplacer: func(string) string {
+			if !strings.Contains(prevLine, "author:") && strings.Contains(line, "name:") {
+				return "\tname: theme.name,"
+			}
+			return line
+		},
+	}
 }

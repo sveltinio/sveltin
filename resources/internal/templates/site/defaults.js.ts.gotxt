@@ -1,4 +1,4 @@
-import { sveltin } from '../sveltin.config.json';
+import { sveltin } from '../sveltin.json';
 
 const sveltinVersion = sveltin.version;
 const sveltekitVersion = process.env.VITE_SVELTEKIT_VERSION
