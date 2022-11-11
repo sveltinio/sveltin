@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// PageData is the struct representing the user configs for the new resource.
+// PageData is the struct representing the user selection for the page.
 type PageData struct {
 	Name string
 	Type string

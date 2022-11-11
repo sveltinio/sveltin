@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// NPMClientData is the struct representing the user configs for the new resource.
+// NPMClientData is the struct representing the node package manager.
 type NPMClientData struct {
 	Name    string
 	Version string

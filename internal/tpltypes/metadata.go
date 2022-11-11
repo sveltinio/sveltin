@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// MetadataData is the struct representing the user configs for the new resource.
+// MetadataData is the struct representing the user selection for the metadata.
 type MetadataData struct {
 	Name     string
 	Resource string

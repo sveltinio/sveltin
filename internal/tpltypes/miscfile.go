@@ -7,7 +7,7 @@
 
 package tpltypes
 
-// MiscFileData is the struct representing the user configs for the new resource.
+// MiscFileData is the struct representing data for template files belongs to the misc category.
 type MiscFileData struct {
 	Name string
 	Type string
