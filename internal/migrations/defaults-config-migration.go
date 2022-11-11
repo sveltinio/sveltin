@@ -19,8 +19,10 @@ import (
 	"github.com/sveltinio/yinlog"
 )
 
-// SemVersionRegExp is the regexp pattern for semantic versioning - https://ihateregex.io/expr/semver/
-const SemVersionRegExp = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
+// SemVersionPattern is the regexp pattern to identify semantic versioning string - https://ihateregex.io/expr/semver/ .
+const SemVersionPattern = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
+
+//=============================================================================
 
 // UpdateDefaultsConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateDefaultsConfigMigration struct {
@@ -61,7 +63,7 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 	}
 
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, SemVersionRegExp, testAsOne); ok {
+		if fileContent, ok := isMigrationRequired(m, SemVersionPattern, findStringMatcher); ok {
 			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
 			if err := updateConfigFile(m, fileContent); err != nil {
 				return err
@@ -115,7 +117,7 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 func newSveltinVersionRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           SemVersionRegExp,
+		Pattern:           SemVersionPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			return `import { sveltin } from '../sveltin.json';
