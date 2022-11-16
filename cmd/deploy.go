@@ -19,6 +19,7 @@ import (
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/ftpfs"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -59,19 +60,13 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		lines, err := common.ReadFileLineByLine(cfg.fs, withExcludeFile)
 		utils.ExitIfError(err)
 		withExclude = common.Union(withExclude, lines)
-
 	}
 
-	ftpConnectionConfig := &ftpfs.FTPConnectionConfig{
-		Host:     cfg.prodData.FTPHost,
-		Port:     cfg.prodData.FTPPort,
-		User:     cfg.prodData.FTPUser,
-		Password: cfg.prodData.FTPPassword,
-		Timeout:  cfg.prodData.FTPDialTimeout,
-		IsEPSV:   cfg.prodData.FTPEPSVMode,
-	}
+	ftpConnectionConfig := newFTPConnectionConfig(cfg.prodData)
+
 	ftpConn := ftpfs.NewFTPServerConnection(ftpConnectionConfig)
 	ftpConn.SetRootFolder(cfg.prodData.FTPServerFolder)
+	ftpConn.SetLogger(cfg.log)
 
 	err := ftpfs.DialAction(&ftpConn).Run()
 	utils.ExitIfError(err)
@@ -84,8 +79,11 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	err = noOpAction.Run()
 	utils.ExitIfError(err)
 
-	common.ShowDeployCommandWarningMessages()
-	//setDefaultLoggerOptions()
+	common.ShowDeployCommandWarningMessages(isBackup)
+
+	if isDryRun {
+		common.PrintHelperTextDryRunFlag()
+	}
 
 	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})
 	utils.ExitIfError(err)
@@ -94,7 +92,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		// create a local tar archive as backup for the remote folder content
 		if isBackup {
 			backupsFolderPath := filepath.Join(cfg.pathMaker.GetRootFolder(), BackupsFolder)
-			utils.ExitIfError(common.MkDir(cfg.fs))
+			utils.ExitIfError(common.MkDir(cfg.fs, backupsFolderPath))
 			pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 			projectName, err := utils.RetrieveProjectName(cfg.fs, pathToPkgFile)
 			utils.ExitIfError(err)
@@ -107,32 +105,41 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
 		utils.ExitIfError(err)
 
-		// Create the folders structure
-		cfg.log.Info("Creating remote folders structure")
-		foldersList := walkLocal(cfg.fs, EntryTypeFolder, cfg.prodData.SvelteKitBuildFolder)
-		err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
-		utils.ExitIfError(err)
+		/**
+		* The folder where adaper-static stores the output for the build process.
+		* Check if pages and assets props for adapter-static are differents.
+		**/
+		kitBuildFolders := []string{cfg.projectSettings.SvelteKit.Adapter.Pages}
+		if cfg.projectSettings.SvelteKit.Adapter.Pages != cfg.projectSettings.SvelteKit.Adapter.Assets {
+			kitBuildFolders = append(kitBuildFolders, cfg.projectSettings.SvelteKit.Adapter.Assets)
+		}
 
-		// prevent the remote FTP server to close the idle connection
-		err = noOpAction.Run()
-		utils.ExitIfError(err)
+		for _, folder := range kitBuildFolders {
+			foldersList := walkLocal(cfg.fs, EntryTypeFolder, folder)
 
-		// upload files
-		cfg.log.Info("Uploading files to the remote folders")
-		filesList := walkLocal(cfg.fs, EntryTypeFile, cfg.prodData.SvelteKitBuildFolder)
-		err = ftpfs.UploadAction(&ftpConn, cfg.fs, cfg.prodData.SvelteKitBuildFolder, filesList, isDryRun).Run()
-		utils.ExitIfError(err)
+			cfg.log.Info("Creating remote folders structure")
+			err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
+			utils.ExitIfError(err)
 
-		// prevent the remote FTP server to close the idle connection
-		err = noOpAction.Run()
-		utils.ExitIfError(err)
+			// prevent the remote FTP server to close the idle connection
+			err = noOpAction.Run()
+			utils.ExitIfError(err)
+
+			cfg.log.Info("Uploading files to the remote folders")
+			filesList := walkLocal(cfg.fs, EntryTypeFile, folder)
+
+			err = ftpfs.UploadAction(&ftpConn, cfg.fs, folder, filesList, isDryRun).Run()
+			utils.ExitIfError(err)
+
+			// prevent the remote FTP server to close the idle connection
+			err = noOpAction.Run()
+			utils.ExitIfError(err)
+		}
 
 		// close the connection
 		err = ftpfs.LogoutAction(&ftpConn).Run()
 		utils.ExitIfError(err)
 
-		// LOG SUMMARY TO THE STDOUT
-		common.PrintHelperTextDeploySummary(len(foldersList), len(filesList))
 		cfg.log.Success("Done\n")
 	}
 }
@@ -150,6 +157,17 @@ func init() {
 }
 
 //=============================================================================
+
+func newFTPConnectionConfig(data tpltypes.EnvProductionData) *ftpfs.FTPConnectionConfig {
+	return &ftpfs.FTPConnectionConfig{
+		Host:     data.FTPHost,
+		Port:     data.FTPPort,
+		User:     data.FTPUser,
+		Password: data.FTPPassword,
+		Timeout:  data.FTPDialTimeout,
+		IsEPSV:   data.FTPEPSVMode,
+	}
+}
 
 func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 	fList := []string{}

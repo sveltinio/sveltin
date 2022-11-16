@@ -22,7 +22,9 @@ import (
 
 // Patterns used by MigrationRule
 const (
-	SitemapPattern = `^sitemap`
+	SitemapPattern               = `^sitemap`
+	SvelteKitBuildPattern        = `^SVELTEKIT_BUILD_FOLDER`
+	SvelteKitBuildCommentPattern = `^*# The folder where adaper-static`
 )
 
 //=============================================================================
@@ -97,7 +99,11 @@ func (m *UpdateDotEnvMigration) allowUp() error {
 func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*MigrationRule{newDotEnvSitemapRule(line)}
+		rules := []*MigrationRule{
+			newDotEnvSitemapRule(line),
+			newDotEnvSvelteKitBuildCommentRule(line),
+			newDotEnvSveltekitRule(line),
+		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -123,6 +129,28 @@ func newDotEnvSitemapRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
 		Pattern:           SitemapPattern,
+		IsReplaceFullLine: true,
+		GetMatchReplacer: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newDotEnvSvelteKitBuildCommentRule(line string) *MigrationRule {
+	return &MigrationRule{
+		Value:             line,
+		Pattern:           SvelteKitBuildCommentPattern,
+		IsReplaceFullLine: true,
+		GetMatchReplacer: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newDotEnvSveltekitRule(line string) *MigrationRule {
+	return &MigrationRule{
+		Value:             line,
+		Pattern:           SvelteKitBuildPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			return ""
