@@ -61,7 +61,7 @@ func (m *AddProjectSettingsMigration) up() error {
 
 	exists, _ := common.FileExists(m.Fs, m.Data.PathToFile)
 	if !exists {
-		m.Logger.Info(fmt.Sprintf("Creating %s file", filepath.Base(m.Data.PathToFile)))
+		m.Logger.Info(fmt.Sprintf("Creating %s", filepath.Base(m.Data.PathToFile)))
 		return addProjectSettingsFile(m)
 	} else if exists && m.Data.ProjectCliVersion != m.Data.CliVersion {
 		m.Logger.Info(fmt.Sprintf("Bumping Sveltin CLI version in %s", filepath.Base(m.Data.PathToFile)))
@@ -88,13 +88,19 @@ func (m *AddProjectSettingsMigration) allowUp() error {
 //=============================================================================
 
 func addProjectSettingsFile(m *AddProjectSettingsMigration) error {
-	themeData, err := makeThemeData(m)
+	pathToPkgFile := filepath.Join(m.PathMaker.GetRootFolder(), "package.json")
+
+	projectName, err := utils.RetrieveProjectName(m.Fs, pathToPkgFile)
 	if err != nil {
 		return err
 	}
 
-	pathToPkgFile := filepath.Join(m.PathMaker.GetRootFolder(), "package.json")
 	cssLibName, err := utils.RetrieveCSSLib(m.Fs, pathToPkgFile)
+	if err != nil {
+		return err
+	}
+
+	themeData, err := makeThemeData(m)
 	if err != nil {
 		return err
 	}
@@ -103,16 +109,24 @@ func addProjectSettingsFile(m *AddProjectSettingsMigration) error {
 	// NEW FILE: .sveltin.json
 	sveltinConfigTplData := &config.TemplateData{
 		Name: "sveltin.json",
-		Misc: &tpltypes.MiscFileData{
-			Info: m.Data.CliVersion,
+		ProjectSettings: &tpltypes.ProjectSettings{
+			Name:    projectName,
+			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+			Sitemap: tpltypes.SitemapData{
+				ChangeFreq: "monthly",
+				Priority:   0.5,
+			},
+			Sveltin: tpltypes.SveltinCLIData{
+				Version: m.Data.CliVersion,
+			},
+			Theme: *themeData,
 		},
-		Theme: themeData,
 	}
 	sveltinJSONConfigFile := m.FsManager.NewJSONConfigFile(sveltinConfigTplData)
 
 	cwd, _ := os.Getwd()
-	projectName := filepath.Base(cwd)
-	projectFolder := m.FsManager.GetFolder(projectName)
+	projectFolderName := filepath.Base(cwd)
+	projectFolder := m.FsManager.GetFolder(projectFolderName)
 	projectFolder.Add(sveltinJSONConfigFile)
 
 	sfs := factory.NewProjectArtifact(&resources.SveltinFS, m.Fs)

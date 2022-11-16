@@ -15,8 +15,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 const (
 	// Blank represents the fontmatter-only template id used when generating the content file.
 	Blank string = "blank"

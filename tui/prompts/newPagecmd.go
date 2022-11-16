@@ -11,8 +11,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 const (
 	// Svelte set svelte as the language used to scaffold a new page
 	Svelte string = "svelte"

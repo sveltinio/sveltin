@@ -22,9 +22,9 @@ import (
 
 // Patterns used by MigrationRule
 const (
-	SitemapPattern               = `^sitemap`
-	SvelteKitBuildPattern        = `^SVELTEKIT_BUILD_FOLDER`
-	SvelteKitBuildCommentPattern = `^*# The folder where adaper-static`
+	sitemapPattern               = `^sitemap`
+	svelteKitBuildPattern        = `^SVELTEKIT_BUILD_FOLDER`
+	svelteKitBuildCommentPattern = `^*# The folder where adaper-static`
 )
 
 //=============================================================================
@@ -69,8 +69,8 @@ func (m *UpdateDotEnvMigration) up() error {
 	}
 
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, SitemapPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, sitemapPattern, findStringMatcher); ok {
+			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateDotEnvFile(m, fileContent); err != nil {
 				return err
 			}
@@ -128,7 +128,7 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 func newDotEnvSitemapRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           SitemapPattern,
+		Pattern:           sitemapPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			return ""
@@ -139,7 +139,7 @@ func newDotEnvSitemapRule(line string) *MigrationRule {
 func newDotEnvSvelteKitBuildCommentRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           SvelteKitBuildCommentPattern,
+		Pattern:           svelteKitBuildCommentPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			return ""
@@ -150,7 +150,7 @@ func newDotEnvSvelteKitBuildCommentRule(line string) *MigrationRule {
 func newDotEnvSveltekitRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           SvelteKitBuildPattern,
+		Pattern:           svelteKitBuildPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			return ""

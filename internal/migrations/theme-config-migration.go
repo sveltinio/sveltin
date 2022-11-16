@@ -19,6 +19,15 @@ import (
 	"github.com/sveltinio/yinlog"
 )
 
+// Patterns used by MigrationRule
+const (
+	configConstPattern  = `^const config`
+	exportConfigPattern = `^export default config`
+	namePropPattern     = `name:`
+)
+
+//=============================================================================
+
 // UpdateThemeConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateThemeConfigMigration struct {
 	Mediator  MigrationMediator
@@ -58,8 +67,8 @@ func (m *UpdateThemeConfigMigration) up() error {
 	}
 
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, "const config = {", findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, configConstPattern, findStringMatcher); ok {
+			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateThemeFile(m, fileContent); err != nil {
 				return err
 			}
@@ -93,7 +102,11 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 			prevLine = lines[i-1]
 		}
 
-		rules := []*MigrationRule{newConstNameRule(line), newExportLineRule(line), newThemeNameRule(line, prevLine)}
+		rules := []*MigrationRule{
+			newConstNameRule(line),
+			newExportLineRule(line),
+			newThemeNameRule(line, prevLine),
+		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -118,8 +131,8 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 func newConstNameRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           "const config = {",
-		IsReplaceFullLine: false,
+		Pattern:           configConstPattern,
+		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			return `import { theme } from '../../sveltin.json';
 
@@ -131,7 +144,7 @@ const themeConfig = {`
 func newExportLineRule(line string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           "export default config",
+		Pattern:           exportConfigPattern,
 		IsReplaceFullLine: false,
 		GetMatchReplacer: func(string) string {
 			return "export { themeConfig }"
@@ -142,7 +155,7 @@ func newExportLineRule(line string) *MigrationRule {
 func newThemeNameRule(line, prevLine string) *MigrationRule {
 	return &MigrationRule{
 		Value:             line,
-		Pattern:           "name:",
+		Pattern:           namePropPattern,
 		IsReplaceFullLine: true,
 		GetMatchReplacer: func(string) string {
 			if !strings.Contains(prevLine, "author:") && strings.Contains(line, "name:") {

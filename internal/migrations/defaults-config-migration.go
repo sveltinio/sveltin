@@ -64,7 +64,7 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 
 	if exists {
 		if fileContent, ok := isMigrationRequired(m, SemVersionPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s file", filepath.Base(m.Data.PathToFile)))
+			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateConfigFile(m, fileContent); err != nil {
 				return err
 			}

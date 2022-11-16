@@ -11,8 +11,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 )
 
-//=============================================================================
-
 // names for the available CSS Lib options
 const (
 	Bootstrap   string = "bootstrap"
