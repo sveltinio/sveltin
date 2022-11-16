@@ -13,9 +13,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/prompti/choose"
 	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
@@ -29,8 +27,44 @@ import (
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
+
+//=============================================================================
+
+var (
+	withCSSLib     string
+	withThemeName  string
+	withPortNumber string
+	withGit        bool
+)
+
+// names for the available style options
+const (
+	StyleDefault string = "default"
+	StyleNone    string = "none"
+)
+
+// names for the available CSS Lib options
+const (
+	Bootstrap   string = "bootstrap"
+	Bulma       string = "bulma"
+	Scss        string = "scss"
+	TailwindCSS string = "tailwindcss"
+	VanillaCSS  string = "vanillacss"
+)
+
+// names for config files
+const (
+	Defaults  string = "defaults"
+	Externals string = "externals"
+	Website   string = "website"
+	Menu      string = "menu"
+	DotEnv    string = "dotenv"
+)
+
+//=============================================================================
 
 // initCmd represents the init command
 var initCmd = &cobra.Command{
@@ -52,18 +86,18 @@ sveltin init portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git`,
 
 // InitCmdRun is the actual work function.
 func InitCmdRun(cmd *cobra.Command, args []string) {
-	projectName, err := promptProjectName(args)
+	projectName, err := prompts.AskProjectNameHandler(args)
 	utils.ExitIfError(err)
 
-	cssLibName, err := promptCSSLibName(withCSSLib)
+	cssLibName, err := prompts.SelectCSSLibHandler(withCSSLib)
 	utils.ExitIfError(err)
 
-	themeSelection, err := promptThemeSelection(withThemeName)
+	themeSelection, err := prompts.SelectThemeHandler(withThemeName)
 	utils.ExitIfError(err)
 	themeData, err := buildThemeData(themeSelection, withThemeName, projectName, cssLibName)
 	utils.ExitIfError(err)
 
-	npmClient := getSelectedNPMClient()
+	npmClient := getSelectedNPMClient(npmClientName)
 	npmClientName = npmClient.Name
 
 	cfg.log.Plain(markup.H1("Initializing a new Sveltin project"))
@@ -187,125 +221,6 @@ func init() {
 
 //=============================================================================
 
-func promptProjectName(inputs []string) (string, error) {
-	switch numOfArgs := len(inputs); {
-	case numOfArgs < 1:
-		projectNamePromptConfig := &input.Config{
-			Message:     "What's your project name?",
-			Placeholder: "Please, provide a name for your project",
-			ErrorMsg:    "Project name is mandatory",
-		}
-		result, err := input.Run(projectNamePromptConfig)
-		if err != nil {
-			return "", err
-		}
-		return result, nil
-	case numOfArgs == 1:
-		return inputs[0], nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
-	}
-}
-
-func promptCSSLibName(cssLibName string) (string, error) {
-	entries := []list.Item{
-		choose.Item{Name: VanillaCSS, Desc: "Plain CSS"},
-		choose.Item{Name: Scss, Desc: "Scss/Sass"},
-		choose.Item{Name: TailwindCSS, Desc: "Tailwind CSS"},
-		choose.Item{Name: Bulma, Desc: "Bulma"},
-		choose.Item{Name: Bootstrap, Desc: "Bootstrap"},
-	}
-
-	switch nameLenght := len(cssLibName); {
-	case nameLenght == 0:
-		cssPromptContent := &choose.Config{
-			Title:    "Which CSS lib?",
-			ErrorMsg: "Please, select the CSS Lib.",
-		}
-
-		result, err := choose.Run(cssPromptContent, entries)
-		if err != nil {
-			return "", err
-		}
-		return result, nil
-	case nameLenght != 0:
-		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, cssLibName) {
-			return "", sveltinerr.NewOptionNotValidError(cssLibName, valid)
-		}
-		return cssLibName, nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
-	}
-}
-
-func promptThemeSelection(themeFlag string) (string, error) {
-	entries := []list.Item{
-		choose.Item{Name: tpltypes.BlankTheme, Desc: "Create a new theme"},
-		choose.Item{Name: tpltypes.SveltinTheme, Desc: "Sveltin default theme"},
-	}
-	switch themeFlagLenght := len(themeFlag); {
-	case themeFlagLenght == 0:
-		themePromptContent := &choose.Config{
-			Title:    "Which theme template?",
-			ErrorMsg: "Please, select the theme option.",
-		}
-
-		result, err := choose.Run(themePromptContent, entries)
-		if err != nil {
-			return "", err
-		}
-		return result, nil
-	case themeFlagLenght != 0:
-		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, themeFlag) {
-			return "", sveltinerr.NewOptionNotValidError(themeFlag, valid)
-		}
-		return themeFlag, nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
-	}
-}
-
-func promptNPMClient(items []string) (string, error) {
-	if len(items) == 0 {
-		err := errors.New("it seems there is no package manager installed on your machine. We cannot proceed now")
-		return "", sveltinerr.NewNPMClientNotFoundError(err)
-	}
-
-	entries := choose.ToListItem(items)
-
-	switch nameLenght := len(npmClientName); {
-	case nameLenght == 0:
-		if len(items) == 1 {
-			return items[0], nil
-		}
-		pmPromptContent := &choose.Config{
-			Title:    "Which package manager?",
-			ErrorMsg: "Please, select the package manager.",
-		}
-
-		result, err := choose.Run(pmPromptContent, entries)
-		if err != nil {
-			return "", err
-		}
-		return result, nil
-	case nameLenght != 0:
-		if !common.Contains(items, npmClientName) {
-			return "", sveltinerr.NewOptionNotValidError(npmClientName, items)
-		}
-		return npmClientName, nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
-	}
-}
-
-//=============================================================================
-
 func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName string) (*tpltypes.ThemeData, error) {
 	switch themeSelection {
 	case tpltypes.BlankTheme:
@@ -372,10 +287,10 @@ func getNewThemeName(value, projectName string) string {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func getSelectedNPMClient() npmc.NPMClient {
+func getSelectedNPMClient(npmcFlag string) npmc.NPMClient {
 	installedNPMClients := utils.GetInstalledNPMClientList()
-	npmClientNames := utils.GetNPMClientNames(installedNPMClients)
-	client, err := promptNPMClient(npmClientNames)
+	npmcNames := utils.GetNPMClientNames(installedNPMClients)
+	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag)
 	utils.ExitIfError(err)
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }

@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
@@ -21,6 +20,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 
 	"github.com/spf13/cobra"
@@ -65,7 +65,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
 	isValidProject(true)
 
-	resourceName, err := promptResourceName(args)
+	resourceName, err := prompts.AskResourceNameHandler(args)
 	utils.ExitIfError(err)
 
 	resourceData := &tpltypes.ResourceData{
@@ -124,28 +124,6 @@ func resourceCmdFlags(cmd *cobra.Command) {
 func init() {
 	newCmd.AddCommand(newResourceCmd)
 	resourceCmdFlags(newResourceCmd)
-}
-
-//=============================================================================
-
-func promptResourceName(inputs []string) (string, error) {
-	switch numOfArgs := len(inputs); {
-	case numOfArgs < 1:
-		resourceNamePromptContent := &input.Config{
-			Placeholder: "What's the resource name? (e.g. posts, portfolio ...)",
-			ErrorMsg:    "Please, provide a name for the resource.",
-		}
-		result, err := input.Run(resourceNamePromptContent)
-		if err != nil {
-			return "", err
-		}
-		return utils.ToSlug(result), nil
-	case numOfArgs == 1:
-		return utils.ToSlug(inputs[0]), nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
-	}
 }
 
 //=============================================================================

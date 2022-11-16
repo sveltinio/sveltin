@@ -9,7 +9,6 @@ package cmd
 
 import (
 	"embed"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -17,7 +16,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers/factory"
@@ -28,6 +26,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -53,17 +52,17 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	// Exit if running the command from an existing sveltin project folder.
 	isValidForThemeMaker()
 
-	themeName, err := promptThemeName(args)
+	themeName, err := prompts.AskThemeName(args)
 	utils.ExitIfError(err)
 	cfg.log.Info(themeName)
 
 	projectName := themeName + "_project"
 
-	cssLibName, err := promptCSSLibName(withCSSLib)
+	cssLibName, err := prompts.SelectCSSLibHandler(withCSSLib)
 	utils.ExitIfError(err)
 	cfg.log.Info(cssLibName)
 
-	npmClient := getSelectedNPMClient()
+	npmClient := getSelectedNPMClient(npmClientName)
 	npmClientName = npmClient.Name
 
 	cfg.log.Plain(markup.H1("A Starter project will be created"))
@@ -157,26 +156,6 @@ func isValidForThemeMaker() {
 	if exists {
 		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
 		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
-	}
-}
-
-func promptThemeName(inputs []string) (string, error) {
-	switch numOfArgs := len(inputs); {
-	case numOfArgs < 1:
-		themeNamePromptContent := &input.Config{
-			Placeholder: "What's the theme name?",
-			ErrorMsg:    "Please, provide a name for the theme.",
-		}
-		result, err := input.Run(themeNamePromptContent)
-		if err != nil {
-			return "", err
-		}
-		return utils.ToSlug(result), nil
-	case numOfArgs == 1:
-		return utils.ToSlug(inputs[0]), nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
 	}
 }
 

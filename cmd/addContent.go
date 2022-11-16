@@ -10,29 +10,21 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"path"
-	"strings"
 
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/prompti/choose"
-	"github.com/sveltinio/prompti/input"
-	"github.com/sveltinio/sveltin/config"
-	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var (
-	withSampleContent bool
-)
+var withSampleContent bool
 
 const (
 	// Blank represents the fontmatter-only template id used when generating the content file.
@@ -74,7 +66,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
 	isValidProject(true)
 
-	contentData, err := promptContentName(cfg.fs, args, withSampleContent, cfg.settings)
+	contentData, err := prompts.AskContentNameHandler(cfg.fs, args, withSampleContent, cfg.settings)
 	utils.ExitIfError(err)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
@@ -107,71 +99,6 @@ func contentCmdFlags(cmd *cobra.Command) {
 func init() {
 	contentCmdFlags(addContentCmd)
 	addCmd.AddCommand(addContentCmd)
-}
-
-//=============================================================================
-
-func promptContentName(fs afero.Fs, inputs []string, isSample bool, s *config.SveltinSettings) (*tpltypes.ContentData, error) {
-	contentType := Blank
-	if isSample {
-		contentType = Sample
-	}
-
-	switch numOfArgs := len(inputs); {
-	case numOfArgs < 1:
-		contentNamePromptContent := &input.Config{
-			Placeholder: "What's the content title? (it will be the slug to the page)",
-			ErrorMsg:    "Please, provide a title for the content.",
-		}
-		contentName, err := input.Run(contentNamePromptContent)
-		if err != nil {
-			return nil, err
-		}
-
-		contentResource, err := promptResourceList(fs, s)
-		if err != nil {
-			return nil, err
-		}
-
-		return &tpltypes.ContentData{
-			Name:     utils.ToSlug(contentName),
-			Type:     contentType,
-			Resource: contentResource,
-		}, nil
-	case numOfArgs == 1:
-		name := inputs[0]
-		contentResource, contentName := path.Split(name)
-		contentResource = strings.ReplaceAll(contentResource, "/", "")
-
-		err := helpers.ResourceExists(fs, contentResource, cfg.settings)
-		if err != nil {
-			return nil, err
-		}
-
-		return &tpltypes.ContentData{
-			Name:     utils.ToSlug(contentName),
-			Type:     contentType,
-			Resource: contentResource,
-		}, nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return nil, sveltinerr.NewDefaultError(err)
-	}
-}
-
-func promptResourceList(fs afero.Fs, s *config.SveltinSettings) (string, error) {
-	availableResources := helpers.GetAllResources(fs, s.GetContentPath())
-
-	entries := choose.ToListItem(availableResources)
-	resourcePromptContent := &choose.Config{
-		Title:    "Which existing resource?",
-		ErrorMsg: "Please, provide an existing resource name.",
-	}
-	result, err := choose.Run(resourcePromptContent, entries)
-	if err != nil {
-		return "", err
-	}
-	return result, nil
 }
 
 //=============================================================================
