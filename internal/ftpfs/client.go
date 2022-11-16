@@ -7,7 +7,9 @@
 
 package ftpfs
 
-import "github.com/spf13/afero"
+import (
+	"github.com/spf13/afero"
+)
 
 // Client is the sturct representing the invoker, who is responsible for initiating requests.
 type Client struct {

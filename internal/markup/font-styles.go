@@ -16,6 +16,8 @@ var (
 	Italic = lipgloss.NewStyle().Italic(true).Render
 	// Bold sets a bold formatting rule for the text.
 	Bold = lipgloss.NewStyle().Bold(true).Render
+	//Underline sets an underlined rule for the text.
+	Underline = lipgloss.NewStyle().Underline(true).Render
 	// Gray sets foreground color to gray for the text.
 	Gray = lipgloss.NewStyle().Foreground(gray).Render
 	// Faint sets a rule for rendering the foreground color in a dimmer shade.
@@ -27,4 +29,6 @@ var (
 			Border(lipgloss.RoundedBorder(), true, true, true, true).
 			BorderForeground(lipgloss.Color("#874BFD")).
 			Render
+	// Centered prints a center aligned text
+	Centered = lipgloss.NewStyle().Align(lipgloss.Center).Render
 )

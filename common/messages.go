@@ -112,7 +112,7 @@ func (uc *UserProjectConfig) PrintHelperTextNewTheme() {
 
 // PrintHelperTextDryRunFlag prints a message box for commands supporting the 'dry-run mode'.
 func PrintHelperTextDryRunFlag() {
-	fmt.Println(markup.Bordered("RUNNING IN DRY-RUN MODE"))
+	fmt.Println(markup.Bordered(markup.Centered(fmt.Sprintf("%s\n\n%s", markup.Underline("DRY-RUN MODE"), "Nothing will really happen! Just simulating the process."))))
 }
 
 // PrintHelperTextDeploySummary prints a summary message string for commands like deploy.
@@ -125,7 +125,7 @@ func PrintHelperTextDeploySummary(numOfFolders, numOfFiles int) {
 }
 
 // ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
-func ShowDeployCommandWarningMessages() {
+func ShowDeployCommandWarningMessages(isBackup bool) {
 	listLogger := logger.NewListLogger()
 	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
 		Timestamp: false,
@@ -135,7 +135,9 @@ func ShowDeployCommandWarningMessages() {
 	})
 
 	listLogger.Title("Be aware! The deploy command will perform the following actions")
-	listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
+	if isBackup {
+		listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
+	}
 	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude flag")
 	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
 	listLogger.Render()
