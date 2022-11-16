@@ -7,7 +7,9 @@
 
 package ftpfs
 
-import "github.com/spf13/afero"
+import (
+	"github.com/spf13/afero"
+)
 
 // RemoteServer is the interface defining the list of actions
 // can be performed on a RemoteServer implementation.
@@ -17,7 +19,7 @@ type RemoteServer interface {
 	Logout() error
 	Idle() error
 	MakeDirs([]string, bool) error
-	Upload(afero.Fs, string, []string, bool) error
+	UploadFiles(afero.Fs, string, []string, bool) error
 	DeleteAll([]string, bool) error
 	DoBackup(afero.Fs, string, bool) error
 }

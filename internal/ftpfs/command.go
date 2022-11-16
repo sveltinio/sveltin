@@ -7,7 +7,9 @@
 
 package ftpfs
 
-import "github.com/spf13/afero"
+import (
+	"github.com/spf13/afero"
+)
 
 // Command interface declares just the single method for executing the command.
 type Command interface {
@@ -73,7 +75,7 @@ type UploadCommand struct {
 }
 
 func (c *UploadCommand) execute() error {
-	return c.Server.Upload(c.AppFs, c.LocalDirname, c.Files, c.DryRun)
+	return c.Server.UploadFiles(c.AppFs, c.LocalDirname, c.Files, c.DryRun)
 }
 
 // DeleteAllCommand implements the delete all request.

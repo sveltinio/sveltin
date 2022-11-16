@@ -14,6 +14,12 @@
 		"changeFreq": "{{ $sitemap.ChangeFreq }}",
 		"priority": {{ $sitemap.Priority }}
 	},
+	"sveltekit": {
+		"adapter": {
+			"pages": "build",
+			"assets": "build"
+		}
+	},
 	"sveltin": {
 		"version": "{{ $sveltin.Version }}"
 	}
