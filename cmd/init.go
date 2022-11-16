@@ -346,9 +346,6 @@ func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *c
 	return &config.TemplateData{
 		Name: ProjectSettingsFile,
 		ProjectSettings: &tpltypes.ProjectSettings{
-			Sveltin: tpltypes.SveltinCLIData{
-				Version: CliVersion,
-			},
 			Name:    projectName,
 			BaseURL: fmt.Sprintf("http://%s.com", projectName),
 			Sitemap: tpltypes.SitemapData{
@@ -356,6 +353,9 @@ func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *c
 				Priority:   0.5,
 			},
 			Theme: *themeData,
+			Sveltin: tpltypes.SveltinCLIData{
+				Version: CliVersion,
+			},
 		},
 	}
 }
