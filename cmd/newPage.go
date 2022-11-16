@@ -8,35 +8,21 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 
-	"github.com/charmbracelet/bubbles/list"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/prompti/choose"
-	"github.com/sveltinio/prompti/input"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
-	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var (
-	pageType string
-)
-
-const (
-	// Svelte set svelte as the language used to scaffold a new page
-	Svelte string = "svelte"
-	// Markdown set markdown as the language used to scaffold a new page
-	Markdown string = "markdown"
-)
+var pageType string
 
 //=============================================================================
 
@@ -59,10 +45,10 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
 	isValidProject(true)
 
-	pageName, err := promptPageName(args)
+	pageName, err := prompts.AskPageNameHandler(args)
 	utils.ExitIfError(err)
 
-	pageType, err := promptPageType(pageType)
+	pageType, err := prompts.SelectPageTypeHandler(pageType)
 	utils.ExitIfError(err)
 
 	pageData := &tpltypes.PageData{
@@ -104,56 +90,4 @@ func pageCmdFlags(cmd *cobra.Command) {
 func init() {
 	newCmd.AddCommand(newPageCmd)
 	pageCmdFlags(newPageCmd)
-}
-
-//=============================================================================
-
-func promptPageName(inputs []string) (string, error) {
-	var name string
-	switch numOfArgs := len(inputs); {
-	case numOfArgs < 1:
-		pageNamePromptContent := &input.Config{
-			Placeholder: "What's the page name?",
-			ErrorMsg:    "Please, provide a name for the page.",
-		}
-		name, err := input.Run(pageNamePromptContent)
-		if err != nil {
-			return "", err
-		}
-		return utils.ToSlug(name), nil
-	case numOfArgs == 1:
-		name = inputs[0]
-		return utils.ToSlug(name), nil
-	default:
-		err := errors.New("something went wrong: value not valid")
-		return "", sveltinerr.NewDefaultError(err)
-	}
-}
-
-func promptPageType(pageTypeFlag string) (string, error) {
-	entries := []list.Item{
-		choose.Item{Name: Svelte, Desc: "Svelte"},
-		choose.Item{Name: Markdown, Desc: "Markdown in Svelte"},
-	}
-
-	switch nameLenght := len(pageTypeFlag); {
-	case nameLenght == 0:
-		pagePromptContent := &choose.Config{
-			Title:    "What's the page type?",
-			ErrorMsg: "Please, provide a page type",
-		}
-		result, err := choose.Run(pagePromptContent, entries)
-		if err != nil {
-			return "", err
-		}
-		return result, nil
-	case nameLenght != 0:
-		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, pageTypeFlag) {
-			return "", sveltinerr.NewPageTypeNotValidError()
-		}
-		return pageTypeFlag, nil
-	default:
-		return "", sveltinerr.NewPageTypeNotValidError()
-	}
 }

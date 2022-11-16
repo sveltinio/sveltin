@@ -11,41 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//=============================================================================
-
-var (
-	withCSSLib     string
-	withThemeName  string
-	withPortNumber string
-	withGit        bool
-)
-
-// names for the available style options
-const (
-	StyleDefault string = "default"
-	StyleNone    string = "none"
-)
-
-// names for the available CSS Lib options
-const (
-	Bootstrap   string = "bootstrap"
-	Bulma       string = "bulma"
-	Scss        string = "scss"
-	TailwindCSS string = "tailwindcss"
-	VanillaCSS  string = "vanillacss"
-)
-
-// names for config files
-const (
-	Defaults  string = "defaults"
-	Externals string = "externals"
-	Website   string = "website"
-	Menu      string = "menu"
-	DotEnv    string = "dotenv"
-)
-
-//=============================================================================
-
 var newCmd = &cobra.Command{
 	Use:     "new",
 	Aliases: []string{"n"},
