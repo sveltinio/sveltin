@@ -79,6 +79,7 @@ const (
 	ProjectSettingsFile string = "sveltin.json"
 	DefaultsConfigFile  string = "defaults.js.ts"
 	DotEnvProdFile      string = ".env.production"
+	PackageJSONFile     string = "package.json"
 )
 
 var (
