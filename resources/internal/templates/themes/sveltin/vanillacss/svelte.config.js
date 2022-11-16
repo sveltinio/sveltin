@@ -7,7 +7,6 @@ import adapter from '@sveltejs/adapter-static';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', ...mdsvexConfig.extensions],
-	// Learn more at https://github.com/sveltejs/svelte-preprocess
 	preprocess: [
 		mdsvex(mdsvexConfig),
 		preprocess({
@@ -17,7 +16,6 @@ const config = {
 	],
 	kit: {
 		adapter: adapter({
-			// default options are shown
 			pages: 'build',
 			assets: 'build',
 			fallback: '200.html',
