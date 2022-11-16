@@ -20,6 +20,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/ftpfs"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -79,10 +80,10 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	err = noOpAction.Run()
 	utils.ExitIfError(err)
 
-	common.ShowDeployCommandWarningMessages(isBackup)
+	feedbacks.ShowDeployCommandWarningMessages(isBackup)
 
 	if isDryRun {
-		common.PrintHelperTextDryRunFlag()
+		feedbacks.ShowDryRunMessage()
 	}
 
 	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})

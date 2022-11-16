@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
@@ -20,6 +19,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 
@@ -113,7 +113,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
-	common.PrintHelperTextNewResource(resourceName)
+	feedbacks.ShowNewResourceHelpMessage(resourceName)
 }
 
 func resourceCmdFlags(cmd *cobra.Command) {

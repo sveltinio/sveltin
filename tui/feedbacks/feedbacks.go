@@ -5,41 +5,21 @@
  * that can be found in the LICENSE file.
  */
 
-package common
+package feedbacks
 
 import (
 	"fmt"
 	"strconv"
 
+	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 	logger "github.com/sveltinio/yinlog"
 )
 
-// UserProjectConfig represents the user selections when creating a new sveltin project.
-type UserProjectConfig struct {
-	ProjectName   string
-	CSSLibName    string
-	ThemeName     string
-	NPMClientName string
-}
-
-// PrintSummary shows a summary text with the project settings selected by the user.
-/*
-func (uc *UserProjectConfig) PrintSummary() {
-	entries := map[string]string{
-		"Project Name: ": uc.ProjectName,
-		"CSSLib: ":       uc.CSSLibName,
-		"Theme: ":        uc.ThemeName,
-		"NPM Client: ":   uc.NPMClientName,
-	}
-	fmt.Println(markup.NewULWithIconPrefix("RECAP your choices", entries, markup.CheckMark))
-}
-*/
-
-// PrintNextStepsHelperForNewProject prints an help message as next steps for a project creation.
-func PrintNextStepsHelperForNewProject(uc *UserProjectConfig) {
+// ShowNewProjectNextStepsHelpMessage prints an help message as next steps for a project creation.
+func ShowNewProjectNextStepsHelpMessage(uc *config.ProjectConfig) {
 	steps := []string{
 		fmt.Sprintf("cd %s", uc.ProjectName),
 		fmt.Sprintf("sveltin install %s", markup.Faint("(or npm run install, pnpm install, ...)")),
@@ -50,8 +30,8 @@ func PrintNextStepsHelperForNewProject(uc *UserProjectConfig) {
 	fmt.Printf("%s%s\n", nextStepsMsg, devServerInfoMessage())
 }
 
-// PrintNextStepsHelperForNewProjectWithExistingTheme pprints an help message as next steps for a project creation with an existing theme'.
-func PrintNextStepsHelperForNewProjectWithExistingTheme(uc *UserProjectConfig) {
+// ShowNewProjectWithExistingThemeNextStepsHelpMessage pprints an help message as next steps for a project creation with an existing theme'.
+func ShowNewProjectWithExistingThemeNextStepsHelpMessage(uc *config.ProjectConfig) {
 	steps := []string{
 		fmt.Sprintf("cd %s", uc.ProjectName),
 		fmt.Sprintf("sveltin install %s", markup.Faint("(or npm run install, pnpm install, ...)")),
@@ -65,8 +45,8 @@ func PrintNextStepsHelperForNewProjectWithExistingTheme(uc *UserProjectConfig) {
 	fmt.Printf("%s%s\n", nextStepsMsg, devServerInfoMessage())
 }
 
-// PrintHelperTextNewResource prints an help message string for 'resource creation'.
-func PrintHelperTextNewResource(name string) {
+// ShowNewResourceHelpMessage prints an help message string for 'resource creation'.
+func ShowNewResourceHelpMessage(name string) {
 	exampleString := fmt.Sprintf("sveltin new content %s/getting-started", name)
 	entries := []string{
 		markup.P("Start by adding content to it, e.g."),
@@ -77,8 +57,8 @@ func PrintHelperTextNewResource(name string) {
 	fmt.Println(markup.Section("Resource ready to be used.", entries))
 }
 
-// PrintHelperTextNewMetadata prints an help message string for 'metadata creation'.
-func PrintHelperTextNewMetadata(metadataInfo *tpltypes.MetadataData) {
+// ShowNewMetadataHelpMessage prints an help message string for 'metadata creation'.
+func ShowNewMetadataHelpMessage(metadataInfo *tpltypes.MetadataData) {
 	var exampleString string
 	if metadataInfo.Type == "single" {
 		exampleString = fmt.Sprintf("%s: your_value", utils.ToSnakeCase(metadataInfo.Name))
@@ -97,10 +77,10 @@ func PrintHelperTextNewMetadata(metadataInfo *tpltypes.MetadataData) {
 	fmt.Println(markup.Section("Metadata ready to be used.", entries))
 }
 
-// PrintHelperTextNewTheme returns an help message string for 'theme creation'.
-func (uc *UserProjectConfig) PrintHelperTextNewTheme() {
+// ShowNewThemeHelpMessage returns an help message string for 'theme creation'.
+func ShowNewThemeHelpMessage(pc *config.ProjectConfig) {
 	steps := []string{
-		fmt.Sprintf("cd %s", uc.ProjectName),
+		fmt.Sprintf("cd %s", pc.ProjectName),
 		fmt.Sprintf("sveltin install %s", markup.Faint("(or npm run install, pnpm install, ...)")),
 		"Create your theme components and partials",
 		fmt.Sprintf("sveltin server %s", markup.Faint(" (or npm run dev, pnpm dev, ...)")),
@@ -110,13 +90,13 @@ func (uc *UserProjectConfig) PrintHelperTextNewTheme() {
 	fmt.Printf("%s\n%s\n", nextStepsMsg, themingInfoMessage())
 }
 
-// PrintHelperTextDryRunFlag prints a message box for commands supporting the 'dry-run mode'.
-func PrintHelperTextDryRunFlag() {
+// ShowDryRunMessage prints a message box for commands supporting the 'dry-run mode'.
+func ShowDryRunMessage() {
 	fmt.Println(markup.Bordered(markup.Centered(fmt.Sprintf("%s\n\n%s", markup.Underline("DRY-RUN MODE"), "Nothing will really happen! Just simulating the process."))))
 }
 
-// PrintHelperTextDeploySummary prints a summary message string for commands like deploy.
-func PrintHelperTextDeploySummary(numOfFolders, numOfFiles int) {
+// ShowDeploySummaryMessage prints a summary message string for commands like deploy.
+func ShowDeploySummaryMessage(numOfFolders, numOfFiles int) {
 	entries := map[string]string{
 		"Total number of created folders: ": strconv.Itoa(numOfFolders),
 		"Total number of copied files: ":    strconv.Itoa(numOfFiles),

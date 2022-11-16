@@ -16,7 +16,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
@@ -26,6 +25,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -125,15 +125,13 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
-	projectConfigSummary := common.UserProjectConfig{
+	projectConfigSummary := config.ProjectConfig{
 		ProjectName:   projectName,
 		CSSLibName:    cssLibName,
 		ThemeName:     themeName,
 		NPMClientName: npmClient.Desc,
 	}
-	//cfg.log.Plain(utils.Underline("Next Steps"))
-	//cfg.log.Plain(common.HelperTextNewTheme(projectName))
-	projectConfigSummary.PrintHelperTextNewTheme()
+	feedbacks.ShowNewThemeHelpMessage(&projectConfigSummary)
 }
 
 func newThemeCmdFlags(cmd *cobra.Command) {
