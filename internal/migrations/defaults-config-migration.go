@@ -14,34 +14,34 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/internal/fsm"
-	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/yinlog"
 )
 
-// SemVersionPattern is the regexp pattern to identify semantic versioning string - https://ihateregex.io/expr/semver/ .
-const SemVersionPattern = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
+// semVersionPattern is the regexp pattern to identify semantic versioning string - https://ihateregex.io/expr/semver/ .
+const semVersionPattern = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
 
 //=============================================================================
 
 // UpdateDefaultsConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateDefaultsConfigMigration struct {
-	Mediator  MigrationMediator
-	Fs        afero.Fs
-	FsManager *fsm.SveltinFSManager
-	PathMaker *pathmaker.SveltinPathMaker
-	Logger    *yinlog.Logger
-	Data      *MigrationData
+	Mediator IMigrationMediator
+	Services *MigrationServices
+	Data     *MigrationData
 }
 
-func (m *UpdateDefaultsConfigMigration) getFs() afero.Fs { return m.Fs }
-func (m *UpdateDefaultsConfigMigration) getPathMaker() *pathmaker.SveltinPathMaker {
-	return m.PathMaker
+// MakeMigration implements IMigrationFactory interface,
+func (m *UpdateDefaultsConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateDefaultsConfigMigration{
+		Mediator: migrationManager,
+		Services: services,
+		Data:     data,
+	}
 }
-func (m *UpdateDefaultsConfigMigration) getLogger() *yinlog.Logger { return m.Logger }
-func (m *UpdateDefaultsConfigMigration) getData() *MigrationData   { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
+// implements IMigration interface.
+func (m *UpdateDefaultsConfigMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateDefaultsConfigMigration) getData() *MigrationData         { return m.Data }
+
+// Execute return error if migration execution over up and down methods fails (IMigration interface).
 func (m UpdateDefaultsConfigMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
@@ -57,14 +57,15 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.Fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
+	migrationTriggers := []string{semVersionPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, SemVersionPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateConfigFile(m, fileContent); err != nil {
 				return err
 			}
@@ -93,7 +94,7 @@ func (m *UpdateDefaultsConfigMigration) allowUp() error {
 func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*MigrationRule{newSveltinVersionRule(line)}
+		rules := []*migrationRule{newSveltinVersionRule(line)}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -101,12 +102,12 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.Fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -114,12 +115,12 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 
 //=============================================================================
 
-func newSveltinVersionRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           SemVersionPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newSveltinVersionRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         semVersionPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return `import { sveltin } from '../sveltin.json';
 
 const sveltinVersion = sveltin.version;`

@@ -7,8 +7,8 @@
 
 package migrations
 
-// MigrationMediator interface declares methods of communication with components.
-type MigrationMediator interface {
-	canRun(Migration) bool
+// IMigrationMediator interface declares methods of communication with components.
+type IMigrationMediator interface {
+	canRun(IMigration) bool
 	notifyAboutCompletion() error
 }
