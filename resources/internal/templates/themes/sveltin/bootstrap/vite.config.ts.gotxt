@@ -40,7 +40,8 @@ const config = defineConfig({
 				additionalData: '@use "src/_variables.scss" as *;'
 			}
 		}
-	}
+	},
+	ssr: { noExternal: ['@indaco/svelte-iconoir/**'] }
 });
 
 export default config;
