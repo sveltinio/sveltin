@@ -46,46 +46,92 @@ with the latest Sveltin version.
 func RunUpgradeCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject(false)
+
 	cwd, _ := os.Getwd()
-
 	cfg.log.Plain(markup.H1(fmt.Sprintf("Upgrading your project to sveltin v%s", CliVersion)))
+
 	migrationManager := migrations.NewMigrationManager()
+	migrationServices := migrations.NewMigrationServices(cfg.fs, cfg.fsManager, cfg.pathMaker, cfg.log)
 
-	// FILE: <project_root>/sveltin.json
+	/** FILE: <project_root>/sveltin.json */
 	pathToFile := path.Join(cwd, ProjectSettingsFile)
-	migration := handleMigration(ProjectSettingsMigrationID, migrationManager, cfg, pathToFile)
-	err := migration.Execute()
+	migrationData := &migrations.MigrationData{
+		PathToFile:        pathToFile,
+		CliVersion:        CliVersion,
+		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
+	}
+	migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationID)
+	migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
-
-	// FILE: <project_root>/config/defaults.js.ts
-	pathToFile = path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile)
-	migration = handleMigration(DefaultsConfigMigrationID, migrationManager, cfg, pathToFile)
+	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
 
-	// FILE: <project_root>/themes/<theme_name>/theme.config.js
+	/** FILE: <project_root>/config/defaults.js.ts */
+	pathToFile = path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile:        pathToFile,
+		CliVersion:        CliVersion,
+		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.DefaultsConfigMigrationID)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	utils.ExitIfError(err)
+	// execute the migration.
+	err = migration.Execute()
+	utils.ExitIfError(err)
+
+	// Load project settings file after sveltin.json file creation
 	cfg.projectSettings, err = loadProjectSettings(ProjectSettingsFile)
 	utils.ExitIfError(err)
+
+	/** FILE: <project_root>/themes/<theme_name>/theme.config.js */
 	pathToFile = path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename())
-	migration = handleMigration(ThemeConfigMigrationID, migrationManager, cfg, pathToFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile:        pathToFile,
+		CliVersion:        CliVersion,
+		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.ThemeConfigMigrationID)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	utils.ExitIfError(err)
+	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
 
-	// File: <project_root>/.env.production
+	/** File: <project_root>/.env.production */
 	pathToFile = path.Join(cwd, DotEnvProdFile)
-	migration = handleMigration(DotEnvMigrationID, migrationManager, cfg, pathToFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile: pathToFile,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.DotEnvMigrationID)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	utils.ExitIfError(err)
+	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
 
-	// File: <project_root>/package.json
+	/** File: <project_root>/package.json */
 	pathToFile = path.Join(cwd, PackageJSONFile)
-	migration = handleMigration(PackageJSONID, migrationManager, cfg, pathToFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile: pathToFile,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.PackageJSONMigrationID)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	utils.ExitIfError(err)
+	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
 
-	// File: <project_root/mdsvex.config.json
-	pathToFile = path.Join(cwd, MDsveXFile+".config.js")
-	migration = handleMigration(MDsveXID, migrationManager, cfg, pathToFile)
+	/** File: <project_root/mdsvex.config.json */
+	pathToFile = path.Join(cwd, MDsveXFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile: pathToFile,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.MDsveXMigrationID)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	utils.ExitIfError(err)
+	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
 
@@ -94,111 +140,4 @@ func RunUpgradeCmd(cmd *cobra.Command, args []string) {
 
 func init() {
 	rootCmd.AddCommand(upgradeCmd)
-}
-
-//=============================================================================
-
-func handleMigration(migrationType string, migrationManager *migrations.MigrationManager, config appConfig, pathToFile string) migrations.Migration {
-	switch migrationType {
-	case ProjectSettingsMigrationID:
-		return newAddProjectSettingsMigration(migrationManager, config, pathToFile)
-	case DefaultsConfigMigrationID:
-		return newUpdateDefaultsConfigMigration(migrationManager, config, pathToFile)
-	case ThemeConfigMigrationID:
-		return newUpdateThemeConfigMigration(migrationManager, config, pathToFile)
-	case DotEnvMigrationID:
-		return newDotEnvMigration(migrationManager, config, pathToFile)
-	case PackageJSONID:
-		return newPackageJSONMigration(migrationManager, config, pathToFile)
-	case MDsveXID:
-		return newMDsveXMigration(migrationManager, config, pathToFile)
-	default:
-		return nil
-	}
-}
-
-//=============================================================================
-
-func newAddProjectSettingsMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.AddProjectSettingsMigration {
-	return &migrations.AddProjectSettingsMigration{
-		Mediator:  migrationManager,
-		Fs:        config.fs,
-		FsManager: config.fsManager,
-		PathMaker: config.pathMaker,
-		Logger:    config.log,
-		Data: &migrations.MigrationData{
-			PathToFile:        pathTofile,
-			CliVersion:        CliVersion,
-			ProjectCliVersion: config.projectSettings.Sveltin.Version,
-		},
-	}
-}
-
-func newUpdateDefaultsConfigMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.UpdateDefaultsConfigMigration {
-	return &migrations.UpdateDefaultsConfigMigration{
-		Mediator:  migrationManager,
-		Fs:        config.fs,
-		FsManager: config.fsManager,
-		PathMaker: config.pathMaker,
-		Logger:    config.log,
-		Data: &migrations.MigrationData{
-			PathToFile:        pathTofile,
-			CliVersion:        CliVersion,
-			ProjectCliVersion: config.projectSettings.Sveltin.Version,
-		},
-	}
-}
-
-func newUpdateThemeConfigMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.UpdateThemeConfigMigration {
-	return &migrations.UpdateThemeConfigMigration{
-		Mediator:  migrationManager,
-		Fs:        config.fs,
-		FsManager: config.fsManager,
-		PathMaker: config.pathMaker,
-		Logger:    config.log,
-		Data: &migrations.MigrationData{
-			PathToFile:        pathTofile,
-			CliVersion:        CliVersion,
-			ProjectCliVersion: config.projectSettings.Sveltin.Version,
-		},
-	}
-}
-
-func newDotEnvMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.UpdateDotEnvMigration {
-	return &migrations.UpdateDotEnvMigration{
-		Mediator:  migrationManager,
-		Fs:        config.fs,
-		FsManager: config.fsManager,
-		PathMaker: config.pathMaker,
-		Logger:    config.log,
-		Data: &migrations.MigrationData{
-			PathToFile: pathTofile,
-		},
-	}
-}
-
-func newPackageJSONMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.UpdatePkgJSONMigration {
-	return &migrations.UpdatePkgJSONMigration{
-		Mediator:  migrationManager,
-		Fs:        config.fs,
-		FsManager: config.fsManager,
-		PathMaker: config.pathMaker,
-		Logger:    config.log,
-		Data: &migrations.MigrationData{
-			PathToFile: pathTofile,
-		},
-	}
-}
-
-func newMDsveXMigration(migrationManager *migrations.MigrationManager, config appConfig, pathTofile string) *migrations.UpdateMDsveXMigration {
-	return &migrations.UpdateMDsveXMigration{
-		Mediator:  migrationManager,
-		Fs:        config.fs,
-		FsManager: config.fsManager,
-		PathMaker: config.pathMaker,
-		Logger:    config.log,
-		Data: &migrations.MigrationData{
-			PathToFile: pathTofile,
-		},
-	}
 }

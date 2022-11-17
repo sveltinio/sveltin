@@ -14,9 +14,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/internal/fsm"
-	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/yinlog"
 )
 
 // Patterns used by MigrationRule
@@ -30,20 +27,23 @@ const (
 
 // UpdateThemeConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateThemeConfigMigration struct {
-	Mediator  MigrationMediator
-	Fs        afero.Fs
-	FsManager *fsm.SveltinFSManager
-	PathMaker *pathmaker.SveltinPathMaker
-	Logger    *yinlog.Logger
-	Data      *MigrationData
+	Mediator IMigrationMediator
+	Services *MigrationServices
+	Data     *MigrationData
 }
 
-func (m *UpdateThemeConfigMigration) getFs() afero.Fs { return m.Fs }
-func (m *UpdateThemeConfigMigration) getPathMaker() *pathmaker.SveltinPathMaker {
-	return m.PathMaker
+// MakeMigration implements IMigrationFactory interface.
+func (m *UpdateThemeConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateThemeConfigMigration{
+		Mediator: migrationManager,
+		Services: services,
+		Data:     data,
+	}
 }
-func (m *UpdateThemeConfigMigration) getLogger() *yinlog.Logger { return m.Logger }
-func (m *UpdateThemeConfigMigration) getData() *MigrationData   { return m.Data }
+
+// implements IMigration interface.
+func (m *UpdateThemeConfigMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateThemeConfigMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails.
 func (m UpdateThemeConfigMigration) Execute() error {
@@ -61,14 +61,15 @@ func (m *UpdateThemeConfigMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.Fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
+	migrationTriggers := []string{configConstPattern, exportConfigPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, configConstPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateThemeFile(m, fileContent); err != nil {
 				return err
 			}
@@ -102,7 +103,7 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 			prevLine = lines[i-1]
 		}
 
-		rules := []*MigrationRule{
+		rules := []*migrationRule{
 			newConstNameRule(line),
 			newExportLineRule(line),
 			newThemeNameRule(line, prevLine),
@@ -115,12 +116,12 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 	}
 
 	output := strings.Join(lines, "\n")
-	err := m.Fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -128,12 +129,12 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 
 //=============================================================================
 
-func newConstNameRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           configConstPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newConstNameRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         configConstPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return `import { theme } from '../../sveltin.json';
 
 const themeConfig = {`
@@ -141,23 +142,23 @@ const themeConfig = {`
 	}
 }
 
-func newExportLineRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           exportConfigPattern,
-		IsReplaceFullLine: false,
-		GetMatchReplacer: func(string) string {
+func newExportLineRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         exportConfigPattern,
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
 			return "export { themeConfig }"
 		},
 	}
 }
 
-func newThemeNameRule(line, prevLine string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           namePropPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newThemeNameRule(line, prevLine string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         namePropPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			if !strings.Contains(prevLine, "author:") && strings.Contains(line, "name:") {
 				return "\tname: theme.name,"
 			}

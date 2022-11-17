@@ -15,9 +15,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/internal/fsm"
-	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/yinlog"
 )
 
 // Patterns used by MigrationRule
@@ -31,22 +28,25 @@ const (
 
 // UpdateDotEnvMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateDotEnvMigration struct {
-	Mediator  MigrationMediator
-	Fs        afero.Fs
-	FsManager *fsm.SveltinFSManager
-	PathMaker *pathmaker.SveltinPathMaker
-	Logger    *yinlog.Logger
-	Data      *MigrationData
+	Mediator IMigrationMediator
+	Services *MigrationServices
+	Data     *MigrationData
 }
 
-func (m *UpdateDotEnvMigration) getFs() afero.Fs { return m.Fs }
-func (m *UpdateDotEnvMigration) getPathMaker() *pathmaker.SveltinPathMaker {
-	return m.PathMaker
+// MakeMigration implements IMigrationFactory interface.
+func (m *UpdateDotEnvMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateDotEnvMigration{
+		Mediator: migrationManager,
+		Services: services,
+		Data:     data,
+	}
 }
-func (m *UpdateDotEnvMigration) getLogger() *yinlog.Logger { return m.Logger }
-func (m *UpdateDotEnvMigration) getData() *MigrationData   { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
+// implements IMigration interface.
+func (m *UpdateDotEnvMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateDotEnvMigration) getData() *MigrationData         { return m.Data }
+
+// Execute return error if migration execution over up and down methods fails (IMigration interface).
 func (m UpdateDotEnvMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
@@ -63,14 +63,15 @@ func (m *UpdateDotEnvMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.Fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
+	migrationTriggers := []string{sitemapPattern, svelteKitBuildPattern, svelteKitBuildCommentPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, sitemapPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateDotEnvFile(m, fileContent); err != nil {
 				return err
 			}
@@ -99,7 +100,7 @@ func (m *UpdateDotEnvMigration) allowUp() error {
 func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*MigrationRule{
+		rules := []*migrationRule{
 			newDotEnvSitemapRule(line),
 			newDotEnvSvelteKitBuildCommentRule(line),
 			newDotEnvSveltekitRule(line),
@@ -111,13 +112,13 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.Fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
 	cleanedOutput := removeMultiEmptyLines(output)
-	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, cleanedOutput, 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, cleanedOutput, 0644); err != nil {
 		return err
 	}
 	return nil
@@ -125,34 +126,34 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 
 //=============================================================================
 
-func newDotEnvSitemapRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           sitemapPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newDotEnvSitemapRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         sitemapPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return ""
 		},
 	}
 }
 
-func newDotEnvSvelteKitBuildCommentRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           svelteKitBuildCommentPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newDotEnvSvelteKitBuildCommentRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         svelteKitBuildCommentPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return ""
 		},
 	}
 }
 
-func newDotEnvSveltekitRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           svelteKitBuildPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newDotEnvSveltekitRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         svelteKitBuildPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return ""
 		},
 	}

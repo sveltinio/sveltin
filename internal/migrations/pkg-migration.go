@@ -14,9 +14,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/internal/fsm"
-	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/yinlog"
 )
 
 // Patterns used by MigrationRule
@@ -28,22 +25,25 @@ const (
 
 // UpdatePkgJSONMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdatePkgJSONMigration struct {
-	Mediator  MigrationMediator
-	Fs        afero.Fs
-	FsManager *fsm.SveltinFSManager
-	PathMaker *pathmaker.SveltinPathMaker
-	Logger    *yinlog.Logger
-	Data      *MigrationData
+	Mediator IMigrationMediator
+	Services *MigrationServices
+	Data     *MigrationData
 }
 
-func (m *UpdatePkgJSONMigration) getFs() afero.Fs { return m.Fs }
-func (m *UpdatePkgJSONMigration) getPathMaker() *pathmaker.SveltinPathMaker {
-	return m.PathMaker
+// MakeMigration implements IMigrationFactory interface.
+func (m *UpdatePkgJSONMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdatePkgJSONMigration{
+		Mediator: migrationManager,
+		Services: services,
+		Data:     data,
+	}
 }
-func (m *UpdatePkgJSONMigration) getLogger() *yinlog.Logger { return m.Logger }
-func (m *UpdatePkgJSONMigration) getData() *MigrationData   { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
+// MakeMigration implements IMigration interface.
+func (m *UpdatePkgJSONMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdatePkgJSONMigration) getData() *MigrationData         { return m.Data }
+
+// Execute return error if migration execution over up and down methods fails (IMigration interface).
 func (m UpdatePkgJSONMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
@@ -59,14 +59,15 @@ func (m *UpdatePkgJSONMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.Fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
+	migrationTriggers := []string{remarkAutolinkHeadingsPkgPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, remarkAutolinkHeadingsPkgPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updatePkgJSONFile(m, fileContent); err != nil {
 				return err
 			}
@@ -95,7 +96,7 @@ func (m *UpdatePkgJSONMigration) allowUp() error {
 func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*MigrationRule{
+		rules := []*migrationRule{
 			newRemarkExternalLinksRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
@@ -105,12 +106,12 @@ func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.Fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -118,12 +119,12 @@ func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) error {
 
 //=============================================================================
 
-func newRemarkExternalLinksRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           remarkAutolinkHeadingsPkgPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newRemarkExternalLinksRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         remarkAutolinkHeadingsPkgPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return "\"rehype-external-links\":\"^2.0.1\","
 		},
 	}

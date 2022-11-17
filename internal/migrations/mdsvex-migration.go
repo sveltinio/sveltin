@@ -14,9 +14,6 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
-	"github.com/sveltinio/sveltin/internal/fsm"
-	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/yinlog"
 )
 
 // Patterns used by MigrationRule
@@ -30,22 +27,25 @@ const (
 
 // UpdateMDsveXMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateMDsveXMigration struct {
-	Mediator  MigrationMediator
-	Fs        afero.Fs
-	FsManager *fsm.SveltinFSManager
-	PathMaker *pathmaker.SveltinPathMaker
-	Logger    *yinlog.Logger
-	Data      *MigrationData
+	Mediator IMigrationMediator
+	Services *MigrationServices
+	Data     *MigrationData
 }
 
-func (m *UpdateMDsveXMigration) getFs() afero.Fs { return m.Fs }
-func (m *UpdateMDsveXMigration) getPathMaker() *pathmaker.SveltinPathMaker {
-	return m.PathMaker
+// MakeMigration implements IMigrationFactory interface.
+func (m *UpdateMDsveXMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateMDsveXMigration{
+		Mediator: migrationManager,
+		Services: services,
+		Data:     data,
+	}
 }
-func (m *UpdateMDsveXMigration) getLogger() *yinlog.Logger { return m.Logger }
-func (m *UpdateMDsveXMigration) getData() *MigrationData   { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
+// implements IMigration interface.
+func (m *UpdateMDsveXMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateMDsveXMigration) getData() *MigrationData         { return m.Data }
+
+// Execute return error if migration execution over up and down methods fails (IMigration interface).
 func (m UpdateMDsveXMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
@@ -62,14 +62,15 @@ func (m *UpdateMDsveXMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.Fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
+	migrationTriggers := []string{remarkExternalLinksImportStrPattern, remarkExternalLinksUsagePattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, remarkExternalLinksImportStrPattern, findStringMatcher); ok {
-			m.Logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
 			if err := updateMDsveXFile(m, fileContent); err != nil {
 				return err
 			}
@@ -98,7 +99,7 @@ func (m *UpdateMDsveXMigration) allowUp() error {
 func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*MigrationRule{
+		rules := []*migrationRule{
 			newReplaceRemarkExternalLinksImportStrRule(line),
 			newReplaceRemarkExternalLinksUsageRule(line),
 			newReplaceRehypePluginUsageRule(line),
@@ -110,12 +111,12 @@ func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.Fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.PathToFile)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.Fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -123,34 +124,34 @@ func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 
 //=============================================================================
 
-func newReplaceRemarkExternalLinksImportStrRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           remarkExternalLinksImportStrPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newReplaceRemarkExternalLinksImportStrRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         remarkExternalLinksImportStrPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return "import rehypeExternalLinks from 'rehype-external-links';"
 		},
 	}
 }
 
-func newReplaceRemarkExternalLinksUsageRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           remarkExternalLinksUsagePattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newReplaceRemarkExternalLinksUsageRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         remarkExternalLinksUsagePattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return ""
 		},
 	}
 }
 
-func newReplaceRehypePluginUsageRule(line string) *MigrationRule {
-	return &MigrationRule{
-		Value:             line,
-		Pattern:           rehypePluginPattern,
-		IsReplaceFullLine: true,
-		GetMatchReplacer: func(string) string {
+func newReplaceRehypePluginUsageRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         rehypePluginPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
 			return `rehypePlugins: [
 		[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],`
 		},

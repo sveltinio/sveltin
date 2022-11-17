@@ -10,7 +10,7 @@ package migrations
 // MigrationManager is the struct for the concrete mediator.
 type MigrationManager struct {
 	isFree         bool
-	migrationQueue []Migration
+	migrationQueue []IMigration
 }
 
 // NewMigrationManager is the concrete Mediator.
@@ -20,7 +20,8 @@ func NewMigrationManager() *MigrationManager {
 	}
 }
 
-func (mm *MigrationManager) canRun(m Migration) bool {
+// implements IMigrationMediator interface.
+func (mm *MigrationManager) canRun(m IMigration) bool {
 	if mm.isFree {
 		mm.isFree = false
 		return true

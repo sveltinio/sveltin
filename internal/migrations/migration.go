@@ -13,18 +13,37 @@ import (
 	"strings"
 
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
 	"github.com/sveltinio/yinlog"
 )
 
-// Migration is the interface defining the methods to be implemented by single migration.
-type Migration interface {
+// IMigration is the interface defining the methods to be implemented by single migration.
+type IMigration interface {
 	Execute() error
-	getFs() afero.Fs
-	getPathMaker() *pathmaker.SveltinPathMaker
-	getLogger() *yinlog.Logger
+	getServices() *MigrationServices
 	getData() *MigrationData
+	up() error
+	down() error
 	allowUp() error
+}
+
+// MigrationServices contains references to services used by the migrations.
+type MigrationServices struct {
+	fs        afero.Fs
+	fsManager *fsm.SveltinFSManager
+	pathMaker *pathmaker.SveltinPathMaker
+	logger    *yinlog.Logger
+}
+
+// NewMigrationServices creates an instance of MigrationService struct.
+func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pathmaker.SveltinPathMaker, logger *yinlog.Logger) *MigrationServices {
+	return &MigrationServices{
+		fs:        fs,
+		fsManager: fsm,
+		pathMaker: pathmaker,
+		logger:    logger,
+	}
 }
 
 // MigrationData is the struct with data used by migrations.
@@ -35,41 +54,44 @@ type MigrationData struct {
 }
 
 // MigrationRule is the struct with settings to be matched for running the migration.
-type MigrationRule struct {
-	Value             string
-	Pattern           string
-	IsReplaceFullLine bool
-	GetMatchReplacer  func(string) string
+type migrationRule struct {
+	value           string
+	pattern         string
+	replaceFullLine bool
+	replacerFunc    func(string) string
 }
 
 type matcherFunc = func([]byte, string, string) ([]byte, bool)
 
 //=============================================================================
 
-func isMigrationRequired(m Migration, pattern string, matcher matcherFunc) ([]byte, bool) {
-	content, err := afero.ReadFile(m.getFs(), m.getData().PathToFile)
+func isMigrationRequired(m IMigration, patterns []string, matcher matcherFunc) ([]byte, bool) {
+	content, err := afero.ReadFile(m.getServices().fs, m.getData().PathToFile)
 	if err != nil {
 		return nil, false
 	}
 
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
-		if r, ok := matcher(content, pattern, line); ok {
-			return r, true
+		for _, pattern := range patterns {
+			if r, ok := matcher(content, pattern, line); ok {
+				return r, true
+			}
+			continue
 		}
 	}
 	return nil, false
 }
 
-func applyMigrationRules(rules []*MigrationRule) (string, bool) {
+func applyMigrationRules(rules []*migrationRule) (string, bool) {
 	for _, r := range rules {
-		rule := regexp.MustCompile(r.Pattern)
+		expression := regexp.MustCompile(r.pattern)
 
-		if rule.MatchString(r.Value) {
-			if r.IsReplaceFullLine {
-				return r.GetMatchReplacer(r.Value), true
+		if expression.MatchString(r.value) {
+			if r.replaceFullLine {
+				return r.replacerFunc(r.value), true
 			}
-			return rule.ReplaceAllStringFunc(r.Value, r.GetMatchReplacer), true
+			return expression.ReplaceAllStringFunc(r.value, r.replacerFunc), true
 		}
 	}
 	return "", false
