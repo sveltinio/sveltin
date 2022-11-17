@@ -63,23 +63,32 @@ const (
 	ThemesFolder  string = "themes"
 )
 
+// File IDs for a Sveltin project structure.
+const (
+	ApiIndexFile      string = "api_index"
+	ApiMetadataIndex  string = "api_metadata_index"
+	ApiSlugFile       string = "api_slug"
+	IndexFile         string = "index"
+	IndexEndpointFile string = "indexendpoint"
+	SlugFile          string = "slug"
+	SlugEndpointFile  string = "slugendpoint"
+	SlugLayoutFile    string = "sluglayout"
+	MDsveXFileID      string = "mdsvex"
+)
+
 // File names for a Sveltin project structure.
 const (
-	StringMatcher       string = "string_matcher"
-	GenericMatcher      string = "generic_matcher"
-	ApiIndexFile        string = "api_index"
-	ApiMetadataIndex    string = "api_metadata_index"
-	ApiSlugFile         string = "api_slug"
-	IndexFile           string = "index"
-	IndexEndpointFile   string = "indexendpoint"
-	SlugFile            string = "slug"
-	SlugEndpointFile    string = "slugendpoint"
-	SlugLayoutFile      string = "sluglayout"
-	MDsveXFile          string = "mdsvex"
 	ProjectSettingsFile string = "sveltin.json"
 	DefaultsConfigFile  string = "defaults.js.ts"
 	DotEnvProdFile      string = ".env.production"
 	PackageJSONFile     string = "package.json"
+	MDsveXFile          string = "mdsvex.config.js"
+)
+
+// Matchers IDs
+const (
+	StringMatcher  string = "string_matcher"
+	GenericMatcher string = "generic_matcher"
 )
 
 var (
