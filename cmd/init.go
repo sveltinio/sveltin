@@ -71,7 +71,7 @@ var initCmd = &cobra.Command{
 	Use:     "init <project>",
 	Aliases: []string{"create"},
 	Args:    cobra.RangeArgs(0, 3),
-	Short:   "Initialize a new Sveltin project.",
+	Short:   "Initialize a new Sveltin project",
 	Long: resources.GetASCIIArt() + `
 Command used to initialize/scaffold a new sveltin project.
 

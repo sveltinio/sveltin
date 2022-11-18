@@ -43,7 +43,7 @@ var (
 var deployCmd = &cobra.Command{
 	Use:     "deploy",
 	Aliases: []string{"publish"},
-	Short:   "Deploy your website over FTP.",
+	Short:   "Deploy your website over FTP",
 	Long: `Command used to deploy the project on your hosting platform over FTP.
 `,
 	Run: DeployCmdRun,

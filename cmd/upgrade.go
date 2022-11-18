@@ -33,7 +33,7 @@ const (
 
 var upgradeCmd = &cobra.Command{
 	Use:   "upgrade",
-	Short: "Upgrade your project to the latest Sveltin version.",
+	Short: "Upgrade your project to the latest Sveltin version",
 	Long: resources.GetASCIIArt() + `
 Command used to upgrade your existing project to be compliant
 with the latest Sveltin version.

@@ -37,7 +37,7 @@ var (
 var addMetadataCmd = &cobra.Command{
 	Use:     "metadata [name] --to [resource] --as [single|list]",
 	Aliases: []string{"m"},
-	Short:   "Add metadata to an existing resource.",
+	Short:   "Add metadata to an existing resource",
 	Long: resources.GetASCIIArt() + `
 Command used to add new metadata for your content to an existing resource.
 

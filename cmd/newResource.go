@@ -38,7 +38,7 @@ var (
 var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Aliases: []string{"route", "r"},
-	Short:   "Create a new resource (route).",
+	Short:   "Create a new resource (route)",
 	Long: resources.GetASCIIArt() + `
 Command used to create new resources.
 

@@ -29,7 +29,7 @@ var pageType string
 var newPageCmd = &cobra.Command{
 	Use:     "page [name]",
 	Aliases: []string{"p"},
-	Short:   "Create a new page route.",
+	Short:   "Create a new page route",
 	Long: resources.GetASCIIArt() + `
 Command used to create a new public page route.
 
