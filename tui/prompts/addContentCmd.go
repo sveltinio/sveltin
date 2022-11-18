@@ -53,13 +53,22 @@ func AskContentNameHandler(fs afero.Fs, inputs []string, isSample bool, s *confi
 			Resource: contentResource,
 		}, nil
 	case numOfArgs == 1:
-		name := inputs[0]
-		contentResource, contentName := path.Split(name)
-		contentResource = strings.ReplaceAll(contentResource, "/", "")
+		value := inputs[0]
+		var contentResource string
 
-		err := helpers.ResourceExists(fs, contentResource, s)
-		if err != nil {
-			return nil, err
+		contentResource, contentName := path.Split(value)
+		if !utils.IsEmpty(contentResource) {
+			contentResource = strings.ReplaceAll(contentResource, "/", "")
+			err := helpers.ResourceExists(fs, contentResource, s)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			res, err := selectFromResourceList(fs, s)
+			if err != nil {
+				return nil, err
+			}
+			contentResource = res
 		}
 
 		return &tpltypes.ContentData{
