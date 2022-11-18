@@ -74,6 +74,7 @@ const (
 	SlugEndpointFile  string = "slugendpoint"
 	SlugLayoutFile    string = "sluglayout"
 	MDsveXFileID      string = "mdsvex"
+	DummyImgFileID    string = "dummy"
 )
 
 // File names for a Sveltin project structure.

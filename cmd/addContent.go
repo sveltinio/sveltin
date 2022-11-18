@@ -10,6 +10,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers/factory"
@@ -89,6 +90,11 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	sfs := factory.NewContentArtifact(&resources.SveltinFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
+
+	if withSampleContent {
+		err := addSampleCoverImage(contentData)
+		utils.ExitIfError(err)
+	}
 	cfg.log.Success("Done\n")
 }
 
@@ -121,15 +127,14 @@ func makeContentFolderStructure(folderName string, contentData *tpltypes.Content
 func createContentLocalFolder(contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: content
 	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
-
 	// NEW FOLDER content/<resource_name>/<content_name>
 	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData)
-
 	// NEW FILE: content/<resource_name>/<content_name>/index.svx
 	contentFile := cfg.fsManager.NewResourceContentFile(contentData)
-
+	// SET FOLDER STRUCTURE
 	resourceContentFolder.Add(contentFile)
 	contentFolder.Add(resourceContentFolder)
+
 	return contentFolder
 }
 
@@ -148,4 +153,9 @@ func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Fo
 	staticFolder.Add(imagesFolder)
 
 	return staticFolder
+}
+
+func addSampleCoverImage(contentData *tpltypes.ContentData) error {
+	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "resources", contentData.Resource, contentData.Name)).Name
+	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileID, saveTo)
 }

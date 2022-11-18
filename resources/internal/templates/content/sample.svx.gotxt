@@ -5,7 +5,7 @@ slug: {{ .Content.Name | ToSlug }}
 headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
 created_at: {{ Today }}
 updated_at: {{ Today }}
-cover:
+cover: dummy.jpeg
 draft: false
 ---
 

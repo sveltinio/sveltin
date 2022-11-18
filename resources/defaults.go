@@ -113,6 +113,18 @@ var SveltinXMLFS = map[string]string{
 
 //=============================================================================
 
+// SveltinStaticFS is the name for the embedded assets used by Sveltin.
+//
+//go:embed internal/statics/*
+var SveltinStaticFS embed.FS
+
+// SveltinImagesFS is a map for images files.
+var SveltinImagesFS = map[string]string{
+	"dummy": "internal/statics/images/dummy.jpeg",
+}
+
+//=============================================================================
+
 // BootstrapSveltinThemeFS is a map for the styled templates file whe using bootstrap.
 var BootstrapSveltinThemeFS = SveltinFSItem{
 	"package_json":   "internal/templates/themes/sveltin/bootstrap/package.json.gotxt",
