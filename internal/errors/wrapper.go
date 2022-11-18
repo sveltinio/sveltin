@@ -230,11 +230,14 @@ func NewDirNotFoundError() error {
 func NewMoveFileError(sourceFile, saveTo string) error {
 	placeholderText := `
 
-Something went wrong trying to save %s as %s
+Something went wrong copying:
+"%s"
+to
+"%s"
 `
 	msg := fmt.Sprintf(placeholderText, sourceFile, saveTo)
 	err := fmt.Errorf("please, check the file path: %s", msg)
-	return newSveltinError(moveFileError, "MoveFileError", "File To Be Moved Not Found", msg, err)
+	return newSveltinError(moveFileError, "MoveFileError", "Embedded File Not Found", msg, err)
 }
 
 // NewOptionNotValidError ...
