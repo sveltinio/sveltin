@@ -129,7 +129,7 @@ func addProjectSettingsFile(m *ProjectSettingsMigration) error {
 	projectFolder := m.getServices().fsManager.GetFolder(projectFolderName)
 	projectFolder.Add(sveltinJSONConfigFile)
 
-	sfs := factory.NewProjectArtifact(&resources.SveltinFS, m.getServices().fs)
+	sfs := factory.NewProjectArtifact(&resources.SveltinTemplatesFS, m.getServices().fs)
 	err = projectFolder.Create(sfs)
 	if err != nil {
 		return err

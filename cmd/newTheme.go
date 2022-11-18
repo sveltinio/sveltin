@@ -101,7 +101,7 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	rootFolder.Add(projectFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewThemeArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewThemeArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
 
@@ -119,7 +119,7 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 		},
 		Theme: themeData,
 	}
-	err = setupThemeCSSLib(&resources.SveltinFS, cfg, &tplData)
+	err = setupThemeCSSLib(&resources.SveltinTemplatesFS, cfg, &tplData)
 	utils.ExitIfError(err)
 
 	cfg.log.Success("Done\n")

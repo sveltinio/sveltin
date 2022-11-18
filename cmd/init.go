@@ -155,13 +155,13 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	rootFolder.Add(projectFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewProjectArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewProjectArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
 
 	// COPY FILE: mdsvex.config.js
 	saveTo := cfg.pathMaker.GetProjectRoot(projectName)
-	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinFS, cfg.fs, resources.SveltinProjectFS, MDsveXFileID, saveTo)
+	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, MDsveXFileID, saveTo)
 	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
@@ -178,7 +178,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 		},
 		Theme: themeData,
 	}
-	err = setupCSSLib(&resources.SveltinFS, cfg, &tplData)
+	err = setupCSSLib(&resources.SveltinTemplatesFS, cfg, &tplData)
 	utils.ExitIfError(err)
 
 	// INITIALIZE GIT REPO

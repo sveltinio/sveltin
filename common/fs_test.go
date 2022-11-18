@@ -122,15 +122,15 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 		pathToFile string
 		saveTo     string
 	}{
-		{pathToFile: resources.SveltinProjectFS["website"], saveTo: "website.js.gotxt"},
-		{pathToFile: resources.SveltinProjectFS["menu"], saveTo: "menu.js.gotxt"},
+		{pathToFile: resources.ProjectFilesMap["website"], saveTo: "website.js.gotxt"},
+		{pathToFile: resources.ProjectFilesMap["menu"], saveTo: "menu.js.gotxt"},
 	}
 
 	memFS := afero.NewMemMapFs()
 	for _, tc := range tests {
 		is := is.New(t)
 
-		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
+		err := CopyFileFromEmbeddedFS(&resources.SveltinTemplatesFS, memFS, tc.pathToFile, tc.saveTo)
 		is.NoErr(err)
 
 		exists, err := afero.Exists(memFS, tc.saveTo)
@@ -149,7 +149,7 @@ func TestCopyFileFromEmbeddedFS(t *testing.T) {
 	for _, tc := range fileNotFoundTests {
 		is := is.New(t)
 
-		err := CopyFileFromEmbeddedFS(&resources.SveltinFS, memFS, tc.pathToFile, tc.saveTo)
+		err := CopyFileFromEmbeddedFS(&resources.SveltinTemplatesFS, memFS, tc.pathToFile, tc.saveTo)
 		re := err.(*sveltinerr.SveltinError)
 		is.Equal(10, int(re.Code))
 		placeholderText := `file not found! Please, check the file path:

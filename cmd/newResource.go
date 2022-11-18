@@ -106,7 +106,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	projectFolder.Add(apiFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewResourceArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewResourceArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 

@@ -56,7 +56,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	projectFolder.Add(staticFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewNoPageArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewNoPageArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 

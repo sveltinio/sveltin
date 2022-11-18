@@ -32,7 +32,7 @@ func TestTemplates(t *testing.T) {
 	err = viper.Unmarshal(&settings)
 	is.NoErr(err)
 
-	pathToTplFile := resources.SveltinProjectFS["theme_config"]
+	pathToTplFile := resources.ProjectFilesMap["theme_config"]
 	data := &config.TemplateData{
 		Name: "white",
 	}
@@ -47,7 +47,7 @@ func TestTemplates(t *testing.T) {
 func TestExecSveltinTpl(t *testing.T) {
 	is := is.New(t)
 
-	pathToTplFile := resources.SveltinProjectFS["theme_config"]
+	pathToTplFile := resources.ProjectFilesMap["theme_config"]
 	data := config.TemplateData{
 		Theme: &tpltypes.ThemeData{
 			Name: "white",
@@ -55,7 +55,7 @@ func TestExecSveltinTpl(t *testing.T) {
 	}
 
 	tplConfig := BuildTemplate(pathToTplFile, nil, &data)
-	retrievedContent := tplConfig.Run(&resources.SveltinFS)
+	retrievedContent := tplConfig.Run(&resources.SveltinTemplatesFS)
 
 	validContent := `import { theme } from '../../sveltin.json';
 

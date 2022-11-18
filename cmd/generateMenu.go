@@ -62,7 +62,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	projectFolder.Add(configFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewMenuArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewMenuArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 

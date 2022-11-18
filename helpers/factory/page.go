@@ -21,6 +21,6 @@ func NewPageArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "page",
-		resources: resources.SveltinPageFS,
+		resources: resources.PageFilesMap,
 	}
 }

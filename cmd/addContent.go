@@ -87,7 +87,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	projectFolder.Add(staticFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewContentArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewContentArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 

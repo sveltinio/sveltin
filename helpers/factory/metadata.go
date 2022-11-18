@@ -22,6 +22,6 @@ func NewMetadataArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "metadata",
-		resources: common.UnionMap(resources.SveltinMetadataFS, common.UnionMap(resources.SveltinAPIFS, resources.SveltinMatchersFS)),
+		resources: common.UnionMap(resources.MetadataFilesMap, common.UnionMap(resources.APIFilesMap, resources.MatchersFilesMap)),
 	}
 }

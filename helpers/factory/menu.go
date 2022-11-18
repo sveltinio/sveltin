@@ -21,6 +21,6 @@ func NewMenuArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "menu",
-		resources: resources.SveltinProjectFS,
+		resources: resources.ProjectFilesMap,
 	}
 }

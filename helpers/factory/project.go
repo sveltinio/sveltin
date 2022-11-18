@@ -21,6 +21,6 @@ func NewProjectArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "project",
-		resources: resources.SveltinProjectFS,
+		resources: resources.ProjectFilesMap,
 	}
 }

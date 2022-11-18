@@ -25,16 +25,16 @@ func GetASCIIArt() string {
 	return sveltinASCIIArt
 }
 
-// SveltinFS is the name for the embedded FS used by Sveltin.
+// SveltinTemplatesFS is the name for the embedded FS used by Sveltin.
 //
 //go:embed internal/templates/*
-var SveltinFS embed.FS
+var SveltinTemplatesFS embed.FS
 
-// SveltinFSItem represents an entry for the embedded FS.
-type SveltinFSItem map[string]string
+// EmbeddedFSEntry type is a map[string]string used to maps embedded files.
+type EmbeddedFSEntry map[string]string
 
-// SveltinProjectFS is the map for the project template files.
-var SveltinProjectFS = map[string]string{
+// ProjectFilesMap is the map for the project template files.
+var ProjectFilesMap = EmbeddedFSEntry{
 	"defaults":         "internal/templates/site/defaults.js.ts.gotxt",
 	"externals":        "internal/templates/site/externals.js.ts.gotxt",
 	"website":          "internal/templates/site/website.js.ts.gotxt",
@@ -42,7 +42,6 @@ var SveltinProjectFS = map[string]string{
 	"menu":             "internal/templates/site/menu.js.ts.gotxt",
 	"dotenv":           "internal/templates/misc/env.gotxt",
 	"project_settings": "internal/templates/misc/sveltin.json.gotxt",
-	"mdsvex":           "internal/templates/misc/mdsvex.config.js",
 	"readme":           "internal/templates/misc/README.md.gotxt",
 	"license":          "internal/templates/misc/LICENSE.gotxt",
 	"index":            "internal/templates/themes/index.svelte.gotxt",
@@ -50,8 +49,8 @@ var SveltinProjectFS = map[string]string{
 	"theme_config":     "internal/templates/themes/theme.config.js.gotxt",
 }
 
-// SveltinResourceFS is the map for the resource template files.
-var SveltinResourceFS = map[string]string{
+// ResourceFilesMap is the map for the resource template files.
+var ResourceFilesMap = EmbeddedFSEntry{
 	"lib":           "internal/templates/resource/lib.gotxt",
 	"index_blank":   "internal/templates/resource/themes/blank/page.svelte.gotxt",
 	"index_sveltin": "internal/templates/resource/themes/sveltin/page.svelte.gotxt",
@@ -62,8 +61,8 @@ var SveltinResourceFS = map[string]string{
 	"sluglayout":    "internal/templates/resource/layout.svelte.gotxt",
 }
 
-// SveltinAPIFS is the map for the api template files.
-var SveltinAPIFS = map[string]string{
+// APIFilesMap is the map for the api template files.
+var APIFilesMap = EmbeddedFSEntry{
 	"api_index":           "internal/templates/resource/api/apiIndex.gotxt",
 	"api_slug":            "internal/templates/resource/api/apiSlug.gotxt",
 	"api_metadata_index":  "internal/templates/resource/api/apiMetadataIndex.gotxt",
@@ -71,14 +70,14 @@ var SveltinAPIFS = map[string]string{
 	"api_metadata_list":   "internal/templates/resource/api/apiMetadataList.gotxt",
 }
 
-// SveltinMatchersFS is the map for the matchers template files.
-var SveltinMatchersFS = map[string]string{
+// MatchersFilesMap is the map for the matchers template files.
+var MatchersFilesMap = EmbeddedFSEntry{
 	"string_matcher":  "internal/templates/resource/matchers/string.js.gotxt",
 	"generic_matcher": "internal/templates/resource/matchers/generic.js.gotxt",
 }
 
-// SveltinMetadataFS is the map for the metadata template files.
-var SveltinMetadataFS = map[string]string{
+// MetadataFilesMap is the map for the metadata template files.
+var MetadataFilesMap = EmbeddedFSEntry{
 	"lib_single":    "internal/templates/resource/metadata/libSingle.gotxt",
 	"lib_list":      "internal/templates/resource/metadata/libList.gotxt",
 	"index_blank":   "internal/templates/resource/metadata/themes/blank/page.svelte.gotxt",
@@ -89,22 +88,22 @@ var SveltinMetadataFS = map[string]string{
 	"slugendpoint":  "internal/templates/resource/metadata/slug.ts.gotxt",
 }
 
-// SveltinPageFS is the map for the page template files.
-var SveltinPageFS = map[string]string{
+// PageFilesMap is the map for the page template files.
+var PageFilesMap = EmbeddedFSEntry{
 	"svelte_blank":     "internal/templates/page/themes/blank/page.svelte.gotxt",
 	"svelte_sveltin":   "internal/templates/page/themes/sveltin/page.svelte.gotxt",
 	"markdown_blank":   "internal/templates/page/themes/blank/page.svx.gotxt",
 	"markdown_sveltin": "internal/templates/page/themes/sveltin/page.svx.gotxt",
 }
 
-// SveltinContentFS is the map for the content template files.
-var SveltinContentFS = map[string]string{
+// ContentFilesMap is the map for the content template files.
+var ContentFilesMap = EmbeddedFSEntry{
 	"blank":  "internal/templates/content/blank.svx.gotxt",
 	"sample": "internal/templates/content/sample.svx.gotxt",
 }
 
-// SveltinXMLFS is a map for the xml (sitemap and rss) template files.
-var SveltinXMLFS = map[string]string{
+// XMLFilesMap is a map for the xml (sitemap and rss) template files.
+var XMLFilesMap = EmbeddedFSEntry{
 	"sitemap_static": "internal/templates/xml/sitemap.xml.gotxt",
 	"rss_static":     "internal/templates/xml/rss.xml.gotxt",
 	"sitemap_ssr":    "internal/templates/xml/ssr_sitemap.xml.ts.gotxt",
@@ -113,20 +112,8 @@ var SveltinXMLFS = map[string]string{
 
 //=============================================================================
 
-// SveltinStaticFS is the name for the embedded assets used by Sveltin.
-//
-//go:embed internal/statics/*
-var SveltinStaticFS embed.FS
-
-// SveltinImagesFS is a map for images files.
-var SveltinImagesFS = map[string]string{
-	"dummy": "internal/statics/images/dummy.jpeg",
-}
-
-//=============================================================================
-
-// BootstrapSveltinThemeFS is a map for the styled templates file whe using bootstrap.
-var BootstrapSveltinThemeFS = SveltinFSItem{
+// BootstrapSveltinThemeFilesMap is a map for the styled templates file whe using bootstrap.
+var BootstrapSveltinThemeFilesMap = EmbeddedFSEntry{
 	"package_json":   "internal/templates/themes/sveltin/bootstrap/package.json.gotxt",
 	"svelte_config":  "internal/templates/themes/sveltin/bootstrap/svelte.config.js",
 	"vite_config":    "internal/templates/themes/sveltin/bootstrap/vite.config.ts.gotxt",
@@ -140,8 +127,8 @@ var BootstrapSveltinThemeFS = SveltinFSItem{
 	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
-// BootstrapBlankThemeFS is the map for the unstyled templates file whe using bootstrap.
-var BootstrapBlankThemeFS = SveltinFSItem{
+// BootstrapBlankThemeFilesMap is the map for the unstyled templates file whe using bootstrap.
+var BootstrapBlankThemeFilesMap = EmbeddedFSEntry{
 	"package_json":   "internal/templates/themes/blank/bootstrap/package.json.gotxt",
 	"svelte_config":  "internal/templates/themes/blank/bootstrap/svelte.config.js",
 	"vite_config":    "internal/templates/themes/blank/bootstrap/vite.config.ts.gotxt",
@@ -156,8 +143,8 @@ var BootstrapBlankThemeFS = SveltinFSItem{
 
 //=============================================================================
 
-// BulmaSveltinThemeFS is the map for the styled templates file whe using bulma.
-var BulmaSveltinThemeFS = SveltinFSItem{
+// BulmaSveltinThemeFilesMap is the map for the styled templates file whe using bulma.
+var BulmaSveltinThemeFilesMap = EmbeddedFSEntry{
 	"package_json":   "internal/templates/themes/sveltin/bulma/package.json.gotxt",
 	"svelte_config":  "internal/templates/themes/sveltin/bulma/svelte.config.js",
 	"vite_config":    "internal/templates/themes/sveltin/bulma/vite.config.ts.gotxt",
@@ -171,8 +158,8 @@ var BulmaSveltinThemeFS = SveltinFSItem{
 	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
-// BulmaBlankThemeFS is the map for the unstyled templates file whe using bulma.
-var BulmaBlankThemeFS = SveltinFSItem{
+// BulmaBlankThemeFilesMap is the map for the unstyled templates file whe using bulma.
+var BulmaBlankThemeFilesMap = EmbeddedFSEntry{
 	"package_json":   "internal/templates/themes/blank/bulma/package.json.gotxt",
 	"svelte_config":  "internal/templates/themes/blank/bulma/svelte.config.js",
 	"vite_config":    "internal/templates/themes/blank/bulma/vite.config.ts.gotxt",
@@ -187,8 +174,8 @@ var BulmaBlankThemeFS = SveltinFSItem{
 
 //=============================================================================
 
-// SCSSSveltinThemeFS is the map for the styled templates file whe using scss/sass.
-var SCSSSveltinThemeFS = SveltinFSItem{
+// SassSveltinThemeFilesMap is the map for the styled templates file whe using scss/sass.
+var SassSveltinThemeFilesMap = EmbeddedFSEntry{
 	"package_json":   "internal/templates/themes/sveltin/scss/package.json.gotxt",
 	"svelte_config":  "internal/templates/themes/sveltin/scss/svelte.config.js",
 	"vite_config":    "internal/templates/themes/sveltin/scss/vite.config.ts.gotxt",
@@ -202,8 +189,8 @@ var SCSSSveltinThemeFS = SveltinFSItem{
 	"error":          "internal/templates/themes/error.styled.svelte",
 }
 
-// SCSSBlankThemeFS is the map for the unstyled templates file whe using scss/sass.
-var SCSSBlankThemeFS = SveltinFSItem{
+// SassBlankThemeFilesMap is the map for the unstyled templates file whe using scss/sass.
+var SassBlankThemeFilesMap = EmbeddedFSEntry{
 	"package_json":   "internal/templates/themes/blank/scss/package.json.gotxt",
 	"svelte_config":  "internal/templates/themes/blank/scss/svelte.config.js",
 	"vite_config":    "internal/templates/themes/blank/scss/vite.config.ts.gotxt",
@@ -218,8 +205,8 @@ var SCSSBlankThemeFS = SveltinFSItem{
 
 //=============================================================================
 
-// TailwindSveltinThemeFS is the map for the styled templates file whe using tailwind css.
-var TailwindSveltinThemeFS = SveltinFSItem{
+// TailwindSveltinThemeFilesMap is the map for the styled templates file whe using tailwind css.
+var TailwindSveltinThemeFilesMap = EmbeddedFSEntry{
 	"package_json":        "internal/templates/themes/sveltin/tailwindcss/package.json.gotxt",
 	"svelte_config":       "internal/templates/themes/sveltin/tailwindcss/svelte.config.js",
 	"vite_config":         "internal/templates/themes/sveltin/tailwindcss/vite.config.ts.gotxt",
@@ -234,8 +221,8 @@ var TailwindSveltinThemeFS = SveltinFSItem{
 	"error":               "internal/templates/themes/error.styled.svelte",
 }
 
-// TailwindBlankThemeFS is the map for the unstyled templates file whe using tailwind css.
-var TailwindBlankThemeFS = SveltinFSItem{
+// TailwindBlankThemeFilesMap is the map for the unstyled templates file whe using tailwind css.
+var TailwindBlankThemeFilesMap = EmbeddedFSEntry{
 	"package_json":        "internal/templates/themes/blank/tailwindcss/package.json.gotxt",
 	"svelte_config":       "internal/templates/themes/blank/tailwindcss/svelte.config.js",
 	"vite_config":         "internal/templates/themes/blank/tailwindcss/vite.config.ts.gotxt",
@@ -251,8 +238,8 @@ var TailwindBlankThemeFS = SveltinFSItem{
 
 //=============================================================================
 
-// VanillaSveltinThemeFS is the map for the styled templates file whe using vanilla css.
-var VanillaSveltinThemeFS = SveltinFSItem{
+// VanillaSveltinThemeFilesMap is the map for the styled templates file whe using vanilla css.
+var VanillaSveltinThemeFilesMap = EmbeddedFSEntry{
 	"package_json":  "internal/templates/themes/sveltin/vanillacss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/sveltin/vanillacss/svelte.config.js",
 	"vite_config":   "internal/templates/themes/sveltin/vanillacss/vite.config.ts.gotxt",
@@ -265,8 +252,8 @@ var VanillaSveltinThemeFS = SveltinFSItem{
 	"error":         "internal/templates/themes/error.styled.svelte",
 }
 
-// VanillaBlankThemeFS is the map for the unstyled templates file whe using vanilla css.
-var VanillaBlankThemeFS = SveltinFSItem{
+// VanillaBlankThemeFilesMap is the map for the unstyled templates file whe using vanilla css.
+var VanillaBlankThemeFilesMap = EmbeddedFSEntry{
 	"package_json":  "internal/templates/themes/blank/vanillacss/package.json.gotxt",
 	"svelte_config": "internal/templates/themes/blank/vanillacss/svelte.config.js",
 	"vite_config":   "internal/templates/themes/blank/vanillacss/vite.config.ts.gotxt",

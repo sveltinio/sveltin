@@ -299,15 +299,15 @@ func makeTheme(cssLib *CSSLib) error {
 func makeResourcesMapForStyled(cssLib *CSSLib) (map[string]string, error) {
 	switch cssLib.Name {
 	case Bootstrap:
-		return resources.BootstrapSveltinThemeFS, nil
+		return resources.BootstrapSveltinThemeFilesMap, nil
 	case Bulma:
-		return resources.BulmaSveltinThemeFS, nil
+		return resources.BulmaSveltinThemeFilesMap, nil
 	case Scss:
-		return resources.SCSSSveltinThemeFS, nil
+		return resources.SassSveltinThemeFilesMap, nil
 	case TailwindCSS:
-		return resources.TailwindSveltinThemeFS, nil
+		return resources.TailwindSveltinThemeFilesMap, nil
 	case VanillaCSS:
-		return resources.VanillaSveltinThemeFS, nil
+		return resources.VanillaSveltinThemeFilesMap, nil
 	default:
 		return nil, sveltinerr.NewOptionNotValidError(cssLib.Name, AvailableCSSLib)
 	}
@@ -316,15 +316,15 @@ func makeResourcesMapForStyled(cssLib *CSSLib) (map[string]string, error) {
 func makeResourcesMapForUnstyled(cssLib *CSSLib) (map[string]string, error) {
 	switch cssLib.Name {
 	case Bootstrap:
-		return resources.BootstrapBlankThemeFS, nil
+		return resources.BootstrapBlankThemeFilesMap, nil
 	case Bulma:
-		return resources.BulmaBlankThemeFS, nil
+		return resources.BulmaBlankThemeFilesMap, nil
 	case Scss:
-		return resources.SCSSBlankThemeFS, nil
+		return resources.SassBlankThemeFilesMap, nil
 	case TailwindCSS:
-		return resources.TailwindBlankThemeFS, nil
+		return resources.TailwindBlankThemeFilesMap, nil
 	case VanillaCSS:
-		return resources.VanillaBlankThemeFS, nil
+		return resources.VanillaBlankThemeFilesMap, nil
 	default:
 		return nil, sveltinerr.NewOptionNotValidError(cssLib.Name, AvailableCSSLib)
 	}

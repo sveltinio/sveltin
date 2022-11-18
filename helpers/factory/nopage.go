@@ -21,6 +21,6 @@ func NewNoPageArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "nopage",
-		resources: resources.SveltinXMLFS,
+		resources: resources.XMLFilesMap,
 	}
 }

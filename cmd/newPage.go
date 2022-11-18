@@ -77,7 +77,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	projectFolder.Add(routesFolder)
 
 	// GENERATE THE FOLDER TREE
-	sfs := factory.NewPageArtifact(&resources.SveltinFS, cfg.fs)
+	sfs := factory.NewPageArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 	cfg.log.Success("Done\n")

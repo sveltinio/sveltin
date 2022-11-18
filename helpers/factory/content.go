@@ -21,6 +21,6 @@ func NewContentArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 		efs:       efs,
 		fs:        fs,
 		builder:   "resContent",
-		resources: resources.SveltinContentFS,
+		resources: resources.ContentFilesMap,
 	}
 }
