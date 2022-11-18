@@ -75,7 +75,7 @@ var (
 	UL = lipgloss.NewStyle().Margin(1, 0, 1, 1)
 
 	// OL is used to style an ordered list, as the HTML <ol> tag.
-	OL = UL.Copy()
+	OL = lipgloss.NewStyle().Margin(1, 0, 0, 1)
 
 	// LI is used to style a list item, as the HTML <li> tag..
 	LI = lipgloss.NewStyle().Render
