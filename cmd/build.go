@@ -23,7 +23,7 @@ import (
 var buildCmd = &cobra.Command{
 	Use:     "build",
 	Aliases: []string{"b"},
-	Short:   "Builds a production version of your static website.",
+	Short:   "Builds a production version of your static website",
 	Long: resources.GetASCIIArt() + `
 Command used to build a production version of your static website.
 

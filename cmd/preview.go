@@ -21,7 +21,7 @@ import (
 
 var previewCmd = &cobra.Command{
 	Use:   "preview",
-	Short: "Preview the production version locally.",
+	Short: "Preview the production version locally",
 	Long: resources.GetASCIIArt() + `
 Command used to start the production version locally.
 

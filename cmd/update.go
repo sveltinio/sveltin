@@ -22,7 +22,7 @@ import (
 var updateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"u"},
-	Short:   "Update your project dependencies.",
+	Short:   "Update your project dependencies",
 	Long: resources.GetASCIIArt() + `
 Command used to update all dependencies from the 'package.json' file.
 

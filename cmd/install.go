@@ -22,7 +22,7 @@ import (
 var installCmd = &cobra.Command{
 	Use:     "install",
 	Aliases: []string{"i"},
-	Short:   "Install your project dependencies.",
+	Short:   "Install your project dependencies",
 	Long: resources.GetASCIIArt() + `
 Command used to install all dependencies from the 'package.json' file.
 

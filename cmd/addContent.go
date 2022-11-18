@@ -38,7 +38,7 @@ const (
 var addContentCmd = &cobra.Command{
 	Use:     "content [name]",
 	Aliases: []string{"c"},
-	Short:   "Add new content to an existing resource.",
+	Short:   "Add new content to an existing resource",
 	Long: resources.GetASCIIArt() + `
 Command used to create a new markdown file as content and a folder to store the statics used by the content itself.
 
