@@ -58,7 +58,6 @@ This command:
 - Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page
 	`,
 	DisableFlagsInUseLine: true,
-	Args:                  cobra.ExactArgs(1),
 	Run:                   RunNewResourceCmd,
 }
 
