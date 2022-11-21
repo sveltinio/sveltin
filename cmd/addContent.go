@@ -25,7 +25,10 @@ import (
 
 //=============================================================================
 
-var withSampleContent bool
+var (
+	resourceNameForContent string
+	withSampleContent      bool
+)
 
 const (
 	// Blank represents the fontmatter-only template id used when generating the content file.
@@ -50,8 +53,8 @@ Use the --template flag to select the right one to you. Valid options: blank or 
 
 Example:
 
-1. You have already created a "posts" resource
-2. run: sveltin new content posts/my-first-content --sample
+1. You have already created some resource by running "sveltin new resource"
+2. run: sveltin add content welcome
 
 As result:
 
@@ -59,8 +62,7 @@ As result:
 - an index.svx file is placed there
 - a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
 `,
-	Args: cobra.ExactArgs(1),
-	Run:  RunAddContentCmd,
+	Run: RunAddContentCmd,
 }
 
 // RunAddContentCmd is the actual work function.
@@ -68,8 +70,17 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
 	isValidProject(true)
 
-	contentData, err := prompts.AskContentNameHandler(cfg.fs, args, withSampleContent, cfg.settings)
+	contentName, err := prompts.AskContentNameHandler(args)
 	utils.ExitIfError(err)
+
+	contentResource, err := prompts.SelectResourceHandler(cfg.fs, resourceNameForContent, cfg.settings)
+	utils.ExitIfError(err)
+
+	/*contentData, err := prompts.AskContentNameHandler(cfg.fs, args, withSampleContent, cfg.settings)
+	utils.ExitIfError(err)
+	*/
+
+	contentData := tpltypes.NewContentData(contentName, contentResource, withSampleContent)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
 	cfg.log.Plain(markup.H1(headingText))
@@ -100,6 +111,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 }
 
 func contentCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to.")
 	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file.")
 }
 

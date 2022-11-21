@@ -13,3 +13,12 @@ type MetadataData struct {
 	Resource string
 	Type     string
 }
+
+// NewMetadataData creates a pointer to a NewMetadataData struct.
+func NewMetadataData(name, mdResource, mdType string) *MetadataData {
+	return &MetadataData{
+		Name:     name,
+		Resource: mdResource,
+		Type:     mdType,
+	}
+}

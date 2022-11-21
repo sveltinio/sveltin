@@ -28,8 +28,8 @@ import (
 //=============================================================================
 
 var (
-	resourceName string
-	metadataType string
+	resourceNameForMetadata string
+	metadataType            string
 )
 
 //=============================================================================
@@ -46,13 +46,17 @@ Command used to add new metadata for your content to an existing resource.
 What is a "metadata" for Sveltin?
 Whatever you enter in the front-matter of your markdown content for which you want content grouped by it.
 
+Example:
+
+1. You have already created some resource by running "sveltin new resource"
+2. run: sveltin add metadata category
+
 Metadata Types:
 
 - single: 1:1 relationship (e.g. category)
 - list: 1:many relationship (e.g. tags)
 `,
-	Args: cobra.ExactArgs(1),
-	Run:  RunAddMetadataCmd,
+	Run: RunAddMetadataCmd,
 }
 
 // RunAddMetadataCmd is the actual work function.
@@ -63,17 +67,13 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	mdName, err := prompts.AskMetadataNameHandler(args)
 	utils.ExitIfError(err)
 
-	mdResource, err := prompts.SelectResourceHandler(cfg.fs, resourceName, cfg.settings)
+	mdResource, err := prompts.SelectResourceHandler(cfg.fs, resourceNameForMetadata, cfg.settings)
 	utils.ExitIfError(err)
 
 	mdType, err := prompts.SelectMetadataTypeHandler(metadataType)
 	utils.ExitIfError(err)
 
-	metadataTemplateData := &tpltypes.MetadataData{
-		Name:     mdName,
-		Resource: mdResource,
-		Type:     mdType,
-	}
+	metadataTemplateData := tpltypes.NewMetadataData(mdName, mdResource, mdType)
 
 	headingText := fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)
 	cfg.log.Plain(markup.H1(headingText))
@@ -112,7 +112,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&resourceName, "to", "t", "", "Name of the resource the new metadata is belongs to.")
+	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to.")
 	cmd.Flags().StringVarP(&metadataType, "as", "a", "", "Type of the new metadata. (possible values: single or list)")
 }
 

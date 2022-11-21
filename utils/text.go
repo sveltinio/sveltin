@@ -63,6 +63,7 @@ func Trimmed(txt string) string {
 // example: ToSlug("New Resource") returns new-resource.
 func ToSlug(txt string) string {
 	cleanString := strings.ToLower(txt)
+	cleanString = Trimmed(cleanString)
 	cleanString = strings.ReplaceAll(cleanString, " ", "-")
 	cleanString = strings.ReplaceAll(cleanString, "_", "-")
 	return cleanString
