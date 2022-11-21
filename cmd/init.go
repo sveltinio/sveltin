@@ -81,8 +81,7 @@ sveltin init blog --css tailwindcss
 sveltin init blog --css vanillacss -t myTheme
 sveltin init portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git
 `,
-	Args: cobra.ExactArgs(1),
-	Run:  InitCmdRun,
+	Run: InitCmdRun,
 }
 
 // InitCmdRun is the actual work function.
