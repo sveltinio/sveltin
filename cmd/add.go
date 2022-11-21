@@ -18,13 +18,11 @@ var addCmd = &cobra.Command{
 	Short:   "Add content and metadata to an existing resource",
 	Long: `Command used to add content and metadata to an existing resources through its own subcommands.
 
-Run 'sveltin add -h' for further details.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-		isValidProject(true)
-
-		cfg.log.Important("Run 'sveltin add -h'")
-	},
+Run 'sveltin add -h' for further details.
+`,
+	ValidArgs:             []string{"content", "metadata"},
+	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	DisableFlagsInUseLine: true,
 }
 
 func init() {

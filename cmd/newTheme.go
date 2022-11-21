@@ -25,6 +25,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
@@ -33,7 +34,7 @@ import (
 //=============================================================================
 
 var newThemeCmd = &cobra.Command{
-	Use:     "theme <name>",
+	Use:     "theme [name]",
 	Aliases: []string{"t"},
 	Short:   "Create a new theme reusable theme",
 	Long: resources.GetASCIIArt() + `
@@ -45,6 +46,15 @@ sveltin new theme paper
 sveltin new theme paper --css tailwindcss
 `,
 	Run: NewThemeCmdRun,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the theme"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, "This command does not take any more arguments but accepts flags")
+		}
+		return comps, cobra.ShellCompDirectiveNoFileComp
+	},
 }
 
 // NewThemeCmdRun is the actual work function.
@@ -141,7 +151,7 @@ func newThemeCmdFlags(cmd *cobra.Command) {
 
 func init() {
 	newThemeCmdFlags(newThemeCmd)
-	newCmd.AddCommand(newThemeCmd)
+	//newCmd.AddCommand(newThemeCmd)
 }
 
 //=============================================================================

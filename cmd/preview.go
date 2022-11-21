@@ -27,8 +27,11 @@ Command used to start the production version locally.
 
 Run after sveltin build (or vite build), you can start the production version locally with sveltin preview.
 
-It wraps vite preview command.`,
-	Run: RunPreviewCmd,
+It wraps vite preview command.
+`,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunPreviewCmd,
 }
 
 // RunPreviewCmd is the actual work function.

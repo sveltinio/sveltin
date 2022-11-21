@@ -21,13 +21,11 @@ Examples:
 
 sveltin new page about
 sveltin new resource posts
-sveltin new theme paper --css tailwindcss --npmClient pnpm`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-		isValidProject(true)
-
-		cfg.log.Important("Run 'sveltin new -h'")
-	},
+sveltin new theme paper --css tailwindcss --npmClient pnpm
+`,
+	ValidArgs:             []string{"page", "resource"},
+	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	DisableFlagsInUseLine: true,
 }
 
 func init() {

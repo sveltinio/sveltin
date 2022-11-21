@@ -50,6 +50,7 @@ const (
 	packageManagerCommandNotValidError
 	execSystemCommandError
 	execSystemCommandErrorWithMsg
+	shellCompletionError
 )
 
 var (
@@ -336,6 +337,12 @@ Here is the string representing the command line executed:
 func NewExecSystemCommandErrorWithMsg(err error) error {
 	errN := errors.New("cannot exec the system command. please, check it and its arguments: " + err.Error())
 	return newSveltinError(execSystemCommandErrorWithMsg, "ExecSystemCommandErrorWithMsg", "System Command Execution Failure", errN.Error(), errN)
+}
+
+// NewShellCompletionError ...
+func NewShellCompletionError() error {
+	err := errors.New("it seems you provided a not valid shell name. Valid  [bash|zsh|fish|powershell]")
+	return newSveltinError(shellCompletionError, "CompletionShellError", "Invalid shell name", err.Error(), err)
 }
 
 //=============================================================================

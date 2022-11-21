@@ -32,7 +32,8 @@ By default it list all resources and public pages.
 
 The --full flag will includes content names for all resources too.
 `,
-	Run: RunGenerateMenuCmd,
+	Args: cobra.ExactArgs(0),
+	Run:  RunGenerateMenuCmd,
 }
 
 // RunGenerateMenuCmd is the actual work function.

@@ -32,7 +32,9 @@ It wraps vite build command.
 Ensure to edit env.production and .sveltin.toml files to reflect
 your production environment
 `,
-	Run: RunBuildCmd,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunBuildCmd,
 }
 
 // RunBuildCmd is the actual work function.

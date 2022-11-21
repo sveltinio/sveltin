@@ -28,7 +28,9 @@ Command used to install all dependencies from the 'package.json' file.
 
 It wraps (npm|pnpm|yarn) install.
 `,
-	Run: RunInstallCmd,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunInstallCmd,
 }
 
 // RunInstallCmd is the actual work function.

@@ -26,7 +26,9 @@ Command used to generate the RSS feed (rss.xml) file for your website.
 
 It makes use of the .env.production file to reflect the base url for your website.
 `,
-	Run: RunGenerateRSSCmd,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunGenerateRSSCmd,
 }
 
 // RunGenerateRSSCmd is the actual work function.

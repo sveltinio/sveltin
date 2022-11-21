@@ -26,7 +26,9 @@ Command used to generate the sitemap (sitemap.xml) file for your website.
 
 It makes use of the .env.production file to reflect the base url for your website.
 `,
-	Run: RunGenerateSitemapCmd,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunGenerateSitemapCmd,
 }
 
 // RunGenerateSitemapCmd is the actual work function.

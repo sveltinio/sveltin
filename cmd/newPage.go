@@ -36,8 +36,10 @@ Command used to create a new public page route.
 Pages are Svelte components written in .svelte or .svx (for markdown) files. The filename determines the route,
 so creating a page named "about" will generate the following route /about/+page.(svelte|svx)
 
-This command allows you to select between a svelte component page and a markdown page.`,
-	Run: NewPageCmdRun,
+This command allows you to select between a svelte component page and a markdown page.
+`,
+	Args: cobra.ExactArgs(1),
+	Run:  NewPageCmdRun,
 }
 
 // NewPageCmdRun is the actual work function.
