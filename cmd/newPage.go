@@ -16,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -39,6 +40,15 @@ so creating a page named "about" will generate the following route /about/+page.
 This command allows you to select between a svelte component page and a markdown page.
 `,
 	Run: NewPageCmdRun,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the page"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+		}
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // NewPageCmdRun is the actual work function.
@@ -86,6 +96,10 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 
 func pageCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&pageType, "as", "a", "", "Sveltekit page as Svelte component or markdown via mdsvex. Possible values: svelte, markdown")
+	err := cmd.RegisterFlagCompletionFunc("as", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{"svelte", "markdown"}, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
 }
 
 func init() {

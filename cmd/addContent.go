@@ -13,12 +13,14 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -63,6 +65,15 @@ As result:
 - a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
 `,
 	Run: RunAddContentCmd,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the content"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+		}
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // RunAddContentCmd is the actual work function.
@@ -75,10 +86,6 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 
 	contentResource, err := prompts.SelectResourceHandler(cfg.fs, resourceNameForContent, cfg.settings)
 	utils.ExitIfError(err)
-
-	/*contentData, err := prompts.AskContentNameHandler(cfg.fs, args, withSampleContent, cfg.settings)
-	utils.ExitIfError(err)
-	*/
 
 	contentData := tpltypes.NewContentData(contentName, contentResource, withSampleContent)
 
@@ -111,7 +118,14 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 }
 
 func contentCmdFlags(cmd *cobra.Command) {
+	// to flag
 	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to.")
+	err := cmd.RegisterFlagCompletionFunc("to", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		availableResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
+		return availableResources, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// sample flag
 	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file.")
 }
 

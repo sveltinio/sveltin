@@ -21,9 +21,9 @@ Examples:
 
 sveltin new page about
 sveltin new resource posts
-sveltin new theme paper --css tailwindcss --npmClient pnpm
 `,
 	ValidArgs:             []string{"page", "resource"},
+	ArgAliases:            []string{"p", "r"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	DisableFlagsInUseLine: true,
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
@@ -57,6 +58,15 @@ Metadata Types:
 - list: 1:many relationship (e.g. tags)
 `,
 	Run: RunAddMetadataCmd,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the metadata"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+		}
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // RunAddMetadataCmd is the actual work function.
@@ -112,8 +122,19 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 }
 
 func metadataCmdFlags(cmd *cobra.Command) {
+	// to flag
 	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to.")
+	err := cmd.RegisterFlagCompletionFunc("to", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		availableResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
+		return availableResources, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// as flag
 	cmd.Flags().StringVarP(&metadataType, "as", "a", "", "Type of the new metadata. (possible values: single or list)")
+	err = cmd.RegisterFlagCompletionFunc("as", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{"single", "list"}, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
 }
 
 func init() {
