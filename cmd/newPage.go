@@ -38,8 +38,7 @@ so creating a page named "about" will generate the following route /about/+page.
 
 This command allows you to select between a svelte component page and a markdown page.
 `,
-	Args: cobra.ExactArgs(1),
-	Run:  NewPageCmdRun,
+	Run: NewPageCmdRun,
 }
 
 // NewPageCmdRun is the actual work function.
