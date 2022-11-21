@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # https://github.com/leoroese/blog-tube/blob/main/.husky/commit-msg
-if ! head -1 "$1" | grep -qE "^(feat|fix|ci|chore|docs|test|style|refactor|perf|build|revert)(\(.+?\))?: .{1,}$"; then
+if ! head -1 "$1" | grep -qE "^(feat|fix|ci|chore|docs|test|style|refactor|perf|build|revert|breaking)(\(.+?\))?: .{1,}$"; then
     echo ""
     echo "\n\x1b[31;1m✘ Aborting commit! Your commit message is not valid.\x1b[0m\n" >&2
     exit 1
