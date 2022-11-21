@@ -26,6 +26,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
@@ -82,6 +83,15 @@ sveltin init blog --css vanillacss -t myTheme
 sveltin init portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git
 `,
 	Run: InitCmdRun,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the project"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags."))
+		}
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // InitCmdRun is the actual work function.
@@ -190,13 +200,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 
 	cfg.log.Success("Done\n")
 
-	projectConfigSummary := &config.ProjectConfig{
-		ProjectName:   projectName,
-		CSSLibName:    cssLibName,
-		ThemeName:     themeSelection,
-		NPMClientName: npmClient.Desc,
-	}
-
+	projectConfigSummary := config.NewProjectConfig(projectName, cssLibName, themeSelection, npmClient.Desc)
 	// NEXT STEPS
 	if themeData.ID != tpltypes.ExistingTheme {
 		feedbacks.ShowNewProjectNextStepsHelpMessage(projectConfigSummary)
@@ -207,9 +211,27 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func initCmdFlags(cmd *cobra.Command) {
+	// npmClient flag
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
+	err := cmd.RegisterFlagCompletionFunc("npmClient", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		installedNPMClients := utils.GetInstalledNPMClientList()
+		npmcNames := utils.GetNPMClientNames(installedNPMClients)
+		return npmcNames, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// theme flag
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The theme you are going to create or reuse")
+	err = cmd.RegisterFlagCompletionFunc("theme", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{tpltypes.BlankTheme, tpltypes.SveltinTheme}, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// css flag
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The CSS lib to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
+	err = cmd.RegisterFlagCompletionFunc("css", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return css.AvailableCSSLib, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// others
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
 	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
 }
@@ -227,7 +249,7 @@ func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName stri
 		defaultThemeName := strings.Join([]string{projectName, "theme"}, "_")
 		newThemePromptContent := &input.Config{
 			Initial:     defaultThemeName,
-			Message:     "What's the your new theme name?",
+			Message:     "What's your theme name?",
 			Placeholder: "Please, provide a name for your theme.",
 		}
 		themeName, err := input.Run(newThemePromptContent)

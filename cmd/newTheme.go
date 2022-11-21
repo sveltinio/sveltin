@@ -135,13 +135,8 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 
 	// NEXT STEPS
-	projectConfigSummary := config.ProjectConfig{
-		ProjectName:   projectName,
-		CSSLibName:    cssLibName,
-		ThemeName:     themeName,
-		NPMClientName: npmClient.Desc,
-	}
-	feedbacks.ShowNewThemeHelpMessage(&projectConfigSummary)
+	projectConfigSummary := config.NewProjectConfig(projectName, cssLibName, themeName, npmClient.Desc)
+	feedbacks.ShowNewThemeHelpMessage(projectConfigSummary)
 }
 
 func newThemeCmdFlags(cmd *cobra.Command) {
