@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
@@ -42,7 +43,7 @@
 				{#each items as item}
 					<li>
 						<div>
-							<a href={item.metadata.slug}>{item.metadata.title}</a>
+							<a href="{base}/{resourceName}/{item.metadata.slug}">{item.metadata.title}</a>
 							<p>{item.metadata.headline}</p>
 						</div>
 					</li>
