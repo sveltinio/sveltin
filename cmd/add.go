@@ -21,6 +21,7 @@ var addCmd = &cobra.Command{
 Run 'sveltin add -h' for further details.
 `,
 	ValidArgs:             []string{"content", "metadata"},
+	ArgAliases:            []string{"c", "m"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	DisableFlagsInUseLine: true,
 }

@@ -19,6 +19,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
@@ -37,7 +38,7 @@ var (
 
 var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
-	Aliases: []string{"route", "r"},
+	Aliases: []string{"r"},
 	Short:   "Create a new resource (route)",
 	Long: resources.GetASCIIArt() + `
 Command used to create new resources.
@@ -59,6 +60,15 @@ This command:
 	`,
 	DisableFlagsInUseLine: true,
 	Run:                   RunNewResourceCmd,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the resource"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+		}
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // RunNewResourceCmd is the actual work function.

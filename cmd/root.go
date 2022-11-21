@@ -44,7 +44,7 @@ type appConfig struct {
 
 const (
 	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.11.0-rc.1"
+	CliVersion string = "0.10.1"
 )
 
 const (
@@ -127,10 +127,6 @@ Resources:
 // Execute adds all child commands to the root command and sets flags appropriately.
 // It is called by main.main().
 func Execute() {
-	rootCmd.CompletionOptions.DisableDefaultCmd = true
-	rootCmd.CompletionOptions.HiddenDefaultCmd = true
-	rootCmd.CompletionOptions.DisableNoDescFlag = true
-	rootCmd.CompletionOptions.DisableDescriptions = true
 	cobra.CheckErr(rootCmd.Execute())
 }
 
