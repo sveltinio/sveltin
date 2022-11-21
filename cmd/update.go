@@ -28,7 +28,9 @@ Command used to update all dependencies from the 'package.json' file.
 
 It wraps (npm|pnpm|yarn) update.
 `,
-	Run: RunUpdateCmd,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunUpdateCmd,
 }
 
 // RunUpdateCmd is the actual work function.

@@ -46,7 +46,9 @@ var deployCmd = &cobra.Command{
 	Short:   "Deploy your website over FTP",
 	Long: `Command used to deploy the project on your hosting platform over FTP.
 `,
-	Run: DeployCmdRun,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   DeployCmdRun,
 }
 
 // DeployCmdRun is the actual work function.

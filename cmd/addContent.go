@@ -59,7 +59,8 @@ As result:
 - an index.svx file is placed there
 - a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
 `,
-	Run: RunAddContentCmd,
+	Args: cobra.ExactArgs(1),
+	Run:  RunAddContentCmd,
 }
 
 // RunAddContentCmd is the actual work function.
@@ -118,7 +119,6 @@ func makeContentFolderStructure(folderName string, contentData *tpltypes.Content
 	default:
 		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
 		return nil, sveltinerr.NewDefaultError(err)
-
 	}
 }
 

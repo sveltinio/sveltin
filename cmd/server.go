@@ -24,8 +24,11 @@ var serverCmd = &cobra.Command{
 	Aliases: []string{"s", "serve", "run", "dev"},
 	Short:   "Run the development server (vite)",
 	Long: resources.GetASCIIArt() + `
-It wraps vite dev to start a development server`,
-	Run: RunServerCmd,
+It wraps vite dev to start a development server
+`,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(0),
+	Run:                   RunServerCmd,
 }
 
 // RunServerCmd is the actual work function.

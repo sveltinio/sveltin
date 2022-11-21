@@ -57,7 +57,9 @@ This command:
 - Scaffold +page.svelte component and +page.serve.ts endpoint to list all the content belongs to a resource
 - Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page
 	`,
-	Run: RunNewResourceCmd,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(1),
+	Run:                   RunNewResourceCmd,
 }
 
 // RunNewResourceCmd is the actual work function.

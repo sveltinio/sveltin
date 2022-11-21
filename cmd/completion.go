@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
 // completionCmd represents the completion command
@@ -75,7 +76,7 @@ func RunCompletionCmd(cmd *cobra.Command, args []string) error {
 	case "powershell":
 		return cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
 	}
-	return nil
+	return sveltinerr.NewShellCompletionError()
 }
 
 func init() {

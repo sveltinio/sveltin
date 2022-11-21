@@ -51,7 +51,8 @@ Metadata Types:
 - single: 1:1 relationship (e.g. category)
 - list: 1:many relationship (e.g. tags)
 `,
-	Run: RunAddMetadataCmd,
+	Args: cobra.ExactArgs(1),
+	Run:  RunAddMetadataCmd,
 }
 
 // RunAddMetadataCmd is the actual work function.
