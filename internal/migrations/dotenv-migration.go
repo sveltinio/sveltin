@@ -58,7 +58,6 @@ func (m UpdateDotEnvMigration) Execute() error {
 }
 
 func (m *UpdateDotEnvMigration) up() error {
-
 	if !m.Mediator.canRun(m) {
 		return nil
 	}

@@ -17,6 +17,8 @@ const (
 	DotEnvMigrationID          string = "dotenv"
 	PackageJSONMigrationID     string = "packagejson"
 	MDsveXMigrationID          string = "mdsvex"
+	SvelteConfigMigrationID    string = "svelteconfig"
+	LayoutMigrationID          string = "layout"
 )
 
 // IMigrationFactory declares a set of methods for creating each of the abstract products.
@@ -41,7 +43,11 @@ func GetMigrationFactory(id string) (IMigrationFactory, error) {
 		return &UpdatePkgJSONMigration{}, nil
 	case MDsveXMigrationID:
 		return &UpdateMDsveXMigration{}, nil
+	case SvelteConfigMigrationID:
+		return &UpdateSvelteConfigMigration{}, nil
+	case LayoutMigrationID:
+		return &UpdateLayoutTSMigration{}, nil
 	default:
-		return nil, fmt.Errorf("wrong migration id used")
+		return nil, fmt.Errorf("wrong migration id: %s is not a valid migration", id)
 	}
 }

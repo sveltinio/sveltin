@@ -89,6 +89,8 @@ const (
 	DotEnvProdFile      string = ".env.production"
 	PackageJSONFile     string = "package.json"
 	MDsveXFile          string = "mdsvex.config.js"
+	SvelteConfigFile    string = "svelte.config.js"
+	LayoutTSFile        string = "+layout.ts"
 )
 
 // Matchers IDs

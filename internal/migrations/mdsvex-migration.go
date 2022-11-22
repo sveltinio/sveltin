@@ -57,7 +57,6 @@ func (m UpdateMDsveXMigration) Execute() error {
 }
 
 func (m *UpdateMDsveXMigration) up() error {
-
 	if !m.Mediator.canRun(m) {
 		return nil
 	}

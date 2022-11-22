@@ -61,8 +61,8 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 	}
 	migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationID)
-	migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
+	migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
@@ -75,8 +75,8 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 	}
 	migrationFactory, err = migrations.GetMigrationFactory(migrations.DefaultsConfigMigrationID)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
@@ -93,8 +93,8 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 	}
 	migrationFactory, err = migrations.GetMigrationFactory(migrations.ThemeConfigMigrationID)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
@@ -105,8 +105,8 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		PathToFile: pathToFile,
 	}
 	migrationFactory, err = migrations.GetMigrationFactory(migrations.DotEnvMigrationID)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
@@ -117,8 +117,8 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		PathToFile: pathToFile,
 	}
 	migrationFactory, err = migrations.GetMigrationFactory(migrations.PackageJSONMigrationID)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
@@ -129,8 +129,32 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		PathToFile: pathToFile,
 	}
 	migrationFactory, err = migrations.GetMigrationFactory(migrations.MDsveXMigrationID)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	// execute the migration.
+	err = migration.Execute()
+	utils.ExitIfError(err)
+
+	/** File: <project_root>/svelte.config.js **/
+	pathToFile = path.Join(cwd, SvelteConfigFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile: pathToFile,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.SvelteConfigMigrationID)
+	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+	// execute the migration.
+	err = migration.Execute()
+	utils.ExitIfError(err)
+
+	/** File: <project_root>/src/routes/+layout.ts **/
+	pathToFile = path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile)
+	migrationData = &migrations.MigrationData{
+		PathToFile: pathToFile,
+	}
+	migrationFactory, err = migrations.GetMigrationFactory(migrations.LayoutMigrationID)
+	utils.ExitIfError(err)
+	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 	// execute the migration.
 	err = migration.Execute()
 	utils.ExitIfError(err)
