@@ -80,7 +80,7 @@ func isMigrationRequired(m IMigration, patterns []string, matcher matcherFunc) (
 			continue
 		}
 	}
-	return nil, false
+	return content, false
 }
 
 func applyMigrationRules(rules []*migrationRule) (string, bool) {
@@ -97,8 +97,6 @@ func applyMigrationRules(rules []*migrationRule) (string, bool) {
 	return "", false
 }
 
-//=============================================================================
-
 func findStringMatcher(content []byte, pattern, line string) ([]byte, bool) {
 	rule := regexp.MustCompile(pattern)
 	matches := rule.FindString(line)
@@ -106,4 +104,18 @@ func findStringMatcher(content []byte, pattern, line string) ([]byte, bool) {
 		return content, true
 	}
 	return nil, false
+}
+
+//=============================================================================
+
+func writeFile(m IMigration, content []byte) error {
+	err := m.getServices().fs.Remove(m.getData().PathToFile)
+	if err != nil {
+		return err
+	}
+
+	if err = afero.WriteFile(m.getServices().fs, m.getData().PathToFile, []byte(content), 0644); err != nil {
+		return err
+	}
+	return nil
 }

@@ -12,14 +12,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // Patterns used by MigrationRule
-const (
-	remarkAutolinkHeadingsPkgPattern = `"remark-external-links"`
-)
+const remarkAutolinkHeadingsPkgPattern = `"remark-external-links"`
+
+// kit packages versions
+const sveltekitPackage = "@sveltejs/kit"
+const nextSvelteKitVersion = "1.0.0-next.556"
+const adapterStatitPackage = "@sveltejs/adapter-static"
+const nextAdapterStaticVersion = "1.0.0-next.48"
 
 //=============================================================================
 
@@ -66,11 +71,32 @@ func (m *UpdatePkgJSONMigration) up() error {
 
 	migrationTriggers := []string{remarkAutolinkHeadingsPkgPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+		fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher)
+		updatedContent := fileContent
+
+		if ok {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
-			if err := updatePkgJSONFile(m, fileContent); err != nil {
+			if updatedContent, err = updatePkgJSONFile(m, updatedContent); err != nil {
 				return err
 			}
+		}
+		// Upgrade adaper-static
+		currentAdapterStaticVersion, ok := getDevDependency(fileContent, adapterStatitPackage)
+		if ok && !isEqual(currentAdapterStaticVersion, nextAdapterStaticVersion) {
+			if updatedContent, err = updateDevDependency(m, updatedContent, adapterStatitPackage, nextAdapterStaticVersion); err != nil {
+				return err
+			}
+		}
+		// Upgrade kit
+		currentSvelteKitVersion, ok := getDevDependency(fileContent, sveltekitPackage)
+		if ok && !isEqual(currentSvelteKitVersion, nextSvelteKitVersion) {
+			if updatedContent, err = updateDevDependency(m, updatedContent, sveltekitPackage, nextSvelteKitVersion); err != nil {
+				return err
+			}
+		}
+		// save new package.json file
+		if err = writeFile(m, updatedContent); err != nil {
+			return err
 		}
 	}
 
@@ -93,7 +119,7 @@ func (m *UpdatePkgJSONMigration) allowUp() error {
 
 //=============================================================================
 
-func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) error {
+func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -106,15 +132,7 @@ func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
-	if err != nil {
-		return err
-	}
-
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
-		return err
-	}
-	return nil
+	return []byte(output), nil
 }
 
 //=============================================================================
@@ -128,4 +146,23 @@ func newRemarkExternalLinksRule(line string) *migrationRule {
 			return "\"rehype-external-links\":\"^2.0.1\","
 		},
 	}
+}
+
+//=============================================================================
+
+func isEqual(s1, s2 string) bool {
+	return s1 == s2
+}
+
+func getDevDependency(content []byte, name string) (string, bool) {
+	value := gjson.GetBytes(content, fmt.Sprintf("devDependencies.%s", name))
+	if value.Exists() {
+		return value.Str, true
+	}
+	return "", false
+}
+
+func updateDevDependency(m *UpdatePkgJSONMigration, content []byte, name, value string) ([]byte, error) {
+	m.getServices().logger.Info(fmt.Sprintf("Upgrading %s to %s", name, value))
+	return sjson.SetBytes(content, fmt.Sprintf("devDependencies.%s", name), value)
 }
