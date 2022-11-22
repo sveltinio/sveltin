@@ -270,7 +270,16 @@ Read more [here][update].
 
 ### sveltin upgrade
 
-`sveltin upgrade` is used to update all depencencies from the `package.json` file.
+`sveltin upgrade` is used to upgrade to the latest Sveltin version features.
+
+<details>
+    <summary>(Click to expand the list of avilable subcommands)</summary>
+
+| Subcommand        | Description                                             |
+| :---------------- | :------------------------------------------------------ |
+| [upgrade-project] | Make your project compliant the latest Sveltin version. |
+
+</details>
 
 Read more [here][upgrade].
 
@@ -338,3 +347,4 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [server]: https://docs.sveltin.io/cli/server/
 [update]: https://docs.sveltin.io/cli/update/
 [upgrade]: https://docs.sveltin.io/cli/upgrade/
+[upgrade-project]: https://docs.sveltin.io/cli/upgrade-project/
