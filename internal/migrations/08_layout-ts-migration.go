@@ -8,6 +8,7 @@
 package migrations
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -63,10 +64,17 @@ func (m *UpdateLayoutTSMigration) up() error {
 
 	migrationTriggers := []string{prerenderPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
-			if err := updateLayoutFile(m, fileContent); err != nil {
-				return err
+		c, err := retrieveFileContent(m)
+		if err != nil {
+			return err
+		}
+
+		if !bytes.Contains(c, []byte(trailingSlashPattern)) {
+			if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
+				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+				if err := updateLayoutFile(m, fileContent); err != nil {
+					return err
+				}
 			}
 		}
 	}

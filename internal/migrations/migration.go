@@ -108,6 +108,14 @@ func findStringMatcher(content []byte, pattern, line string) ([]byte, bool) {
 
 //=============================================================================
 
+func retrieveFileContent(m IMigration) ([]byte, error) {
+	content, err := afero.ReadFile(m.getServices().fs, m.getData().PathToFile)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
+}
+
 func writeFile(m IMigration, content []byte) error {
 	err := m.getServices().fs.Remove(m.getData().PathToFile)
 	if err != nil {
