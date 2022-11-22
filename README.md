@@ -206,7 +206,7 @@ Read more [here][init].
 Alias: `n`
 
 <details>
-    <summary>(Click to expand the list of avilable subcommands)</summary>
+    <summary>(Click to expand the list of available subcommands)</summary>
 
 | Subcommand     | Aliases | Description                          |
 | :------------- | :-----: | :----------------------------------- |
@@ -224,7 +224,7 @@ Read more [here][new].
 Alias: `a`
 
 <details>
-    <summary>(Click to expand the list of avilable subcommands)</summary>
+    <summary>(Click to expand the list of available subcommands)</summary>
 
 | Subcommand     | Aliases | Description                                                            |
 | :------------- | :-----: | :--------------------------------------------------------------------- |
