@@ -47,11 +47,11 @@ func AskProjectNameHandler(inputs []string) (string, error) {
 // SelectCSSLibHandler if no flag passed, prompts the user to select the CSS lib to be used with the project.
 func SelectCSSLibHandler(cssLibName string) (string, error) {
 	entries := []list.Item{
+		choose.Item{Name: Bootstrap, Desc: "Bootstrap"},
+		choose.Item{Name: Bulma, Desc: "Bulma"},
 		choose.Item{Name: VanillaCSS, Desc: "Plain CSS"},
 		choose.Item{Name: Scss, Desc: "Scss/Sass"},
 		choose.Item{Name: TailwindCSS, Desc: "Tailwind CSS"},
-		choose.Item{Name: Bulma, Desc: "Bulma"},
-		choose.Item{Name: Bootstrap, Desc: "Bootstrap"},
 	}
 
 	switch nameLenght := len(cssLibName); {
