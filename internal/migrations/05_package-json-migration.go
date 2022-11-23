@@ -21,7 +21,7 @@ import (
 const remarkAutolinkHeadingsPkgPattern = `"remark-external-links"`
 
 var npmPackagesMap = map[string]string{
-	"@sveltejs/kit":            "1.0.0-next.559",
+	"@sveltejs/kit":            "1.0.0-next.560",
 	"@sveltejs/adapter-static": "1.0.0-next.48",
 	"@sveltinio/essentials":    "^0.3.0",
 }

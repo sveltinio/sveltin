@@ -16,7 +16,10 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-const trailingSlashPattern = `trailingSlash`
+const (
+	trailingSlashPattern    = `trailingSlash`
+	prerenderEnabledPattern = `enabled`
+)
 
 //=============================================================================
 
@@ -61,7 +64,7 @@ func (m *UpdateSvelteConfigMigration) up() error {
 		return err
 	}
 
-	migrationTriggers := []string{trailingSlashPattern}
+	migrationTriggers := []string{trailingSlashPattern, prerenderEnabledPattern}
 	if exists {
 		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
@@ -93,7 +96,10 @@ func (m *UpdateSvelteConfigMigration) allowUp() error {
 func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) error {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*migrationRule{newSvelteConfigRule(line)}
+		rules := []*migrationRule{
+			newSvelteConfigTrailingSlashRule(line),
+			newSvelteConfigPrerenderEnabledRule(line),
+		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -114,10 +120,21 @@ func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) erro
 
 //=============================================================================
 
-func newSvelteConfigRule(line string) *migrationRule {
+func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		pattern:         trailingSlashPattern,
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newSvelteConfigPrerenderEnabledRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		pattern:         prerenderEnabledPattern,
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
