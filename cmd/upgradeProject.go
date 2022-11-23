@@ -67,97 +67,31 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 	err = migration.Execute()
 	utils.ExitIfError(err)
 
-	/** FILE: <project_root>/config/defaults.js.ts */
-	pathToFile = path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile)
-	migrationData = &migrations.MigrationData{
-		PathToFile:        pathToFile,
-		CliVersion:        CliVersion,
-		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
-	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.DefaultsConfigMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
-
 	// Load project settings file after sveltin.json file creation
 	cfg.projectSettings, err = loadProjectSettings(ProjectSettingsFile)
 	utils.ExitIfError(err)
 
-	/** FILE: <project_root>/themes/<theme_name>/theme.config.js */
-	pathToFile = path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename())
-	migrationData = &migrations.MigrationData{
-		PathToFile:        pathToFile,
-		CliVersion:        CliVersion,
-		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
+	migrationIdPathToFileMap := map[string]string{
+		migrations.DefaultsConfigMigrationID: path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
+		migrations.ThemeConfigMigrationID:    path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
+		migrations.DotEnvMigrationID:         path.Join(cwd, DotEnvProdFile),
+		migrations.PackageJSONMigrationID:    path.Join(cwd, PackageJSONFile),
+		migrations.MDsveXMigrationID:         path.Join(cwd, MDsveXFile),
+		migrations.SvelteConfigMigrationID:   path.Join(cwd, SvelteConfigFile),
+		migrations.LayoutMigrationID:         path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
 	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.ThemeConfigMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
 
-	/** File: <project_root>/.env.production */
-	pathToFile = path.Join(cwd, DotEnvProdFile)
-	migrationData = &migrations.MigrationData{
-		PathToFile: pathToFile,
+	for id, pathToFile := range migrationIdPathToFileMap {
+		migrationData := &migrations.MigrationData{
+			PathToFile: pathToFile,
+		}
+		migrationFactory, err := migrations.GetMigrationFactory(id)
+		utils.ExitIfError(err)
+		migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+		// execute the migration.
+		err = migration.Execute()
+		utils.ExitIfError(err)
 	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.DotEnvMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
-
-	/** File: <project_root>/package.json */
-	pathToFile = path.Join(cwd, PackageJSONFile)
-	migrationData = &migrations.MigrationData{
-		PathToFile: pathToFile,
-	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.PackageJSONMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
-
-	/** File: <project_root/mdsvex.config.json */
-	pathToFile = path.Join(cwd, MDsveXFile)
-	migrationData = &migrations.MigrationData{
-		PathToFile: pathToFile,
-	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.MDsveXMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
-
-	/** File: <project_root>/svelte.config.js **/
-	pathToFile = path.Join(cwd, SvelteConfigFile)
-	migrationData = &migrations.MigrationData{
-		PathToFile: pathToFile,
-	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.SvelteConfigMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
-
-	/** File: <project_root>/src/routes/+layout.ts **/
-	pathToFile = path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile)
-	migrationData = &migrations.MigrationData{
-		PathToFile: pathToFile,
-	}
-	migrationFactory, err = migrations.GetMigrationFactory(migrations.LayoutMigrationID)
-	utils.ExitIfError(err)
-	migration = migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
-	utils.ExitIfError(err)
 
 	cfg.log.Success(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion))
 }
