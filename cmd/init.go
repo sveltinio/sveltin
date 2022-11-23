@@ -82,7 +82,9 @@ sveltin init blog --css tailwindcss
 sveltin init blog --css vanillacss -t myTheme
 sveltin init portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git
 `,
-	Run: InitCmdRun,
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.ExactArgs(1),
+	Run:                   InitCmdRun,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var comps []string
 		if len(args) == 0 {

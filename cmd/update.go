@@ -14,6 +14,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -30,6 +31,11 @@ It wraps (npm|pnpm|yarn) update.
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunUpdateCmd,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument."))
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // RunUpdateCmd is the actual work function.
