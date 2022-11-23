@@ -20,11 +20,11 @@ import (
 // Patterns used by MigrationRule
 const remarkAutolinkHeadingsPkgPattern = `"remark-external-links"`
 
-// kit packages versions
-const sveltekitPackage = "@sveltejs/kit"
-const nextSvelteKitVersion = "1.0.0-next.556"
-const adapterStatitPackage = "@sveltejs/adapter-static"
-const nextAdapterStaticVersion = "1.0.0-next.48"
+var npmPackagesMap = map[string]string{
+	"@sveltejs/kit":            "1.0.0-next.559",
+	"@sveltejs/adapter-static": "1.0.0-next.48",
+	"@sveltinio/essentials":    "^0.3.0",
+}
 
 //=============================================================================
 
@@ -80,22 +80,18 @@ func (m *UpdatePkgJSONMigration) up() error {
 				return err
 			}
 		}
-		// Upgrade adaper-static
-		currentAdapterStaticVersion, ok := getDevDependency(fileContent, adapterStatitPackage)
-		if ok && !isEqual(currentAdapterStaticVersion, nextAdapterStaticVersion) {
-			if updatedContent, err = updateDevDependency(m, updatedContent, adapterStatitPackage, nextAdapterStaticVersion); err != nil {
-				return err
+
+		for name, nextVersion := range npmPackagesMap {
+			currentVersion, ok := getDevDependency(fileContent, name)
+			if ok && !isEqual(currentVersion, nextVersion) {
+				if updatedContent, err = updateDevDependency(m, updatedContent, name, nextVersion); err != nil {
+					return err
+				}
 			}
 		}
-		// Upgrade kit
-		currentSvelteKitVersion, ok := getDevDependency(fileContent, sveltekitPackage)
-		if ok && !isEqual(currentSvelteKitVersion, nextSvelteKitVersion) {
-			if updatedContent, err = updateDevDependency(m, updatedContent, sveltekitPackage, nextSvelteKitVersion); err != nil {
-				return err
-			}
-		}
+
 		// save new package.json file
-		if err = writeFile(m, updatedContent); err != nil {
+		if err = overwriteFile(m, updatedContent); err != nil {
 			return err
 		}
 	}
