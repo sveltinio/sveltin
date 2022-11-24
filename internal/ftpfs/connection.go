@@ -36,8 +36,8 @@ type FTPServerConnection struct {
 }
 
 // NewFTPServerConnection returns a new FTPServerConnection struct.
-func NewFTPServerConnection(config *FTPConnectionConfig) FTPServerConnection {
-	return FTPServerConnection{
+func NewFTPServerConnection(config *FTPConnectionConfig) *FTPServerConnection {
+	return &FTPServerConnection{
 		Config: FTPConnectionConfig{
 			Host:     config.Host,
 			Port:     config.Port,
@@ -116,14 +116,14 @@ func (s *FTPServerConnection) MakeDirs(folders []string, dryRun bool) error {
 }
 
 // UploadFiles contains the logic for the FTP receiver to handle the upload files command.
-func (s *FTPServerConnection) UploadFiles(appFs afero.Fs, localDir string, files []string, dryRun bool) error {
+func (s *FTPServerConnection) UploadFiles(appFs afero.Fs, localDir string, files []string, replaceBasePath, dryRun bool) error {
 	sort.Strings(files)
 
 	pbConfig := &progressbar.Config{
 		Items:          files,
 		OnCompletesMsg: fmt.Sprintf("Done! %d files uploaded", len(files)),
 		OnProgressCmd: func(path string) tea.Cmd {
-			return uploadFileTeaCmd(s, appFs, path, localDir, dryRun)
+			return uploadFileTeaCmd(s, appFs, path, localDir, replaceBasePath, dryRun)
 		},
 	}
 

@@ -118,7 +118,7 @@ func ShowDeployCommandWarningMessages(isBackup bool) {
 	if isBackup {
 		listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
 	}
-	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude flag")
+	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude or --withExcludeFile flags")
 	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
 	listLogger.Render()
 }

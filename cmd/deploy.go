@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -20,6 +21,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/ftpfs"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -49,6 +51,11 @@ var deployCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   DeployCmdRun,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument but accepts flags."))
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // DeployCmdRun is the actual work function.
@@ -71,14 +78,14 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	ftpConn.SetRootFolder(cfg.prodData.FTPServerFolder)
 	ftpConn.SetLogger(cfg.log)
 
-	err := ftpfs.DialAction(&ftpConn).Run()
+	err := ftpfs.DialAction(ftpConn).Run()
 	utils.ExitIfError(err)
 
-	err = ftpfs.LoginAction(&ftpConn).Run()
+	err = ftpfs.LoginAction(ftpConn).Run()
 	utils.ExitIfError(err)
 
 	// prevent the remote FTP server to close the idle connection
-	noOpAction := ftpfs.IdleAction(&ftpConn)
+	noOpAction := ftpfs.IdleAction(ftpConn)
 	err = noOpAction.Run()
 	utils.ExitIfError(err)
 
@@ -99,39 +106,61 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 			pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 			projectName, err := utils.RetrieveProjectName(cfg.fs, pathToPkgFile)
 			utils.ExitIfError(err)
-			err = ftpfs.BackupAction(&ftpConn, cfg.fs, filepath.Join(backupsFolderPath, projectName), isDryRun).Run()
+			err = ftpfs.BackupAction(ftpConn, cfg.fs, filepath.Join(backupsFolderPath, projectName), isDryRun).Run()
 			utils.ExitIfError(err)
 		}
 
 		// delete content from the remote folder with exclude list
-		cfg.log.Important(fmt.Sprintf("The following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", ")))
-		err = ftpfs.DeleteAllAction(&ftpConn, withExclude, isDryRun).Run()
+		cfg.log.Important(fmt.Sprintf("If present, the following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", ")))
+		err = ftpfs.DeleteAllAction(ftpConn, withExclude, isDryRun).Run()
+		utils.ExitIfError(err)
+
+		// create and update content from "kit.adapter.pages" folder
+		kitPagesFolder := cfg.projectSettings.SvelteKit.Adapter.Pages
+		pagesFoldersList, err := walkLocal(cfg.fs, EntryTypeFolder, kitPagesFolder, true)
+		utils.ExitIfError(err)
+
+		cfg.log.Infof("Creating remote folders structure for '%s'", kitPagesFolder)
+		err = ftpfs.MakeDirsAction(ftpConn, pagesFoldersList, isDryRun).Run()
+		utils.ExitIfError(err)
+
+		// prevent the remote FTP server to close the idle connection
+		err = noOpAction.Run()
+		utils.ExitIfError(err)
+
+		cfg.log.Infof("Uploading files to the remote folder '%s'", kitPagesFolder)
+		pagesFilesList, err := walkLocal(cfg.fs, EntryTypeFile, kitPagesFolder, true)
+		utils.ExitIfError(err)
+
+		err = ftpfs.UploadAction(ftpConn, cfg.fs, kitPagesFolder, pagesFilesList, true, isDryRun).Run()
+		utils.ExitIfError(err)
+
+		// prevent the remote FTP server to close the idle connection
+		err = noOpAction.Run()
 		utils.ExitIfError(err)
 
 		/**
-		* The folder where adaper-static stores the output for the build process.
 		* Check if pages and assets props for adapter-static are differents.
+		* If true, upload the entire kit.adapter.assets folder.
 		**/
-		kitBuildFolders := []string{cfg.projectSettings.SvelteKit.Adapter.Pages}
-		if cfg.projectSettings.SvelteKit.Adapter.Pages != cfg.projectSettings.SvelteKit.Adapter.Assets {
-			kitBuildFolders = append(kitBuildFolders, cfg.projectSettings.SvelteKit.Adapter.Assets)
-		}
+		kitAssetsFolder := cfg.projectSettings.SvelteKit.Adapter.Assets
+		if kitPagesFolder != kitAssetsFolder {
+			assetsFoldersList, err := walkLocal(cfg.fs, EntryTypeFolder, kitAssetsFolder, false)
+			utils.ExitIfError(err)
 
-		for _, folder := range kitBuildFolders {
-			foldersList := walkLocal(cfg.fs, EntryTypeFolder, folder)
-
-			cfg.log.Info("Creating remote folders structure")
-			err = ftpfs.MakeDirsAction(&ftpConn, foldersList, isDryRun).Run()
+			cfg.log.Infof("Creating remote folders structure for '%s'", kitAssetsFolder)
+			err = ftpfs.MakeDirsAction(ftpConn, assetsFoldersList, isDryRun).Run()
 			utils.ExitIfError(err)
 
 			// prevent the remote FTP server to close the idle connection
 			err = noOpAction.Run()
 			utils.ExitIfError(err)
 
-			cfg.log.Info("Uploading files to the remote folders")
-			filesList := walkLocal(cfg.fs, EntryTypeFile, folder)
+			cfg.log.Infof("Uploading files to the remote folder '%s'", kitAssetsFolder)
+			assetsFilesList, err := walkLocal(cfg.fs, EntryTypeFile, kitAssetsFolder, false)
+			utils.ExitIfError(err)
 
-			err = ftpfs.UploadAction(&ftpConn, cfg.fs, folder, filesList, isDryRun).Run()
+			err = ftpfs.UploadAction(ftpConn, cfg.fs, kitPagesFolder, assetsFilesList, false, isDryRun).Run()
 			utils.ExitIfError(err)
 
 			// prevent the remote FTP server to close the idle connection
@@ -140,7 +169,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		}
 
 		// close the connection
-		err = ftpfs.LogoutAction(&ftpConn).Run()
+		err = ftpfs.LogoutAction(ftpConn).Run()
 		utils.ExitIfError(err)
 
 		cfg.log.Success("Done\n")
@@ -172,7 +201,7 @@ func newFTPConnectionConfig(data tpltypes.EnvProductionData) *ftpfs.FTPConnectio
 	}
 }
 
-func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
+func walkLocal(fs afero.Fs, fType EntryType, dirname string, replaceBasePath bool) ([]string, error) {
 	fList := []string{}
 	err := afero.Walk(cfg.fs, dirname,
 		func(path string, info os.FileInfo, err error) error {
@@ -181,9 +210,15 @@ func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 			}
 			switch fType {
 			case EntryTypeFolder:
-				if info.IsDir() && info.Name() != dirname {
-					_path := utils.ToBasePath(path, dirname)
-					fList = append(fList, _path)
+				if info.IsDir() {
+					// kit.prerender.pages content must be copied without the parent folder name
+					if replaceBasePath {
+						_path := utils.ToBasePath(path, dirname)
+						fList = append(fList, _path)
+						// kit.prerender.assets must be copied as whole folder
+					} else {
+						fList = append(fList, path)
+					}
 				}
 			case EntryTypeFile:
 				if !info.IsDir() && info.Name() != dirname {
@@ -192,6 +227,6 @@ func walkLocal(fs afero.Fs, fType EntryType, dirname string) []string {
 			}
 			return nil
 		})
-	utils.ExitIfError(err)
-	return fList
+	sort.Strings(fList)
+	return fList, err
 }
