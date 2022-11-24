@@ -9,7 +9,6 @@ package feedbacks
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -95,15 +94,6 @@ func ShowDryRunMessage() {
 	fmt.Println(markup.Bordered(markup.Centered(fmt.Sprintf("%s\n\n%s", markup.Underline("DRY-RUN MODE"), "Nothing will really happen! Just simulating the process."))))
 }
 
-// ShowDeploySummaryMessage prints a summary message string for commands like deploy.
-func ShowDeploySummaryMessage(numOfFolders, numOfFiles int) {
-	entries := map[string]string{
-		"Total number of created folders: ": strconv.Itoa(numOfFolders),
-		"Total number of copied files: ":    strconv.Itoa(numOfFiles),
-	}
-	fmt.Println(markup.NewULWithIconPrefix("SUMMARY", entries, markup.CheckMark))
-}
-
 // ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
 func ShowDeployCommandWarningMessages(isBackup bool) {
 	listLogger := logger.NewListLogger()
@@ -120,6 +110,21 @@ func ShowDeployCommandWarningMessages(isBackup bool) {
 	}
 	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude or --withExcludeFile flags")
 	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
+	listLogger.Render()
+}
+
+// ShowUpgradeCommandMessages display a set of useful information when running the upgrade command.
+func ShowUpgradeCommandMessages() {
+	listLogger := logger.NewListLogger()
+	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
+		Timestamp: false,
+		Colors:    true,
+		Labels:    false,
+		Icons:     true,
+	})
+
+	listLogger.Title("\nYou are going to run the upgrade project command")
+	listLogger.Append(logger.ImportantLevel, "Enure to commit your changes so you can keep track of what the command applies")
 	listLogger.Render()
 }
 

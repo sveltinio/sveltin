@@ -13,9 +13,11 @@ import (
 	"path"
 
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/prompti/confirm"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -47,53 +49,60 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject(false)
 
-	cwd, _ := os.Getwd()
-	cfg.log.Plain(markup.H1(fmt.Sprintf("Upgrading your project to sveltin v%s", CliVersion)))
+	feedbacks.ShowUpgradeCommandMessages()
 
-	migrationManager := migrations.NewMigrationManager()
-	migrationServices := migrations.NewMigrationServices(cfg.fs, cfg.fsManager, cfg.pathMaker, cfg.log)
-
-	/** FILE: <project_root>/sveltin.json */
-	pathToFile := path.Join(cwd, ProjectSettingsFile)
-	migrationData := &migrations.MigrationData{
-		PathToFile:        pathToFile,
-		CliVersion:        CliVersion,
-		ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
-	}
-	migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationID)
-	utils.ExitIfError(err)
-	migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
-	// execute the migration.
-	err = migration.Execute()
+	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})
 	utils.ExitIfError(err)
 
-	// Load project settings file after sveltin.json file creation
-	cfg.projectSettings, err = loadProjectSettings(ProjectSettingsFile)
-	utils.ExitIfError(err)
+	if isConfirm {
+		cwd, _ := os.Getwd()
+		cfg.log.Plain(markup.H1(fmt.Sprintf("Upgrading your project to sveltin v%s", CliVersion)))
 
-	migrationIdPathToFileMap := map[string]string{
-		migrations.DefaultsConfigMigrationID: path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
-		migrations.ThemeConfigMigrationID:    path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
-		migrations.DotEnvMigrationID:         path.Join(cwd, DotEnvProdFile),
-		migrations.PackageJSONMigrationID:    path.Join(cwd, PackageJSONFile),
-		migrations.MDsveXMigrationID:         path.Join(cwd, MDsveXFile),
-		migrations.SvelteConfigMigrationID:   path.Join(cwd, SvelteConfigFile),
-		migrations.LayoutMigrationID:         path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
-	}
+		migrationManager := migrations.NewMigrationManager()
+		migrationServices := migrations.NewMigrationServices(cfg.fs, cfg.fsManager, cfg.pathMaker, cfg.log)
 
-	for id, pathToFile := range migrationIdPathToFileMap {
+		/** FILE: <project_root>/sveltin.json */
+		pathToFile := path.Join(cwd, ProjectSettingsFile)
 		migrationData := &migrations.MigrationData{
-			PathToFile: pathToFile,
+			PathToFile:        pathToFile,
+			CliVersion:        CliVersion,
+			ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 		}
-		migrationFactory, err := migrations.GetMigrationFactory(id)
+		migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationID)
 		utils.ExitIfError(err)
 		migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 		// execute the migration.
 		err = migration.Execute()
 		utils.ExitIfError(err)
-	}
 
-	cfg.log.Success(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion))
+		// Load project settings file after sveltin.json file creation
+		cfg.projectSettings, err = loadProjectSettings(ProjectSettingsFile)
+		utils.ExitIfError(err)
+
+		migrationIdPathToFileMap := map[string]string{
+			migrations.DefaultsConfigMigrationID: path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
+			migrations.ThemeConfigMigrationID:    path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
+			migrations.DotEnvMigrationID:         path.Join(cwd, DotEnvProdFile),
+			migrations.PackageJSONMigrationID:    path.Join(cwd, PackageJSONFile),
+			migrations.MDsveXMigrationID:         path.Join(cwd, MDsveXFile),
+			migrations.SvelteConfigMigrationID:   path.Join(cwd, SvelteConfigFile),
+			migrations.LayoutMigrationID:         path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
+		}
+
+		for id, pathToFile := range migrationIdPathToFileMap {
+			migrationData := &migrations.MigrationData{
+				PathToFile: pathToFile,
+			}
+			migrationFactory, err := migrations.GetMigrationFactory(id)
+			utils.ExitIfError(err)
+			migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
+			// execute the migration.
+			err = migration.Execute()
+			utils.ExitIfError(err)
+		}
+
+		cfg.log.Success(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion))
+	}
 }
 
 func init() {
