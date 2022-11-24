@@ -25,7 +25,6 @@ const config = {
 		}),
 		prerender: {
 			crawl: true,
-			enabled: true,
 			entries: ['*'],
 		},
 	},
