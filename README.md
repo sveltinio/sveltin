@@ -50,7 +50,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :warning: Project Status
 
-> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-560**). If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-561**). If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
 
 ## :mega: Overview
 
