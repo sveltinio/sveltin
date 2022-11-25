@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { sveltinVersion } from '$config/defaults.js';
 	import type { IWebSite } from '@sveltinio/seo/types';
 
@@ -13,7 +14,7 @@
 			<div>
 				<a href="/">
 					<img
-						src="{websiteData.baseURL}/{websiteData.logo}"
+						src="{base}/{websiteData.logo}"
 						alt="sveltin logo"
 						style="width: 100px; height: 48px;"
 					/>
