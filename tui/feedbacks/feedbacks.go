@@ -113,18 +113,26 @@ func ShowDeployCommandWarningMessages(isBackup bool) {
 	listLogger.Render()
 }
 
-// ShowUpgradeCommandMessages display a set of useful information when running the upgrade command.
-func ShowUpgradeCommandMessages() {
+// ShowUpgradeCommandMessage display a set of useful information when running the upgrade command.
+func ShowUpgradeCommandMessage() {
 	listLogger := logger.NewListLogger()
 	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
 		Timestamp: false,
 		Colors:    true,
-		Labels:    false,
+		Labels:    true,
 		Icons:     true,
 	})
 
+	warningText := `Sveltin will try to migrate as much as it can to make your project ready.
+
+  Something cannot be easily handled. The main goal is to update sveltin's files.
+  If there is something purely related to SvelteKit we do not cover by migrations,
+  you will see error from SvelteKit by running the server as usual.
+`
 	listLogger.Title("\nYou are going to run the upgrade project command")
-	listLogger.Append(logger.ImportantLevel, "Enure to commit your changes so you can keep track of what the command applies")
+	listLogger.Append(logger.WarningLevel, warningText)
+
+	listLogger.Append(logger.ImportantLevel, "Ensure to commit your changes to keep track of what the command applies")
 	listLogger.Render()
 }
 

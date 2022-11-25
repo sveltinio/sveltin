@@ -49,7 +49,7 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject(false)
 
-	feedbacks.ShowUpgradeCommandMessages()
+	feedbacks.ShowUpgradeCommandMessage()
 
 	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})
 	utils.ExitIfError(err)
@@ -64,7 +64,7 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 		/** FILE: <project_root>/sveltin.json */
 		pathToFile := path.Join(cwd, ProjectSettingsFile)
 		migrationData := &migrations.MigrationData{
-			PathToFile:        pathToFile,
+			FileToMigrate:     pathToFile,
 			CliVersion:        CliVersion,
 			ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 		}
@@ -91,7 +91,7 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 
 		for id, pathToFile := range migrationIdPathToFileMap {
 			migrationData := &migrations.MigrationData{
-				PathToFile: pathToFile,
+				FileToMigrate: pathToFile,
 			}
 			migrationFactory, err := migrations.GetMigrationFactory(id)
 			utils.ExitIfError(err)
