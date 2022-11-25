@@ -1,22 +1,19 @@
+import { name, baseurl } from '../sveltin.json';
 import type { IWebSite } from '@sveltinio/seo/types';
 
 const website: IWebSite = {
-	name: '{{ .ProjectName }}',
-	baseURL: '',
+	name: name,
+	baseURL: baseurl,
 	language: 'en-GB',
-	title: '{{ .ProjectName }}',
+	title: name,
 	slogan: '',
 	description: '',
 	seoDescription: '',
-	favicon: 'favicon.ico',
+	favicon: 'favicon.png',
 	logo: 'logo.png',
-	copyright: '2022, {{ .ProjectName }}',
+	copyright: '{{ CurrentYear }}'.concat(" - ", name),
 	keywords: '',
 	contactEmail: '',
-	sitemap: {
-		changefreq: 'weekly',
-		priority: 0.5
-	},
 	socials: {
 		linkedin: '',
 		twitter: '',
