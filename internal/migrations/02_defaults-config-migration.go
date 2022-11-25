@@ -16,11 +16,6 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// semVersionPattern is the regexp pattern to identify semantic versioning string - https://ihateregex.io/expr/semver/ .
-const semVersionPattern = `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`
-
-//=============================================================================
-
 // UpdateDefaultsConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateDefaultsConfigMigration struct {
 	Mediator IMigrationMediator
@@ -57,15 +52,20 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{semVersionPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
+		if err != nil {
+			return err
+		}
+
+		migrationTriggers := []string{patterns[semVersion]}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
 			if err := updateConfigFile(m, fileContent); err != nil {
 				return err
 			}
@@ -102,12 +102,12 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -118,7 +118,7 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 func newSveltinVersionRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         semVersionPattern,
+		pattern:         patterns[semVersion],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `import { sveltin } from '../sveltin.json';

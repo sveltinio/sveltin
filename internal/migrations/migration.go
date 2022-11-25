@@ -48,7 +48,7 @@ func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pat
 
 // MigrationData is the struct with data used by migrations.
 type MigrationData struct {
-	PathToFile        string
+	FileToMigrate     string
 	CliVersion        string
 	ProjectCliVersion string
 }
@@ -61,26 +61,21 @@ type migrationRule struct {
 	replacerFunc    func(string) string
 }
 
-type matcherFunc = func([]byte, string, string) ([]byte, bool)
+type matcherFunc = func([]byte, string, string) bool
 
 //=============================================================================
 
-func isMigrationRequired(m IMigration, patterns []string, matcher matcherFunc) ([]byte, bool) {
-	content, err := afero.ReadFile(m.getServices().fs, m.getData().PathToFile)
-	if err != nil {
-		return nil, false
-	}
-
+func isMigrationRequired(content []byte, patterns []string, matcher matcherFunc) bool {
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		for _, pattern := range patterns {
-			if r, ok := matcher(content, pattern, line); ok {
-				return r, true
+			if matcher(content, pattern, line) {
+				return true
 			}
 			continue
 		}
 	}
-	return content, false
+	return false
 }
 
 func applyMigrationRules(rules []*migrationRule) (string, bool) {
@@ -97,19 +92,16 @@ func applyMigrationRules(rules []*migrationRule) (string, bool) {
 	return "", false
 }
 
-func findStringMatcher(content []byte, pattern, line string) ([]byte, bool) {
+func findStringMatcher(content []byte, pattern, line string) bool {
 	rule := regexp.MustCompile(pattern)
 	matches := rule.FindString(line)
-	if len(matches) > 0 {
-		return content, true
-	}
-	return nil, false
+	return len(matches) > 0
 }
 
 //=============================================================================
 
-func retrieveFileContent(m IMigration) ([]byte, error) {
-	content, err := afero.ReadFile(m.getServices().fs, m.getData().PathToFile)
+func retrieveFileContent(fs afero.Fs, pathToFile string) ([]byte, error) {
+	content, err := afero.ReadFile(fs, pathToFile)
 	if err != nil {
 		return nil, err
 	}
@@ -117,12 +109,12 @@ func retrieveFileContent(m IMigration) ([]byte, error) {
 }
 
 func overwriteFile(m IMigration, content []byte) error {
-	err := m.getServices().fs.Remove(m.getData().PathToFile)
+	err := m.getServices().fs.Remove(m.getData().FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.getData().PathToFile, []byte(content), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.getData().FileToMigrate, []byte(content), 0644); err != nil {
 		return err
 	}
 	return nil

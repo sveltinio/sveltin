@@ -16,13 +16,6 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-const (
-	trailingSlashPattern    = `trailingSlash`
-	prerenderEnabledPattern = `enabled`
-)
-
-//=============================================================================
-
 // UpdateSvelteConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateSvelteConfigMigration struct {
 	Mediator IMigrationMediator
@@ -59,15 +52,20 @@ func (m *UpdateSvelteConfigMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{trailingSlashPattern, prerenderEnabledPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
+		if err != nil {
+			return err
+		}
+
+		migrationTriggers := []string{patterns[trailingSlash], patterns[prerenderEnabled]}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
 			if err := updateSvelteConfigFile(m, fileContent); err != nil {
 				return err
 			}
@@ -107,12 +105,12 @@ func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) erro
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -123,7 +121,7 @@ func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) erro
 func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         trailingSlashPattern,
+		pattern:         patterns[trailingSlash],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -134,7 +132,7 @@ func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 func newSvelteConfigPrerenderEnabledRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         prerenderEnabledPattern,
+		pattern:         patterns[prerenderEnabled],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""

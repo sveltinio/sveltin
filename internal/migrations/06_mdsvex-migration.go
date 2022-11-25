@@ -16,15 +16,6 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// Patterns used by MigrationRule
-const (
-	remarkExternalLinksImportStrPattern = `^import remarkExternalLinks`
-	remarkExternalLinksUsagePattern     = `\[remarkExternalLinks`
-	rehypePluginPattern                 = `rehypePlugins:[\t\s]+\[`
-)
-
-//=============================================================================
-
 // UpdateMDsveXMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateMDsveXMigration struct {
 	Mediator IMigrationMediator
@@ -61,15 +52,20 @@ func (m *UpdateMDsveXMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{remarkExternalLinksImportStrPattern, remarkExternalLinksUsagePattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
+		if err != nil {
+			return err
+		}
+
+		migrationTriggers := []string{patterns[remarkExtLinksImport], patterns[remarkExtLinksUsage]}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
 			if err := updateMDsveXFile(m, fileContent); err != nil {
 				return err
 			}
@@ -110,12 +106,12 @@ func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -126,7 +122,7 @@ func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 func newReplaceRemarkExternalLinksImportStrRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         remarkExternalLinksImportStrPattern,
+		pattern:         patterns[remarkExtLinksImport],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return "import rehypeExternalLinks from 'rehype-external-links';"
@@ -137,7 +133,7 @@ func newReplaceRemarkExternalLinksImportStrRule(line string) *migrationRule {
 func newReplaceRemarkExternalLinksUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         remarkExternalLinksUsagePattern,
+		pattern:         patterns[remarkExtLinksUsage],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -148,7 +144,7 @@ func newReplaceRemarkExternalLinksUsageRule(line string) *migrationRule {
 func newReplaceRehypePluginUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         rehypePluginPattern,
+		pattern:         patterns[rehypePlugins],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `rehypePlugins: [

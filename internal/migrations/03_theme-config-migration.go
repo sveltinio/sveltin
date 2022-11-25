@@ -16,15 +16,6 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// Patterns used by MigrationRule
-const (
-	configConstPattern  = `^const config`
-	exportConfigPattern = `^export default config`
-	namePropPattern     = `name:`
-)
-
-//=============================================================================
-
 // UpdateThemeConfigMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateThemeConfigMigration struct {
 	Mediator IMigrationMediator
@@ -61,15 +52,20 @@ func (m *UpdateThemeConfigMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{configConstPattern, exportConfigPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
+		if err != nil {
+			return err
+		}
+
+		migrationTriggers := []string{patterns[themeConfigConst], themeNameProp, themeConfigExport}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
 			if err := updateThemeFile(m, fileContent); err != nil {
 				return err
 			}
@@ -116,12 +112,12 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 	}
 
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -132,7 +128,7 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 func newConstNameRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         configConstPattern,
+		pattern:         patterns[themeConfigConst],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `import { theme } from '../../sveltin.json';
@@ -145,7 +141,7 @@ const themeConfig = {`
 func newExportLineRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         exportConfigPattern,
+		pattern:         patterns[themeConfigExport],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
 			return "export { themeConfig }"
@@ -156,7 +152,7 @@ func newExportLineRule(line string) *migrationRule {
 func newThemeNameRule(line, prevLine string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         namePropPattern,
+		pattern:         patterns[themeNameProp],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			if !strings.Contains(prevLine, "author:") && strings.Contains(line, "name:") {

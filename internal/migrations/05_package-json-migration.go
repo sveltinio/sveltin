@@ -17,13 +17,10 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-// Patterns used by MigrationRule
-const remarkAutolinkHeadingsPkgPattern = `"remark-external-links"`
-
 var npmPackagesMap = map[string]string{
-	"@sveltejs/kit":            "1.0.0-next.560",
+	"@sveltejs/kit":            "1.0.0-next.561",
 	"@sveltejs/adapter-static": "1.0.0-next.48",
-	"@sveltinio/essentials":    "^0.3.0",
+	//"@sveltinio/essentials":    "^0.3.0",
 }
 
 //=============================================================================
@@ -64,18 +61,21 @@ func (m *UpdatePkgJSONMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{remarkAutolinkHeadingsPkgPattern}
 	if exists {
-		fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher)
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
+		if err != nil {
+			return err
+		}
 		updatedContent := fileContent
 
-		if ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
+		migrationTriggers := []string{patterns[remarkExtLinks]}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
 			if updatedContent, err = updatePkgJSONFile(m, updatedContent); err != nil {
 				return err
 			}
@@ -136,7 +136,7 @@ func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) ([]byte, error
 func newRemarkExternalLinksRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         remarkAutolinkHeadingsPkgPattern,
+		pattern:         patterns[remarkExtLinks],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return "\"rehype-external-links\":\"^2.0.1\","

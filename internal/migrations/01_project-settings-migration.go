@@ -59,12 +59,12 @@ func (m *ProjectSettingsMigration) up() error {
 		return nil
 	}
 
-	exists, _ := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, _ := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if !exists {
-		m.getServices().logger.Info(fmt.Sprintf("Creating %s", filepath.Base(m.Data.PathToFile)))
+		m.getServices().logger.Info(fmt.Sprintf("Creating %s", filepath.Base(m.Data.FileToMigrate)))
 		return addProjectSettingsFile(m)
 	} else if exists && m.Data.ProjectCliVersion != m.Data.CliVersion {
-		m.getServices().logger.Info(fmt.Sprintf("Bumping Sveltin CLI version in %s", filepath.Base(m.Data.PathToFile)))
+		m.getServices().logger.Info(fmt.Sprintf("Bumping Sveltin CLI version in %s", filepath.Base(m.Data.FileToMigrate)))
 		return updateFileContent(m)
 	}
 
@@ -163,14 +163,14 @@ func makeThemeData(m *ProjectSettingsMigration) (*tpltypes.ThemeData, error) {
 }
 
 func updateFileContent(m *ProjectSettingsMigration) error {
-	content, err := afero.ReadFile(m.getServices().fs, m.Data.PathToFile)
+	content, err := afero.ReadFile(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
 	newContent := bytes.Replace(content, []byte(m.Data.ProjectCliVersion), []byte(m.Data.CliVersion), -1)
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, newContent, 0666); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, newContent, 0666); err != nil {
 		return err
 	}
 	return nil

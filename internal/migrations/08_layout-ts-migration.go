@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -16,10 +15,6 @@ import (
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
 )
-
-const prerenderPattern = `^export const prerender`
-
-//=============================================================================
 
 // UpdateLayoutTSMigration is the struct representing the migration update the defaults.js.ts file.
 type UpdateLayoutTSMigration struct {
@@ -57,24 +52,22 @@ func (m *UpdateLayoutTSMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{prerenderPattern}
 	if exists {
-		c, err := retrieveFileContent(m)
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
 		if err != nil {
 			return err
 		}
 
-		if !bytes.Contains(c, []byte(trailingSlashPattern)) {
-			if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
-				if err := updateLayoutFile(m, fileContent); err != nil {
-					return err
-				}
+		migrationTriggers := []string{patterns[trailingSlash]}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
+			if err := updateLayoutFile(m, fileContent); err != nil {
+				return err
 			}
 		}
 	}
@@ -109,12 +102,12 @@ func updateLayoutFile(m *UpdateLayoutTSMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
 		return err
 	}
 	return nil
@@ -125,7 +118,7 @@ func updateLayoutFile(m *UpdateLayoutTSMigration, content []byte) error {
 func newLayoutRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         prerenderPattern,
+		pattern:         patterns[prerenderConst],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `export const prerender = true;
