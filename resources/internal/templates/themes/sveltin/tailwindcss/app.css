@@ -54,15 +54,15 @@
 	@apply relative min-h-screen w-full flex flex-col justify-center;
 }
 
-.btn {
+.hero-btn {
 	@apply relative inline-flex items-center pl-2 pr-2 pt-2 pb-2 text-sm font-medium border-2;
 }
 
-.btn-accent {
+.hero-btn-accent {
 	@apply relative inline-flex items-center px-2 py-2 text-sm font-medium text-white bg-river border-2 border-river rounded-l-lg hover:bg-haiti focus:z-10 focus:outline-none focus:ring-1 focus:ring-river focus:border-white lg:px-8;
 }
 
-.btn-base {
+.hero-btn-base {
 	@apply relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium border-2 border-river rounded-r-lg focus:z-10 focus:outline-none focus:ring-1 focus:ring-auburn focus:border-auburn lg:px-8;
 }
 

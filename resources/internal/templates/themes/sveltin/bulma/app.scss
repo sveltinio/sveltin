@@ -60,7 +60,7 @@ pre[class*='language-'] {
 	}
 }
 
-.btn {
+.hero-btn {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
@@ -79,7 +79,7 @@ pre[class*='language-'] {
 	}
 }
 
-.btn-base {
+.hero-btn-base {
 	margin-left: -1px;
 	color: $dark;
 	border-top-right-radius: 0.5rem /* 8px */;
@@ -93,7 +93,7 @@ pre[class*='language-'] {
 	}
 }
 
-.btn-accent {
+.hero-btn-accent {
 	color: $white;
 	background-color: $color-text-base;
 	border-top-left-radius: 0.5rem /* 8px */;

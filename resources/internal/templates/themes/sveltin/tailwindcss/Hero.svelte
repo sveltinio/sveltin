@@ -1,14 +1,16 @@
 <script>
-	import { ExternalLink } from '@sveltinio/essentials';
+	import { Link } from '@sveltinio/essentials';
 </script>
 
 <section class="hero">
 	<div class="mx-auto max-w-7xl">
 		<div class="py-44">
 			<div class="max-w-5xl px-6 mx-auto">
-				<div class="pb-24 text-center">
+				<div
+					class="pb-24 text-center flex flex-col items-center w-full mx-auto"
+				>
 					<h1
-						class=" pb-4 mx-auto text-skin-base text-3xl font-bold tracking-tighter sm:text-4xl lg:text-5xl lg:leading-tight"
+						class="pb-4 mx-auto text-skin-base text-3xl font-bold tracking-tighter sm:text-4xl lg:text-5xl lg:leading-tight"
 					>
 						Your Sveltin project is <span
 							class="block italic font-normal text-skin-accent capitalize"
@@ -17,22 +19,24 @@
 					</h1>
 
 					<div
-						class="inline-flex justify-center w-full ml-auto mr-auto mt-4"
+						class="inline-flex justify-center max-w-md mx-auto mt-4"
 					>
-						<ExternalLink
+						<Link
 							id="learnMoreLink"
-							name="learnMore"
+							external
+							icon={false}
 							url="https://docs.sveltin.io/tutorials"
 							alt="link to the tutorial pages"
-							class="btn btn-accent">Learn More</ExternalLink
+							class="hero-btn hero-btn-accent">Learn More</Link
 						>
 
-						<ExternalLink
+						<Link
 							id="documentationLink"
-							name="docs"
+							external
+							icon={false}
 							url="https://docs.sveltin.io"
 							alt="link to the documentation website"
-							class="btn btn-base">Read the Docs</ExternalLink
+							class="hero-btn hero-btn-base">Read the Docs</Link
 						>
 					</div>
 				</div>

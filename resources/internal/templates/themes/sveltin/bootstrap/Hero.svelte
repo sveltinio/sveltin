@@ -1,5 +1,5 @@
 <script>
-	import { ExternalLink } from '@sveltinio/essentials';
+	import { Link } from '@sveltinio/essentials';
 </script>
 
 <section class="d-flex justify-content-center text-center">
@@ -18,20 +18,22 @@
 						class="mx-auto mt-4 d-inline-flex justify-content-center btn-group"
 						role="group"
 					>
-						<ExternalLink
+						<Link
 							id="learnMoreLink"
-							name="learnMore"
+							external
+							icon={false}
 							url="https://docs.sveltin.io/tutorials"
 							alt="link to the tutorial pages"
-							class="btn btn-accent">Learn More</ExternalLink
+							class="hero-btn hero-btn-accent">Learn More</Link
 						>
 
-						<ExternalLink
+						<Link
 							id="documentationLink"
-							name="docs"
+							external
+							icon={false}
 							url="https://docs.sveltin.io"
 							alt="link to the documentation website"
-							class="btn btn-base">Read the Docs</ExternalLink
+							class="hero-btn hero-btn-base">Read the Docs</Link
 						>
 					</div>
 				</div>

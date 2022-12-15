@@ -112,7 +112,7 @@ pre[class*='language-'] {
 	justify-content: center;
 }
 
-.btn {
+.hero-btn {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
@@ -126,7 +126,7 @@ pre[class*='language-'] {
 	border-style: solid;
 }
 
-.btn-accent {
+.hero-btn-accent {
 	color: $white;
 	background-color: $color-text-base;
 	border-top-left-radius: 0.5rem;
@@ -145,7 +145,7 @@ pre[class*='language-'] {
 	}
 }
 
-.btn-base {
+.hero-btn-base {
 	margin-left: -1px;
 	color: $dark;
 	border-top-right-radius: 0.5rem;

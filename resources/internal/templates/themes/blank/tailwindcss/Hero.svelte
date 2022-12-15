@@ -1,21 +1,23 @@
 <script>
-	import { ExternalLink } from '@sveltinio/essentials';
+	import { Link } from '@sveltinio/essentials';
 </script>
 
 <h1 class="text-xl">Your Sveltin project is up & running!</h1>
 
 <div>
-	<ExternalLink
+	<Link
 		id="learnMoreLink"
-		name="learnMore"
+		external
+		icon={false}
 		url="https://docs.sveltin.io/tutorials"
-		alt="link to the tutorial pages">Learn More</ExternalLink
+		alt="link to the tutorial pages">Learn More</Link
 	>
 
-	<ExternalLink
+	<Link
 		id="documentationLink"
-		name="docs"
+		external
+		icon={false}
 		url="https://docs.sveltin.io"
-		alt="link to the documentation website">Read the Docs</ExternalLink
+		alt="link to the documentation website">Read the Docs</Link
 	>
 </div>
