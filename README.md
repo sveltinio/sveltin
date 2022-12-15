@@ -94,7 +94,7 @@ sveltin new resource posts
 
 # Add new content to the posts resource
 # (http://localhost:5173/posts/getting-started)
-sveltin add content getting-started --to posts
+sveltin add content posts/getting-started
 
 # Add a 'category' metadata
 # (http://localhost:5173/posts/category)
