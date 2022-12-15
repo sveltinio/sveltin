@@ -71,6 +71,8 @@ Sveltin provides:
 
 With few commands Sveltin flex the muscles 💪
 
+> **NOTE**: each command can be executed in interactive way so do not need to pass arguments ad flags to it.
+
 ```bash
 # Create a project with TailwindCSS support
 sveltin init myBlog --css tailwindcss
@@ -94,7 +96,7 @@ sveltin new resource posts
 
 # Add new content to the posts resource
 # (http://localhost:5173/posts/getting-started)
-sveltin add content posts/getting-started
+sveltin add content getting-started --to posts
 
 # Add a 'category' metadata
 # (http://localhost:5173/posts/category)
@@ -157,6 +159,10 @@ sudo chmod +x /usr/local/bin/sveltin
 
 ## :gear: CLI Commands & Options
 
+sveltin comes with a set of commands and subcommands to help dealing with your SvelteKit project.
+
+Each command can be executed with inline arguments or interactivly.
+
 ```bash
 $ sveltin -h
 
@@ -169,16 +175,16 @@ Available Commands:
   add         Add content and metadata to a resource
   build       Builds a production version of your static website
   completion  Generate the autocompletion script for the specified shell
-  deploy      Deploy your website over FTP
+  deploy      Deploy the website over FTP
   generate    Generate static files (sitemap, rss, menu)
   help        Help about any command
   init        Initialize a new sveltin project
-  install     Install your project dependencies
+  install     Install the project dependencies
+  migrate     Migrate existing sveltin project files to the latest sveltin version ones
   new         Create nee resources, pages and themes
   preview     Preview the production version locally
   server      Run the development server
   update      Update your project dependencies
-  upgrade     Upgrade to the latest Sveltin version features
 
 Flags:
   -h, --help      help for sveltin
@@ -186,10 +192,6 @@ Flags:
 
 Use "sveltin [command] --help" for more information about a command.
 ```
-
-sveltin comes with a set of commands and subcommands to help dealing with your SvelteKit project.
-
-Each command can be executed with inline arguments or interactivly.
 
 ### sveltin init
 
@@ -268,18 +270,9 @@ Read more [here][install].
 
 Read more [here][update].
 
-### sveltin upgrade
+### sveltin migrate
 
-`sveltin upgrade` is used to upgrade to the latest Sveltin version features.
-
-<details>
-    <summary>(Click to expand the list of avilable subcommands)</summary>
-
-| Subcommand        | Description                                             |
-| :---------------- | :------------------------------------------------------ |
-| [upgrade-project] | Make your project compliant the latest Sveltin version. |
-
-</details>
+`sveltin migrate` is used to migrate existing sveltin project files to the latest Sveltin version ones.
 
 Read more [here][upgrade].
 
