@@ -10,11 +10,11 @@ export async function load({ params }) {
 			actual: current,
 			before: previous,
 			after: next,
-			{{if .Resource.Group}}
+			{{ if .Resource.Group -}}
 			mdsvexComponent: (await import(`../../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
-			{{else}}
+			{{ else -}}
 			mdsvexComponent: (await import(`../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
-			{{end}}
+			{{- end -}}
 		};
 	}
 
