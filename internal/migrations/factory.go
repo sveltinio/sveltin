@@ -19,6 +19,7 @@ const (
 	MDsveXMigrationID          string = "mdsvex"
 	SvelteConfigMigrationID    string = "svelteconfig"
 	LayoutMigrationID          string = "layout"
+	HeadingsMigrationID        string = "headingsjs"
 )
 
 // IMigrationFactory declares a set of methods for creating each of the abstract products.
@@ -47,6 +48,8 @@ func GetMigrationFactory(id string) (IMigrationFactory, error) {
 		return &UpdateSvelteConfigMigration{}, nil
 	case LayoutMigrationID:
 		return &UpdateLayoutTSMigration{}, nil
+	case HeadingsMigrationID:
+		return &UpdateHeadingJSMigration{}, nil
 	default:
 		return nil, fmt.Errorf("wrong migration id: %s is not a valid migration", id)
 	}

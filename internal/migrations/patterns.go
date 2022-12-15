@@ -10,25 +10,27 @@ package migrations
 // Patterns used by MigrationRule
 const (
 	semVersion = "semversion"
-	// used as trigger for config/defaults.js.ts and config/website.js.ts files migrations
+	// used to trigger the config/defaults.js.ts and config/website.js.ts files migrations
 	sveltinjson = "sveltinjson"
-	// used as triggers for .env.production file migration
+	// used to trigger the .env.production file migration
 	svelteKitBuildFolder  = "sveltekit-build-folder"
 	svelteKitBuildComment = "sveltekit-build-comment"
 	sitemap               = "sitemap"
-	// used as triggers for svelte.config.js file migration
+	// used to trigger the svelte.config.js file migration
 	prerenderConst   = "prerender-const"
 	prerenderEnabled = "prerender-enabled"
 	trailingSlash    = "trailing-slash"
-	// used as triggers for themes/<theme_name>/theme.config.js file migration
+	// used to trigger the themes/<theme_name>/theme.config.js file migration
 	themeConfigConst  = "theme-config-const"
 	themeConfigExport = "theme-config-export"
 	themeNameProp     = "theme-name-prop"
-	// used as triggers mdsvex.config.js file migration
+	// used to trigger the mdsvex.config.js file migration
 	remarkExtLinks       = "remark-extlinks"
 	remarkExtLinksImport = "remark-extlinks-import"
 	remarkExtLinksUsage  = "remark-extlinks-usage"
 	rehypePlugins        = "rehype-plugins"
+	// used to trigger the headings.js file migration
+	headingsTitleProp = "headings-js"
 )
 
 var patterns = map[string]string{
@@ -48,4 +50,5 @@ var patterns = map[string]string{
 	remarkExtLinksImport:  `^import remarkExternalLinks`,
 	remarkExtLinksUsage:   `\[remarkExternalLinks`,
 	rehypePlugins:         `rehypePlugins:[\t\s]+\[`,
+	headingsTitleProp:     `title:`,
 }

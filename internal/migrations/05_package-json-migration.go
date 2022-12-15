@@ -18,9 +18,10 @@ import (
 )
 
 var npmPackagesMap = map[string]string{
-	"@sveltejs/kit":            "1.0.0-next.561",
-	"@sveltejs/adapter-static": "1.0.0-next.48",
-	//"@sveltinio/essentials":    "^0.3.0",
+	"@sveltejs/kit":            "^1.0.0",
+	"@sveltejs/adapter-static": "^1.0.0",
+	"typescript":               "^4.9.4",
+	"vite":                     "^4.0.1",
 }
 
 //=============================================================================
@@ -76,6 +77,7 @@ func (m *UpdatePkgJSONMigration) up() error {
 		migrationTriggers := []string{patterns[remarkExtLinks]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
+			m.getServices().logger.Important("Remember to run: sveltin install (or npm run install, pnpm install ...)")
 			if updatedContent, err = updatePkgJSONFile(m, updatedContent); err != nil {
 				return err
 			}
@@ -159,6 +161,5 @@ func getDevDependency(content []byte, name string) (string, bool) {
 }
 
 func updateDevDependency(m *UpdatePkgJSONMigration, content []byte, name, value string) ([]byte, error) {
-	m.getServices().logger.Info(fmt.Sprintf("Upgrading %s to %s", name, value))
 	return sjson.SetBytes(content, fmt.Sprintf("devDependencies.%s", name), value)
 }

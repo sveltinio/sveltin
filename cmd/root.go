@@ -91,6 +91,7 @@ const (
 	MDsveXFile          string = "mdsvex.config.js"
 	SvelteConfigFile    string = "svelte.config.js"
 	LayoutTSFile        string = "+layout.ts"
+	HeadingsJSFile      string = "headings.js"
 )
 
 // Matchers IDs

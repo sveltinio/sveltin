@@ -21,16 +21,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// Migration identifiers.
-const (
-	ProjectSettingsMigrationID string = "projectSettings"
-	DefaultsConfigMigrationID  string = "defaultsConfig"
-	ThemeConfigMigrationID     string = "themeConfig"
-	DotEnvMigrationID          string = "dotenv"
-	PackageJSONID              string = "packagejson"
-	MDsveXID                   string = "mdsvex"
-)
-
 //=============================================================================
 
 var upgradeProjectCmd = &cobra.Command{
@@ -87,6 +77,7 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 			migrations.MDsveXMigrationID:         path.Join(cwd, MDsveXFile),
 			migrations.SvelteConfigMigrationID:   path.Join(cwd, SvelteConfigFile),
 			migrations.LayoutMigrationID:         path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
+			migrations.HeadingsMigrationID:       path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", HeadingsJSFile),
 		}
 
 		for id, pathToFile := range migrationIdPathToFileMap {
