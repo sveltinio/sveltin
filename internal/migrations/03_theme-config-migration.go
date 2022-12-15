@@ -66,7 +66,7 @@ func (m *UpdateThemeConfigMigration) up() error {
 		migrationTriggers := []string{patterns[themeConfigConst], themeNameProp, themeConfigExport}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := updateThemeFile(m, fileContent); err != nil {
+			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
 		}
@@ -89,9 +89,7 @@ func (m *UpdateThemeConfigMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
+func (m *UpdateThemeConfigMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string
@@ -114,13 +112,13 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -128,7 +126,7 @@ func updateThemeFile(m *UpdateThemeConfigMigration, content []byte) error {
 func newConstNameRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[themeConfigConst],
+		trigger:         patterns[themeConfigConst],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `import { theme } from '../../sveltin.json';
@@ -141,7 +139,7 @@ const themeConfig = {`
 func newExportLineRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[themeConfigExport],
+		trigger:         patterns[themeConfigExport],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
 			return "export { themeConfig }"
@@ -152,7 +150,7 @@ func newExportLineRule(line string) *migrationRule {
 func newThemeNameRule(line, prevLine string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[themeNameProp],
+		trigger:         patterns[themeNameProp],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			if !strings.Contains(prevLine, "author:") && strings.Contains(line, "name:") {

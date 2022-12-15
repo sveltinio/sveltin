@@ -67,7 +67,7 @@ func (m *UpdateDotEnvMigration) up() error {
 		migrationTriggers := []string{patterns[sitemap], patterns[svelteKitBuildFolder], patterns[svelteKitBuildComment]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := updateDotEnvFile(m, fileContent); err != nil {
+			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
 		}
@@ -90,9 +90,7 @@ func (m *UpdateDotEnvMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
+func (m *UpdateDotEnvMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -109,14 +107,14 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	cleanedOutput := removeMultiEmptyLines(output)
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, cleanedOutput, 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -124,7 +122,7 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 func newDotEnvSitemapRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[sitemap],
+		trigger:         patterns[sitemap],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -135,7 +133,7 @@ func newDotEnvSitemapRule(line string) *migrationRule {
 func newDotEnvSveltekitRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[svelteKitBuildFolder],
+		trigger:         patterns[svelteKitBuildFolder],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -146,7 +144,7 @@ func newDotEnvSveltekitRule(line string) *migrationRule {
 func newDotEnvSvelteKitBuildCommentRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[svelteKitBuildComment],
+		trigger:         patterns[svelteKitBuildComment],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""

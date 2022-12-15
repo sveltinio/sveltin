@@ -66,7 +66,7 @@ func (m *UpdateSvelteConfigMigration) up() error {
 		migrationTriggers := []string{patterns[trailingSlash], patterns[prerenderEnabled]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := updateSvelteConfigFile(m, fileContent); err != nil {
+			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
 		}
@@ -89,9 +89,7 @@ func (m *UpdateSvelteConfigMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) error {
+func (m *UpdateSvelteConfigMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -107,13 +105,13 @@ func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) erro
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -121,7 +119,7 @@ func updateSvelteConfigFile(m *UpdateSvelteConfigMigration, content []byte) erro
 func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[trailingSlash],
+		trigger:         patterns[trailingSlash],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -132,7 +130,7 @@ func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 func newSvelteConfigPrerenderEnabledRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[prerenderEnabled],
+		trigger:         patterns[prerenderEnabled],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""

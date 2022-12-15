@@ -66,7 +66,7 @@ func (m *UpdateHeadingJSMigration) up() error {
 		migrationTriggers := []string{patterns[headingsTitleProp]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := m.migrate(fileContent); err != nil {
+			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
 		}
@@ -75,7 +75,7 @@ func (m *UpdateHeadingJSMigration) up() error {
 	return nil
 }
 
-func (m *UpdateHeadingJSMigration) migrate(content []byte) error {
+func (m *UpdateHeadingJSMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -90,13 +90,13 @@ func (m *UpdateHeadingJSMigration) migrate(content []byte) error {
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 func (m *UpdateHeadingJSMigration) down() error {
@@ -118,7 +118,7 @@ func (m *UpdateHeadingJSMigration) allowUp() error {
 func newHeadingsJSRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[headingsTitleProp],
+		trigger:         patterns[headingsTitleProp],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
 			return "value:"

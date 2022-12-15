@@ -18,6 +18,8 @@ import (
 	"github.com/sveltinio/yinlog"
 )
 
+type matcherFunc = func([]byte, string, string) bool
+
 // IMigration is the interface defining the methods to be implemented by single migration.
 type IMigration interface {
 	Execute() error
@@ -26,6 +28,7 @@ type IMigration interface {
 	up() error
 	down() error
 	allowUp() error
+	migrate([]byte) ([]byte, error)
 }
 
 // MigrationServices contains references to services used by the migrations.
@@ -56,12 +59,10 @@ type MigrationData struct {
 // MigrationRule is the struct with settings to be matched for running the migration.
 type migrationRule struct {
 	value           string
-	pattern         string
+	trigger         string
 	replaceFullLine bool
 	replacerFunc    func(string) string
 }
-
-type matcherFunc = func([]byte, string, string) bool
 
 //=============================================================================
 
@@ -80,7 +81,7 @@ func isMigrationRequired(content []byte, patterns []string, matcher matcherFunc)
 
 func applyMigrationRules(rules []*migrationRule) (string, bool) {
 	for _, r := range rules {
-		expression := regexp.MustCompile(r.pattern)
+		expression := regexp.MustCompile(r.trigger)
 
 		if expression.MatchString(r.value) {
 			if r.replaceFullLine {

@@ -8,6 +8,7 @@
 package migrations
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -63,12 +64,15 @@ func (m *UpdateLayoutTSMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[trailingSlash]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := updateLayoutFile(m, fileContent); err != nil {
-				return err
+		if !bytes.Contains(fileContent, []byte(patterns[trailingSlash])) {
+			migrationTriggers := []string{patterns[prerenderConst]}
+			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
+				if _, err := m.migrate(fileContent); err != nil {
+					return err
+				}
 			}
+
 		}
 	}
 
@@ -89,9 +93,7 @@ func (m *UpdateLayoutTSMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updateLayoutFile(m *UpdateLayoutTSMigration, content []byte) error {
+func (m *UpdateLayoutTSMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{newLayoutRule(line)}
@@ -104,13 +106,13 @@ func updateLayoutFile(m *UpdateLayoutTSMigration, content []byte) error {
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -118,7 +120,7 @@ func updateLayoutFile(m *UpdateLayoutTSMigration, content []byte) error {
 func newLayoutRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[prerenderConst],
+		trigger:         patterns[prerenderConst],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `export const prerender = true;

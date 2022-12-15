@@ -66,7 +66,7 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 		migrationTriggers := []string{patterns[semVersion]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := updateConfigFile(m, fileContent); err != nil {
+			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
 		}
@@ -89,9 +89,7 @@ func (m *UpdateDefaultsConfigMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
+func (m *UpdateDefaultsConfigMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{newSveltinVersionRule(line)}
@@ -104,13 +102,13 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -118,7 +116,7 @@ func updateConfigFile(m *UpdateDefaultsConfigMigration, content []byte) error {
 func newSveltinVersionRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[semVersion],
+		trigger:         patterns[semVersion],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `import { sveltin } from '../sveltin.json';

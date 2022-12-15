@@ -31,6 +31,7 @@ type UpdatePkgJSONMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
+	rules    []*migrationRule
 }
 
 // MakeMigration implements IMigrationFactory interface.
@@ -44,6 +45,8 @@ func (m *UpdatePkgJSONMigration) MakeMigration(migrationManager *MigrationManage
 
 // MakeMigration implements IMigration interface.
 func (m *UpdatePkgJSONMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdatePkgJSONMigration) getRules() []*migrationRule      { return m.rules }
+func (m *UpdatePkgJSONMigration) setRules(r []*migrationRule)     { m.rules = r }
 func (m *UpdatePkgJSONMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
@@ -78,7 +81,7 @@ func (m *UpdatePkgJSONMigration) up() error {
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
 			m.getServices().logger.Important("Remember to run: sveltin install (or npm run install, pnpm install ...)")
-			if updatedContent, err = updatePkgJSONFile(m, updatedContent); err != nil {
+			if updatedContent, err = m.migrate(updatedContent); err != nil {
 				return err
 			}
 		}
@@ -115,15 +118,13 @@ func (m *UpdatePkgJSONMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) ([]byte, error) {
+func (m *UpdatePkgJSONMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*migrationRule{
+		m.setRules([]*migrationRule{
 			newRemarkExternalLinksRule(line),
-		}
-		if res, ok := applyMigrationRules(rules); ok {
+		})
+		if res, ok := applyMigrationRules(m.getRules()); ok {
 			lines[i] = res
 		} else {
 			lines[i] = line
@@ -138,7 +139,7 @@ func updatePkgJSONFile(m *UpdatePkgJSONMigration, content []byte) ([]byte, error
 func newRemarkExternalLinksRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[remarkExtLinks],
+		trigger:         patterns[remarkExtLinks],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return "\"rehype-external-links\":\"^2.0.1\","

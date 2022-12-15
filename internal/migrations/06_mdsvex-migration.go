@@ -66,7 +66,7 @@ func (m *UpdateMDsveXMigration) up() error {
 		migrationTriggers := []string{patterns[remarkExtLinksImport], patterns[remarkExtLinksUsage]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
-			if err := updateMDsveXFile(m, fileContent); err != nil {
+			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
 		}
@@ -89,9 +89,7 @@ func (m *UpdateMDsveXMigration) allowUp() error {
 	return nil
 }
 
-//=============================================================================
-
-func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
+func (m *UpdateMDsveXMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -108,13 +106,13 @@ func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 	output := strings.Join(lines, "\n")
 	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -122,7 +120,7 @@ func updateMDsveXFile(m *UpdateMDsveXMigration, content []byte) error {
 func newReplaceRemarkExternalLinksImportStrRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[remarkExtLinksImport],
+		trigger:         patterns[remarkExtLinksImport],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return "import rehypeExternalLinks from 'rehype-external-links';"
@@ -133,7 +131,7 @@ func newReplaceRemarkExternalLinksImportStrRule(line string) *migrationRule {
 func newReplaceRemarkExternalLinksUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[remarkExtLinksUsage],
+		trigger:         patterns[remarkExtLinksUsage],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -144,7 +142,7 @@ func newReplaceRemarkExternalLinksUsageRule(line string) *migrationRule {
 func newReplaceRehypePluginUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         patterns[rehypePlugins],
+		trigger:         patterns[rehypePlugins],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return `rehypePlugins: [
