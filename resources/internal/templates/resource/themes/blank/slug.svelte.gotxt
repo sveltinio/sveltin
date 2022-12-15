@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { PageData } from './$types';
 	import { website } from '$config/website.js';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
+	import { TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
 	$: ({ actual, before, after, mdsvexComponent } = data);
@@ -67,33 +69,24 @@
 			</div>
 		{/if}
 		<div>
-			<h2 style="margin-top: 20px;">Table of Contents</h2>
-			<nav>
-				<ul>
-					{#each current.metadata.headings as item}
-						<li id={`toc_item_${item.id}}`}>
-							<a class="mdsvextoc-list-item-link parent" href={`#${item.id}`}>{item.title}</a>
-						</li>
-					{/each}
-				</ul>
-			</nav>
+			<TOC data={current.metadata.headings} />
 
 			<div class="markdown-body">
 				<svelte:component this={mdsvexComponent} />
 			</div>
 		</div>
 
-		<div>
-			{#if previous.metadata.title}
-				<p>
-					Prev: <a href={`/${previous.resource}/${previous.metadata.slug}`}>
-						{previous.metadata.title}</a
-					>
-				</p>
-			{/if}
-			{#if next.metadata.title}
-				<p>Next:<a href={`/${next.resource}/${next.metadata.slug}`}> {next.metadata.title}</a></p>
-			{/if}
-		</div>
+		<PagesNavigator
+			prev={ {
+				label: previous.metadata.title,
+				href: `${base}/${previous.resource}/${previous.metadata.slug}`,
+				alt: `link to ${previous.metadata.title}`
+			} }
+			next={ {
+				label: next.metadata.title,
+				href: `${base}/${next.resource}/${next.metadata.slug}`,
+				alt: `link to ${next.metadata.title}`
+			} }
+		/>
 	</div>
 </article>

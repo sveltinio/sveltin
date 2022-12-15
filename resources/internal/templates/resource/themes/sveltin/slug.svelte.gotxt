@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { PageData } from './$types';
 	import { website } from '$config/website.js';
-	import { TOC, PrevNextButtons } from '@sveltinio/widgets';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
+	import { TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
 	$: ({ actual, before, after, mdsvexComponent } = data);
@@ -68,18 +69,25 @@
 			</div>
 		{/if}
 		<div>
-			<TOC
-				resource={current.resource}
-				slug={current.metadata.slug}
-				headings={current.metadata.headings}
-				withChildren={true}
-			/>
+			<TOC data={current.metadata.headings} theme="sveltin" />
 
 			<div class="markdown-body">
 				<svelte:component this={mdsvexComponent} />
 			</div>
 		</div>
-		<PrevNextButtons {previous} {next} />
+
+		<PagesNavigator
+			prev={ {
+				label: previous.metadata.title,
+				href: `${base}/${previous.resource}/${previous.metadata.slug}`,
+				alt: `link to ${previous.metadata.title}`
+			} }
+			next={ {
+				label: next.metadata.title,
+				href: `${base}/${next.resource}/${next.metadata.slug}`,
+				alt: `link to ${next.metadata.title}`
+			} }
+		/>
 	</div>
 </article>
 
