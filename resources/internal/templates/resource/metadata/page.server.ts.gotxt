@@ -4,7 +4,7 @@ import { all } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 
 export async function load() {
 	const data = await all();
-	const metadata = data as unknown as Array<Sveltin.ContentMetadata>;
+	const metadata = data as unknown as Array<Sveltin.YAMLFrontmatter>;
 	return {
 		metadata: metadata
 	};

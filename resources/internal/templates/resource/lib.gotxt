@@ -32,18 +32,18 @@ export async function getSingle(slug: string) {
 	if (selected.length != 0) {
 		const selectedItemIndex = publishedByDate.findIndex((elem) => slug === elem.meta['slug']);
 		const selectedItem = publishedByDate[selectedItemIndex];
-		const current: Sveltin.ContentEntry = {
+		const current: Sveltin.ResourceContent = {
 			resource: resourceName,
 			metadata: selectedItem.meta as Sveltin.YAMLFrontmatter
 		};
-		const previous: Sveltin.ContentEntry = {
+		const previous: Sveltin.ResourceContent = {
 			resource: resourceName,
 			metadata: <Sveltin.YAMLFrontmatter>{
 				title: publishedByDate[selectedItemIndex + 1]?.meta['title'],
 				slug: publishedByDate[selectedItemIndex + 1]?.meta['slug']
 			}
 		};
-		const next: Sveltin.ContentEntry = {
+		const next: Sveltin.ResourceContent = {
 			resource: resourceName,
 			metadata: <Sveltin.YAMLFrontmatter>{
 				title: publishedByDate[selectedItemIndex - 1]?.meta['title'],
