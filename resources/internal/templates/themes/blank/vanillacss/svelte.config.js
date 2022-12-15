@@ -10,7 +10,6 @@ const config = {
 	preprocess: [
 		mdsvex(mdsvexConfig),
 		preprocess({
-			postcss: false,
 			preserve: ['ld+json'],
 		}),
 	],
