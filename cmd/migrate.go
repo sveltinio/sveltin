@@ -1,11 +1,11 @@
+package cmd
+
 /**
  * Copyright © 2021-present Sveltin contributors <github@sveltin.io>
  *
  * Use of this source code is governed by Apache 2.0 license
  * that can be found in the LICENSE file.
  */
-
-package cmd
 
 import (
 	"fmt"
@@ -23,19 +23,19 @@ import (
 
 //=============================================================================
 
-var upgradeProjectCmd = &cobra.Command{
-	Use:   "project",
-	Short: "Upgrade your project to the latest Sveltin version",
+var migrateCmd = &cobra.Command{
+	Use:   "migrate",
+	Short: "migrate your project to the latest Sveltin version",
 	Long: resources.GetASCIIArt() + `
-Command used to upgrade your project files to the latest Sveltin version.
+Command used to migrate your project files to the latest Sveltin version.
 `,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
-	Run:                   RunUpgradeProjectCmd,
+	Run:                   RunMigrateCmd,
 }
 
-// RunUpgradeProjectCmd is the actual work function.
-func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
+// RunMigrateCmd is the actual work function.
+func RunMigrateCmd(cmd *cobra.Command, args []string) {
 	// Exit if running sveltin commands from a not valid directory.
 	isValidProject(false)
 
@@ -46,7 +46,7 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 
 	if isConfirm {
 		cwd, _ := os.Getwd()
-		cfg.log.Plain(markup.H1(fmt.Sprintf("Upgrading your project to sveltin v%s", CliVersion)))
+		cfg.log.Plain(markup.H1(fmt.Sprintf("Migrating your project to sveltin v%s", CliVersion)))
 
 		migrationManager := migrations.NewMigrationManager()
 		migrationServices := migrations.NewMigrationServices(cfg.fs, cfg.fsManager, cfg.pathMaker, cfg.log)
@@ -97,5 +97,5 @@ func RunUpgradeProjectCmd(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	upgradeCmd.AddCommand(upgradeProjectCmd)
+	rootCmd.AddCommand(migrateCmd)
 }

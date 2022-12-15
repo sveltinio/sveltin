@@ -130,7 +130,7 @@ func ShowUpgradeCommandMessage() {
  If there is something purely related to SvelteKit we do not cover by migrations,
  you will see error from SvelteKit by running the server as usual.
 `
-	listLogger.Title("\n[INFO] Upgrade Project Command")
+	listLogger.Title("\n[INFO] Migrate Project Command")
 	listLogger.Append(logger.DefaultLevel, infoText)
 
 	listLogger.Append(logger.ImportantLevel, "Ensure to commit your changes to keep track of what the command applies")
