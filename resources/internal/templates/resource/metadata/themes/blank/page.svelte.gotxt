@@ -12,11 +12,11 @@
 		{#if metadata.length != 0}
 			{#each metadata as {{ $mdName}} }
 			<h2>
-				<a data-sveltekit-prefetch href="{base}/{{.Metadata.Resource}}/{{ .Metadata.Name }}/{ {{ $mdName }}.name}">{ {{ $mdName }}.name}</a>
+				<a data-sveltekit-preload-data="hover" href="{base}/{{.Metadata.Resource}}/{{ .Metadata.Name }}/{ {{ $mdName }}.name}">{ {{ $mdName }}.name}</a>
 			</h2>
 			<ul>
 				{#each {{ $mdName }}.items as item}
-					<li><a data-sveltekit-prefetch href="{base}/{{.Metadata.Resource}}/{item.slug}">{item.title}</a></li>
+					<li><a data-sveltekit-preload-data="hover" href="{base}/{{.Metadata.Resource}}/{item.slug}">{item.title}</a></li>
 				{/each}
 			</ul>
 			{/each}
