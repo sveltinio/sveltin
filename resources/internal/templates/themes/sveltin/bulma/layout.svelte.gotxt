@@ -9,7 +9,7 @@
 		JsonLdWebSite,
 	} from '@sveltinio/seo';
 	import { GoogleFonts } from '@sveltinio/services';
-	import ScrollToTopButton from '@sveltinio/widgets/components/ScrollToTopButton.svelte';
+	import { ScrollToTopButton } from '@sveltinio/widgets';
 	import Footer from '$themes/{{ .Theme.Name }}/partials/Footer.svelte';
 
 	const sortedMenu = orderBy(menu, 'weight');
