@@ -71,7 +71,7 @@ Sveltin provides:
 
 With few commands Sveltin flex the muscles 💪
 
-> **NOTE**: each command can be executed in interactive way so do not need to pass arguments ad flags to it.
+> **NOTE**: each command can be executed in interactive way so do not need to pass arguments and flags to it.
 
 ```bash
 # Create a project with TailwindCSS support
