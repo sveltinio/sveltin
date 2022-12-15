@@ -5,6 +5,7 @@
 	import { menu } from '$config/menu.js';
 	import orderBy from 'lodash-es/orderBy.js';
 	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
+	import { ScrollToTopButton } from '@sveltinio/widgets';
 	//import { GoogleFonts } from '@sveltinio/services';
 
 	const sortedMenu = orderBy(menu, 'weight');
@@ -14,8 +15,8 @@
 <JsonLdSiteNavigationElements websiteData={website} menuData={sortedMenu} />
 
 <!-- GoogleFonts fonts={googleFonts} /> -->
+
 <main>
 	<slot />
 </main>
-
-
+<ScrollToTopButton />
