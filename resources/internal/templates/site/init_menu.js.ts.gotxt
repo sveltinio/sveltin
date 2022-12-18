@@ -1,6 +1,6 @@
-import type { IMenuItem } from '@sveltinio/seo/types';
+import type { Sveltin } from 'src/sveltin';
 
-const menu: Array<IMenuItem> = [
+const menu: Array<Sveltin.MenuItem> = [
 	{
 		identifier: 'home',
 		name: 'Home',

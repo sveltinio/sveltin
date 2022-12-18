@@ -16,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateHeadingJSMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateHeadingJSMigration struct {
+// UpdateWebSiteTSMigration is the struct representing the migration update the defaults.js.ts file.
+type UpdateWebSiteTSMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateHeadingJSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateHeadingJSMigration{
+func (m *UpdateWebSiteTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateWebSiteTSMigration{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateHeadingJSMigration) MakeMigration(migrationManager *MigrationMana
 }
 
 // implements IMigration interface.
-func (m *UpdateHeadingJSMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateHeadingJSMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdateWebSiteTSMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateWebSiteTSMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateHeadingJSMigration) Execute() error {
+func (m UpdateWebSiteTSMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdateHeadingJSMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateHeadingJSMigration) up() error {
+func (m *UpdateWebSiteTSMigration) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -63,7 +63,7 @@ func (m *UpdateHeadingJSMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[headingsTitleProp]}
+		migrationTriggers := []string{patterns[importIWebSiteSeoType], patterns[iwebsiteSeoTypeUsage]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.migrate(fileContent); err != nil {
@@ -75,11 +75,12 @@ func (m *UpdateHeadingJSMigration) up() error {
 	return nil
 }
 
-func (m *UpdateHeadingJSMigration) migrate(content []byte) ([]byte, error) {
+func (m *UpdateWebSiteTSMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
-			newHeadingsJSRule(line),
+			newWebSiteTSImportRule(line),
+			newWebSiteTSUsageRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -99,14 +100,14 @@ func (m *UpdateHeadingJSMigration) migrate(content []byte) ([]byte, error) {
 	return nil, nil
 }
 
-func (m *UpdateHeadingJSMigration) down() error {
+func (m *UpdateWebSiteTSMigration) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateHeadingJSMigration) allowUp() error {
+func (m *UpdateWebSiteTSMigration) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -115,13 +116,24 @@ func (m *UpdateHeadingJSMigration) allowUp() error {
 
 //=============================================================================
 
-func newHeadingsJSRule(line string) *migrationRule {
+func newWebSiteTSImportRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[headingsTitleProp],
+		trigger:         patterns[importIWebSiteSeoType],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return "import type { Sveltin } from 'src/sveltin';"
+		},
+	}
+}
+
+func newWebSiteTSUsageRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[iwebsiteSeoTypeUsage],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
-			return "value:"
+			return "Sveltin.WebSite"
 		},
 	}
 }

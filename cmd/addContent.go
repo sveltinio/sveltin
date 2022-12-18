@@ -183,5 +183,5 @@ func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Fo
 
 func addSampleCoverImage(contentData *tpltypes.ContentData) error {
 	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "resources", contentData.Resource, contentData.Name)).Name
-	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileID, saveTo)
+	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileId, saveTo)
 }

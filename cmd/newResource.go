@@ -236,7 +236,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 	resourceRoutesFolder := composer.NewFolder(resourceData.Name)
 	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.server.ts}
 	cfg.log.Info("Routes")
-	for _, item := range []string{IndexFile, IndexEndpointFile} {
+	for _, item := range []string{IndexFileId, IndexEndpointFileId} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
@@ -253,9 +253,9 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
 	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
-	slugFiles := []string{SlugFile, SlugEndpointFile}
+	slugFiles := []string{SlugFileId, SlugEndpointFileId}
 	if resourceData.SlugLayout {
-		slugFiles = append(slugFiles, SlugLayoutFile)
+		slugFiles = append(slugFiles, SlugLayoutFileId)
 	}
 	for _, item := range slugFiles {
 		f := &composer.File{
@@ -296,7 +296,7 @@ func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *co
 	// NEW FILE: src/routes/api/<version>/<resource_name>/+server.ts
 	apiFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
-		TemplateID: ApiIndexFile,
+		TemplateID: ApiIndexFileId,
 		TemplateData: &config.TemplateData{
 			Name:     resourceData.Name,
 			Resource: resourceData,
@@ -310,7 +310,7 @@ func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *co
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[slug=string]/+server.ts
 	apiSlugFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
-		TemplateID: ApiSlugFile,
+		TemplateID: ApiSlugFileId,
 		TemplateData: &config.TemplateData{
 			Name:     resourceData.Name,
 			Resource: resourceData,

@@ -72,6 +72,12 @@ func (maker *SveltinPathMaker) GetContentFolder() string {
 	return maker.s.GetContentPath()
 }
 
+// GetSrcFolder returns a string representing the path to the 'src' folder
+// for a sveltin project relative to the project root folder.
+func (maker *SveltinPathMaker) GetSrcFolder() string {
+	return maker.s.GetSrcPath()
+}
+
 // GetRoutesFolder returns a string representing the path to the 'src/routes' folder
 // for a sveltin project relative to the project root folder.
 func (maker *SveltinPathMaker) GetRoutesFolder() string {

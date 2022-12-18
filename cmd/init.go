@@ -11,6 +11,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -170,9 +171,14 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
 
+	// COPY FILE: sveltin.d.ts
+	saveTo := path.Join(cfg.pathMaker.GetProjectRoot(projectName), cfg.pathMaker.GetSrcFolder())
+	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, SveltinDTSFileId, saveTo)
+	utils.ExitIfError(err)
+
 	// COPY FILE: mdsvex.config.js
-	saveTo := cfg.pathMaker.GetProjectRoot(projectName)
-	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, MDsveXFileID, saveTo)
+	saveTo = cfg.pathMaker.GetProjectRoot(projectName)
+	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, MDsveXFileId, saveTo)
 	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
@@ -408,8 +414,8 @@ func createProjectRoutesLocalFolder(themeData *tpltypes.ThemeData) *composer.Fol
 
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       helpers.GetResourceRouteFilename(IndexFile, cfg.settings),
-		TemplateID: IndexFile,
+		Name:       helpers.GetResourceRouteFilename(IndexFileId, cfg.settings),
+		TemplateID: IndexFileId,
 		TemplateData: &config.TemplateData{
 			Theme: themeData,
 		},

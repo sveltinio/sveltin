@@ -45,17 +45,21 @@ By running `sveltin migrate` your project will make use of the latest introduced
 
 `migrate` works with migrations.With this release it applies migrations to the following:
 
-| File                        | Actions             |
-| :-------------------------- | :------------------ |
-| `sveltin.json`              | create or update it |
-| `config/defaults.ts`        | make use of `sveltin.json` |
-| `theme.config.js`           | make use of `sveltin.json` |
-| `.env.production`           | remove props now in `sveltin.json` |
-| `package.json`              | replace `remark-external-links` with `rehype-external-links`, bump sveltekit to v1.0.0 and some other deps |
-| `mdsvex.config.js`          | replace configs for `remark-external-links` with the ones for `rehype-external-links` |
-| `src/lib/utils/headings.js` | replace prop `title` with `value` as per `@sveltinio/widgets@0.3.0` |
-| `layout.ts`                 | add `trailingSlash` as per [#7719] |
-| `svelte.config.js`          | remove `trailingSlash` as per [#7719] <br/> remove `config.kit.prerender.enabled` as per [#7762] |
+| Target File                   | Actions                                                                                                    |
+| :---------------------------- | :--------------------------------------------------------------------------------------------------------- |
+| `sveltin.json`                | create or update it                                                                                        |
+| `svelte.config.js`            | remove `trailingSlash` as per [#7719] <br/> remove `config.kit.prerender.enabled` as per [#7762]           |
+| `.env.production`             | remove props now in `sveltin.json`                                                                         |
+| `package.json`                | replace `remark-external-links` with `rehype-external-links`, bump sveltekit to v1.0.0 and some other deps |
+| `mdsvex.config.js`            | replace configs for `remark-external-links` with the ones for `rehype-external-links`                      |
+| `config/defaults.js.ts`       | make use of `sveltin.json`                                                                                 |
+| `config/menu.js.ts`           | make use of `sveltin.d.ts`                                                                                 |
+| `config/website.js.ts`        | make use of `sveltin.d.ts`                                                                                 |
+| `src/sveltin.d.ts`            | update the content with revisited types                                                                    |
+| `src/lib/utils/headings.js`   | replace prop `title` with `value` as per `@sveltinio/widgets@0.3.0`                                        |
+| `src/lib/utils/strings.js.ts` | make use of `sveltin.d.ts`                                                                                 |
+| `src/routes/layout.ts`        | add `trailingSlash` as per [#7719]                                                                         |
+| `themes/*/theme.config.js`    | make use of `sveltin.json`                                                                                 |
 
 [#7719]: https://github.com/sveltejs/kit/pull/7719
 [#7762]: https://github.com/sveltejs/kit/pull/7762

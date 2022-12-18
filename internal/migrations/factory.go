@@ -11,15 +11,19 @@ import "fmt"
 
 // Migration identifiers.
 const (
-	ProjectSettingsMigrationID string = "projectSettings"
-	DefaultsConfigMigrationID  string = "defaultsConfig"
-	ThemeConfigMigrationID     string = "themeConfig"
-	DotEnvMigrationID          string = "dotenv"
-	PackageJSONMigrationID     string = "packagejson"
-	MDsveXMigrationID          string = "mdsvex"
-	SvelteConfigMigrationID    string = "svelteconfig"
-	LayoutMigrationID          string = "layout"
-	HeadingsMigrationID        string = "headingsjs"
+	ProjectSettingsMigrationId string = "projectSettings"
+	DefaultsConfigMigrationId  string = "defaultsConfig"
+	ThemeConfigMigrationId     string = "themeConfig"
+	DotEnvMigrationId          string = "dotenv"
+	PackageJSONMigrationId     string = "packagejson"
+	MDsveXMigrationId          string = "mdsvex"
+	SvelteConfigMigrationId    string = "svelteconfig"
+	LayoutMigrationId          string = "layout"
+	HeadingsMigrationId        string = "headingsjs"
+	WebSiteTSMigrationId       string = "websitets"
+	MenuTSMigrationId          string = "menuts"
+	StringsTSMigrationId       string = "stringsts"
+	SveltinDTSMigrationId      string = "sveltindts"
 )
 
 // IMigrationFactory declares a set of methods for creating each of the abstract products.
@@ -32,24 +36,32 @@ type IMigrationFactory interface {
 // GetMigrationFactory picks the migration factory depending on the migration id.
 func GetMigrationFactory(id string) (IMigrationFactory, error) {
 	switch id {
-	case ProjectSettingsMigrationID:
+	case ProjectSettingsMigrationId:
 		return &ProjectSettingsMigration{}, nil
-	case DefaultsConfigMigrationID:
+	case DefaultsConfigMigrationId:
 		return &UpdateDefaultsConfigMigration{}, nil
-	case ThemeConfigMigrationID:
+	case ThemeConfigMigrationId:
 		return &UpdateThemeConfigMigration{}, nil
-	case DotEnvMigrationID:
+	case DotEnvMigrationId:
 		return &UpdateDotEnvMigration{}, nil
-	case PackageJSONMigrationID:
+	case PackageJSONMigrationId:
 		return &UpdatePkgJSONMigration{}, nil
-	case MDsveXMigrationID:
+	case MDsveXMigrationId:
 		return &UpdateMDsveXMigration{}, nil
-	case SvelteConfigMigrationID:
+	case SvelteConfigMigrationId:
 		return &UpdateSvelteConfigMigration{}, nil
-	case LayoutMigrationID:
+	case LayoutMigrationId:
 		return &UpdateLayoutTSMigration{}, nil
-	case HeadingsMigrationID:
+	case HeadingsMigrationId:
 		return &UpdateHeadingJSMigration{}, nil
+	case WebSiteTSMigrationId:
+		return &UpdateWebSiteTSMigration{}, nil
+	case MenuTSMigrationId:
+		return &UpdateMenuTSMigration{}, nil
+	case StringsTSMigrationId:
+		return &UpdateStringsTSMigration{}, nil
+	case SveltinDTSMigrationId:
+		return &SveltinDTSMigration{}, nil
 	default:
 		return nil, fmt.Errorf("wrong migration id: %s is not a valid migration", id)
 	}

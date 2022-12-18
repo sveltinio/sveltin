@@ -1,7 +1,7 @@
 import { name, baseurl } from '../sveltin.json';
-import type { IWebSite } from '@sveltinio/seo/types';
+import type { Sveltin } from 'src/sveltin';
 
-const website: IWebSite = {
+const website: Sveltin.WebSite = {
 	name: name,
 	baseURL: baseurl,
 	language: 'en-GB',

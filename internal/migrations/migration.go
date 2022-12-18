@@ -51,7 +51,7 @@ func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pat
 
 // MigrationData is the struct with data used by migrations.
 type MigrationData struct {
-	FileToMigrate     string
+	TargetPath        string
 	CliVersion        string
 	ProjectCliVersion string
 }
@@ -104,18 +104,18 @@ func findStringMatcher(content []byte, pattern, line string) bool {
 func retrieveFileContent(fs afero.Fs, pathToFile string) ([]byte, error) {
 	content, err := afero.ReadFile(fs, pathToFile)
 	if err != nil {
-		return nil, err
+		return nil, afero.ErrFileNotFound
 	}
 	return content, nil
 }
 
 func overwriteFile(m IMigration, content []byte) error {
-	err := m.getServices().fs.Remove(m.getData().FileToMigrate)
+	err := m.getServices().fs.Remove(m.getData().TargetPath)
 	if err != nil {
 		return err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.getData().FileToMigrate, []byte(content), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.getData().TargetPath, []byte(content), 0644); err != nil {
 		return err
 	}
 	return nil

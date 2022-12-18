@@ -54,11 +54,11 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 		/** FILE: <project_root>/sveltin.json */
 		pathToFile := path.Join(cwd, ProjectSettingsFile)
 		migrationData := &migrations.MigrationData{
-			FileToMigrate:     pathToFile,
+			TargetPath:        pathToFile,
 			CliVersion:        CliVersion,
 			ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 		}
-		migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationID)
+		migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationId)
 		utils.ExitIfError(err)
 		migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 		// execute the migration.
@@ -70,19 +70,23 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 		utils.ExitIfError(err)
 
 		migrationIdPathToFileMap := map[string]string{
-			migrations.DefaultsConfigMigrationID: path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
-			migrations.ThemeConfigMigrationID:    path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
-			migrations.DotEnvMigrationID:         path.Join(cwd, DotEnvProdFile),
-			migrations.PackageJSONMigrationID:    path.Join(cwd, PackageJSONFile),
-			migrations.MDsveXMigrationID:         path.Join(cwd, MDsveXFile),
-			migrations.SvelteConfigMigrationID:   path.Join(cwd, SvelteConfigFile),
-			migrations.LayoutMigrationID:         path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
-			migrations.HeadingsMigrationID:       path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", HeadingsJSFile),
+			migrations.PackageJSONMigrationId:    path.Join(cwd, PackageJSONFile),
+			migrations.MDsveXMigrationId:         path.Join(cwd, MDsveXFile),
+			migrations.SvelteConfigMigrationId:   path.Join(cwd, SvelteConfigFile),
+			migrations.DotEnvMigrationId:         path.Join(cwd, DotEnvProdFile),
+			migrations.SveltinDTSMigrationId:     path.Join(cwd, cfg.pathMaker.GetSrcFolder(), SveltinDTSFile),
+			migrations.LayoutMigrationId:         path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
+			migrations.DefaultsConfigMigrationId: path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
+			migrations.WebSiteTSMigrationId:      path.Join(cwd, cfg.pathMaker.GetConfigFolder(), WebSiteTSFile),
+			migrations.MenuTSMigrationId:         path.Join(cwd, cfg.pathMaker.GetConfigFolder(), MenuTSFile),
+			migrations.HeadingsMigrationId:       path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", HeadingsJSFile),
+			migrations.StringsTSMigrationId:      path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", StringsTSFile),
+			migrations.ThemeConfigMigrationId:    path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
 		}
 
 		for id, pathToFile := range migrationIdPathToFileMap {
 			migrationData := &migrations.MigrationData{
-				FileToMigrate: pathToFile,
+				TargetPath: pathToFile,
 			}
 			migrationFactory, err := migrations.GetMigrationFactory(id)
 			utils.ExitIfError(err)

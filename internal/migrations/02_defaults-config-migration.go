@@ -52,20 +52,20 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.FileToMigrate)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if err != nil {
 		return err
 	}
 
 	if exists {
-		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().FileToMigrate)
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().TargetPath)
 		if err != nil {
 			return err
 		}
 
 		migrationTriggers := []string{patterns[semVersion]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.FileToMigrate)))
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.migrate(fileContent); err != nil {
 				return err
 			}
@@ -100,12 +100,12 @@ func (m *UpdateDefaultsConfigMigration) migrate(content []byte) ([]byte, error) 
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.FileToMigrate)
+	err := m.getServices().fs.Remove(m.Data.TargetPath)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.FileToMigrate, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.TargetPath, []byte(output), 0644); err != nil {
 		return nil, err
 	}
 	return nil, nil
