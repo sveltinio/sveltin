@@ -6,18 +6,16 @@
 
 <div>
 	<Link
-		id="learnMoreLink"
+		id="quickStartLink"
 		external
 		icon={false}
-		url="https://docs.sveltin.io/tutorials"
-		alt="link to the tutorial pages">Learn More</Link
+		href="https://docs.sveltin.io/quick-start/">Quick Start</Link
 	>
 
 	<Link
 		id="documentationLink"
 		external
 		icon={false}
-		url="https://docs.sveltin.io"
-		alt="link to the documentation website">Read the Docs</Link
+		href="https://docs.sveltin.io">Read the Docs</Link
 	>
 </div>

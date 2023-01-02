@@ -22,20 +22,18 @@
 						class="inline-flex justify-center max-w-md mx-auto mt-4"
 					>
 						<Link
-							id="learnMoreLink"
+							id="quickStartLink"
 							external
 							icon={false}
-							url="https://docs.sveltin.io/tutorials"
-							alt="link to the tutorial pages"
-							class="hero-btn hero-btn-accent">Learn More</Link
+							href="https://docs.sveltin.io/quick-start"
+							class="hero-btn hero-btn-accent">Quick Start</Link
 						>
 
 						<Link
 							id="documentationLink"
 							external
 							icon={false}
-							url="https://docs.sveltin.io"
-							alt="link to the documentation website"
+							href="https://docs.sveltin.io"
 							class="hero-btn hero-btn-base">Read the Docs</Link
 						>
 					</div>
