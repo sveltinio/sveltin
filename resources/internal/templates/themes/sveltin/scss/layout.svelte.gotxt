@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.scss';
+	import { assets } from '$app/paths';
 	import { website } from '$config/website.js';
 	import { googleFonts } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
@@ -12,8 +13,8 @@
 	const sortedMenu = orderBy(menu, 'weight');
 </script>
 
-<JsonLdWebSite websiteData={website} />
-<JsonLdSiteNavigationElements websiteData={website} menuData={sortedMenu} />
+<JsonLdWebSite data={website} />
+<JsonLdSiteNavigationElements data={website} menuData={sortedMenu} />
 
 <GoogleFonts fonts={googleFonts} />
 
@@ -21,6 +22,7 @@
 	<main>
 		<slot />
 	</main>
-	<Footer websiteData={website} />
+
+	<Footer logoSrc="{assets}/{website.logo}" />
 </div>
 <ScrollToTopButton />

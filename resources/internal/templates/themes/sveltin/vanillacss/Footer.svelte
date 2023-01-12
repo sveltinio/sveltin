@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { assets } from '$app/paths';
 	import { sveltinVersion } from '$config/defaults.js';
-	import type { IWebSite } from '@sveltinio/seo/types';
-
-	export let websiteData: IWebSite;
+	export let logoSrc: string;
 </script>
 
 <footer>
@@ -12,7 +9,7 @@
 			<div>
 				<a href="/">
 					<img
-						src="{assets}/{websiteData.logo}"
+						src={logoSrc}
 						alt="sveltin logo"
 						style="width: 100px; height: 48px;"
 					/>
