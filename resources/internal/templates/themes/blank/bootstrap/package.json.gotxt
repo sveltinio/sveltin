@@ -20,7 +20,7 @@
 		"@sveltejs/adapter-static": "^1.0.1",
 		"@sveltejs/kit": "^1.0.11",
 		"@sveltejs/vite-plugin-svelte": "^2.0.2",
-		"@sveltinio/essentials": "^0.4.0",
+		"@sveltinio/essentials": "^0.5.0",
 		"@sveltinio/media-content": "^0.3.4",
 		"@sveltinio/seo": "^0.2.0",
 		"@sveltinio/services": "^0.3.1",
