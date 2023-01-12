@@ -5,10 +5,7 @@
 	import { googleFonts } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
 	import orderBy from 'lodash-es/orderBy.js';
-	import {
-		JsonLdSiteNavigationElements,
-		JsonLdWebSite,
-	} from '@sveltinio/seo';
+	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
 	import { GoogleFonts } from '@sveltinio/services';
 	import { ScrollToTopButton } from '@sveltinio/widgets';
 	import Footer from '$themes/{{ .Theme.Name }}/partials/Footer.svelte';
@@ -31,4 +28,5 @@
 
 	<Footer logoSrc="{assets}/{website.logo}" />
 </div>
+
 <ScrollToTopButton />

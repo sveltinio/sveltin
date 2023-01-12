@@ -11,11 +11,12 @@
 	const sortedMenu = orderBy(menu, 'weight');
 </script>
 
-<JsonLdWebSite websiteData={website} />
-<JsonLdSiteNavigationElements websiteData={website} menuData={sortedMenu} />
+<JsonLdWebSite data={website} />
+<JsonLdSiteNavigationElements data={website} menuData={sortedMenu} />
 
 <!-- <GoogleFonts fonts={googleFonts} /> -->
 <main>
 	<slot />
 </main>
+
 <ScrollToTopButton />
