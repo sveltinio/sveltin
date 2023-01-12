@@ -60,17 +60,12 @@ export namespace Sveltin {
 		copyright: string;
 		keywords: string;
 		contactEmail: string;
-		socials: Socials;
-		webmaster: WebMaster;
+		socials?: Socials;
+		webmaster?: WebMaster;
 	};
 
 	export type Socials = {
-		linkedin: string;
-		twitter: string;
-		github: string;
-		facebook: string;
-		instagram: string;
-		youtube: string;
+		[key: string]: string;
 	};
 
 	export type WebMaster = {
