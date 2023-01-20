@@ -23,6 +23,7 @@ var AvailableCSSLib = []string{Bootstrap, Bulma, Scss, TailwindCSS, VanillaCSS}
 const (
 	PackageJSONFileID    string = "package_json"
 	AppHTMLFileID        string = "app_html"
+	ResetCSSFileID       string = "reset_css"
 	AppCSSFileID         string = "app_css"
 	VariablesFileID      string = "variables_scss"
 	LayoutFileID         string = "layout"

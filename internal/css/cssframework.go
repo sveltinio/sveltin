@@ -349,14 +349,28 @@ func copyAdditionalConfigFiles(embeddedResources map[string]string, cssLib *CSSL
 }
 
 func copyStylesheets(embeddedResources map[string]string, cssLib *CSSLib) error {
-	if cssLib.Name == TailwindCSS || cssLib.Name == VanillaCSS {
+
+	switch cssLib.Name {
+	case Scss, VanillaCSS:
+		// Copying tw-preflight.css file
+		sourceFile := embeddedResources[ResetCSSFileID]
+		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "tw-preflight.css")
+		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+			return err
+		}
+	default:
+		break
+	}
+
+	switch cssLib.Name {
+	case TailwindCSS, VanillaCSS:
 		// Copying app.css file
 		sourceFile := embeddedResources[AppCSSFileID]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.css")
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
-	} else {
+	case Bootstrap, Bulma, Scss:
 		// Copying app.scss file
 		sourceFile := embeddedResources[AppCSSFileID]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.scss")
@@ -370,5 +384,6 @@ func copyStylesheets(embeddedResources map[string]string, cssLib *CSSLib) error 
 			return err
 		}
 	}
+
 	return nil
 }
