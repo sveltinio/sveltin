@@ -109,6 +109,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	themeData, err := buildThemeData(themeSelection, withThemeName, projectName, cssLibName)
 	utils.ExitIfError(err)
 
+	cfg.log.Infof(markup.Faint("Detecting installed package managers..."))
 	npmClient := getSelectedNPMClient(npmClientName)
 	npmClientName = npmClient.Name
 
