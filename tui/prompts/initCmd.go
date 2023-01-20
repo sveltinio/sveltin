@@ -49,9 +49,9 @@ func SelectCSSLibHandler(cssLibName string) (string, error) {
 	entries := []list.Item{
 		choose.Item{Name: Bootstrap, Desc: "Bootstrap"},
 		choose.Item{Name: Bulma, Desc: "Bulma"},
-		choose.Item{Name: VanillaCSS, Desc: "Plain CSS"},
 		choose.Item{Name: Scss, Desc: "Scss/Sass"},
 		choose.Item{Name: TailwindCSS, Desc: "Tailwind CSS"},
+		choose.Item{Name: VanillaCSS, Desc: "Vanilla CSS"},
 	}
 
 	switch nameLenght := len(cssLibName); {
