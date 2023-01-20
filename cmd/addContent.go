@@ -56,13 +56,13 @@ Use the --template flag to select the right one to you. Valid options: blank or 
 Example:
 
 1. You have already created some resource by running "sveltin new resource"
-2. run: sveltin add content welcome
+2. run: sveltin add content welcome --to posts
 
 As result:
 
-- a new "my-first-post" folder within "content/posts" is created
+- a new "welcome" folder within "content/posts" is created
 - an index.svx file is placed there
-- a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
+- a new "posts/welcome" folder created within the "static" folder to store images relative to the content
 `,
 	Run: RunAddContentCmd,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

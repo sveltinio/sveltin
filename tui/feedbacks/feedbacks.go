@@ -46,7 +46,7 @@ func ShowNewProjectWithExistingThemeNextStepsHelpMessage(uc *config.ProjectConfi
 
 // ShowNewResourceHelpMessage prints an help message string for 'resource creation'.
 func ShowNewResourceHelpMessage(name string) {
-	exampleString := fmt.Sprintf("sveltin new content %s/getting-started", name)
+	exampleString := fmt.Sprintf("sveltin add content %s/getting-started", name)
 	entries := []string{
 		markup.P("Start by adding content to it, e.g."),
 		markup.BR,
