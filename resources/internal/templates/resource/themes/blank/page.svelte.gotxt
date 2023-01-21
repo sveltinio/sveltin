@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { base, assets } from '$app/paths';
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
+	import { Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
@@ -32,23 +33,25 @@
 <JsonLdBreadcrumbs
 	baseURL={website.baseURL}
 	parent={resourceName}
-	currentTitle={postsIndexPage.title}
+	current={postsIndexPage.title}
 />
 
 <section>
 	<div>
 		{#if items.length != 0}
 			<h1>{ToTitle(resourceName)}</h1>
-			<ul>
-				{#each items as item}
-					<li>
-						<div>
-							<a href="{base}/{resourceName}/{item.metadata.slug}">{item.metadata.title}</a>
-							<p>{item.metadata.headline}</p>
-						</div>
-					</li>
-				{/each}
-			</ul>
+			{#each items as item}
+				<Card title={item.metadata.title} content={item.metadata.headline}>
+					<span slot="cardImage">
+						<CardImage
+							alt={item.metadata.title}
+							src="{assets}/resources/{item.resource}/{item.metadata.slug}/{item.metadata
+								.cover}"
+						/>
+					</span>
+					<CardAction slot="cardAction" href="{base}/{item.resource}/{item.metadata.slug}" />
+				</Card>
+			{/each}
 		{:else}
 			<h2 class="message warning">
 				Nothing to show here! Create some content first and reload the page:

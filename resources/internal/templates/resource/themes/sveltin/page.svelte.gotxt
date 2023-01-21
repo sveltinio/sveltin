@@ -1,9 +1,10 @@
 {{ $varName := .Resource.Name | ToVariableName | ReplaceIfNested }}
 <script lang="ts">
+	import { base, assets } from '$app/paths';
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
-	import { Card } from '@sveltinio/widgets';
+	import { Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
@@ -33,7 +34,7 @@
 <JsonLdBreadcrumbs
 	baseURL={website.baseURL}
 	parent={resourceName}
-	currentTitle={ {{ $varName }}IndexPage.title}
+	current={ {{ $varName }}IndexPage.title}
 />
 
 <section class="artifact-container">
@@ -42,7 +43,16 @@
 			<h1>{ToTitle(resourceName)}</h1>
 			<div class="cards">
 				{#each items as item}
-					<Card {item} />
+					<Card title={item.metadata.title} content={item.metadata.headline}>
+						<span slot="cardImage">
+							<CardImage
+								alt={item.metadata.title}
+								src="{assets}/resources/{item.resource}/{item.metadata.slug}/{item.metadata
+									.cover}"
+							/>
+						</span>
+						<CardAction slot="cardAction" href="{base}/{item.resource}/{item.metadata.slug}" />
+					</Card>
 				{/each}
 			</div>
 		{:else}
