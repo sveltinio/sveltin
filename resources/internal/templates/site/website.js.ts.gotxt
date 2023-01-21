@@ -20,7 +20,8 @@ const website: Sveltin.WebSite = {
 		github: '',
 		facebook: '',
 		instagram: '',
-		youtube: ''
+		youtube: '',
+		mastodon: ''
 	},
 	webmaster: {
 		name: 'YOUR_NAME_HERE',
