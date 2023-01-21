@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
-	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
 	import Hero from '$themes/{{ .Theme.Name }}/partials/Hero.svelte';
 	import { getFavicon } from '$lib/utils/strings.js';
 
-	const homePage: IWebPageMetadata = {
+	const homePage: SEOWebPageMetadata = {
 		url: website.baseURL,
 		title: website.title,
 		description: website.seoDescription,
