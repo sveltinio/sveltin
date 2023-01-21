@@ -39,7 +39,7 @@
 <JsonLdBreadcrumbs
 	baseURL={website.baseURL}
 	parent={current.resource}
-	currentTitle={slugPageData.title}
+	current={slugPageData.title}
 />
 
 <article>
