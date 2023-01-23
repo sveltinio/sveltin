@@ -69,7 +69,7 @@
 			</div>
 		{/if}
 		<div>
-			<TOC data={current.metadata.headings} theme="sveltin" />
+			<TOC data={current.metadata.headings} class="sveltin" />
 
 			<div class="markdown-body">
 				<svelte:component this={mdsvexComponent} />
