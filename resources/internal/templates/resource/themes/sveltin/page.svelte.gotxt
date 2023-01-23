@@ -44,13 +44,11 @@
 			<div class="cards">
 				{#each items as item}
 					<Card title={item.metadata.title} content={item.metadata.headline}>
-						<span slot="cardImage">
-							<CardImage
-								alt={item.metadata.title}
-								src="{assets}/resources/{item.resource}/{item.metadata.slug}/{item.metadata
-									.cover}"
-							/>
-						</span>
+						<CardImage
+							slot="cardImage"
+							alt={item.metadata.title}
+							src="{assets}/resources/{item.resource}/{item.metadata.slug}/{item.metadata.cover}"
+						/>
 						<CardAction slot="cardAction" href="{base}/{item.resource}/{item.metadata.slug}" />
 					</Card>
 				{/each}
