@@ -9,6 +9,17 @@ cover: dummy.jpeg
 draft: false
 ---
 
+<script lang="ts">
+  import { YouTube } from '@sveltinio/media-content';
+
+  const youtubeSampleVideoSettings: IYouTubeSettings = {
+    autoplay: false,
+    ccLangPref: 'it',
+    color: 'white',
+    controls: true
+  }
+</script>
+
 ## Headings
 
 The following HTML `<h1>`—`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level while `<h6>` is the lowest.
@@ -34,6 +45,16 @@ The blockquote element represents content that is quoted from another source, op
 > — <cite>Rob Pike[^1]</cite>
 
 [^1]: The above quote is excerpted from Rob Pike's [talk](https://www.youtube.com/watch?v=PAAkCSZUG1c) during Gopherfest, November 18, 2015.
+
+## Media
+
+Embed media content with [@sveltinio/media-content](https://github.com/sveltinio/components-library/tree/main/packages/media-content)
+
+<YouTube
+    id="pJcbZr5VlV4"
+    title="Svelte Summit Fall 2022 - Day 1"
+    settings={youtubeSampleVideoSettings}
+/>
 
 ## Tables
 
