@@ -18,10 +18,12 @@ import (
 )
 
 var npmPackagesMap = map[string]string{
-	"@sveltejs/kit":            "^1.0.0",
-	"@sveltejs/adapter-static": "^1.0.0",
+	"@sveltinio/seo":           "^0.2.0",
+	"@sveltinio/widgets":       "^0.5.0",
+	"@sveltejs/kit":            "^1.2.3",
+	"@sveltejs/adapter-static": "^1.0.5",
 	"typescript":               "^4.9.4",
-	"vite":                     "^4.0.1",
+	"vite":                     "^4.0.4",
 }
 
 //=============================================================================
@@ -74,7 +76,7 @@ func (m *UpdatePkgJSONMigration) up() error {
 		}
 		updatedContent := fileContent
 
-		migrationTriggers := []string{patterns[remarkExtLinks]}
+		migrationTriggers := []string{patterns[remarkExtLinks], patterns[remarkSlug]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			m.getServices().logger.Important("Remember to run: sveltin install (or npm run install, pnpm install ...)")
@@ -120,6 +122,7 @@ func (m *UpdatePkgJSONMigration) migrate(content []byte) ([]byte, error) {
 	for i, line := range lines {
 		rules := []*migrationRule{
 			newRemarkExternalLinksRule(line),
+			newRemarkSlugRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -140,6 +143,17 @@ func newRemarkExternalLinksRule(line string) *migrationRule {
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return "\"rehype-external-links\":\"^2.0.1\","
+		},
+	}
+}
+
+func newRemarkSlugRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[remarkSlug],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return "\"@sveltinio/remark-headings\":\"^1.0.1\","
 		},
 	}
 }

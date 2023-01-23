@@ -27,9 +27,13 @@ const (
 	themeConfigExport = "theme-config-export"
 	themeNameProp     = "theme-name-prop"
 	// used to trigger the mdsvex.config.js file migration
+	headingsImport       = "headings-import"
 	remarkExtLinks       = "remark-extlinks"
 	remarkExtLinksImport = "remark-extlinks-import"
 	remarkExtLinksUsage  = "remark-extlinks-usage"
+	remarkSlug           = "remark-slug"
+	remarkSlugImport     = "remark-slug-import"
+	remarkSlugUsage      = "remakr-slug-usage"
 	rehypePlugins        = "rehype-plugins"
 	// used to trigger the src/lib/utils/headings.js file migration
 	headingsTitleProp = "headings-js"
@@ -57,9 +61,13 @@ var patterns = map[string]string{
 	themeConfigConst:       `^const config`,
 	themeConfigExport:      `^export default config`,
 	themeNameProp:          `name:`,
+	headingsImport:         `import headings from './src/lib/utils/headings.js`,
 	remarkExtLinks:         `"remark-external-links"`,
 	remarkExtLinksImport:   `^import remarkExternalLinks`,
 	remarkExtLinksUsage:    `\[remarkExternalLinks`,
+	remarkSlug:             "remark-slug",
+	remarkSlugImport:       `^import remarkSlug`,
+	remarkSlugUsage:        `remarkSlug,`,
 	rehypePlugins:          `rehypePlugins:[\t\s]+\[`,
 	headingsTitleProp:      `title:`,
 	importIWebSiteSeoType:  `^import type { IWebSite } from '@sveltinio/seo/types';`,

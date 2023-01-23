@@ -63,7 +63,14 @@ func (m *UpdateMDsveXMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[remarkExtLinksImport], patterns[remarkExtLinksUsage]}
+		migrationTriggers := []string{
+			patterns[remarkExtLinksImport],
+			patterns[remarkSlugImport],
+			patterns[headingsImport],
+			patterns[remarkSlugUsage],
+			patterns[remarkExtLinksUsage],
+		}
+
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.migrate(fileContent); err != nil {
@@ -93,8 +100,11 @@ func (m *UpdateMDsveXMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
+			newReplaceHeadingsImportStrRule(line),
 			newReplaceRemarkExternalLinksImportStrRule(line),
 			newReplaceRemarkExternalLinksUsageRule(line),
+			newReplaceRemarkSlugImportStrRule(line),
+			newReplaceRemarkSlugUsageRule(line),
 			newReplaceRehypePluginUsageRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
@@ -117,6 +127,17 @@ func (m *UpdateMDsveXMigration) migrate(content []byte) ([]byte, error) {
 
 //=============================================================================
 
+func newReplaceHeadingsImportStrRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[headingsImport],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return "import headings from '@sveltinio/remark-headings';"
+		},
+	}
+}
+
 func newReplaceRemarkExternalLinksImportStrRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
@@ -133,6 +154,28 @@ func newReplaceRemarkExternalLinksUsageRule(line string) *migrationRule {
 		value:           line,
 		trigger:         patterns[remarkExtLinksUsage],
 		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newReplaceRemarkSlugImportStrRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[remarkSlugImport],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newReplaceRemarkSlugUsageRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[remarkSlugUsage],
+		replaceFullLine: false,
 		replacerFunc: func(string) string {
 			return ""
 		},
