@@ -69,6 +69,7 @@ func (m *UpdateMDsveXMigration) up() error {
 			patterns[headingsImport],
 			patterns[remarkSlugUsage],
 			patterns[remarkExtLinksUsage],
+			patterns[rehypeSlugUsage],
 		}
 
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
@@ -99,6 +100,10 @@ func (m *UpdateMDsveXMigration) allowUp() error {
 func (m *UpdateMDsveXMigration) migrate(content []byte) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
+		var prevLine string
+		if i > 0 {
+			prevLine = lines[i-1]
+		}
 		rules := []*migrationRule{
 			newReplaceHeadingsImportStrRule(line),
 			newReplaceRemarkExternalLinksImportStrRule(line),
@@ -106,6 +111,7 @@ func (m *UpdateMDsveXMigration) migrate(content []byte) ([]byte, error) {
 			newReplaceRemarkSlugImportStrRule(line),
 			newReplaceRemarkSlugUsageRule(line),
 			newReplaceRehypePluginUsageRule(line),
+			newReplaceRehypeSlugUsageRule(line, prevLine),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -190,6 +196,21 @@ func newReplaceRehypePluginUsageRule(line string) *migrationRule {
 		replacerFunc: func(string) string {
 			return `rehypePlugins: [
 		[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],`
+		},
+	}
+}
+
+func newReplaceRehypeSlugUsageRule(line, prevLine string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[rehypeSlugUsage],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			if strings.Contains(prevLine, "'noopener', 'noreferrer'") {
+				return `rehypeSlug,
+				[`
+			}
+			return line
 		},
 	}
 }

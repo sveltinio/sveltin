@@ -33,8 +33,9 @@ const (
 	remarkExtLinksUsage  = "remark-extlinks-usage"
 	remarkSlug           = "remark-slug"
 	remarkSlugImport     = "remark-slug-import"
-	remarkSlugUsage      = "remakr-slug-usage"
+	remarkSlugUsage      = "remark-slug-usage"
 	rehypePlugins        = "rehype-plugins"
+	rehypeSlugUsage      = "rehype-slug"
 	// used to trigger the src/lib/utils/headings.js file migration
 	headingsTitleProp = "headings-js"
 	// used to trigger the config/website.js.ts
@@ -69,6 +70,7 @@ var patterns = map[string]string{
 	remarkSlugImport:       `^import remarkSlug`,
 	remarkSlugUsage:        `remarkSlug,`,
 	rehypePlugins:          `rehypePlugins:[\t\s]+\[`,
+	rehypeSlugUsage:        `rehypeSlug\[`,
 	headingsTitleProp:      `title:`,
 	importIWebSiteSeoType:  `^import type { IWebSite } from '@sveltinio/seo/types';`,
 	iwebsiteSeoTypeUsage:   `IWebSite`,
