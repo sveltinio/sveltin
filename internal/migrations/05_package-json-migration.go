@@ -18,10 +18,16 @@ import (
 )
 
 var npmPackagesMap = map[string]string{
+	"@sveltinio/essentials":    "^0.5.1",
+	"@sveltinio/media-content": "^0.3.5",
 	"@sveltinio/seo":           "^0.2.0",
 	"@sveltinio/widgets":       "^0.5.0",
-	"@sveltejs/kit":            "^1.2.3",
+	"@sveltejs/kit":            "^1.2.6",
 	"@sveltejs/adapter-static": "^1.0.5",
+	"@types/gtag.js":           "^0.0.12",
+	"rimraf":                   "^4.1.2",
+	"svelte-check":             "^3.0.2",
+	"svelte-preprocess":        "^5.0.1",
 	"typescript":               "^4.9.4",
 	"vite":                     "^4.0.4",
 }
