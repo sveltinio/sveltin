@@ -15,14 +15,14 @@ const (
 	DefaultsConfigMigrationId  string = "defaultsConfig"
 	ThemeConfigMigrationId     string = "themeConfig"
 	DotEnvMigrationId          string = "dotenv"
+	WebSiteTSMigrationId       string = "websitets"
+	MenuTSMigrationId          string = "menuts"
+	ResourceLibs               string = "resource-libs"
+	SveltinDTSMigrationId      string = "sveltindts"
 	PackageJSONMigrationId     string = "packagejson"
 	MDsveXMigrationId          string = "mdsvex"
 	SvelteConfigMigrationId    string = "svelteconfig"
 	LayoutMigrationId          string = "layout"
-	WebSiteTSMigrationId       string = "websitets"
-	MenuTSMigrationId          string = "menuts"
-	StringsTSMigrationId       string = "stringsts"
-	SveltinDTSMigrationId      string = "sveltindts"
 	SvelteFilesMigrationId     string = "svelte-files"
 	PageServerTSMigrationId    string = "page-server-ts"
 )
@@ -34,7 +34,7 @@ var migrationMap = map[string]IMigrationFactory{
 	DotEnvMigrationId:          &UpdateDotEnvMigration{},
 	WebSiteTSMigrationId:       &UpdateWebSiteTSMigration{},
 	MenuTSMigrationId:          &UpdateMenuTSMigration{},
-	StringsTSMigrationId:       &UpdateStringsTSMigration{},
+	ResourceLibs:               &UpdateResourceLibsMigration{},
 	SveltinDTSMigrationId:      &SveltinDTSMigration{},
 	PackageJSONMigrationId:     &UpdatePkgJSONMigration{},
 	MDsveXMigrationId:          &UpdateMDsveXMigration{},
@@ -44,7 +44,7 @@ var migrationMap = map[string]IMigrationFactory{
 	PageServerTSMigrationId:    &UpdatePageServerTSMigration{},
 }
 
-// IMigrationFactory declares a set of methods for creating each of the abstract products.
+// IMigrationFactory declares a set of methods for creating each of the abstract migrations.
 type IMigrationFactory interface {
 	MakeMigration(*MigrationManager, *MigrationServices, *MigrationData) IMigration
 }

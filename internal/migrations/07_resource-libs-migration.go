@@ -9,23 +9,23 @@ package migrations
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateStringsTSMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateStringsTSMigration struct {
+// UpdateResourceLibsMigration is the struct representing the migration update the defaults.js.ts file.
+type UpdateResourceLibsMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateStringsTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateStringsTSMigration{
+func (m *UpdateResourceLibsMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateResourceLibsMigration{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateStringsTSMigration) MakeMigration(migrationManager *MigrationMana
 }
 
 // implements IMigration interface.
-func (m *UpdateStringsTSMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateStringsTSMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdateResourceLibsMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateResourceLibsMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateStringsTSMigration) Execute() error {
+func (m UpdateResourceLibsMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,20 +47,29 @@ func (m UpdateStringsTSMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateStringsTSMigration) up() error {
+func (m *UpdateResourceLibsMigration) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.TargetPath)
+	exists, err := afero.DirExists(m.getServices().fs, m.Data.TargetPath)
 	if err != nil {
 		return err
 	}
 
 	if exists {
-		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().TargetPath)
+		files := []string{}
+
+		walkFunc := func(file string, info os.FileInfo, err error) error {
+			if filepath.Ext(file) == ".ts" {
+				files = append(files, file)
+			}
+			return nil
+		}
+
+		err := afero.Walk(m.getServices().fs, m.Data.TargetPath, walkFunc)
 		if err != nil {
-			return err
+			m.getServices().logger.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", m.Data.TargetPath)
 		}
 
 		migrationTriggers := []string{
@@ -70,18 +79,27 @@ func (m *UpdateStringsTSMigration) up() error {
 			patterns[iwebsiteSeoTypeUsage],
 		}
 
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent, ""); err != nil {
+		for _, file := range files {
+			fileContent, err := retrieveFileContent(m.getServices().fs, file)
+			if err != nil {
 				return err
 			}
+
+			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", file))
+				if _, err := m.migrate(fileContent, file); err != nil {
+					return err
+				}
+			}
+
 		}
+
 	}
 
 	return nil
 }
 
-func (m *UpdateStringsTSMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdateResourceLibsMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 
 	// It must be executed twice to replace multiple triggers on the same line
@@ -89,9 +107,9 @@ func (m *UpdateStringsTSMigration) migrate(content []byte, filepath string) ([]b
 		for i, line := range lines {
 			rules := []*migrationRule{
 				newSveltinNamespaceRule(line),
-				newStringsTSImportRule(line),
-				newStringsTSContentEntryUsageRule(line),
-				newStringsTSIWebSiteUsageRule(line),
+				newIWebSiteImportRule(line),
+				newContentEntryUsageRule(line),
+				newIWebSiteUsageRule(line),
 			}
 
 			if res, ok := applyMigrationRules(rules); ok {
@@ -103,25 +121,26 @@ func (m *UpdateStringsTSMigration) migrate(content []byte, filepath string) ([]b
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.TargetPath)
+	err := m.getServices().fs.Remove(filepath)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, m.Data.TargetPath, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, filepath, []byte(output), 0644); err != nil {
 		return nil, err
 	}
+
 	return nil, nil
 }
 
-func (m *UpdateStringsTSMigration) down() error {
+func (m *UpdateResourceLibsMigration) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateStringsTSMigration) allowUp() error {
+func (m *UpdateResourceLibsMigration) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -141,7 +160,7 @@ func newSveltinNamespaceRule(line string) *migrationRule {
 	}
 }
 
-func newStringsTSImportRule(line string) *migrationRule {
+func newIWebSiteImportRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[importIWebSiteSeoType],
@@ -152,7 +171,7 @@ func newStringsTSImportRule(line string) *migrationRule {
 	}
 }
 
-func newStringsTSContentEntryUsageRule(line string) *migrationRule {
+func newContentEntryUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[icontententryTypeUsage],
@@ -163,7 +182,7 @@ func newStringsTSContentEntryUsageRule(line string) *migrationRule {
 	}
 }
 
-func newStringsTSIWebSiteUsageRule(line string) *migrationRule {
+func newIWebSiteUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[iwebsiteSeoTypeUsage],

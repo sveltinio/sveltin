@@ -76,7 +76,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			migrations.DotEnvMigrationId:       path.Join(cwd, DotEnvProdFile),
 			migrations.WebSiteTSMigrationId:    path.Join(cwd, cfg.pathMaker.GetConfigFolder(), WebSiteTSFile),
 			migrations.MenuTSMigrationId:       path.Join(cwd, cfg.pathMaker.GetConfigFolder(), MenuTSFile),
-			migrations.StringsTSMigrationId:    path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", StringsTSFile),
+			migrations.ResourceLibs:            path.Join(cwd, cfg.pathMaker.GetLibFolder()),
 			migrations.SveltinDTSMigrationId:   path.Join(cwd, cfg.pathMaker.GetSrcFolder(), SveltinDTSFile),
 			migrations.PackageJSONMigrationId:  path.Join(cwd, PackageJSONFile),
 			migrations.MDsveXMigrationId:       path.Join(cwd, MDsveXFile),
