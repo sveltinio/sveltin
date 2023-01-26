@@ -1,4 +1,4 @@
-import type { Sveltin } from 'src/sveltin';
+import type { Sveltin } from '../../sveltin';
 import { list } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 
 export async function load() {
