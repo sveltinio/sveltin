@@ -126,14 +126,16 @@ func ShowUpgradeCommandMessage() {
 	infoText := `
  Sveltin will try to migrate as much as it can to make your project ready.
 
- Something cannot be easily handled. The main goal is to update sveltin's files.
- If there is something purely related to SvelteKit we do not cover by migrations,
- you will see error from SvelteKit by running the server as usual.
+ The main goal is to update sveltin internal files and make your project
+ compliant with the latest introduced by SvelteKit.
+
+ For sure, something will not be handled by the migrations. In this case,
+ you will see errors from SvelteKit by running the server as usual.
 `
-	listLogger.Title("\n[INFO] Migrate Project Command")
+	listLogger.Title("\nMigrate Project Command")
 	listLogger.Append(logger.DefaultLevel, infoText)
 
-	listLogger.Append(logger.ImportantLevel, "Ensure to commit your changes to keep track of what the command applies")
+	listLogger.Append(logger.WarningLevel, markup.Amber("Ensure to commit your changes to keep track of what the command applies"))
 	listLogger.Render()
 }
 

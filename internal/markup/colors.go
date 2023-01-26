@@ -10,10 +10,20 @@ package markup
 import "github.com/charmbracelet/lipgloss"
 
 var (
-	nocolor = lipgloss.AdaptiveColor{Light: "#0f172a", Dark: "#d1d5db"} // Light: gray-900, Dark: gray-300
-	slate   = lipgloss.AdaptiveColor{Light: "#cbd5e1", Dark: "#f8fafc"} // Light: slate-300, Dark: slate-50
-	green   = lipgloss.AdaptiveColor{Light: "#166534", Dark: "#22c55e"} // Light: green-800, Dark: green-500
-	gray    = lipgloss.AdaptiveColor{Light: "#6b7280", Dark: "#9ca3af"} // Light: gray-500, Dark: gray-400
-	amber   = lipgloss.AdaptiveColor{Light: "#fcd34d", Dark: "#fffbeb"} // Light: amber-300, Dark: amber-50
-	purple  = lipgloss.AdaptiveColor{Light: "#7e22ce", Dark: "#a855f7"} // Light: purple-700, Dark: purple-500
+	// Light: gray-600, Dark: gray-500
+	nocolor = lipgloss.AdaptiveColor{Light: "#4b5563", Dark: "#64748b"}
+	// Light: slate-600, Dark: slate-500
+	slate = lipgloss.AdaptiveColor{Light: "#475569", Dark: "#64748b"}
+	// Light: green-600, Dark: green-500
+	green = lipgloss.AdaptiveColor{Light: "#16a34a", Dark: "#22c55e"}
+	// Light: gray-600, Dark: gray-500
+	gray = lipgloss.AdaptiveColor{Light: "#4b5563", Dark: "#64748b"}
+	// Light: yellow-600, Dark: yellow-500
+	yellow = lipgloss.AdaptiveColor{Light: "#ca8a04", Dark: "#eab308"}
+	// Light: amber-600, Dark: amber-500
+	amber = lipgloss.AdaptiveColor{Light: "#d97706", Dark: "#f59e0b"}
+	// Light: purple-600, Dark: purple-500
+	purple = lipgloss.AdaptiveColor{Light: "#9333ea", Dark: "#a855f7"}
+	// Light: blue-600, Dark: blue-500
+	blue = lipgloss.AdaptiveColor{Light: "#2563eb", Dark: "#3b82f6"}
 )
