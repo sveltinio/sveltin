@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { PageData } from './$types';
+	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
 	import { website } from '$config/website.js';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
@@ -14,7 +15,7 @@
 	$: previous = before;
 	$: next = after;
 
-	$: slugPageData = {
+	$: slugPageData = <SEOWebPageMetadata>{
 		url: getSlugPageUrl(current, website),
 		title: current.metadata.title,
 		description: current.metadata.headline,
