@@ -46,6 +46,7 @@ const (
 	imenuitemSeoTypeUsage  = "imenuitem"
 	// used to trigger the src/lib/utils/strings.js.ts migration
 	icontententryTypeUsage = "content-entry"
+	sveltinNamespace       = "sveltin-namespace-js"
 	// used to trigger the +page.[svelte|svx] migration
 	iwebpagemedataImport = "import-iwebpagemetadata"
 	jsonLdWebsiteData    = "jsonld-websitedata"
@@ -77,11 +78,12 @@ var patterns = map[string]string{
 	rehypePlugins:          `rehypePlugins:[\t\s]+\[`,
 	rehypeSlugUsage:        `rehypeSlug\[`,
 	headingsTitleProp:      `title:`,
-	importIWebSiteSeoType:  `^import type { IWebSite } from '@sveltinio/seo/types';`,
+	importIWebSiteSeoType:  `\{\s+IWebSite\s+\}`,
 	iwebsiteSeoTypeUsage:   `IWebSite`,
-	importIMenuItemSeoType: `^import type { IMenuItem } from '@sveltinio/seo/types';`,
+	importIMenuItemSeoType: `\{\s+IMenuItem\s+\}`,
 	imenuitemSeoTypeUsage:  `IMenuItem`,
 	icontententryTypeUsage: `ContentEntry`,
+	sveltinNamespace:       `'src\/sveltin';$`,
 	iwebpagemedataImport:   `IWebPageMetadata`,
 	jsonLdWebsiteData:      `websiteData`,
 	jsonLdCurrentTitle:     `currentTitle`,

@@ -64,6 +64,7 @@ func (m *UpdateStringsTSMigration) up() error {
 		}
 
 		migrationTriggers := []string{
+			patterns[sveltinNamespace],
 			patterns[importIWebSiteSeoType],
 			patterns[icontententryTypeUsage],
 			patterns[iwebsiteSeoTypeUsage],
@@ -85,9 +86,9 @@ func (m *UpdateStringsTSMigration) migrate(content []byte, filepath string) ([]b
 
 	// It must be executed twice to replace multiple triggers on the same line
 	for loopCounter := 0; loopCounter <= 1; loopCounter++ {
-		fmt.Println(loopCounter)
 		for i, line := range lines {
 			rules := []*migrationRule{
+				newSveltinNamespaceRule(line),
 				newStringsTSImportRule(line),
 				newStringsTSContentEntryUsageRule(line),
 				newStringsTSIWebSiteUsageRule(line),
@@ -128,6 +129,17 @@ func (m *UpdateStringsTSMigration) allowUp() error {
 }
 
 //=============================================================================
+
+func newSveltinNamespaceRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[sveltinNamespace],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return "import type { Sveltin } from '../../sveltin';"
+		},
+	}
+}
 
 func newStringsTSImportRule(line string) *migrationRule {
 	return &migrationRule{
