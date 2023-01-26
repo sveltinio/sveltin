@@ -74,7 +74,7 @@ func (m *UpdateMDsveXMigration) up() error {
 
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent); err != nil {
+			if _, err := m.migrate(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -97,7 +97,7 @@ func (m *UpdateMDsveXMigration) allowUp() error {
 	return nil
 }
 
-func (m *UpdateMDsveXMigration) migrate(content []byte) ([]byte, error) {
+func (m *UpdateMDsveXMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string

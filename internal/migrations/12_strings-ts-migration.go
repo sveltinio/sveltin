@@ -71,7 +71,7 @@ func (m *UpdateStringsTSMigration) up() error {
 
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent); err != nil {
+			if _, err := m.migrate(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -80,7 +80,7 @@ func (m *UpdateStringsTSMigration) up() error {
 	return nil
 }
 
-func (m *UpdateStringsTSMigration) migrate(content []byte) ([]byte, error) {
+func (m *UpdateStringsTSMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 
 	// It must be executed twice to replace multiple triggers on the same line

@@ -88,7 +88,7 @@ func (m *SveltinDTSMigration) allowUp() error {
 	return nil
 }
 
-func (m *SveltinDTSMigration) migrate(content []byte) ([]byte, error) {
+func (m *SveltinDTSMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	return nil, nil
 }
 

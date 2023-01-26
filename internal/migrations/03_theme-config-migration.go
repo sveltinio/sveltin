@@ -66,7 +66,7 @@ func (m *UpdateThemeConfigMigration) up() error {
 		migrationTriggers := []string{patterns[themeConfigConst], themeNameProp, themeConfigExport}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent); err != nil {
+			if _, err := m.migrate(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -89,7 +89,7 @@ func (m *UpdateThemeConfigMigration) allowUp() error {
 	return nil
 }
 
-func (m *UpdateThemeConfigMigration) migrate(content []byte) ([]byte, error) {
+func (m *UpdateThemeConfigMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string

@@ -66,7 +66,7 @@ func (m *UpdateWebSiteTSMigration) up() error {
 		migrationTriggers := []string{patterns[importIWebSiteSeoType], patterns[iwebsiteSeoTypeUsage]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent); err != nil {
+			if _, err := m.migrate(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -75,7 +75,7 @@ func (m *UpdateWebSiteTSMigration) up() error {
 	return nil
 }
 
-func (m *UpdateWebSiteTSMigration) migrate(content []byte) ([]byte, error) {
+func (m *UpdateWebSiteTSMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{

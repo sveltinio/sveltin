@@ -82,6 +82,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			migrations.HeadingsMigrationId:       path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", HeadingsJSFile),
 			migrations.StringsTSMigrationId:      path.Join(cwd, cfg.pathMaker.GetLibFolder(), "utils", StringsTSFile),
 			migrations.ThemeConfigMigrationId:    path.Join(cwd, cfg.pathMaker.GetThemesFolder(), cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
+			migrations.SvelteFilesMigrationId:    path.Join(cwd, cfg.pathMaker.GetRoutesFolder()),
 		}
 
 		for id, pathToFile := range migrationIdPathToFileMap {

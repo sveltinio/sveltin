@@ -86,7 +86,7 @@ func (m *UpdatePkgJSONMigration) up() error {
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			m.getServices().logger.Important("Remember to run: sveltin install (or npm run install, pnpm install ...)")
-			if updatedContent, err = m.migrate(updatedContent); err != nil {
+			if updatedContent, err = m.migrate(updatedContent, ""); err != nil {
 				return err
 			}
 		}
@@ -123,7 +123,7 @@ func (m *UpdatePkgJSONMigration) allowUp() error {
 	return nil
 }
 
-func (m *UpdatePkgJSONMigration) migrate(content []byte) ([]byte, error) {
+func (m *UpdatePkgJSONMigration) migrate(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{

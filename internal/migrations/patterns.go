@@ -38,14 +38,19 @@ const (
 	rehypeSlugUsage      = "rehype-slug"
 	// used to trigger the src/lib/utils/headings.js file migration
 	headingsTitleProp = "headings-js"
-	// used to trigger the config/website.js.ts
+	// used to trigger the config/website.js.ts migration
 	importIWebSiteSeoType = "import-iwebsite"
 	iwebsiteSeoTypeUsage  = "iwebsite"
-	// used to trigger the config/menu.js.ts
+	// used to trigger the config/menu.js.ts migration
 	importIMenuItemSeoType = "import-imenuitem"
 	imenuitemSeoTypeUsage  = "imenuitem"
-	// used to trigger the src/lib/utils/strings.js.ts
+	// used to trigger the src/lib/utils/strings.js.ts migration
 	icontententryTypeUsage = "content-entry"
+	// used to trigger the +page.[svelte|svx] migration
+	iwebpagemedataImport = "import-iwebpagemetadata"
+	jsonLdWebsiteData    = "jsonld-websitedata"
+	jsonLdCurrentTitle   = "jsonld-current-title"
+	svelteKitPrefetch    = "sveltekit-prefetch"
 )
 
 var patterns = map[string]string{
@@ -77,4 +82,8 @@ var patterns = map[string]string{
 	importIMenuItemSeoType: `^import type { IMenuItem } from '@sveltinio/seo/types';`,
 	imenuitemSeoTypeUsage:  `IMenuItem`,
 	icontententryTypeUsage: `ContentEntry`,
+	iwebpagemedataImport:   `IWebPageMetadata`,
+	jsonLdWebsiteData:      `websiteData`,
+	jsonLdCurrentTitle:     `currentTitle`,
+	svelteKitPrefetch:      `data-sveltekit-prefetch`,
 }

@@ -28,7 +28,7 @@ type IMigration interface {
 	up() error
 	down() error
 	allowUp() error
-	migrate([]byte) ([]byte, error)
+	migrate([]byte, string) ([]byte, error)
 }
 
 // MigrationServices contains references to services used by the migrations.

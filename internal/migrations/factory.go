@@ -24,6 +24,7 @@ const (
 	MenuTSMigrationId          string = "menuts"
 	StringsTSMigrationId       string = "stringsts"
 	SveltinDTSMigrationId      string = "sveltindts"
+	SvelteFilesMigrationId     string = "svelte-files"
 )
 
 // IMigrationFactory declares a set of methods for creating each of the abstract products.
@@ -62,6 +63,8 @@ func GetMigrationFactory(id string) (IMigrationFactory, error) {
 		return &UpdateStringsTSMigration{}, nil
 	case SveltinDTSMigrationId:
 		return &SveltinDTSMigration{}, nil
+	case SvelteFilesMigrationId:
+		return &SvelteFilesMigration{}, nil
 	default:
 		return nil, fmt.Errorf("wrong migration id: %s is not a valid migration", id)
 	}
