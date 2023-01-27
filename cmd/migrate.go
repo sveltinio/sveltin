@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"sort"
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/prompti/confirm"
@@ -58,7 +59,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			CliVersion:        CliVersion,
 			ProjectCliVersion: cfg.projectSettings.Sveltin.Version,
 		}
-		migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettingsMigrationId)
+		migrationFactory, err := migrations.GetMigrationFactory(migrations.ProjectSettings)
 		utils.ExitIfError(err)
 		migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 		// execute the migration.
@@ -69,28 +70,39 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 		cfg.projectSettings, err = loadProjectSettings(ProjectSettingsFile)
 		utils.ExitIfError(err)
 
-		migrationIdPathToTargetMap := map[string]string{
-			migrations.DefaultsConfigMigrationId: path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
-			migrations.ThemeConfigMigrationId: path.Join(cwd, cfg.pathMaker.GetThemesFolder(),
+		migrationIdPathToTargetMap := map[migrations.Migration]string{
+			migrations.DefaultsConfig:     path.Join(cwd, cfg.pathMaker.GetConfigFolder(), DefaultsConfigFile),
+			migrations.WebSiteTS:          path.Join(cwd, cfg.pathMaker.GetConfigFolder(), WebSiteTSFile),
+			migrations.MenuTS:             path.Join(cwd, cfg.pathMaker.GetConfigFolder(), MenuTSFile),
+			migrations.SveltinDTS:         path.Join(cwd, cfg.pathMaker.GetSrcFolder(), SveltinDTSFile),
+			migrations.ResourceLibs:       path.Join(cwd, cfg.pathMaker.GetLibFolder()),
+			migrations.Layout:             path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
+			migrations.SvelteFiles:        path.Join(cwd, cfg.pathMaker.GetRoutesFolder()),
+			migrations.PageServerTS:       path.Join(cwd, cfg.pathMaker.GetRoutesFolder()),
+			migrations.SveltinioComponent: path.Join(cwd, cfg.pathMaker.GetRoutesFolder()),
+			migrations.ThemeConfig: path.Join(cwd, cfg.pathMaker.GetThemesFolder(),
 				cfg.projectSettings.Theme.Name, cfg.settings.GetThemeConfigFilename()),
-			migrations.DotEnvMigrationId:       path.Join(cwd, DotEnvProdFile),
-			migrations.WebSiteTSMigrationId:    path.Join(cwd, cfg.pathMaker.GetConfigFolder(), WebSiteTSFile),
-			migrations.MenuTSMigrationId:       path.Join(cwd, cfg.pathMaker.GetConfigFolder(), MenuTSFile),
-			migrations.ResourceLibs:            path.Join(cwd, cfg.pathMaker.GetLibFolder()),
-			migrations.SveltinDTSMigrationId:   path.Join(cwd, cfg.pathMaker.GetSrcFolder(), SveltinDTSFile),
-			migrations.PackageJSONMigrationId:  path.Join(cwd, PackageJSONFile),
-			migrations.MDsveXMigrationId:       path.Join(cwd, MDsveXFile),
-			migrations.SvelteConfigMigrationId: path.Join(cwd, SvelteConfigFile),
-			migrations.LayoutMigrationId:       path.Join(cwd, cfg.pathMaker.GetRoutesFolder(), LayoutTSFile),
-			migrations.SvelteFilesMigrationId:  path.Join(cwd, cfg.pathMaker.GetRoutesFolder()),
-			migrations.PageServerTSMigrationId: path.Join(cwd, cfg.pathMaker.GetRoutesFolder()),
+			migrations.ThemeSveltinioComponents: path.Join(cwd, cfg.pathMaker.GetThemesFolder()),
+			migrations.MDsveXConfig:             path.Join(cwd, MDsveXFile),
+			migrations.SvelteConfig:             path.Join(cwd, SvelteConfigFile),
+			migrations.DotEnv:                   path.Join(cwd, DotEnvProdFile),
+			migrations.PackageJSON:              path.Join(cwd, PackageJSONFile),
 		}
 
-		for id, pathToFile := range migrationIdPathToTargetMap {
+		// Ensure the migrations execution order
+		keys := make([]int, 0)
+		for k := range migrationIdPathToTargetMap {
+			keys = append(keys, int(k))
+		}
+		sort.Ints(keys)
+
+		for _, k := range keys {
+			_id := migrations.Migration(k)
+			_pathToFile := migrationIdPathToTargetMap[_id]
 			migrationData := &migrations.MigrationData{
-				TargetPath: pathToFile,
+				TargetPath: _pathToFile,
 			}
-			migrationFactory, err := migrations.GetMigrationFactory(id)
+			migrationFactory, err := migrations.GetMigrationFactory(_id)
 			utils.ExitIfError(err)
 			migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 			// execute the migration.

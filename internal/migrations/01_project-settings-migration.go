@@ -85,7 +85,7 @@ func (m *ProjectSettingsMigration) allowUp() error {
 	return nil
 }
 
-func (m *ProjectSettingsMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *ProjectSettingsMigration) migrate(content []byte, file string) ([]byte, error) {
 	return nil, nil
 }
 

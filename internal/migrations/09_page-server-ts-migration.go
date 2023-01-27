@@ -61,9 +61,9 @@ func (m *UpdatePageServerTSMigration) up() error {
 		files := []string{}
 		targetFiles := []string{"+page.server.ts"}
 
-		walkFunc := func(filepath string, info os.FileInfo, err error) error {
+		walkFunc := func(file string, info os.FileInfo, err error) error {
 			if common.Contains(targetFiles, info.Name()) {
-				files = append(files, filepath)
+				files = append(files, file)
 			}
 			return nil
 		}
@@ -100,7 +100,7 @@ func (m *UpdatePageServerTSMigration) up() error {
 	return nil
 }
 
-func (m *UpdatePageServerTSMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdatePageServerTSMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 
 	// It must be executed twice to replace multiple triggers on the same line
@@ -122,12 +122,12 @@ func (m *UpdatePageServerTSMigration) migrate(content []byte, filepath string) (
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(filepath)
+	err := m.getServices().fs.Remove(file)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, filepath, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, file, []byte(output), 0644); err != nil {
 		return nil, err
 	}
 

@@ -7,57 +7,62 @@
 
 package migrations
 
-// Patterns used by MigrationRule
+type migrationTriggerId int
+
 const (
-	semVersion = "semversion"
-	// used to trigger the config/defaults.js.ts and config/website.js.ts files migrations
-	sveltinjson = "sveltinjson"
-	// used to trigger the src/sveltin.d.ts file migration
-	sveltindts = "sveltin_d_ts"
-	// used to trigger the .env.production file migration
-	svelteKitBuildFolder  = "sveltekit-build-folder"
-	svelteKitBuildComment = "sveltekit-build-comment"
-	sitemap               = "sitemap"
-	// used to trigger the svelte.config.js file migration
-	prerenderConst   = "prerender-const"
-	prerenderEnabled = "prerender-enabled"
-	trailingSlash    = "trailing-slash"
-	// used to trigger the themes/<theme_name>/theme.config.js file migration
-	themeConfigConst  = "theme-config-const"
-	themeConfigExport = "theme-config-export"
-	themeNameProp     = "theme-name-prop"
-	// used to trigger the mdsvex.config.js file migration
-	headingsImport       = "headings-import"
-	remarkExtLinks       = "remark-extlinks"
-	remarkExtLinksImport = "remark-extlinks-import"
-	remarkExtLinksUsage  = "remark-extlinks-usage"
-	remarkSlug           = "remark-slug"
-	remarkSlugImport     = "remark-slug-import"
-	remarkSlugUsage      = "remark-slug-usage"
-	rehypePlugins        = "rehype-plugins"
-	rehypeSlugUsage      = "rehype-slug"
-	// used to trigger the src/lib/utils/headings.js file migration
-	headingsTitleProp = "headings-js"
-	// used to trigger the config/website.js.ts migration
-	importIWebSiteSeoType = "import-iwebsite"
-	iwebsiteSeoTypeUsage  = "iwebsite"
-	// used to trigger the config/menu.js.ts migration
-	importIMenuItemSeoType = "import-imenuitem"
-	imenuitemSeoTypeUsage  = "imenuitem"
-	// used to trigger the src/lib/utils/strings.js.ts migration
-	icontententryTypeUsage = "content-entry"
-	sveltinNamespace       = "sveltin-namespace-js"
-	// used to trigger the +page.[svelte|svx] migration
-	iwebpagemedataImport = "import-iwebpagemetadata"
-	jsonLdWebsiteData    = "jsonld-websitedata"
-	jsonLdCurrentTitle   = "jsonld-current-title"
-	svelteKitPrefetch    = "sveltekit-prefetch"
+	semVersion migrationTriggerId = iota
+	// config/defaults.js.ts and config/website.js.ts files migrations
+	sveltinjson
+	// src/sveltin.d.ts file migration
+	sveltindts
+	// .env.production file migration
+	svelteKitBuildFolder
+	svelteKitBuildComment
+	sitemap
+	// svelte.config.js file migration
+	prerenderConst
+	prerenderEnabled
+	trailingSlash
+	// themes/<theme_name>/theme.config.js file migration
+	themeConfigConst
+	themeConfigExport
+	themeNameProp
+	// mdsvex.config.js file migration
+	headingsImport
+	remarkExtLinks
+	remarkExtLinksImport
+	remarkExtLinksUsage
+	remarkSlug
+	remarkSlugImport
+	remarkSlugUsage
+	rehypePlugins
+	rehypeSlugUsage
+	// src/lib/utils/headings.js file migration
+	headingsTitleProp
+	// config/website.js.ts migration
+	importIWebSiteSeoType
+	iwebsiteSeoTypeUsage
+	// config/menu.js.ts migration
+	importIMenuItemSeoType
+	imenuitemSeoTypeUsage
+	// src/lib/utils/strings.js.ts migration
+	icontententryTypeUsage
+	sveltinNamespace
+	// +page.[svelte|svx] migration
+	iwebpagemedataImport
+	jsonLdWebsiteData
+	jsonLdCurrentTitle
+	svelteKitPrefetch
+	// unhandled migrations where @sveltinio/* componets are used
+	essentialsImport
+	widgetsImport
 )
 
-var patterns = map[string]string{
+// Patterns used by MigrationRule
+var patterns = map[migrationTriggerId]string{
 	// semantic versioning regex - https://ihateregex.io/expr/semver/ .
 	semVersion:             `(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?`,
-	sveltinjson:            `/sveltin.json`,
+	sveltinjson:            `\/sveltin.json`,
 	sveltindts:             `export type ResourceContent`,
 	svelteKitBuildFolder:   `SVELTEKIT_BUILD_FOLDER`,
 	svelteKitBuildComment:  `^*# The folder where adapter-static`,
@@ -88,4 +93,6 @@ var patterns = map[string]string{
 	jsonLdWebsiteData:      `websiteData`,
 	jsonLdCurrentTitle:     `currentTitle`,
 	svelteKitPrefetch:      `data-sveltekit-prefetch`,
+	essentialsImport:       `(.*?)'@sveltinio\/essentials';$`,
+	widgetsImport:          `(.*?)'@sveltinio\/widgets';$`,
 }

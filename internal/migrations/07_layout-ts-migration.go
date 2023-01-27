@@ -8,6 +8,7 @@
 package migrations
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -16,16 +17,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateDefaultsConfigMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateDefaultsConfigMigration struct {
+// UpdateLayoutTSMigration is the struct representing the migration update the defaults.js.ts file.
+type UpdateLayoutTSMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateDefaultsConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateDefaultsConfigMigration{
+func (m *UpdateLayoutTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateLayoutTSMigration{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +34,11 @@ func (m *UpdateDefaultsConfigMigration) MakeMigration(migrationManager *Migratio
 }
 
 // implements IMigration interface.
-func (m *UpdateDefaultsConfigMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateDefaultsConfigMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdateLayoutTSMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateLayoutTSMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateDefaultsConfigMigration) Execute() error {
+func (m UpdateLayoutTSMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +48,7 @@ func (m UpdateDefaultsConfigMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) up() error {
+func (m *UpdateLayoutTSMigration) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -63,36 +64,39 @@ func (m *UpdateDefaultsConfigMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[semVersion]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent, ""); err != nil {
-				return err
+		if !bytes.Contains(fileContent, []byte(patterns[trailingSlash])) {
+			migrationTriggers := []string{patterns[prerenderConst]}
+			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+				if _, err := m.migrate(fileContent, ""); err != nil {
+					return err
+				}
 			}
+
 		}
 	}
 
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) down() error {
+func (m *UpdateLayoutTSMigration) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) allowUp() error {
+func (m *UpdateLayoutTSMigration) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateDefaultsConfigMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *UpdateLayoutTSMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*migrationRule{newSveltinVersionRule(line)}
+		rules := []*migrationRule{newLayoutRule(line)}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -113,15 +117,14 @@ func (m *UpdateDefaultsConfigMigration) migrate(content []byte, file string) ([]
 
 //=============================================================================
 
-func newSveltinVersionRule(line string) *migrationRule {
+func newLayoutRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[semVersion],
+		trigger:         patterns[prerenderConst],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return `import { sveltin } from '../sveltin.json';
-
-const sveltinVersion = sveltin.version;`
+			return `export const prerender = true;
+export const trailingSlash = 'always';`
 		},
 	}
 }

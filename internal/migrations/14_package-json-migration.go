@@ -126,7 +126,7 @@ func (m *UpdatePkgJSONMigration) allowUp() error {
 	return nil
 }
 
-func (m *UpdatePkgJSONMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdatePkgJSONMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{

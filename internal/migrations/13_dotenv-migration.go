@@ -90,7 +90,7 @@ func (m *UpdateDotEnvMigration) allowUp() error {
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdateDotEnvMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{

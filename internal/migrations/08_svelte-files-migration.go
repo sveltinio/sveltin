@@ -10,22 +10,22 @@ package migrations
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/spf13/afero"
+	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateResourceLibsMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateResourceLibsMigration struct {
+// SvelteFilesMigration is the struct representing the migration update the defaults.js.ts file.
+type SvelteFilesMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateResourceLibsMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateResourceLibsMigration{
+func (m *SvelteFilesMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &SvelteFilesMigration{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateResourceLibsMigration) MakeMigration(migrationManager *MigrationM
 }
 
 // implements IMigration interface.
-func (m *UpdateResourceLibsMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateResourceLibsMigration) getData() *MigrationData         { return m.Data }
+func (m *SvelteFilesMigration) getServices() *MigrationServices { return m.Services }
+func (m *SvelteFilesMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateResourceLibsMigration) Execute() error {
+func (m SvelteFilesMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdateResourceLibsMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateResourceLibsMigration) up() error {
+func (m *SvelteFilesMigration) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -59,9 +59,10 @@ func (m *UpdateResourceLibsMigration) up() error {
 
 	if exists {
 		files := []string{}
+		targetFiles := []string{"+layout.svelte", "+page.svelte", "+page.svx"}
 
 		walkFunc := func(file string, info os.FileInfo, err error) error {
-			if filepath.Ext(file) == ".ts" {
+			if common.Contains(targetFiles, info.Name()) {
 				files = append(files, file)
 			}
 			return nil
@@ -73,10 +74,10 @@ func (m *UpdateResourceLibsMigration) up() error {
 		}
 
 		migrationTriggers := []string{
-			patterns[sveltinNamespace],
-			patterns[importIWebSiteSeoType],
-			patterns[icontententryTypeUsage],
-			patterns[iwebsiteSeoTypeUsage],
+			patterns[iwebpagemedataImport],
+			patterns[jsonLdCurrentTitle],
+			patterns[jsonLdWebsiteData],
+			patterns[svelteKitPrefetch],
 		}
 
 		for _, file := range files {
@@ -99,48 +100,43 @@ func (m *UpdateResourceLibsMigration) up() error {
 	return nil
 }
 
-func (m *UpdateResourceLibsMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *SvelteFilesMigration) migrate(content []byte, file string) ([]byte, error) {
+
 	lines := strings.Split(string(content), "\n")
-
-	// It must be executed twice to replace multiple triggers on the same line
-	for loopCounter := 0; loopCounter <= 1; loopCounter++ {
-		for i, line := range lines {
-			rules := []*migrationRule{
-				newSveltinNamespaceRule(line),
-				newIWebSiteImportRule(line),
-				newContentEntryUsageRule(line),
-				newIWebSiteUsageRule(line),
-			}
-
-			if res, ok := applyMigrationRules(rules); ok {
-				lines[i] = res
-			} else {
-				lines[i] = line
-			}
-
+	for i, line := range lines {
+		rules := []*migrationRule{
+			newReplaceIWebPageMedatadaRule(line),
+			newReplaceJSONLdWebsiteDataRule(line),
+			newReplaceJSONLdCurrentTitleRule(line),
+			newReplaceSvelteKitPrefetchRule(line),
+		}
+		if res, ok := applyMigrationRules(rules); ok {
+			lines[i] = res
+		} else {
+			lines[i] = line
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(filepath)
+	err := m.getServices().fs.Remove(file)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = afero.WriteFile(m.getServices().fs, filepath, []byte(output), 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, file, []byte(output), 0644); err != nil {
 		return nil, err
 	}
 
 	return nil, nil
 }
 
-func (m *UpdateResourceLibsMigration) down() error {
+func (m *SvelteFilesMigration) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateResourceLibsMigration) allowUp() error {
+func (m *SvelteFilesMigration) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -149,46 +145,46 @@ func (m *UpdateResourceLibsMigration) allowUp() error {
 
 //=============================================================================
 
-func newSveltinNamespaceRule(line string) *migrationRule {
+func newReplaceIWebPageMedatadaRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[sveltinNamespace],
-		replaceFullLine: true,
-		replacerFunc: func(string) string {
-			return "import type { Sveltin } from '../../sveltin';"
-		},
-	}
-}
-
-func newIWebSiteImportRule(line string) *migrationRule {
-	return &migrationRule{
-		value:           line,
-		trigger:         patterns[importIWebSiteSeoType],
-		replaceFullLine: true,
-		replacerFunc: func(string) string {
-			return ""
-		},
-	}
-}
-
-func newContentEntryUsageRule(line string) *migrationRule {
-	return &migrationRule{
-		value:           line,
-		trigger:         patterns[icontententryTypeUsage],
+		trigger:         patterns[iwebpagemedataImport],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
-			return "ResourceContent"
+			return `SEOWebPageMetadata`
 		},
 	}
 }
 
-func newIWebSiteUsageRule(line string) *migrationRule {
+func newReplaceJSONLdWebsiteDataRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[iwebsiteSeoTypeUsage],
+		trigger:         patterns[jsonLdWebsiteData],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
-			return "Sveltin.WebSite"
+			return `data`
+		},
+	}
+}
+
+func newReplaceJSONLdCurrentTitleRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[jsonLdCurrentTitle],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return `current`
+		},
+	}
+}
+
+func newReplaceSvelteKitPrefetchRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[svelteKitPrefetch],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return `data-sveltekit-preload-data="hover"`
 		},
 	}
 }

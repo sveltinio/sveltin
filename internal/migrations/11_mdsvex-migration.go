@@ -97,7 +97,7 @@ func (m *UpdateMDsveXMigration) allowUp() error {
 	return nil
 }
 
-func (m *UpdateMDsveXMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdateMDsveXMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string

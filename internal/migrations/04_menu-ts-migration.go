@@ -16,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateSvelteConfigMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateSvelteConfigMigration struct {
+// UpdateMenuTSMigration is the struct representing the migration update the defaults.js.ts file.
+type UpdateMenuTSMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateSvelteConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateSvelteConfigMigration{
+func (m *UpdateMenuTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateMenuTSMigration{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateSvelteConfigMigration) MakeMigration(migrationManager *MigrationM
 }
 
 // implements IMigration interface.
-func (m *UpdateSvelteConfigMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateSvelteConfigMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdateMenuTSMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateMenuTSMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateSvelteConfigMigration) Execute() error {
+func (m UpdateMenuTSMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdateSvelteConfigMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateSvelteConfigMigration) up() error {
+func (m *UpdateMenuTSMigration) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -63,7 +63,7 @@ func (m *UpdateSvelteConfigMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[trailingSlash], patterns[prerenderEnabled]}
+		migrationTriggers := []string{patterns[importIMenuItemSeoType], patterns[imenuitemSeoTypeUsage]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.migrate(fileContent, ""); err != nil {
@@ -75,26 +75,12 @@ func (m *UpdateSvelteConfigMigration) up() error {
 	return nil
 }
 
-func (m *UpdateSvelteConfigMigration) down() error {
-	if err := m.Mediator.notifyAboutCompletion(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *UpdateSvelteConfigMigration) allowUp() error {
-	if err := m.up(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *UpdateSvelteConfigMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdateMenuTSMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
-			newSvelteConfigTrailingSlashRule(line),
-			newSvelteConfigPrerenderEnabledRule(line),
+			newMenuTSImportRule(line),
+			newMenuTSUsageRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -114,26 +100,40 @@ func (m *UpdateSvelteConfigMigration) migrate(content []byte, filepath string) (
 	return nil, nil
 }
 
+func (m *UpdateMenuTSMigration) down() error {
+	if err := m.Mediator.notifyAboutCompletion(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *UpdateMenuTSMigration) allowUp() error {
+	if err := m.up(); err != nil {
+		return err
+	}
+	return nil
+}
+
 //=============================================================================
 
-func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
+func newMenuTSImportRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[trailingSlash],
+		trigger:         patterns[importIMenuItemSeoType],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return ""
+			return "import type { Sveltin } from 'src/sveltin';"
 		},
 	}
 }
 
-func newSvelteConfigPrerenderEnabledRule(line string) *migrationRule {
+func newMenuTSUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[prerenderEnabled],
-		replaceFullLine: true,
+		trigger:         patterns[imenuitemSeoTypeUsage],
+		replaceFullLine: false,
 		replacerFunc: func(string) string {
-			return ""
+			return "Sveltin.MenuItem"
 		},
 	}
 }

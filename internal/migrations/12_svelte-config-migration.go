@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -17,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateLayoutTSMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateLayoutTSMigration struct {
+// UpdateSvelteConfigMigration is the struct representing the migration update the defaults.js.ts file.
+type UpdateSvelteConfigMigration struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateLayoutTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateLayoutTSMigration{
+func (m *UpdateSvelteConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateSvelteConfigMigration{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -34,11 +33,11 @@ func (m *UpdateLayoutTSMigration) MakeMigration(migrationManager *MigrationManag
 }
 
 // implements IMigration interface.
-func (m *UpdateLayoutTSMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateLayoutTSMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdateSvelteConfigMigration) getServices() *MigrationServices { return m.Services }
+func (m *UpdateSvelteConfigMigration) getData() *MigrationData         { return m.Data }
 
 // Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateLayoutTSMigration) Execute() error {
+func (m UpdateSvelteConfigMigration) Execute() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -48,7 +47,7 @@ func (m UpdateLayoutTSMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) up() error {
+func (m *UpdateSvelteConfigMigration) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -64,39 +63,39 @@ func (m *UpdateLayoutTSMigration) up() error {
 			return err
 		}
 
-		if !bytes.Contains(fileContent, []byte(patterns[trailingSlash])) {
-			migrationTriggers := []string{patterns[prerenderConst]}
-			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-				if _, err := m.migrate(fileContent, ""); err != nil {
-					return err
-				}
+		migrationTriggers := []string{patterns[trailingSlash], patterns[prerenderEnabled]}
+		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			if _, err := m.migrate(fileContent, ""); err != nil {
+				return err
 			}
-
 		}
 	}
 
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) down() error {
+func (m *UpdateSvelteConfigMigration) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) allowUp() error {
+func (m *UpdateSvelteConfigMigration) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *UpdateSvelteConfigMigration) migrate(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*migrationRule{newLayoutRule(line)}
+		rules := []*migrationRule{
+			newSvelteConfigTrailingSlashRule(line),
+			newSvelteConfigPrerenderEnabledRule(line),
+		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -117,14 +116,24 @@ func (m *UpdateLayoutTSMigration) migrate(content []byte, filepath string) ([]by
 
 //=============================================================================
 
-func newLayoutRule(line string) *migrationRule {
+func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[prerenderConst],
+		trigger:         patterns[trailingSlash],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return `export const prerender = true;
-export const trailingSlash = 'always';`
+			return ""
+		},
+	}
+}
+
+func newSvelteConfigPrerenderEnabledRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[prerenderEnabled],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
 		},
 	}
 }
