@@ -65,7 +65,7 @@ func (m *SveltinDTSMigration) up() error {
 		}
 
 		if !bytes.Contains(fileContent, []byte(patterns[sveltindts])) {
-			m.getServices().logger.Info(fmt.Sprintf("Replacing content for %s", filepath.Base(m.Data.TargetPath)))
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			saveTo := path.Join(m.Services.pathMaker.GetSrcFolder())
 			return m.Services.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, m.Services.fs, resources.SveltinFilesFS, "sveltin_d_ts", saveTo)
 		}

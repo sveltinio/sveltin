@@ -65,8 +65,6 @@ func (m *UpdateThemeConfigMigration) up() error {
 
 		migrationTriggers := []string{
 			patterns[themeConfigConst],
-			patterns[themeNameProp],
-			patterns[themeConfigExport],
 		}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
