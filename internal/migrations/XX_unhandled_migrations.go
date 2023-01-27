@@ -16,7 +16,6 @@ import (
 	"strings"
 
 	"github.com/spf13/afero"
-	"github.com/tidwall/gjson"
 )
 
 // UnhandledMigration is the struct representing the migration update the defaults.js.ts file.
@@ -60,19 +59,26 @@ func (m *UnhandledMigration) up() error {
 		return err
 	}
 
-	// Retrieve version numbers for @sveltinio/essentials & @sveltinio/widgets packages
 	fileContent, err := retrieveFileContent(m.getServices().fs, path.Join(m.getServices().pathMaker.GetRootFolder(), "package.json"))
 	if err != nil {
 		return err
 	}
 
-	const minVersion = "0.5"
-	currentEssentialsVersion, _ := getPackageVersion(fileContent, "@sveltinio/essentials")
-	currentWidgetsVersion, _ := getPackageVersion(fileContent, "@sveltinio/widgets")
+	// @sveltinio/essentials min version
+	const minEssentialsVersion = 0.5
+	// Retrieve @sveltinio/essentials version
+	currentEssentialsVersionStr, _ := getDevDependency(fileContent, "@sveltinio/essentials")
+	currentEssentialsVersion, _ := versionAsNum(currentEssentialsVersionStr)
+
+	// @sveltinio/widgets min version
+	const minWidgetsVersion = 0.5
+	// Retrieve @sveltinio/widgets version
+	currentWidgetsVersionStr, _ := getDevDependency(fileContent, "@sveltinio/widgets")
+	currentWidgetsVersion, _ := versionAsNum(currentWidgetsVersionStr)
 
 	if exists &&
-		(!strings.Contains(currentEssentialsVersion, minVersion) ||
-			!strings.Contains(currentWidgetsVersion, minVersion)) {
+		(currentEssentialsVersion < minEssentialsVersion ||
+			currentWidgetsVersion < minWidgetsVersion) {
 		files := []string{}
 		walkFunc := func(file string, info os.FileInfo, err error) error {
 			if filepath.Ext(file) == ".svelte" {
@@ -208,12 +214,4 @@ func newWidgetsImportRule(line string) *migrationRule {
 			return sb.String()
 		},
 	}
-}
-
-func getPackageVersion(content []byte, name string) (string, bool) {
-	value := gjson.GetBytes(content, fmt.Sprintf("devDependencies.%s", name))
-	if value.Exists() {
-		return value.Str, true
-	}
-	return "", false
 }

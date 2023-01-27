@@ -14,7 +14,6 @@ import (
 
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
 
@@ -169,18 +168,6 @@ func newRemarkSlugRule(line string) *migrationRule {
 }
 
 //=============================================================================
-
-func isEqual(s1, s2 string) bool {
-	return s1 == s2
-}
-
-func getDevDependency(content []byte, name string) (string, bool) {
-	value := gjson.GetBytes(content, fmt.Sprintf("devDependencies.%s", name))
-	if value.Exists() {
-		return value.Str, true
-	}
-	return "", false
-}
 
 func updateDevDependency(m *UpdatePkgJSONMigration, content []byte, name, value string) ([]byte, error) {
 	return sjson.SetBytes(content, fmt.Sprintf("devDependencies.%s", name), value)
