@@ -72,7 +72,7 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 	cfg.log.Info(cssLibName)
 
-	npmClient := getSelectedNPMClient(npmClientName)
+	npmClient := getSelectedNPMClient(npmClientName, cfg.log)
 	npmClientName = npmClient.Name
 
 	cfg.log.Plain(markup.H1("A Starter project will be created"))

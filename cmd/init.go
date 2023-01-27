@@ -31,6 +31,7 @@ import (
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
+	logger "github.com/sveltinio/yinlog"
 )
 
 //=============================================================================
@@ -109,8 +110,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	themeData, err := buildThemeData(themeSelection, withThemeName, projectName, cssLibName)
 	utils.ExitIfError(err)
 
-	cfg.log.Infof(markup.Faint("Detecting installed package managers..."))
-	npmClient := getSelectedNPMClient(npmClientName)
+	npmClient := getSelectedNPMClient(npmClientName, cfg.log)
 	npmClientName = npmClient.Name
 
 	cfg.log.Plain(markup.H1("Initializing a new Sveltin project"))
@@ -317,10 +317,10 @@ func getNewThemeName(value, projectName string) string {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func getSelectedNPMClient(npmcFlag string) npmc.NPMClient {
+func getSelectedNPMClient(npmcFlag string, logger *logger.Logger) npmc.NPMClient {
 	installedNPMClients := utils.GetInstalledNPMClientList()
 	npmcNames := utils.GetNPMClientNames(installedNPMClients)
-	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag)
+	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag, logger)
 	utils.ExitIfError(err)
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
