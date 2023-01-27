@@ -90,13 +90,9 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 		}
 
 		// Ensure the migrations execution order
-		keys := make([]int, 0)
-		for k := range migrationIdPathToTargetMap {
-			keys = append(keys, int(k))
-		}
-		sort.Ints(keys)
+		migrationKeys := sortedMigrationMap(migrationIdPathToTargetMap)
 
-		for _, k := range keys {
+		for _, k := range migrationKeys {
 			_id := migrations.Migration(k)
 			_pathToFile := migrationIdPathToTargetMap[_id]
 			migrationData := &migrations.MigrationData{
@@ -110,10 +106,19 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			utils.ExitIfError(err)
 		}
 
-		cfg.log.Success(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion))
+		cfg.log.Success(markup.Green(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion)))
 	}
 }
 
 func init() {
 	rootCmd.AddCommand(migrateCmd)
+}
+
+func sortedMigrationMap(m map[migrations.Migration]string) []int {
+	keys := make([]int, 0)
+	for k := range m {
+		keys = append(keys, int(k))
+	}
+	sort.Ints(keys)
+	return keys
 }
