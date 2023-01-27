@@ -104,7 +104,7 @@ func (m *UnhandledMigration) up() error {
 			}
 
 			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-				if !bytes.Contains(fileContent, []byte("@IMPORTANT")) {
+				if !bytes.Contains(fileContent, []byte("[sveltin migrate] @IMPORTANT")) {
 					localFilePath :=
 						strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 					m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
@@ -174,7 +174,7 @@ func newEssentialsImportRule(line string) *migrationRule {
 		replacerFunc: func(string) string {
 			message := `
 	/**
-	 * ! @IMPORTANT
+	 * ! [sveltin migrate] @IMPORTANT
 	 * We detected usage of components from @sveltinio/essentials.
 	 *
 	 * Latest versions of the package introduced changes the components interfaces.
@@ -199,7 +199,7 @@ func newWidgetsImportRule(line string) *migrationRule {
 		replacerFunc: func(string) string {
 			message := `
 	/**
-	 * ! @IMPORTANT
+	 * ! [sveltin migrate] @IMPORTANT
 	 * We detected usage of components from @sveltinio/widgets.
 	 *
 	 * Latest versions of the package introduced changes the components interfaces.
