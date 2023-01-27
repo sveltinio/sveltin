@@ -9,7 +9,6 @@ package migrations
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -65,7 +64,9 @@ func (m *UpdateWebSiteTSMigration) up() error {
 
 		migrationTriggers := []string{patterns[importIWebSiteSeoType], patterns[iwebsiteSeoTypeUsage]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			localFilePath :=
+				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
 			if _, err := m.migrate(fileContent, ""); err != nil {
 				return err
 			}

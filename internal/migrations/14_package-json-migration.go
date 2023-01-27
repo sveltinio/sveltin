@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -88,7 +89,7 @@ func (m *UpdatePkgJSONMigration) up() error {
 		migrationTriggers := []string{patterns[remarkExtLinks], patterns[remarkSlug]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			m.getServices().logger.Important("Remember to run: sveltin install (or npm run install, pnpm install ...)")
+			m.getServices().logger.Important(markup.Purple("Remember to run: sveltin install (or npm run install, pnpm install ...)"))
 			if updatedContent, err = m.migrate(updatedContent, ""); err != nil {
 				return err
 			}

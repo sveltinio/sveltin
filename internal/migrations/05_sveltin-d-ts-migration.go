@@ -11,7 +11,7 @@ import (
 	"bytes"
 	"fmt"
 	"path"
-	"path/filepath"
+	"strings"
 
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/resources"
@@ -65,7 +65,9 @@ func (m *SveltinDTSMigration) up() error {
 		}
 
 		if !bytes.Contains(fileContent, []byte(patterns[sveltindts])) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			localFilePath :=
+				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
 			saveTo := path.Join(m.Services.pathMaker.GetSrcFolder())
 			return m.Services.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, m.Services.fs, resources.SveltinFilesFS, "sveltin_d_ts", saveTo)
 		}

@@ -99,7 +99,9 @@ func (m *UnhandledMigration) up() error {
 
 			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 				if !bytes.Contains(fileContent, []byte("@IMPORTANT")) {
-					m.getServices().logger.Info(fmt.Sprintf("Migrating %s", file))
+					localFilePath :=
+						strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
+					m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
 					if _, err := m.migrate(fileContent, file); err != nil {
 						return err
 					}
