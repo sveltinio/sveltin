@@ -130,13 +130,12 @@ Ensure you are running the command from a valid project.
 // NewNotLatestVersionError ...
 func NewNotLatestVersionError(pathToFile string) error {
 	placeholderText := `
-Your project is not based on the latest Sveltin version.
+You are not running the latest Sveltin version.
 
-Something missing within the current project:
-
+Project path:
 "%s"
 
-Run "sveltin upgrade" first.
+Please, run "sveltin migrate" first!
 `
 
 	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
