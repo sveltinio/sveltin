@@ -274,7 +274,7 @@ Read more [here][update].
 
 `sveltin migrate` is used to migrate existing sveltin project files to the latest Sveltin version ones.
 
-Read more [here][upgrade].
+Read more [here][migrate].
 
 ### sveltin server
 
@@ -333,11 +333,10 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [generate-sitemap]: https://docs.sveltin.io/cli/generate-sitemap/
 [init]: https://docs.sveltin.io/cli/init/
 [install]: https://docs.sveltin.io/cli/install/
+[migrate]: https://docs.sveltin.io/cli/migrate/
 [new]: https://docs.sveltin.io/cli/new/
 [new-page]: https://docs.sveltin.io/cli/new-page/
 [new-resource]: https://docs.sveltin.io/cli/new-resource/
 [preview]: https://docs.sveltin.io/cli/preview/
 [server]: https://docs.sveltin.io/cli/server/
 [update]: https://docs.sveltin.io/cli/update/
-[upgrade]: https://docs.sveltin.io/cli/upgrade/
-[upgrade-project]: https://docs.sveltin.io/cli/upgrade-project/
