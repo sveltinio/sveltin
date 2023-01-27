@@ -24,8 +24,8 @@ var npmPackagesMap = map[string]string{
 	"@sveltinio/seo":           "^0.2.1",
 	"@sveltinio/services":      "^0.3.2",
 	"@sveltinio/widgets":       "^0.5.1",
-	"@sveltejs/adapter-static": "^1.0.5",
-	"@sveltejs/kit":            "^1.3.1",
+	"@sveltejs/adapter-static": "1.0.5",
+	"@sveltejs/kit":            "1.3.2",
 	"@types/gtag.js":           "^0.0.12",
 	"rimraf":                   "^4.1.2",
 	"svelte-check":             "^3.0.3",
@@ -86,21 +86,28 @@ func (m *UpdatePkgJSONMigration) up() error {
 		updatedContent := fileContent
 
 		migrationTriggers := []string{patterns[remarkExtLinks], patterns[remarkSlug]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		isMigrate := isMigrationRequired(fileContent, migrationTriggers, findStringMatcher)
+		if isMigrate {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			m.getServices().logger.Important(markup.Purple("Remember to run: sveltin install (or npm run install, pnpm install ...)"))
 			if updatedContent, err = m.migrate(updatedContent, ""); err != nil {
 				return err
 			}
 		}
 
+		updateVersion := false
 		for name, nextVersion := range npmPackagesMap {
 			currentVersion, ok := getDevDependency(fileContent, name)
 			if ok && !isEqual(currentVersion, nextVersion) {
+				updateVersion = true
+				m.getServices().logger.Info(fmt.Sprintf("Bump %s to %s", name, nextVersion))
 				if updatedContent, err = updateDevDependency(m, updatedContent, name, nextVersion); err != nil {
 					return err
 				}
 			}
+		}
+
+		if isMigrate || updateVersion {
+			m.getServices().logger.Important(markup.Purple("Remember to run: sveltin install (or npm run install, pnpm install ...)"))
 		}
 
 		// save new package.json file
