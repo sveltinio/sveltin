@@ -18,17 +18,19 @@ import (
 )
 
 var npmPackagesMap = map[string]string{
+	"@indaco/svelte-iconoir":   "^3.2.0",
 	"@sveltinio/essentials":    "^0.5.2",
 	"@sveltinio/media-content": "^0.3.6",
 	"@sveltinio/seo":           "^0.2.1",
 	"@sveltinio/services":      "^0.3.2",
 	"@sveltinio/widgets":       "^0.5.1",
-	"@sveltejs/kit":            "^1.3.0",
 	"@sveltejs/adapter-static": "^1.0.5",
+	"@sveltejs/kit":            "^1.3.1",
 	"@types/gtag.js":           "^0.0.12",
 	"rimraf":                   "^4.1.2",
 	"svelte-check":             "^3.0.3",
 	"svelte-preprocess":        "^5.0.1",
+	"tslib":                    "^2.5.0",
 	"typescript":               "^4.9.4",
 	"vite":                     "^4.0.4",
 }
