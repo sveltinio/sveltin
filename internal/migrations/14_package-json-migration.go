@@ -28,6 +28,7 @@ var npmPackagesMap = map[string]string{
 	"@sveltejs/kit":            "1.3.2",
 	"@types/gtag.js":           "^0.0.12",
 	"rimraf":                   "^4.1.2",
+	"svelte":                   "^3.55.1",
 	"svelte-check":             "^3.0.3",
 	"svelte-preprocess":        "^5.0.1",
 	"tslib":                    "^2.5.0",
