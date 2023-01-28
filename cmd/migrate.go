@@ -26,7 +26,7 @@ import (
 
 var migrateCmd = &cobra.Command{
 	Use:   "migrate",
-	Short: "migrate your project to the latest Sveltin version",
+	Short: "Migrate your project to the latest Sveltin version",
 	Long: resources.GetASCIIArt() + `
 Command used to migrate your project files to the latest Sveltin version.
 `,
@@ -86,6 +86,8 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			migrations.MDsveXConfig:             path.Join(cwd, MDsveXFile),
 			migrations.SvelteConfig:             path.Join(cwd, SvelteConfigFile),
 			migrations.DotEnv:                   path.Join(cwd, DotEnvProdFile),
+			migrations.ViteConfig:               path.Join(cwd, ViteConfigFile),
+			migrations.TSConfig:                 path.Join(cwd, TSConfigFile),
 			migrations.PackageJSON:              path.Join(cwd, PackageJSONFile),
 		}
 

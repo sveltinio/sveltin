@@ -1,4 +1,4 @@
-import path from 'path';
+import { resolve, join } from 'path';
 import { defineConfig } from 'vite';
 import { readFileSync } from 'fs';
 import { sveltekit } from '@sveltejs/kit/vite';
@@ -28,9 +28,10 @@ const config = defineConfig({
 	},
 	resolve: {
 		alias: {
-			$config: path.resolve('config'),
-			$content: path.resolve('content'),
-			$themes: path.resolve('themes')
+			$sveltin: resolve(join(__dirname, './src/sveltin')),
+			$config: resolve(join(__dirname, './config')),
+			$content: resolve(join(__dirname, './content')),
+			$themes: resolve(join(__dirname, './themes'))
 		}
 	},
 	plugins: [sveltekit()],

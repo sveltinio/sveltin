@@ -29,6 +29,8 @@ const (
 	MDsveXConfig
 	SvelteConfig
 	DotEnv
+	ViteConfig
+	TSConfig
 	PackageJSON
 )
 
@@ -48,6 +50,8 @@ var migrationNameMap = map[Migration]string{
 	MDsveXConfig:             "mdsvex-config-js",
 	SvelteConfig:             "svelte-config-js",
 	DotEnv:                   "dotenv",
+	ViteConfig:               "vire-config-ts",
+	TSConfig:                 "ts-config-ts",
 	PackageJSON:              "package-json",
 }
 
@@ -64,10 +68,12 @@ var migrationMap = map[Migration]IMigrationFactory{
 	SveltinioComponent:       &UnhandledMigration{},
 	ThemeConfig:              &UpdateThemeConfigMigration{},
 	ThemeSveltinioComponents: &UnhandledMigration{},
-	PackageJSON:              &UpdatePkgJSONMigration{},
 	MDsveXConfig:             &UpdateMDsveXMigration{},
 	SvelteConfig:             &UpdateSvelteConfigMigration{},
 	DotEnv:                   &UpdateDotEnvMigration{},
+	ViteConfig:               &UpdateViteConfigMigration{},
+	TSConfig:                 &UpdateTSConfigMigration{},
+	PackageJSON:              &UpdatePkgJSONMigration{},
 }
 
 // IMigrationFactory declares a set of methods for creating each of the abstract migrations.

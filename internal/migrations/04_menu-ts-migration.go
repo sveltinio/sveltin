@@ -123,7 +123,7 @@ func newMenuTSImportRule(line string) *migrationRule {
 		trigger:         patterns[importIMenuItemSeoType],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return "import type { Sveltin } from 'src/sveltin';"
+			return "import type { Sveltin } from '$sveltin';"
 		},
 	}
 }

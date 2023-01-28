@@ -1,6 +1,6 @@
 {{- $resourceName := .Metadata.Resource | ToVariableName | Capitalize -}}
 {{- $mdName := .Metadata.Name | ToSnakeCase -}}
-import type { Sveltin } from '../../sveltin';
+import type { Sveltin } from '$sveltin';
 import { groupedByOne } from '$lib/utils/collections.js';
 import { list } from './load{{ $resourceName }}';
 

@@ -2,7 +2,7 @@
 {{- $resourceCounter := len $resources -}}
 {{- $contentValues := .Menu.Items.Content -}}
 {{- $withContent := .Menu.WithContent -}}
-import type { Sveltin } from 'src/sveltin';
+import type { Sveltin } from '$sveltin';
 
 const menu: Array<Sveltin.MenuItem> = [
 	{

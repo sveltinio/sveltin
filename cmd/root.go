@@ -97,6 +97,8 @@ const (
 	HeadingsJSFile      string = "headings.js"
 	StringsTSFile       string = "strings.js.ts"
 	SveltinDTSFile      string = "sveltin.d.ts"
+	ViteConfigFile      string = "vite.config.ts"
+	TSConfigFile        string = "tsconfig.json"
 )
 
 // Matchers IDs

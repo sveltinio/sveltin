@@ -158,7 +158,7 @@ func newPageServerTSSveltinNamespaceRule(line string) *migrationRule {
 		trigger:         patterns[sveltinNamespace],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return "import type { Sveltin } from '../../sveltin';"
+			return "import type { Sveltin } from '$sveltin';"
 		},
 	}
 }

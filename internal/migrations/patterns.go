@@ -53,6 +53,10 @@ const (
 	jsonLdWebsiteData
 	jsonLdCurrentTitle
 	svelteKitPrefetch
+	// vite.config.ts migration
+	viteAlias
+	// tsconfig.json migration
+	tsPath
 	// unhandled migrations where @sveltinio/* componets are used
 	essentialsImport
 	widgetsImport
@@ -93,6 +97,8 @@ var patterns = map[migrationTriggerId]string{
 	jsonLdWebsiteData:      `websiteData`,
 	jsonLdCurrentTitle:     `currentTitle`,
 	svelteKitPrefetch:      `data-sveltekit-prefetch`,
+	viteAlias:              `^\s+(alias)`,
+	tsPath:                 `^\s+"(paths)"`,
 	essentialsImport:       `(.*?)'@sveltinio\/essentials';$`,
 	widgetsImport:          `(.*?)'@sveltinio\/widgets';$`,
 }

@@ -1,4 +1,4 @@
-import type { Sveltin } from 'src/sveltin';
+import type { Sveltin } from '$sveltin';
 {{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
 import { all } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 
