@@ -46,7 +46,7 @@ The Smartest Way to Create SvelteKit powered static websites.
 
 # Sveltin
 
-Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit v1.x.x powered static websites</strong>. Latest tested SvelteKit version is [1.3.2](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.3.2).
+Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit v1.x.x powered static websites</strong>. Latest tested SvelteKit version is [1.3.7](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.3.7).
 
 ## :warning: Project Status
 
