@@ -32,7 +32,7 @@ var npmPackagesMap = map[string]string{
 	"svelte-check":             "^3.0.3",
 	"svelte-preprocess":        "^5.0.1",
 	"tslib":                    "^2.5.0",
-	"typescript":               "^4.9.4",
+	"typescript":               "^4.9.5",
 	"vite":                     "^4.0.4",
 }
 
