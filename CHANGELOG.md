@@ -4,7 +4,14 @@
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.10.1...v0.11.0)
 
-Read the [Release Notes](RELEASE-NOTES.md).
+Read the [Release Notes](https://docs.sveltin.io/release-notes).
+
+### 🚀  New Features
+
+- `sveltin.json` file: to simplify settings across parts of the project
+- `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release.
+- `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell)
+- active helps: by using `TAB` after the command name shows a message about params or flags
 
 ### Fixed Bugs
 
@@ -21,12 +28,9 @@ Read the [Release Notes](RELEASE-NOTES.md).
 
    `sveltin add content <title> --to <resource>`
 
-### 🚀  New Features
+- **new page cmd:** page type flag renamed as `language` (in short `-l`) . The new way it works is:
 
-- `sveltin.json` file: to simplify settings across parts of the project
-- `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release.
-- `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell)
-- active helps: by using `TAB` after the command name shows a message about params or flags
+   `sveltin new page about -l markdown`
 
 ### 🔧  Code Refactoring
 
@@ -40,8 +44,6 @@ Read the [Release Notes](RELEASE-NOTES.md).
 
 ### Chores
 
-- **slug.svelte.gotxt:** format date metadata with time datetime tag
-- **vite.config.ts:** prevent [@indaco/svelte-iconoir](https://github.com/indaco/svelte-iconoir) from being externalized for SSR
 - `@sveltejs/kit` updated to `v1.3.7`
 - `@sveltejs/adapter-static` updated to `v1.0.5`
 - `vite` updated to `v4.0.4`
@@ -62,6 +64,8 @@ Read the [Release Notes](RELEASE-NOTES.md).
   - `mdast-util-to-string` removed
   - `unist-util-visit` removed
   - `remark-external-links` replaced by `rehype-external-links`
+- **slug.svelte.gotxt:** format date metadata with time datetime tag
+- **vite.config.ts:** prevent [@indaco/svelte-iconoir](https://github.com/indaco/svelte-iconoir) from being externalized for SSR
 
 ### 📖  Documentation
 
