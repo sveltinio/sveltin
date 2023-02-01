@@ -1,0 +1,29 @@
+<!--
+   A component wrapping the mdsvex document.
+   Used as layout for markdown content pages by mdsvex.
+   It receives all values defined in frontmatter as props.
+
+   **Note**: The pages affected are the ones created by running:
+   `sveltin new page --type markdown`
+
+   Refer to: https://mdsvex.pngwn.io/docs#layouts
+-->
+
+<script>
+	export let title;
+	export let author;
+	export let headline;
+	export let created_at;
+	export let updated_at;
+	export let cover;
+</script>
+
+<!-- Page markup-->
+<section class="page">
+	<div class="content">
+		<div class="markdown-body">
+			<!-- the mdsvex content will be slotted in here -->
+			<slot />
+		</div>
+	</div>
+</section>

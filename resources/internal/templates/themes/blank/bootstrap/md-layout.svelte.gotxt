@@ -1,0 +1,20 @@
+<!--
+   A component wrapping the mdsvex document.
+   Used as layout for markdown content pages by mdsvex.
+
+   https://mdsvex.pngwn.io/docs#layouts
+
+   The pages affected are the ones created by running
+   `sveltin new page --type markdown`
+-->
+
+<script lang="ts">
+	export let title: string;
+	export let author: string;
+	export let headline: string;
+	export let created_at: string;
+	export let updated_at: string;
+</script>
+
+<!-- the mdsvex content will be slotted in here -->
+<slot />

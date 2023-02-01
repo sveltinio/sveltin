@@ -177,11 +177,6 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, SveltinDTSFileId, saveTo)
 	utils.ExitIfError(err)
 
-	// COPY FILE: mdsvex.config.js
-	saveTo = cfg.pathMaker.GetProjectRoot(projectName)
-	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, MDsveXFileId, saveTo)
-	utils.ExitIfError(err)
-
 	// SETUP THE CSS LIB
 	cfg.log.Info("Setting up the CSS Lib")
 	tplData := config.TemplateData{
