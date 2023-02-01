@@ -45,7 +45,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 ### Chores
 
-- `@sveltejs/kit` updated to `v1.3.7`
+- `@sveltejs/kit` updated to `v1.3.9`
 - `@sveltejs/adapter-static` updated to `v1.0.5`
 - `vite` updated to `v4.0.4`
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.)

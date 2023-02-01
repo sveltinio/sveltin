@@ -46,11 +46,11 @@ The Smartest Way to Create SvelteKit powered static websites.
 
 # Sveltin
 
-Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit v1.x.x powered static websites</strong>. Latest tested SvelteKit version is [1.3.7](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.3.7).
+Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit v1.x.x powered static websites</strong>.
 
-## :warning: Project Status
+## :information_source: SvelteKit versions
 
-> Sveltin is under active development and some changes are expected before we hit version 1.0. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Latest tested SvelteKit version is [1.3.9](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.3.9). SvelteKit reached v1.x.x so no breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions
 
 ## :mega: Overview
 
