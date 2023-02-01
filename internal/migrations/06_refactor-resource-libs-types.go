@@ -90,10 +90,10 @@ func (m *RefactorResourcesLibsTypes) up() error {
 				return err
 			}
 
-			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 				localFilePath :=
 					strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
-				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+				m.getServices().logger.Info(fmt.Sprintf("Migrating: %s", localFilePath))
 				if _, err := m.runMigration(fileContent, file); err != nil {
 					return err
 				}

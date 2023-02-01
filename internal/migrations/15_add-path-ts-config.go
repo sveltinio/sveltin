@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -64,13 +63,13 @@ func (m *AddSveltinPathToTSConfig) up() error {
 			return err
 		}
 
-		if !bytes.Contains(fileContent, []byte("$sveltin\":[\"./src/sveltin\"]")) {
-			migrationTriggers := []string{patterns[tsPath]}
-			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-				if _, err := m.runMigration(fileContent, ""); err != nil {
-					return err
-				}
+		gatekeeper := "./src/sveltin"
+		migrationTriggers := []string{patterns[tsPath]}
+		if mustMigrate(fileContent, gatekeeper) &&
+			patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			if _, err := m.runMigration(fileContent, ""); err != nil {
+				return err
 			}
 		}
 	}

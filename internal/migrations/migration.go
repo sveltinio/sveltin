@@ -9,6 +9,7 @@
 package migrations
 
 import (
+	"bytes"
 	"regexp"
 	"strings"
 
@@ -66,7 +67,11 @@ type migrationRule struct {
 
 //=============================================================================
 
-func isMigrationRequired(content []byte, patterns []string, matcher matcherFunc) bool {
+func mustMigrate(content []byte, gatekeeper string) bool {
+	return !bytes.Contains(content, []byte(gatekeeper))
+}
+
+func patternsMatched(content []byte, patterns []string, matcher matcherFunc) bool {
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		for _, pattern := range patterns {

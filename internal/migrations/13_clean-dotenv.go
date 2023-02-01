@@ -64,8 +64,12 @@ func (m *CleanDotEnv) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[sitemap], patterns[svelteKitBuildFolder], patterns[svelteKitBuildComment]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		migrationTriggers := []string{
+			patterns[sitemap],
+			patterns[svelteKitBuildFolder],
+			patterns[svelteKitBuildComment],
+		}
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err

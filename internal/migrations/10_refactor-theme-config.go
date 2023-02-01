@@ -65,7 +65,7 @@ func (m *RefactorThemeConfig) up() error {
 		migrationTriggers := []string{
 			patterns[themeConfigConst],
 		}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))

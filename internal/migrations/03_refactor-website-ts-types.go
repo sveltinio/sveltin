@@ -62,8 +62,11 @@ func (m *RefactorWebSiteTSTypes) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[importIWebSiteSeoType], patterns[iwebsiteSeoTypeUsage]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		migrationTriggers := []string{
+			patterns[importIWebSiteSeoType],
+			patterns[iwebsiteSeoTypeUsage],
+		}
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))

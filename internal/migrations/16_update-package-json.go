@@ -86,8 +86,11 @@ func (m *UpdatePackageJson) up() error {
 		}
 		updatedContent := fileContent
 
-		migrationTriggers := []string{patterns[remarkExtLinks], patterns[remarkSlug]}
-		isMigrate := isMigrationRequired(fileContent, migrationTriggers, findStringMatcher)
+		migrationTriggers := []string{
+			patterns[remarkExtLinks],
+			patterns[remarkSlug],
+		}
+		isMigrate := patternsMatched(fileContent, migrationTriggers, findStringMatcher)
 		if isMigrate {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if updatedContent, err = m.runMigration(updatedContent, ""); err != nil {

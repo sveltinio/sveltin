@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 
@@ -63,15 +62,16 @@ func (m *AddPrerenderTrailingToLayoutTS) up() error {
 			return err
 		}
 
-		if !bytes.Contains(fileContent, []byte(patterns[trailingSlash])) {
-			migrationTriggers := []string{patterns[prerenderConst]}
-			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
-				localFilePath :=
-					strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
-				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-				if _, err := m.runMigration(fileContent, ""); err != nil {
-					return err
-				}
+		gatekeeper := "export const trailingSlash"
+		migrationTriggers := []string{patterns[prerenderConst]}
+
+		if mustMigrate(fileContent, gatekeeper) &&
+			patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
+			localFilePath :=
+				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+			if _, err := m.runMigration(fileContent, ""); err != nil {
+				return err
 			}
 
 		}

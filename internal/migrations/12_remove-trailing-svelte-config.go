@@ -63,8 +63,11 @@ func (m *RemoveTrailingFromSvelteConfig) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[trailingSlash], patterns[prerenderEnabled]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		migrationTriggers := []string{
+			patterns[trailingSlash],
+			patterns[prerenderEnabled],
+		}
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err

@@ -103,7 +103,7 @@ func (m *UnhandledMigration) up() error {
 				return err
 			}
 
-			if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+			if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 				if !bytes.Contains(fileContent, []byte("[sveltin migrate] @IMPORTANT")) {
 					localFilePath :=
 						strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)

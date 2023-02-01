@@ -72,7 +72,7 @@ func (m *UpdateMDsveXPlugins) up() error {
 			patterns[rehypeSlugUsage],
 		}
 
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err

@@ -62,11 +62,14 @@ func (m *RefactorMenuTSTypes) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[importIMenuItemSeoType], patterns[imenuitemSeoTypeUsage]}
-		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
+		migrationTriggers := []string{
+			patterns[importIMenuItemSeoType],
+			patterns[imenuitemSeoTypeUsage],
+		}
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+			m.getServices().logger.Info(fmt.Sprintf("Migrating: %s", localFilePath))
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
