@@ -18,7 +18,9 @@ const mdsvexConfig = defineConfig({
 	smartypants: {
 		dashes: 'oldschool',
 	},
-	layout: resolve(join(__dirname, './themes/{{ .Theme.Name }}/components/md-layout.svelte')),
+	layout: {
+		page: resolve(join(__dirname, './themes/{{ .Theme.Name }}/components/md-layout.svelte'))
+	},
 	remarkPlugins: [headings, emoji, readingTime(), relativeImages],
 	rehypePlugins: [
 		[

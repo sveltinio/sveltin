@@ -12,6 +12,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 - `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release.
 - `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell)
 - active helps: by using `TAB` after the command name shows a message about params or flags
+- mdsvex config: set a layout component for pages created by running `sveltin new page` command.
 
 ### Fixed Bugs
 
