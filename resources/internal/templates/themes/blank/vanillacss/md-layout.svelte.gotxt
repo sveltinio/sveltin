@@ -10,13 +10,37 @@
 -->
 
 <script>
+	import { website } from '$config/website.js';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { getFavicon, getPageUrl, capitalizeFirstLetter } from '$lib/utils/strings.js';
+
 	export let title;
+	/* All values defined in frontmatter are available as props.
 	export let author;
 	export let headline;
 	export let created_at;
 	export let updated_at;
-	export let cover;
+	*/
+
+	const pageSEOData = {
+		url: getPageUrl(title, website),
+		title: capitalizeFirstLetter(title),
+		description: website.seoDescription,
+		keywords: website.keywords ? website.keywords : '',
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
 </script>
+
+<PageMetaTags data={pageSEOData} />
+<JsonLdWebPage data={pageSEOData} />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" current={pageSEOData.title} />
 
 <!-- the mdsvex content will be slotted in here -->
 <slot />

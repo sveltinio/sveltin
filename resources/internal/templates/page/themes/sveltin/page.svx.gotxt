@@ -1,54 +1,11 @@
 ---
-title: {{ .Page.Name | ToTitle }}
+title: {{ .Page.Name | ToTitle | Capitalize }}
+author: YOUR_NAME
+headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
+created_at: {{ Today }}
+updated_at: {{ Today }}
 ---
 
-{{ $pageName := .Page.Name | ToVariableName }}
-<script lang="ts">
-	import { website } from '$config/website.js';
-	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
-	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+# {title}
 
-	const {{ $pageName }}Page: SEOWebPageMetadata = {
-		url: getPageUrl('{{ .Page.Name }}', website),
-		title: title,
-		description: website.seoDescription,
-		keywords: (website.keywords) ? website.keywords : '',
-		image: getFavicon(website),
-		opengraph: {
-			type: OpenGraphType.Article
-		},
-		twitter: {
-			type: TwitterCardType.Summary
-		}
-	};
-</script>
-
-<PageMetaTags data={ {{ $pageName }}Page } />
-<JsonLdWebPage data={ {{ $pageName }}Page } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" current={ {{ $pageName }}Page.title} />
-
-<!-- Page markup-->
-<section class="page">
-	<div class="content">
-		<div class="centered">
-			<h1>This is the {{ .Page.Name | Capitalize }} page</h1>
-		</div>
-	</div>
-</section>
-
-<style>
-	.centered {
-		position: fixed;
-		top: 30%;
-		left: 40%;
-		margin-top: -50px;
-		margin-left: -100px;
-	}
-
-	.centered h1 {
-		font-size: 3rem;
-		line-height: 1;
-	}
-</style>
+Your markdown content here...

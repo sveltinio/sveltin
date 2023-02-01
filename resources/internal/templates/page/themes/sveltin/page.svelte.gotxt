@@ -4,11 +4,12 @@
 	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+	import { getFavicon, getPageUrl, capitalizeFirstLetter } from '$lib/utils/strings.js';
 
+	const title = '{{ .Page.Name }}';
 	const {{ $pageName }}Page: SEOWebPageMetadata = {
-		url: getPageUrl('{{ .Page.Name }}', website),
-		title: '{{ .Page.Name | ToTitle }}',
+		url: getPageUrl(title, website),
+		title: capitalizeFirstLetter(title),
 		description: website.seoDescription,
 		keywords: website.keywords ? website.keywords : '',
 		image: getFavicon(website),

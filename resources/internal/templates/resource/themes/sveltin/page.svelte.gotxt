@@ -8,7 +8,7 @@
 	import { Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
+	import { toTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let data: PageData;
 	$: ({ resourceName, items } = data);
@@ -41,7 +41,7 @@
 <section class="artifact-container">
 	<div class="content">
 		{#if items.length != 0}
-			<h1>{ToTitle(resourceName)}</h1>
+			<h1>{toTitle(resourceName)}</h1>
 			<div class="cards">
 				{#each items as item}
 					<Card title={item.metadata.title} content={item.metadata.headline}>
