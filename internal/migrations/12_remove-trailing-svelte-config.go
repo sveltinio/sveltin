@@ -16,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateTSConfigMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateTSConfigMigration struct {
+// RemoveTrailingFromSvelteConfig is the struct representing the migration update the defaults.js.ts file.
+type RemoveTrailingFromSvelteConfig struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
-// MakeMigration implements IMigrationFactory interface.
-func (m *UpdateTSConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateTSConfigMigration{
+// MakeMigration implements IMigrationFactory interface,
+func (m *RemoveTrailingFromSvelteConfig) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &RemoveTrailingFromSvelteConfig{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateTSConfigMigration) MakeMigration(migrationManager *MigrationManag
 }
 
 // implements IMigration interface.
-func (m *UpdateTSConfigMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateTSConfigMigration) getData() *MigrationData         { return m.Data }
+func (m *RemoveTrailingFromSvelteConfig) getServices() *MigrationServices { return m.Services }
+func (m *RemoveTrailingFromSvelteConfig) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateTSConfigMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m RemoveTrailingFromSvelteConfig) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdateTSConfigMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateTSConfigMigration) up() error {
+func (m *RemoveTrailingFromSvelteConfig) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -63,10 +63,10 @@ func (m *UpdateTSConfigMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[tsPath]}
+		migrationTriggers := []string{patterns[trailingSlash], patterns[prerenderEnabled]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent, ""); err != nil {
+			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -75,25 +75,26 @@ func (m *UpdateTSConfigMigration) up() error {
 	return nil
 }
 
-func (m *UpdateTSConfigMigration) down() error {
+func (m *RemoveTrailingFromSvelteConfig) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateTSConfigMigration) allowUp() error {
+func (m *RemoveTrailingFromSvelteConfig) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateTSConfigMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *RemoveTrailingFromSvelteConfig) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
-			newTSConfigRule(line),
+			newSvelteConfigTrailingSlashRule(line),
+			newSvelteConfigPrerenderEnabledRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -107,8 +108,7 @@ func (m *UpdateTSConfigMigration) migrate(content []byte, file string) ([]byte, 
 		return nil, err
 	}
 
-	cleanedOutput := removeMultiEmptyLines(output)
-	if err = afero.WriteFile(m.getServices().fs, m.Data.TargetPath, cleanedOutput, 0644); err != nil {
+	if err = afero.WriteFile(m.getServices().fs, m.Data.TargetPath, []byte(output), 0644); err != nil {
 		return nil, err
 	}
 	return nil, nil
@@ -116,13 +116,24 @@ func (m *UpdateTSConfigMigration) migrate(content []byte, file string) ([]byte, 
 
 //=============================================================================
 
-func newTSConfigRule(line string) *migrationRule {
+func newSvelteConfigTrailingSlashRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[tsPath],
+		trigger:         patterns[trailingSlash],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return "\t\t\"paths\": {\n\t\t\t\"$sveltin\": [\"./src/sveltin\"],"
+			return ""
+		},
+	}
+}
+
+func newSvelteConfigPrerenderEnabledRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[prerenderEnabled],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
 		},
 	}
 }

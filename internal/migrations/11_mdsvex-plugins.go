@@ -16,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateMDsveXMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateMDsveXMigration struct {
+// UpdateMDsveXPlugins is the struct representing the migration update the defaults.js.ts file.
+type UpdateMDsveXPlugins struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *UpdateMDsveXMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateMDsveXMigration{
+func (m *UpdateMDsveXPlugins) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdateMDsveXPlugins{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateMDsveXMigration) MakeMigration(migrationManager *MigrationManager
 }
 
 // implements IMigration interface.
-func (m *UpdateMDsveXMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateMDsveXMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdateMDsveXPlugins) getServices() *MigrationServices { return m.Services }
+func (m *UpdateMDsveXPlugins) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateMDsveXMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m UpdateMDsveXPlugins) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdateMDsveXMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateMDsveXMigration) up() error {
+func (m *UpdateMDsveXPlugins) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -74,7 +74,7 @@ func (m *UpdateMDsveXMigration) up() error {
 
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent, ""); err != nil {
+			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -83,21 +83,21 @@ func (m *UpdateMDsveXMigration) up() error {
 	return nil
 }
 
-func (m *UpdateMDsveXMigration) down() error {
+func (m *UpdateMDsveXPlugins) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateMDsveXMigration) allowUp() error {
+func (m *UpdateMDsveXPlugins) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateMDsveXMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *UpdateMDsveXPlugins) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string

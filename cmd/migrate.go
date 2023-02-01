@@ -63,7 +63,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 		utils.ExitIfError(err)
 		migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 		// execute the migration.
-		err = migration.Execute()
+		err = migration.Migrate()
 		utils.ExitIfError(err)
 
 		// Load project settings file after sveltin.json file creation
@@ -104,7 +104,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			utils.ExitIfError(err)
 			migration := migrationFactory.MakeMigration(migrationManager, migrationServices, migrationData)
 			// execute the migration.
-			err = migration.Execute()
+			err = migration.Migrate()
 			utils.ExitIfError(err)
 		}
 

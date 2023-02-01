@@ -17,16 +17,16 @@ import (
 	"github.com/sveltinio/sveltin/resources"
 )
 
-// SveltinDTSMigration is the struct representing the migration add the sveltin.json file.
-type SveltinDTSMigration struct {
+// OverwriteSveltinDTS is the struct representing the migration add the sveltin.json file.
+type OverwriteSveltinDTS struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *SveltinDTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &SveltinDTSMigration{
+func (m *OverwriteSveltinDTS) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &OverwriteSveltinDTS{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -34,11 +34,11 @@ func (m *SveltinDTSMigration) MakeMigration(migrationManager *MigrationManager, 
 }
 
 // MakeMigration implements IMigration interface.
-func (m *SveltinDTSMigration) getServices() *MigrationServices { return m.Services }
-func (m *SveltinDTSMigration) getData() *MigrationData         { return m.Data }
+func (m *OverwriteSveltinDTS) getServices() *MigrationServices { return m.Services }
+func (m *OverwriteSveltinDTS) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
-func (m SveltinDTSMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails.
+func (m OverwriteSveltinDTS) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (m SveltinDTSMigration) Execute() error {
 	return nil
 }
 
-func (m *SveltinDTSMigration) up() error {
+func (m *OverwriteSveltinDTS) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -76,21 +76,21 @@ func (m *SveltinDTSMigration) up() error {
 	return nil
 }
 
-func (m *SveltinDTSMigration) down() error {
+func (m *OverwriteSveltinDTS) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *SveltinDTSMigration) allowUp() error {
+func (m *OverwriteSveltinDTS) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *SveltinDTSMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *OverwriteSveltinDTS) runMigration(content []byte, file string) ([]byte, error) {
 	return nil, nil
 }
 

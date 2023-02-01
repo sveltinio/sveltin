@@ -10,22 +10,22 @@ package migrations
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdatePageServerTSMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdatePageServerTSMigration struct {
+// RefactorResourcesLibsTypes is the struct representing the migration update the defaults.js.ts file.
+type RefactorResourcesLibsTypes struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdatePageServerTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdatePageServerTSMigration{
+func (m *RefactorResourcesLibsTypes) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &RefactorResourcesLibsTypes{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdatePageServerTSMigration) MakeMigration(migrationManager *MigrationM
 }
 
 // implements IMigration interface.
-func (m *UpdatePageServerTSMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdatePageServerTSMigration) getData() *MigrationData         { return m.Data }
+func (m *RefactorResourcesLibsTypes) getServices() *MigrationServices { return m.Services }
+func (m *RefactorResourcesLibsTypes) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdatePageServerTSMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m RefactorResourcesLibsTypes) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdatePageServerTSMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdatePageServerTSMigration) up() error {
+func (m *RefactorResourcesLibsTypes) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -59,10 +59,9 @@ func (m *UpdatePageServerTSMigration) up() error {
 
 	if exists {
 		files := []string{}
-		targetFiles := []string{"+page.server.ts"}
 
 		walkFunc := func(file string, info os.FileInfo, err error) error {
-			if common.Contains(targetFiles, info.Name()) {
+			if filepath.Ext(file) == ".ts" {
 				files = append(files, file)
 			}
 			return nil
@@ -78,6 +77,11 @@ func (m *UpdatePageServerTSMigration) up() error {
 			patterns[importIWebSiteSeoType],
 			patterns[icontententryTypeUsage],
 			patterns[iwebsiteSeoTypeUsage],
+			patterns[capitalizeAll],
+			patterns[capitalizeFirstLetter],
+			patterns[camelToKebabCase],
+			patterns[toTitle],
+			patterns[toSlug],
 		}
 
 		for _, file := range files {
@@ -90,7 +94,7 @@ func (m *UpdatePageServerTSMigration) up() error {
 				localFilePath :=
 					strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-				if _, err := m.migrate(fileContent, file); err != nil {
+				if _, err := m.runMigration(fileContent, file); err != nil {
 					return err
 				}
 			}
@@ -102,17 +106,22 @@ func (m *UpdatePageServerTSMigration) up() error {
 	return nil
 }
 
-func (m *UpdatePageServerTSMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *RefactorResourcesLibsTypes) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 
 	// It must be executed twice to replace multiple triggers on the same line
 	for loopCounter := 0; loopCounter <= 1; loopCounter++ {
 		for i, line := range lines {
 			rules := []*migrationRule{
-				newPageServerTSSveltinNamespaceRule(line),
-				newPageServerTSImportRule(line),
-				newPageServerTSContentEntryUsageRule(line),
-				newPageServerTSIWebSiteUsageRule(line),
+				newSveltinNamespaceRule(line),
+				newIWebSiteImportRule(line),
+				newContentEntryUsageRule(line),
+				newIWebSiteUsageRule(line),
+				newCapitalizeAllRule(line),
+				newCapitalizeFirstLetterRule(line),
+				newCamelToKebabCaseRule(line),
+				newToTitleRule(line),
+				newToSlug(line),
 			}
 
 			if res, ok := applyMigrationRules(rules); ok {
@@ -136,14 +145,14 @@ func (m *UpdatePageServerTSMigration) migrate(content []byte, file string) ([]by
 	return nil, nil
 }
 
-func (m *UpdatePageServerTSMigration) down() error {
+func (m *RefactorResourcesLibsTypes) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdatePageServerTSMigration) allowUp() error {
+func (m *RefactorResourcesLibsTypes) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -152,7 +161,7 @@ func (m *UpdatePageServerTSMigration) allowUp() error {
 
 //=============================================================================
 
-func newPageServerTSSveltinNamespaceRule(line string) *migrationRule {
+func newSveltinNamespaceRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[sveltinNamespace],
@@ -163,7 +172,7 @@ func newPageServerTSSveltinNamespaceRule(line string) *migrationRule {
 	}
 }
 
-func newPageServerTSImportRule(line string) *migrationRule {
+func newIWebSiteImportRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[importIWebSiteSeoType],
@@ -174,7 +183,7 @@ func newPageServerTSImportRule(line string) *migrationRule {
 	}
 }
 
-func newPageServerTSContentEntryUsageRule(line string) *migrationRule {
+func newContentEntryUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[icontententryTypeUsage],
@@ -185,13 +194,68 @@ func newPageServerTSContentEntryUsageRule(line string) *migrationRule {
 	}
 }
 
-func newPageServerTSIWebSiteUsageRule(line string) *migrationRule {
+func newIWebSiteUsageRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
 		trigger:         patterns[iwebsiteSeoTypeUsage],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
 			return "Sveltin.WebSite"
+		},
+	}
+}
+
+func newCapitalizeAllRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[capitalizeAll],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return "capitalizeAll"
+		},
+	}
+}
+
+func newCapitalizeFirstLetterRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[capitalizeFirstLetter],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return "capitalizeFirstLetter"
+		},
+	}
+}
+
+func newCamelToKebabCaseRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[camelToKebabCase],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return "camelToKebabCase"
+		},
+	}
+}
+
+func newToTitleRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[toTitle],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return "toTitle"
+		},
+	}
+}
+
+func newToSlug(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[toSlug],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return "toSlug"
 		},
 	}
 }

@@ -25,7 +25,7 @@ var npmPackagesMap = map[string]string{
 	"@sveltinio/services":      "^0.3.2",
 	"@sveltinio/widgets":       "^0.5.1",
 	"@sveltejs/adapter-static": "1.0.5",
-	"@sveltejs/kit":            "1.3.2",
+	"@sveltejs/kit":            "1.3.3",
 	"@types/gtag.js":           "^0.0.12",
 	"rimraf":                   "^4.1.2",
 	"svelte":                   "^3.55.1",
@@ -38,16 +38,16 @@ var npmPackagesMap = map[string]string{
 
 //=============================================================================
 
-// UpdatePkgJSONMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdatePkgJSONMigration struct {
+// UpdatePackageJson is the struct representing the migration update the defaults.js.ts file.
+type UpdatePackageJson struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *UpdatePkgJSONMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdatePkgJSONMigration{
+func (m *UpdatePackageJson) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &UpdatePackageJson{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -55,11 +55,11 @@ func (m *UpdatePkgJSONMigration) MakeMigration(migrationManager *MigrationManage
 }
 
 // MakeMigration implements IMigration interface.
-func (m *UpdatePkgJSONMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdatePkgJSONMigration) getData() *MigrationData         { return m.Data }
+func (m *UpdatePackageJson) getServices() *MigrationServices { return m.Services }
+func (m *UpdatePackageJson) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdatePkgJSONMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m UpdatePackageJson) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -69,7 +69,7 @@ func (m UpdatePkgJSONMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdatePkgJSONMigration) up() error {
+func (m *UpdatePackageJson) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -90,7 +90,7 @@ func (m *UpdatePkgJSONMigration) up() error {
 		isMigrate := isMigrationRequired(fileContent, migrationTriggers, findStringMatcher)
 		if isMigrate {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if updatedContent, err = m.migrate(updatedContent, ""); err != nil {
+			if updatedContent, err = m.runMigration(updatedContent, ""); err != nil {
 				return err
 			}
 		}
@@ -120,21 +120,21 @@ func (m *UpdatePkgJSONMigration) up() error {
 	return nil
 }
 
-func (m *UpdatePkgJSONMigration) down() error {
+func (m *UpdatePackageJson) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdatePkgJSONMigration) allowUp() error {
+func (m *UpdatePackageJson) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdatePkgJSONMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *UpdatePackageJson) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -177,6 +177,6 @@ func newRemarkSlugRule(line string) *migrationRule {
 
 //=============================================================================
 
-func updateDevDependency(m *UpdatePkgJSONMigration, content []byte, name, value string) ([]byte, error) {
+func updateDevDependency(m *UpdatePackageJson, content []byte, name, value string) ([]byte, error) {
 	return sjson.SetBytes(content, fmt.Sprintf("devDependencies.%s", name), value)
 }

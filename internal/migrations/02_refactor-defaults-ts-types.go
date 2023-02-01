@@ -15,16 +15,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateWebSiteTSMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateWebSiteTSMigration struct {
+// RefactorDefaultsTSTypes is the struct representing the migration update the defaults.js.ts file.
+type RefactorDefaultsTSTypes struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateWebSiteTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateWebSiteTSMigration{
+func (m *RefactorDefaultsTSTypes) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &RefactorDefaultsTSTypes{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -32,11 +32,11 @@ func (m *UpdateWebSiteTSMigration) MakeMigration(migrationManager *MigrationMana
 }
 
 // implements IMigration interface.
-func (m *UpdateWebSiteTSMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateWebSiteTSMigration) getData() *MigrationData         { return m.Data }
+func (m *RefactorDefaultsTSTypes) getServices() *MigrationServices { return m.Services }
+func (m *RefactorDefaultsTSTypes) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateWebSiteTSMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m RefactorDefaultsTSTypes) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (m UpdateWebSiteTSMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateWebSiteTSMigration) up() error {
+func (m *RefactorDefaultsTSTypes) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -62,12 +62,12 @@ func (m *UpdateWebSiteTSMigration) up() error {
 			return err
 		}
 
-		migrationTriggers := []string{patterns[importIWebSiteSeoType], patterns[iwebsiteSeoTypeUsage]}
+		migrationTriggers := []string{patterns[semVersion]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-			if _, err := m.migrate(fileContent, ""); err != nil {
+			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -76,13 +76,24 @@ func (m *UpdateWebSiteTSMigration) up() error {
 	return nil
 }
 
-func (m *UpdateWebSiteTSMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *RefactorDefaultsTSTypes) down() error {
+	if err := m.Mediator.notifyAboutCompletion(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *RefactorDefaultsTSTypes) allowUp() error {
+	if err := m.up(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *RefactorDefaultsTSTypes) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
-		rules := []*migrationRule{
-			newWebSiteTSImportRule(line),
-			newWebSiteTSUsageRule(line),
-		}
+		rules := []*migrationRule{newSveltinVersionRule(line)}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
 		} else {
@@ -101,40 +112,17 @@ func (m *UpdateWebSiteTSMigration) migrate(content []byte, file string) ([]byte,
 	return nil, nil
 }
 
-func (m *UpdateWebSiteTSMigration) down() error {
-	if err := m.Mediator.notifyAboutCompletion(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *UpdateWebSiteTSMigration) allowUp() error {
-	if err := m.up(); err != nil {
-		return err
-	}
-	return nil
-}
-
 //=============================================================================
 
-func newWebSiteTSImportRule(line string) *migrationRule {
+func newSveltinVersionRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[importIWebSiteSeoType],
+		trigger:         patterns[semVersion],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
-			return "import type { Sveltin } from '$sveltin';"
-		},
-	}
-}
+			return `import { sveltin } from '../sveltin.json';
 
-func newWebSiteTSUsageRule(line string) *migrationRule {
-	return &migrationRule{
-		value:           line,
-		trigger:         patterns[iwebsiteSeoTypeUsage],
-		replaceFullLine: false,
-		replacerFunc: func(string) string {
-			return "Sveltin.WebSite"
+const sveltinVersion = sveltin.version;`
 		},
 	}
 }

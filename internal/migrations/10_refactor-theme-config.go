@@ -15,16 +15,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateThemeConfigMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateThemeConfigMigration struct {
+// RefactorThemeConfig is the struct representing the migration update the defaults.js.ts file.
+type RefactorThemeConfig struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *UpdateThemeConfigMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateThemeConfigMigration{
+func (m *RefactorThemeConfig) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &RefactorThemeConfig{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -32,11 +32,11 @@ func (m *UpdateThemeConfigMigration) MakeMigration(migrationManager *MigrationMa
 }
 
 // implements IMigration interface.
-func (m *UpdateThemeConfigMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateThemeConfigMigration) getData() *MigrationData         { return m.Data }
+func (m *RefactorThemeConfig) getServices() *MigrationServices { return m.Services }
+func (m *RefactorThemeConfig) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
-func (m UpdateThemeConfigMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails.
+func (m RefactorThemeConfig) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (m UpdateThemeConfigMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateThemeConfigMigration) up() error {
+func (m *RefactorThemeConfig) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -69,7 +69,7 @@ func (m *UpdateThemeConfigMigration) up() error {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-			if _, err := m.migrate(fileContent, ""); err != nil {
+			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -78,21 +78,21 @@ func (m *UpdateThemeConfigMigration) up() error {
 	return nil
 }
 
-func (m *UpdateThemeConfigMigration) down() error {
+func (m *RefactorThemeConfig) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateThemeConfigMigration) allowUp() error {
+func (m *RefactorThemeConfig) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateThemeConfigMigration) migrate(content []byte, filepath string) ([]byte, error) {
+func (m *RefactorThemeConfig) runMigration(content []byte, filepath string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		var prevLine string

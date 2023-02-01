@@ -22,13 +22,13 @@ type matcherFunc = func([]byte, string, string) bool
 
 // IMigration is the interface defining the methods to be implemented by single migration.
 type IMigration interface {
-	Execute() error
+	Migrate() error
 	getServices() *MigrationServices
 	getData() *MigrationData
 	up() error
 	down() error
 	allowUp() error
-	migrate([]byte, string) ([]byte, error)
+	runMigration([]byte, string) ([]byte, error)
 }
 
 // MigrationServices contains references to services used by the migrations.

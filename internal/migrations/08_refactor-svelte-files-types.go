@@ -16,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// SvelteFilesMigration is the struct representing the migration update the defaults.js.ts file.
-type SvelteFilesMigration struct {
+// RefactorSvelteFilesTypes is the struct representing the migration update the defaults.js.ts file.
+type RefactorSvelteFilesTypes struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *SvelteFilesMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &SvelteFilesMigration{
+func (m *RefactorSvelteFilesTypes) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &RefactorSvelteFilesTypes{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *SvelteFilesMigration) MakeMigration(migrationManager *MigrationManager,
 }
 
 // implements IMigration interface.
-func (m *SvelteFilesMigration) getServices() *MigrationServices { return m.Services }
-func (m *SvelteFilesMigration) getData() *MigrationData         { return m.Data }
+func (m *RefactorSvelteFilesTypes) getServices() *MigrationServices { return m.Services }
+func (m *RefactorSvelteFilesTypes) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m SvelteFilesMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m RefactorSvelteFilesTypes) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m SvelteFilesMigration) Execute() error {
 	return nil
 }
 
-func (m *SvelteFilesMigration) up() error {
+func (m *RefactorSvelteFilesTypes) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -90,7 +90,7 @@ func (m *SvelteFilesMigration) up() error {
 				localFilePath :=
 					strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-				if _, err := m.migrate(fileContent, file); err != nil {
+				if _, err := m.runMigration(fileContent, file); err != nil {
 					return err
 				}
 			}
@@ -102,7 +102,7 @@ func (m *SvelteFilesMigration) up() error {
 	return nil
 }
 
-func (m *SvelteFilesMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *RefactorSvelteFilesTypes) runMigration(content []byte, file string) ([]byte, error) {
 
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
@@ -131,14 +131,14 @@ func (m *SvelteFilesMigration) migrate(content []byte, file string) ([]byte, err
 	return nil, nil
 }
 
-func (m *SvelteFilesMigration) down() error {
+func (m *RefactorSvelteFilesTypes) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *SvelteFilesMigration) allowUp() error {
+func (m *RefactorSvelteFilesTypes) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}

@@ -38,8 +38,8 @@ func (m *UnhandledMigration) MakeMigration(migrationManager *MigrationManager, s
 func (m *UnhandledMigration) getServices() *MigrationServices { return m.Services }
 func (m *UnhandledMigration) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UnhandledMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m UnhandledMigration) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func (m *UnhandledMigration) up() error {
 					localFilePath :=
 						strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 					m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-					if _, err := m.migrate(fileContent, file); err != nil {
+					if _, err := m.runMigration(fileContent, file); err != nil {
 						return err
 					}
 				}
@@ -121,7 +121,7 @@ func (m *UnhandledMigration) up() error {
 	return nil
 }
 
-func (m *UnhandledMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *UnhandledMigration) runMigration(content []byte, file string) ([]byte, error) {
 
 	lines := strings.Split(string(content), "\n")
 

@@ -17,16 +17,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateDotEnvMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateDotEnvMigration struct {
+// CleanDotEnv is the struct representing the migration update the defaults.js.ts file.
+type CleanDotEnv struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *UpdateDotEnvMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateDotEnvMigration{
+func (m *CleanDotEnv) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &CleanDotEnv{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -34,11 +34,11 @@ func (m *UpdateDotEnvMigration) MakeMigration(migrationManager *MigrationManager
 }
 
 // implements IMigration interface.
-func (m *UpdateDotEnvMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateDotEnvMigration) getData() *MigrationData         { return m.Data }
+func (m *CleanDotEnv) getServices() *MigrationServices { return m.Services }
+func (m *CleanDotEnv) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateDotEnvMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m CleanDotEnv) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (m UpdateDotEnvMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) up() error {
+func (m *CleanDotEnv) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -67,7 +67,7 @@ func (m *UpdateDotEnvMigration) up() error {
 		migrationTriggers := []string{patterns[sitemap], patterns[svelteKitBuildFolder], patterns[svelteKitBuildComment]}
 		if isMigrationRequired(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.migrate(fileContent, ""); err != nil {
+			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -76,21 +76,21 @@ func (m *UpdateDotEnvMigration) up() error {
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) down() error {
+func (m *CleanDotEnv) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) allowUp() error {
+func (m *CleanDotEnv) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *CleanDotEnv) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{

@@ -48,6 +48,11 @@ const (
 	// src/lib/utils/strings.js.ts migration
 	icontententryTypeUsage
 	sveltinNamespace
+	capitalizeAll
+	capitalizeFirstLetter
+	camelToKebabCase
+	toTitle
+	toSlug
 	// +page.[svelte|svx] migration
 	iwebpagemedataImport
 	jsonLdWebsiteData
@@ -73,10 +78,10 @@ var patterns = map[migrationTriggerId]string{
 	sitemap:                `^sitemap`,
 	prerenderConst:         `^export const prerender`,
 	prerenderEnabled:       `enabled`,
-	trailingSlash:          `trailingSlash`,
+	trailingSlash:          `\btrailingSlash\b`,
 	themeConfigConst:       `^const config`,
 	themeConfigExport:      `^export default config`,
-	themeNameProp:          `name:`,
+	themeNameProp:          `\bname:\b`,
 	headingsImport:         `import headings from './src/lib/utils/headings.js`,
 	remarkExtLinks:         `"remark-external-links"`,
 	remarkExtLinksImport:   `^import remarkExternalLinks`,
@@ -88,15 +93,20 @@ var patterns = map[migrationTriggerId]string{
 	rehypeSlugUsage:        `rehypeSlug\[`,
 	headingsTitleProp:      `title:`,
 	importIWebSiteSeoType:  `\{\s+IWebSite\s+\}`,
-	iwebsiteSeoTypeUsage:   `IWebSite`,
+	iwebsiteSeoTypeUsage:   `\bIWebSite\b`,
 	importIMenuItemSeoType: `\{\s+IMenuItem\s+\}`,
-	imenuitemSeoTypeUsage:  `IMenuItem`,
-	icontententryTypeUsage: `ContentEntry`,
+	imenuitemSeoTypeUsage:  `\bIMenuItem\b`,
+	icontententryTypeUsage: `\bContentEntry\b`,
 	sveltinNamespace:       `'src\/sveltin';$`,
-	iwebpagemedataImport:   `IWebPageMetadata`,
-	jsonLdWebsiteData:      `websiteData`,
-	jsonLdCurrentTitle:     `currentTitle`,
-	svelteKitPrefetch:      `data-sveltekit-prefetch`,
+	capitalizeAll:          `\bCapitalizeAll\b`,
+	capitalizeFirstLetter:  `\bCapitalizeFirstLetter\b`,
+	camelToKebabCase:       `\bCamelToKebabCase\b`,
+	toTitle:                `\bToTitle\b`,
+	toSlug:                 `\bToSlug\b`,
+	iwebpagemedataImport:   `\bIWebPageMetadata\b`,
+	jsonLdWebsiteData:      `\bwebsiteData\b`,
+	jsonLdCurrentTitle:     `\bcurrentTitle\b`,
+	svelteKitPrefetch:      `\bdata-sveltekit-prefetch\b`,
 	viteAlias:              `^\s+(alias)`,
 	tsPath:                 `^\s+"(paths)"`,
 	essentialsImport:       `(.*?)'@sveltinio\/essentials';$`,

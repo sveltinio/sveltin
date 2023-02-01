@@ -16,16 +16,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// UpdateLayoutTSMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateLayoutTSMigration struct {
+// AddPrerenderTrailingToLayoutTS is the struct representing the migration update the defaults.js.ts file.
+type AddPrerenderTrailingToLayoutTS struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface,
-func (m *UpdateLayoutTSMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateLayoutTSMigration{
+func (m *AddPrerenderTrailingToLayoutTS) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &AddPrerenderTrailingToLayoutTS{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -33,11 +33,11 @@ func (m *UpdateLayoutTSMigration) MakeMigration(migrationManager *MigrationManag
 }
 
 // implements IMigration interface.
-func (m *UpdateLayoutTSMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateLayoutTSMigration) getData() *MigrationData         { return m.Data }
+func (m *AddPrerenderTrailingToLayoutTS) getServices() *MigrationServices { return m.Services }
+func (m *AddPrerenderTrailingToLayoutTS) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateLayoutTSMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m AddPrerenderTrailingToLayoutTS) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (m UpdateLayoutTSMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) up() error {
+func (m *AddPrerenderTrailingToLayoutTS) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -69,7 +69,7 @@ func (m *UpdateLayoutTSMigration) up() error {
 				localFilePath :=
 					strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
 				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
-				if _, err := m.migrate(fileContent, ""); err != nil {
+				if _, err := m.runMigration(fileContent, ""); err != nil {
 					return err
 				}
 			}
@@ -80,21 +80,21 @@ func (m *UpdateLayoutTSMigration) up() error {
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) down() error {
+func (m *AddPrerenderTrailingToLayoutTS) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) allowUp() error {
+func (m *AddPrerenderTrailingToLayoutTS) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateLayoutTSMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *AddPrerenderTrailingToLayoutTS) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{newLayoutRule(line)}

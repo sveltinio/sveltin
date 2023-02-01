@@ -23,16 +23,16 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-// ProjectSettingsMigration is the struct representing the migration add the sveltin.json file.
-type ProjectSettingsMigration struct {
+// AddUpdateProjectSettings is the struct representing the migration add the sveltin.json file.
+type AddUpdateProjectSettings struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *ProjectSettingsMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &ProjectSettingsMigration{
+func (m *AddUpdateProjectSettings) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &AddUpdateProjectSettings{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -40,11 +40,11 @@ func (m *ProjectSettingsMigration) MakeMigration(migrationManager *MigrationMana
 }
 
 // MakeMigration implements IMigration interface.
-func (m *ProjectSettingsMigration) getServices() *MigrationServices { return m.Services }
-func (m *ProjectSettingsMigration) getData() *MigrationData         { return m.Data }
+func (m *AddUpdateProjectSettings) getServices() *MigrationServices { return m.Services }
+func (m *AddUpdateProjectSettings) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails.
-func (m ProjectSettingsMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails.
+func (m AddUpdateProjectSettings) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (m ProjectSettingsMigration) Execute() error {
 	return nil
 }
 
-func (m *ProjectSettingsMigration) up() error {
+func (m *AddUpdateProjectSettings) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
@@ -71,27 +71,27 @@ func (m *ProjectSettingsMigration) up() error {
 	return nil
 }
 
-func (m *ProjectSettingsMigration) down() error {
+func (m *AddUpdateProjectSettings) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *ProjectSettingsMigration) allowUp() error {
+func (m *AddUpdateProjectSettings) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *ProjectSettingsMigration) migrate(content []byte, file string) ([]byte, error) {
+func (m *AddUpdateProjectSettings) runMigration(content []byte, file string) ([]byte, error) {
 	return nil, nil
 }
 
 //=============================================================================
 
-func addProjectSettingsFile(m *ProjectSettingsMigration) error {
+func addProjectSettingsFile(m *AddUpdateProjectSettings) error {
 	pathToPkgFile := filepath.Join(m.getServices().pathMaker.GetRootFolder(), "package.json")
 
 	projectName, err := utils.RetrieveProjectName(m.getServices().fs, pathToPkgFile)
@@ -141,7 +141,7 @@ func addProjectSettingsFile(m *ProjectSettingsMigration) error {
 	return nil
 }
 
-func makeThemeData(m *ProjectSettingsMigration) (*tpltypes.ThemeData, error) {
+func makeThemeData(m *AddUpdateProjectSettings) (*tpltypes.ThemeData, error) {
 	const (
 		blankThemeId   string = "blank"
 		sveltinThemeId string = "sveltin"
@@ -166,7 +166,7 @@ func makeThemeData(m *ProjectSettingsMigration) (*tpltypes.ThemeData, error) {
 	return themeData, nil
 }
 
-func updateFileContent(m *ProjectSettingsMigration) error {
+func updateFileContent(m *AddUpdateProjectSettings) error {
 	content, err := afero.ReadFile(m.getServices().fs, m.Data.TargetPath)
 	if err != nil {
 		return err
