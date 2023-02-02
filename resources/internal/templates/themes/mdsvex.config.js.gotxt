@@ -23,17 +23,9 @@ const mdsvexConfig = defineConfig({
 	},
 	remarkPlugins: [headings, emoji, readingTime(), relativeImages],
 	rehypePlugins: [
-		[
-			(rehypeExternalLinks,
-			{ target: '_blank', rel: ['noopener', 'noreferrer'] }),
-		],
 		rehypeSlug,
-		[
-			(rehypeAutoLinkHeadings,
-			{
-				behavior: 'wrap',
-			}),
-		],
+		[rehypeAutoLinkHeadings, { behavior: 'wrap' }],
+		[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }]
 	],
 });
 
