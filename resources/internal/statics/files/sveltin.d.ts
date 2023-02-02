@@ -11,7 +11,7 @@ export namespace Sveltin {
 
 	export type ContentMetadata = {
 		name: string;
-		items: Array<YAMLFrontmatter>;
+		items?: Array<YAMLFrontmatter> | null;
 	};
 
 	export type TocEntry = {
@@ -30,8 +30,9 @@ export namespace Sveltin {
 		headline?: string;
 		created_at?: string;
 		updated_at?: string;
+		readingTime?: Record<string, string>;
 		cover?: string;
-		[key: string]: string | undefined | Array<TocEntry> | boolean;
+		misc?: DynamicObject;
 	};
 
 	export type DynamicObject = {
