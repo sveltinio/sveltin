@@ -45,8 +45,8 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 ### Chores
 
-- `@sveltejs/kit` updated to `v1.3.9`
-- `@sveltejs/adapter-static` updated to `v1.0.5`
+- `@sveltejs/kit` updated to `v1.3.10`
+- `@sveltejs/adapter-static` updated to `v1.0.6`
 - `vite` updated to `v4.0.4`
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.)
 - removing unused imports from page and slug svelte files

@@ -24,8 +24,8 @@ var npmPackagesMap = map[string]string{
 	"@sveltinio/seo":           "^0.2.1",
 	"@sveltinio/services":      "^0.3.2",
 	"@sveltinio/widgets":       "^0.5.1",
-	"@sveltejs/adapter-static": "1.0.5",
-	"@sveltejs/kit":            "1.3.9",
+	"@sveltejs/adapter-static": "1.0.6",
+	"@sveltejs/kit":            "1.3.10",
 	"@types/gtag.js":           "^0.0.12",
 	"rimraf":                   "^4.1.2",
 	"svelte":                   "^3.55.1",
@@ -33,7 +33,7 @@ var npmPackagesMap = map[string]string{
 	"svelte-preprocess":        "^5.0.1",
 	"tslib":                    "^2.5.0",
 	"typescript":               "^4.9.5",
-	"vite":                     "^4.1.0",
+	"vite":                     "^4.1.1",
 }
 
 //=============================================================================
