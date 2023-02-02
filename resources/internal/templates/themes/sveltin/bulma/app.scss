@@ -3,10 +3,12 @@
  * Variables and mixins from the src/variables.scss file are available here without importing
  */
 
+@import url(./tw-preflight.css);
+
 /* Import only what you need from Bulma */
 @import 'bulma/sass/utilities/_all';
 @import 'bulma/sass/base/_all';
-@import 'bulma/sass/elements/_all';
+//@import 'bulma/sass/elements/_all';
 //@import 'bulma/sass/form/_all';
 //@import 'bulma/sass/components/_all';
 //@import 'bulma/sass/grid/_all';
@@ -19,6 +21,8 @@ html {
 }
 
 body {
+	height: 100%;
+	line-height: 1.5;
 	background-color: $white;
 	margin-left: auto;
 	margin-right: auto;
@@ -36,8 +40,13 @@ h1 {
 }
 
 a {
+	color: currentColor;
 	text-decoration: none;
-	color: inherit;
+
+	&:hover {
+		color: currentColor;
+		text-decoration: none;
+	}
 }
 
 code[class*='language-'] {
@@ -47,70 +56,6 @@ code[class*='language-'] {
 code[class*='language-'],
 pre[class*='language-'] {
 	line-height: 20px;
-}
-
-@media only screen and (min-width: 1024px) {
-	code[class*='language-'] {
-		font-size: 1rem !important;
-	}
-
-	code[class*='language-'],
-	pre[class*='language-'] {
-		line-height: 25px;
-	}
-}
-
-.hero-btn {
-	position: relative;
-	display: inline-flex;
-	align-items: center;
-	padding-left: 0.5rem /* 8px */;
-	padding-right: 0.5rem /* 8px */;
-	padding-top: 0.5rem /* 8px */;
-	padding-bottom: 0.5rem /* 8px */;
-	font-size: 0.875rem /* 14px */;
-	font-weight: 500;
-	border-width: 2px;
-	border-style: solid;
-
-	@include from($lg) {
-		padding-left: 2rem /* 32px */;
-		padding-right: 2rem /* 32px */;
-	}
-}
-
-.hero-btn-base {
-	margin-left: -1px;
-	color: $dark;
-	border-top-right-radius: 0.5rem /* 8px */;
-	border-bottom-right-radius: 0.5rem /* 8px */;
-	border-color: $color-text-base;
-
-	&:focus {
-		z-index: 10;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-	}
-}
-
-.hero-btn-accent {
-	color: $white;
-	background-color: $color-text-base;
-	border-top-left-radius: 0.5rem /* 8px */;
-	border-bottom-left-radius: 0.5rem /* 8px */;
-	border-color: $color-text-base;
-
-	&:hover {
-		color: $white;
-		background-color: $dark;
-	}
-
-	&:focus {
-		z-index: 10;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		border-color: $white;
-	}
 }
 
 .artifact-container {
@@ -157,8 +102,8 @@ pre[class*='language-'] {
 	border-radius: 0.375rem /* 6px */;
 }
 
-.warning {
-	background-color: rgb(254 215 170);
+.message--warning {
+	background-color: $orange;
 }
 
 .text-default {
@@ -172,4 +117,23 @@ pre[class*='language-'] {
 	max-width: 980px;
 	margin: 0 auto;
 	padding: 45px;
+}
+
+.markdown-body a {
+	color: currentColor;
+}
+
+.markdown-body a:hover {
+	text-decoration: none;
+}
+
+@media only screen and (min-width: 1024px) {
+	code[class*='language-'] {
+		font-size: 1rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 25px;
+	}
 }

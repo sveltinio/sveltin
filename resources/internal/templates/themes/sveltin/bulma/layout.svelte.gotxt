@@ -19,7 +19,7 @@
 <GoogleFonts fonts={googleFonts} />
 
 <div
-	class="main-container is-full is-flex is-flex-direction-column is-justify-content-center"
+	class="is-relative is-fullhd is-flex is-flex-direction-column is-justify-content-center"
 	style="min-height: 100vh;"
 >
 	<main class="is-flex-grow-1">
