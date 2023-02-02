@@ -2,66 +2,42 @@
 	import { Link } from '@sveltinio/essentials';
 </script>
 
-<section class="hero">
-	<div class="content">
-		<div class="wrapper">
-			<div class="subwrapper">
-				<div class="herotext">
-					<h1>
-						Your Sveltin project is <span class="accent"
-							>up & running!</span
-						>
-					</h1>
+<section>
+	<h1>
+		Your Sveltin project is <span class="accent">up & running!</span>
+	</h1>
 
-					<div class="buttons-wrapper">
-						<Link
-							id="quickStartLink"
-							external
-							icon={false}
-							href="https://docs.sveltin.io/quick-start"
-							class="hero-btn hero-btn-accent">Quick Start</Link
-						>
+	<div class="buttons-wrapper">
+		<Link
+			id="quickStartLink"
+			external
+			icon={false}
+			href="https://docs.sveltin.io/quick-start"
+			class="hero-btn hero-btn--accent">Quick Start</Link
+		>
 
-						<Link
-							id="documentationLink"
-							external
-							icon={false}
-							href="https://docs.sveltin.io"
-							class="hero-btn hero-btn-base">Read the Docs</Link
-						>
-					</div>
-				</div>
-			</div>
-		</div>
+		<Link
+			id="documentationLink"
+			external
+			icon={false}
+			href="https://docs.sveltin.io"
+			class="hero-btn hero-btn--base">Read the Docs</Link
+		>
 	</div>
 </section>
 
 <style>
-	.hero > .content {
+	section {
 		max-width: 80rem /* 1280px */;
 		margin-left: auto;
 		margin-right: auto;
-	}
-
-	.hero > .content > .wrapper {
 		padding-top: 11rem /* 176px */;
 		padding-bottom: 11rem /* 176px */;
-	}
-
-	.subwrapper {
-		max-width: 64rem /* 1024px */;
 		padding-left: 1.5rem /* 24px */;
 		padding-right: 1.5rem /* 24px */;
-		margin-left: auto;
-		margin-right: auto;
 	}
 
-	.herotext {
-		padding-bottom: 6rem /* 96px */;
-		text-align: center;
-	}
-
-	.herotext h1 {
+	h1 {
 		font-size: 1.875rem /* 30px */;
 		font-weight: 700;
 		text-align: center;
@@ -88,20 +64,70 @@
 		margin-top: 1rem /* 16px */;
 	}
 
-	@media (min-width: 640px) {
-		.herotext h1 {
+	:global(.hero-btn) {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		padding-top: 0.5rem /* 8px */;
+		padding-right: 0.5rem /* 8px */;
+		padding-bottom: 0.5rem /* 8px */;
+		padding-left: 0.5rem /* 8px */;
+		font-size: 0.875rem /* 14px */;
+		font-weight: 500;
+		border-width: 2px;
+		border-style: solid;
+	}
+
+	:global(.hero-btn--base) {
+		margin-left: -1px;
+		color: var(--dark);
+		border-top-right-radius: 0.5rem /* 8px */;
+		border-bottom-right-radius: 0.5rem /* 8px */;
+		border-color: var(--color-text-base);
+	}
+
+	:global(.hero-btn--base:focus) {
+		z-index: 10;
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+	}
+
+	:global(.hero-btn--accent) {
+		color: var(--white);
+		background-color: var(--color-text-base);
+		border-top-left-radius: 0.5rem /* 8px */;
+		border-bottom-left-radius: 0.5rem /* 8px */;
+		border-color: var(--color-text-base);
+	}
+
+	:global(.hero-btn--accent:hover) {
+		color: var(--white);
+		background-color: var(--dark);
+	}
+
+	:global(.hero-btn--accent:focus) {
+		z-index: 10;
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+		border-color: var(--white);
+	}
+
+	@media only screen and (min-width: 640px) {
+		h1 {
 			font-size: 2.25rem /* 36px */;
 		}
 	}
 
-	@media (min-width: 1024px) {
-		.subwrapper {
-			padding-left: 4rem /* 64px */;
-			padding-right: 4rem /* 64px */;
+	@media only screen and (min-width: 1024px) {
+		h1 {
+			font-size: 3rem /* 48px */;
 		}
 
-		.herotext h1 {
-			font-size: 3rem /* 48px */;
+		:global(.hero-btn) {
+			padding-top: 0.5rem /* 8px */;
+			padding-right: 0.75rem /* 8px */;
+			padding-bottom: 0.5rem /* 8px */;
+			padding-left: 0.75rem /* 8px */;
 		}
 	}
 </style>
