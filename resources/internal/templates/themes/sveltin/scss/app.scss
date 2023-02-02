@@ -1,21 +1,21 @@
+/*
+ * Write your global styles here, in SCSS syntax.
+ * Variables and mixins from the src/variables.scss file are available here without importing
+ */
+
 @import url(./tw-preflight.css);
 
 html {
+	height: 100%;
 	scroll-behavior: smooth;
 }
 
 body {
+	height: 100%;
+	line-height: 1.5;
 	background-color: $white;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-ol,
-ul,
-menu {
-	list-style: none;
-	margin: 0;
-	padding: 0;
 }
 
 main {
@@ -24,7 +24,7 @@ main {
 
 h1 {
 	color: $color-text-base;
-	margin-top: 0.75rem;
+	margin-top: 0.75rem /* 12px */;
 	margin-bottom: 32px;
 	margin-left: auto;
 	margin-right: auto;
@@ -34,8 +34,13 @@ h1 {
 }
 
 a {
+	color: currentColor;
 	text-decoration: none;
-	color: inherit;
+
+	&:hover {
+		color: currentColor;
+		text-decoration: none;
+	}
 }
 
 code[class*='language-'] {
@@ -47,17 +52,6 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-@media only screen and (min-width: 1024px) {
-	code[class*='language-'] {
-		font-size: 1rem !important;
-	}
-
-	code[class*='language-'],
-	pre[class*='language-'] {
-		line-height: 25px;
-	}
-}
-
 .main-container {
 	position: relative;
 	min-height: 100vh;
@@ -65,53 +59,6 @@ pre[class*='language-'] {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-}
-
-.hero-btn {
-	position: relative;
-	display: inline-flex;
-	align-items: center;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-	font-size: 0.875rem;
-	font-weight: 500;
-	border-width: 2px;
-	border-style: solid;
-}
-
-.hero-btn-accent {
-	color: $white;
-	background-color: $color-text-base;
-	border-top-left-radius: 0.5rem;
-	border-bottom-left-radius: 0.5rem;
-	border-color: $color-text-base;
-
-	&:hover {
-		background-color: $dark;
-	}
-
-	&:focus {
-		z-index: 10;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		border-color: $white;
-	}
-}
-
-.hero-btn-base {
-	margin-left: -1px;
-	color: $dark;
-	border-top-right-radius: 0.5rem;
-	border-bottom-right-radius: 0.5rem;
-	border-color: $color-text-base;
-
-	&:focus {
-		z-index: 10;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-	}
 }
 
 .artifact-container {
@@ -133,20 +80,20 @@ pre[class*='language-'] {
 
 		h1 {
 			text-align: left;
-			line-height: 2rem;
-			font-size: 1.5rem;
+			line-height: 2rem /* 32px */;
+			font-size: 1.5rem /* 24px */;
 			font-weight: 500;
 			margin-left: 0px;
 			margin-right: 0px;
+			margin-bottom: 32px;
 		}
-
 		h2 {
 			text-align: left;
-			font-size: 1.25rem;
+			font-size: 1.25rem /* 20px */;
 			font-weight: 400;
-			line-height: 1.75rem;
-			margin-top: 0.5rem;
-			margin-bottom: 0.5rem;
+			line-height: 1.75rem /* 28px */;
+			margin-top: 0.5rem /* 8px */;
+			margin-bottom: 0.5rem /* 8px */;
 			margin-left: 0px;
 			margin-right: 0px;
 		}
@@ -154,29 +101,17 @@ pre[class*='language-'] {
 }
 
 .message {
-	padding: 0.5rem 1rem;
-	border-radius: 0.375rem;
+	padding: 0.5rem 1rem /* 8px 16px */;
+	border-radius: 0.375rem /* 6px */;
 }
 
-.warning {
-	background-color: rgb(254 215 170);
+.message--warning {
+	background-color: $orange;
 }
 
 .text-default {
-	font-size: 1rem;
-	line-height: 1.5rem;
-}
-
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border-width: 0;
+	font-size: 1rem /* 16px */;
+	line-height: 1.5rem /* 24px */;
 }
 
 .markdown-body {
@@ -185,20 +120,25 @@ pre[class*='language-'] {
 	max-width: 980px;
 	margin: 0 auto;
 	padding: 45px;
-}
 
-@media (min-width: 1024px) {
-	.subwrapper {
-		padding-left: 4rem;
-		padding-right: 4rem;
+	a {
+		color: currentColor;
+		text-decoration: none;
 
-		> .herotext h1 {
-			font-size: 3rem;
+		&:hover {
+			color: currentColor;
+			text-decoration: none;
 		}
 	}
+}
 
-	.btn {
-		padding-left: 2rem;
-		padding-right: 2rem;
+@media only screen and (min-width: 1024px) {
+	code[class*='language-'] {
+		font-size: 1rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 25px;
 	}
 }
