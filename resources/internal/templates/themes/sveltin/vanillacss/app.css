@@ -65,6 +65,7 @@ pre[class*='language-'] {
 	flex-direction: column;
 	justify-content: center;
 }
+
 .artifact-container {
 	color: var(--dark);
 	margin-top: 1.75rem;
