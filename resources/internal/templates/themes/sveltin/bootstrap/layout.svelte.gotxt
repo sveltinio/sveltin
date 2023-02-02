@@ -18,8 +18,8 @@
 
 <GoogleFonts fonts={googleFonts} />
 
-<div class="w-full min-vh-100 d-flex flex-column justify-content-center">
-	<main class="flex-grow-1">
+<div class="main-container">
+	<main>
 		<slot />
 	</main>
 

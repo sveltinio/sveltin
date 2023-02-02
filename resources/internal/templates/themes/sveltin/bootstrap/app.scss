@@ -52,6 +52,10 @@ body {
 	margin-right: auto;
 }
 
+main {
+	flex-grow: 1;
+}
+
 h1 {
 	color: $color-text-base;
 	margin-top: 0.75rem /* 12px */;

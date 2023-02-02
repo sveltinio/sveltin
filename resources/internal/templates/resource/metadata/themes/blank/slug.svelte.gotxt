@@ -18,7 +18,7 @@
 				{/each}
 			</ul>
 		{:else}
-			<h2 class="message warning">
+			<h2 class="message message--warning">
 				Please, check all your content files ensuring the YAML frontmatter contains "<i>Category</i>".
 			</h2>
 		{/if}
