@@ -9,8 +9,8 @@
 	import { TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
-	$: ({ actual, before, after, mdsvexComponent } = data);
 
+	$: ({ actual, before, after, mdsvexComponent } = data);
 	$: current = actual;
 	$: previous = before;
 	$: next = after;
@@ -44,50 +44,64 @@
 />
 
 <article>
-	<div style="padding: 20px">
-		<h1>{current.metadata.title}</h1>
-		<div>
-			{#if current.metadata.created_at}
-				<time datetime={current.metadata.created_at}>
-					Created At {current.metadata.created_at}
-				</time>
-			{/if}
-			{#if current.metadata.updated_at}
-				<time datetime={current.metadata.updated_at}>
-					Updated On {current.metadata.updated_at}
-				</time>
-			{/if}
-			{#if current.metadata.readingTime}
-				<p><span>{current.metadata.readingTime.text}</span></p>
-			{/if}
-		</div>
-		{#if current.metadata.cover}
-			<div>
-				<img
-					src="/resources/{current.resource}/{current.metadata.slug}/{current.metadata.cover}"
-					alt="cover image for {current.metadata.title}"
-				/>
-			</div>
+	<h1>{current.metadata.title}</h1>
+	<div>
+		{#if current.metadata.created_at}
+			<time datetime={current.metadata.created_at}>
+				Created At {current.metadata.created_at}
+			</time>
 		{/if}
-		<div>
-			<TOC data={current.metadata.headings} />
-
-			<div class="markdown-body">
-				<svelte:component this={mdsvexComponent} />
-			</div>
-		</div>
-
-		<PagesNavigator
-			prev={ {
-				label: previous.metadata.title,
-				href: `${base}/${previous.resource}/${previous.metadata.slug}`,
-				alt: `link to ${previous.metadata.title}`
-			} }
-			next={ {
-				label: next.metadata.title,
-				href: `${base}/${next.resource}/${next.metadata.slug}`,
-				alt: `link to ${next.metadata.title}`
-			} }
-		/>
+		{#if current.metadata.updated_at}
+			<time datetime={current.metadata.updated_at}>
+				Updated On {current.metadata.updated_at}
+			</time>
+		{/if}
+		{#if current.metadata.readingTime}
+			<p><span>{current.metadata.readingTime.text}</span></p>
+		{/if}
 	</div>
+	{#if current.metadata.cover}
+		<img
+			src="/resources/{current.resource}/{current.metadata.slug}/{current.metadata.cover}"
+			alt="cover image for {current.metadata.title}"
+		/>
+	{/if}
+
+	<TOC data={current.metadata.headings} />
+
+	<div class="markdown-body">
+		<svelte:component this={mdsvexComponent} />
+	</div>
+
+	<PagesNavigator
+		prev={ {
+			label: previous.metadata.title,
+			href: `${base}/${previous.resource}/${previous.metadata.slug}`,
+			alt: `link to ${previous.metadata.title}`
+		} }
+		next={ {
+			label: next.metadata.title,
+			href: `${base}/${next.resource}/${next.metadata.slug}`,
+			alt: `link to ${next.metadata.title}`
+		} }
+	/>
 </article>
+
+<style>
+	article {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 16px auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+	h1 {
+		font-size: 2em;
+	}
+
+	img {
+		margin: 8px 0;
+	}
+</style>

@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 
 	export let data: PageData;
+
 	$: ({ metadata } = data);
 </script>
 {{ $mdName := .Metadata.Name | ToVariableName}}
@@ -16,7 +17,9 @@
 			</h2>
 			<ul>
 				{#each {{ $mdName }}.items as item}
-					<li><a data-sveltekit-preload-data="hover" href="{base}/{{.Metadata.Resource}}/{item.slug}">{item.title}</a></li>
+					<li>
+						<a data-sveltekit-preload-data="hover" href="{base}/{{.Metadata.Resource}}/{item.slug}">{item.title}</a>
+					</li>
 				{/each}
 			</ul>
 			{/each}

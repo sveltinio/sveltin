@@ -10,8 +10,8 @@
 	import { toTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let data: PageData;
-	$: ({ resourceName, items } = data);
 
+	$: ({ resourceName, items } = data);
 	$: postsIndexPage = <SEOWebPageMetadata>{
 		url: getPageUrl(resourceName, website),
 		title: website.name,
@@ -25,7 +25,6 @@
 			type: TwitterCardType.Summary
 		}
 	};
-
 	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
 </script>
 
@@ -42,7 +41,11 @@
 		{#if items.length != 0}
 			<h1>{toTitle(resourceName)}</h1>
 			{#each items as item}
-				<Card title={item.metadata.title} content={item.metadata.headline}>
+				<Card
+					title={item.metadata.title}
+					content={item.metadata.headline}
+					href="{base}/{item.resource}/{item.metadata.slug}"
+				>
 					<CardImage
 						slot="cardImage"
 						alt={item.metadata.title}

@@ -11,8 +11,8 @@
 	import { toTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
 
 	export let data: PageData;
-	$: ({ resourceName, items } = data);
 
+	$: ({ resourceName, items } = data);
 	$: {{ $varName }}IndexPage = <SEOWebPageMetadata>{
 		url: getPageUrl(resourceName, website),
 		title: website.name,
@@ -44,7 +44,11 @@
 			<h1>{toTitle(resourceName)}</h1>
 			<div class="cards">
 				{#each items as item}
-					<Card title={item.metadata.title} content={item.metadata.headline}>
+					<Card
+					title={item.metadata.title}
+					content={item.metadata.headline}
+					href="{base}/{item.resource}/{item.metadata.slug}"
+					>
 						<CardImage
 							slot="cardImage"
 							alt={item.metadata.title}

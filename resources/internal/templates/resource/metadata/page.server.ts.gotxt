@@ -1,10 +1,10 @@
-import type { Sveltin } from '$sveltin';
 {{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
+import type { Sveltin } from '$sveltin';
 import { all } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 
 export async function load() {
 	const data = await all();
-	const metadata = data as unknown as Array<Sveltin.YAMLFrontmatter>;
+	const metadata = data as unknown as Array<Sveltin.ContentMetadata>;
 	return {
 		metadata: metadata
 	};

@@ -9,8 +9,8 @@
 	import { TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
-	$: ({ actual, before, after, mdsvexComponent } = data);
 
+	$: ({ actual, before, after, mdsvexComponent } = data);
 	$: current = actual;
 	$: previous = before;
 	$: next = after;
@@ -44,7 +44,6 @@
 />
 
 <article class="artifact-container">
-	<div class="content">
 		<h1>{current.metadata.title}</h1>
 		<div class="entry-meta">
 			{#if current.metadata.created_at}
@@ -69,12 +68,11 @@
 				/>
 			</div>
 		{/if}
-		<div>
-			<TOC data={current.metadata.headings} class="sveltin" />
 
-			<div class="markdown-body">
-				<svelte:component this={mdsvexComponent} />
-			</div>
+		<TOC data={current.metadata.headings} class="sveltin" />
+
+		<div class="markdown-body">
+			<svelte:component this={mdsvexComponent} />
 		</div>
 
 		<PagesNavigator
@@ -89,7 +87,6 @@
 				alt: `link to ${next.metadata.title}`
 			} }
 		/>
-	</div>
 </article>
 
 
