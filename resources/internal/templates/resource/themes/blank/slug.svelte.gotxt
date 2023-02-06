@@ -1,11 +1,13 @@
+{{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
-	import { base } from '$app/paths';
 	import type { PageData } from './$types';
 	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
+	import { base } from '$app/paths';
+	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
+	import { canonicalPageUrl, definePageKeywords, getCoverImagePath } from '$lib/utils/strings.js';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
 	import { TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
@@ -15,11 +17,11 @@
 	$: previous = before;
 	$: next = after;
 
-	$: slugPageData = <SEOWebPageMetadata>{
-		url: getSlugPageUrl(current, website),
+	$: {{ $resourceName }}SlugPage = <SEOWebPageMetadata>{
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: current.metadata.title,
 		description: current.metadata.headline,
-		keywords: website.keywords ? website.keywords : '',
+		keywords: definePageKeywords(current.metadata.keywords, website.keywords),
 		author: current.metadata.author,
 		image: getCoverImagePath(current, website),
 		opengraph: {
@@ -35,12 +37,12 @@
 	};
 </script>
 
-<PageMetaTags data={slugPageData} />
-<JsonLdWebPage data={slugPageData} />
+<PageMetaTags data={ {{ $resourceName }}SlugPage } />
+<JsonLdWebPage data={ {{ $resourceName }}SlugPage } />
 <JsonLdBreadcrumbs
 	baseURL={website.baseURL}
 	parent={current.resource}
-	current={slugPageData.title}
+	current={ {{ $resourceName }}SlugPage.title }
 />
 
 <article>

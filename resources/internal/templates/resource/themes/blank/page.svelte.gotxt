@@ -1,3 +1,4 @@
+{{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
 	import { base, assets } from '$app/paths';
 	import type { PageData } from './$types';
@@ -7,16 +8,21 @@
 	import { Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { toTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, toTitle, definePageKeywords, getFavicon } from '$lib/utils/strings.js';
 
 	export let data: PageData;
 
+	const pageDescription = `Here you can find the list of all available {{ .Resource.Name }}.`;
+	// page keywords as comma separeted values
+	const pageKeywords: Array<string> = [];
+
 	$: ({ resourceName, items } = data);
-	$: postsIndexPage = <SEOWebPageMetadata>{
-		url: getPageUrl(resourceName, website),
-		title: website.name,
-		description: 'Here you can find the list of all available posts.',
-		keywords: website.keywords ? website.keywords : '',
+	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
+	$: {{ $resourceName }}IndexPage = <SEOWebPageMetadata> {
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
+		title: toTitle(resourceName),
+		description: pageDescription,
+		keywords: definePageKeywords(pageKeywords, website.keywords),
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Website
@@ -25,15 +31,14 @@
 			type: TwitterCardType.Summary
 		}
 	};
-	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
 </script>
 
-<PageMetaTags data={postsIndexPage} />
-<JsonLdWebPage data={postsIndexPage} />
+<PageMetaTags data={ {{ $resourceName }}IndexPage } />
+<JsonLdWebPage data={ {{ $resourceName }}IndexPage } />
 <JsonLdBreadcrumbs
 	baseURL={website.baseURL}
 	parent={resourceName}
-	current={postsIndexPage.title}
+	current={ {{ $resourceName }}IndexPage.title }
 />
 
 <section>

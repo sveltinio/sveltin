@@ -1,10 +1,11 @@
 ---
+layout: page
 title: {{ .Page.Name | ToTitle | Capitalize }}
 author: YOUR_NAME
 headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
+keywords: []
 created_at: {{ Today }}
 updated_at: {{ Today }}
-layout: page
 ---
 
 # {title}

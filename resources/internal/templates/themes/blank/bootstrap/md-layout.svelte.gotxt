@@ -1,33 +1,28 @@
 <!--
-   A component wrapping the mdsvex document.
-   Used as layout for markdown content pages by mdsvex.
-   It receives all values defined in frontmatter as props.
+   A layout component for markdown content pages wrapping the mdsvex document.
 
    **Note**: The pages affected are the ones created by running:
    `sveltin new page --type markdown`
 
    Refer to: https://mdsvex.pngwn.io/docs#layouts
 -->
-
 <script>
+	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { getFavicon, getPageUrl, capitalizeFirstLetter } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, definePageKeywords, getFavicon } from '$lib/utils/strings.js';
 
+	/* All values defined in frontmatter are available as props.*/
 	export let title;
-	/* All values defined in frontmatter are available as props.
-	export let author;
 	export let headline;
-	export let created_at;
-	export let updated_at;
-	*/
+	export let keywords;
 
-	const pageSEOData = {
-		url: getPageUrl(title, website),
-		title: capitalizeFirstLetter(title),
-		description: website.seoDescription,
-		keywords: website.keywords ? website.keywords : '',
+	const mdPage = {
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
+		title: title,
+		description: headline,
+		keywords: definePageKeywords(keywords, website.keywords),
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Article
@@ -38,9 +33,9 @@
 	};
 </script>
 
-<PageMetaTags data={pageSEOData} />
-<JsonLdWebPage data={pageSEOData} />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" current={pageSEOData.title} />
+<PageMetaTags data={mdPage} />
+<JsonLdWebPage data={mdPage} />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" current={mdPage.title} />
 
 <!-- the mdsvex content will be slotted in here -->
 <slot />

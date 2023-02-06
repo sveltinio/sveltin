@@ -10,6 +10,7 @@ package migrations
 
 import (
 	"bytes"
+	"os"
 	"regexp"
 	"strings"
 
@@ -124,4 +125,18 @@ func overwriteFile(m IMigration, content []byte) error {
 		return err
 	}
 	return nil
+}
+
+func appendToFile(fs afero.Fs, filename string, contentToAppend []string, logger *yinlog.Logger) {
+	f, err := fs.OpenFile(filename, os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		logger.Fatalf("failed opening file: %s", err)
+	}
+	defer f.Close()
+
+	for _, content := range contentToAppend {
+		if _, err = f.WriteString(content); err != nil {
+			logger.Fatalf("failed writing to file: %s", err)
+		}
+	}
 }

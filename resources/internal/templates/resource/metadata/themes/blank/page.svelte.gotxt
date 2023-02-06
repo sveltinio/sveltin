@@ -1,12 +1,32 @@
+{{- $mdName := .Metadata.Name | ToVariableName -}}
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
 	import { base } from '$app/paths';
+	import { page } from '$app/stores';
+	import { website } from '$config/website.js';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { canonicalPageUrl, getFavicon, capitalizeFirstLetter } from '$lib/utils/strings.js';
 
 	export let data: PageData;
 
+	const mdName = '{{ .Metadata.Name }}';
+	const mdPageDescription = 'Here the description for the {{ .Metadata.Name | Capitalize }} index page.';
+
+	const {{ $mdName }}IndexPage: SEOWebPageMetadata = {
+		url:   canonicalPageUrl($page.url.pathname, website.baseURL),
+		title: capitalizeFirstLetter(mdName),
+		description: mdPageDescription,
+		image: getFavicon(website)
+	};
+
 	$: ({ metadata } = data);
 </script>
-{{ $mdName := .Metadata.Name | ToVariableName}}
+
+<PageMetaTags data={ {{ $mdName }}IndexPage } />
+<JsonLdWebPage data={ {{ $mdName }}IndexPage } />
+<JsonLdBreadcrumbs baseURL={website.baseURL} parent="{{ .Metadata.Resource }}" current={ {{ $mdName }}IndexPage.title } />
+
 <div>
 	<div>
 		<h1>Grouped by {{ .Metadata.Name | Capitalize }}</h1>

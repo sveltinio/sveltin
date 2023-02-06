@@ -26,6 +26,7 @@ export namespace Sveltin {
 		slug: string;
 		draft: boolean;
 		headings?: Array<TocEntry>;
+		keywords?: Array<string>;
 		author?: string;
 		headline?: string;
 		created_at?: string;

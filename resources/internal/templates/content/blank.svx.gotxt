@@ -1,13 +1,14 @@
 ---
+layout: false
 title: {{ .Content.Name | ToTitle }}
 author: YOUR_NAME
 slug: {{ .Content.Name | ToSlug }}
 headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
+keywords: []
 created_at: {{ Today }}
 updated_at: {{ Today }}
 cover:
 draft: false
-layout: false
 ---
 
 ## Heading 2 here

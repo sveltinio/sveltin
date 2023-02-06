@@ -90,14 +90,40 @@ func (m *RefactorResourcesLibsTypes) up() error {
 				return err
 			}
 
+			localFilePath :=
+				strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
-				localFilePath :=
-					strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
 				if _, err := m.runMigration(fileContent, file); err != nil {
 					return err
 				}
 			}
+
+			contentsToAppend := []string{}
+
+			if isStringsLib(localFilePath) && mustMigrate(fileContent, "canonicalPageUrl") {
+				const canonicalPageUrlFunction = "\nexport const canonicalPageUrl = (name: string, baseURL: string): string => baseURL.concat(name);"
+				contentsToAppend = append(contentsToAppend, canonicalPageUrlFunction)
+			}
+
+			if isStringsLib(localFilePath) && mustMigrate(fileContent, "definePageKeywords") {
+				const definePageKeywordsFunction = `
+
+export const definePageKeywords = (keywords: Array<string>, others: string): string => {
+	let result = '';
+	if (keywords && keywords.length != 0) {
+		result = keywords.join(', ');
+	} else if (isNotEmpty(others)) {
+		result = others;
+	}
+
+	return result;
+};
+`
+				contentsToAppend = append(contentsToAppend, definePageKeywordsFunction)
+			}
+
+			appendToFile(m.getServices().fs, file, contentsToAppend, m.getServices().logger)
 
 		}
 
@@ -258,4 +284,10 @@ func newToSlug(line string) *migrationRule {
 			return "toSlug"
 		},
 	}
+}
+
+//=============================================================================
+
+func isStringsLib(filename string) bool {
+	return filename == "/src/lib/utils/strings.js.ts"
 }
