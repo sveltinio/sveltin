@@ -13,7 +13,7 @@
 	</h1>
 
 	<div
-		class="is-relative mx-auto is-inline-flex is-flex-direction-row is-justify-content-center m-4"
+		class="is-relative mx-auto is-inline-flex is-flex-direction-row is-justify-content-center mt-4"
 		style="width: 100%;"
 	>
 		<Link
@@ -88,7 +88,7 @@
 
 		.hero-btn--accent {
 			color: $white;
-			font-weight: bold;
+			font-weight: 500;
 			background-color: $base;
 			border-top-left-radius: 0.5rem;
 			border-bottom-left-radius: 0.5rem;

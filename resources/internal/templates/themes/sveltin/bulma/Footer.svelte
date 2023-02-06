@@ -19,7 +19,7 @@
 			</a>
 
 			<p
-				class="has-text-grey-light has-text-weight-medium mt-5"
+				class="has-text-grey-light has-text-weight-medium mt-6"
 				style="letter-spacing: -0.2px;"
 			>
 				The CLI to Boost Your Productivity creating SvelteKit powered
