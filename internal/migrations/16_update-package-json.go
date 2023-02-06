@@ -24,7 +24,7 @@ var npmPackagesMap = map[string]string{
 	"@sveltinio/seo":           "^0.2.1",
 	"@sveltinio/services":      "^0.3.2",
 	"@sveltinio/widgets":       "^0.5.1",
-	"@sveltejs/adapter-static": "1.0.6",
+	"@sveltejs/adapter-static": "2.0.0",
 	"@sveltejs/kit":            "1.5.0",
 	"@types/gtag.js":           "^0.0.12",
 	"rimraf":                   "^4.1.2",
