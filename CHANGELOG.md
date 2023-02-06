@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v0.11.0](https://github.com/sveltinio/sveltin/releases/tag/v0.11.0) (2023-01-XX)
+## [v0.11.0](https://github.com/sveltinio/sveltin/releases/tag/v0.11.0) (2023-02-XX)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.10.1...v0.11.0)
 
@@ -12,7 +12,8 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 - `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release.
 - `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell)
 - active helps: by using `TAB` after the command name shows a message about params or flags
-- mdsvex config: set a layout component for pages created by running `sveltin new page` command.
+- mdsvex config: set a layout component for pages created by running `sveltin new page` command
+- SEO keywords per page
 
 ### Fixed Bugs
 
@@ -42,12 +43,13 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 - renaming ProjectData struct as EnvProductionData
 - fileNotFound error now display the file path
 - **cmds:** prompt handlers moved to tui/prompts
+- `sveltin` theme: simplified components structure and styles. Lint style files with [stylelint](https://stylelint.io/)
 
 ### Chores
 
-- `@sveltejs/kit` updated to `v1.3.10`
+- `@sveltejs/kit` updated to `v1.5.0`
 - `@sveltejs/adapter-static` updated to `v1.0.6`
-- `vite` updated to `v4.0.4`
+- `vite` updated to `v4.1.1`
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.)
 - removing unused imports from page and slug svelte files
 - **go deps:**
