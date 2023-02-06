@@ -1,7 +1,9 @@
-@import url(./tw-preflight.css);
+@charset "utf-8";
+
+@import url('./tw-preflight.css');
 
 :root {
-	--white: #ffffff;
+	--white: #fff;
 	--dark: #2c2c35;
 	--orange: #fed7aa;
 	--deep-dark: #1e2028;
@@ -37,12 +39,12 @@ h1 {
 }
 
 a {
-	color: currentColor;
+	color: currentcolor;
 	text-decoration: none;
 }
 
 a:hover {
-	color: currentColor;
+	color: currentcolor;
 	text-decoration: none;
 }
 
@@ -66,10 +68,7 @@ pre[class*='language-'] {
 
 .page-wrapper {
 	color: var(--dark);
-	margin-top: 1.75rem;
-	margin-bottom: 1.75rem;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 1.75rem auto;
 	display: flex;
 	max-width: 56rem;
 	flex-direction: column;
@@ -131,11 +130,12 @@ pre[class*='language-'] {
 }
 
 .markdown-body a {
-	color: currentColor;
+	color: currentcolor;
 	text-decoration: none;
 }
+
 .markdown-body a:hover {
-	color: currentColor;
+	color: currentcolor;
 	text-decoration: none;
 }
 

@@ -1,9 +1,10 @@
+@charset "utf-8";
+
+@import url('./tw-preflight.css');
+
 /*
- * Write your global styles here, in SCSS syntax.
  * Variables and mixins from the src/variables.scss file are available here without importing
  */
-
-@import url(./tw-preflight.css);
 
 /* Import only what you need from Bootstrap */
 //@import 'bootstrap/scss/root';
@@ -66,11 +67,11 @@ h1 {
 }
 
 a {
-	color: currentColor;
+	color: currentcolor;
 	text-decoration: none;
 
 	&:hover {
-		color: currentColor;
+		color: currentcolor;
 		text-decoration: none;
 	}
 }
@@ -95,10 +96,7 @@ pre[class*='language-'] {
 
 .page-wrapper {
 	color: $dark;
-	margin-top: 1.75rem;
-	margin-bottom: 1.75rem;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 1.75rem auto;
 	display: flex;
 	max-width: 56rem;
 	flex-direction: column;
@@ -159,11 +157,11 @@ pre[class*='language-'] {
 	padding: 45px;
 
 	a {
-		color: currentColor;
+		color: currentcolor;
 		text-decoration: none;
 
 		&:hover {
-			color: currentColor;
+			color: currentcolor;
 			text-decoration: none;
 		}
 	}

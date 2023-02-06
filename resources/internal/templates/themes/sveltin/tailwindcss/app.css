@@ -1,10 +1,12 @@
+@charset "utf-8";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
 	:root {
-		--white: #ffffff;
+		--white: #fff;
 		--dark: #2c2c35;
 		--deep-dark: #1e2028;
 		--base: #464a5d;
