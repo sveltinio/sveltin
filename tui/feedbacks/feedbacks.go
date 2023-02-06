@@ -46,7 +46,7 @@ func ShowNewProjectWithExistingThemeNextStepsHelpMessage(uc *config.ProjectConfi
 
 // ShowNewResourceHelpMessage prints an help message string for 'resource creation'.
 func ShowNewResourceHelpMessage(name string) {
-	exampleString := fmt.Sprintf("sveltin add content %s/getting-started", name)
+	exampleString := fmt.Sprintf("sveltin add content getting-started --to %s", name)
 	entries := []string{
 		markup.P("Start by adding content to it, e.g."),
 		markup.BR,
@@ -62,9 +62,11 @@ func ShowNewMetadataHelpMessage(metadataInfo *tpltypes.MetadataData) {
 	if metadataInfo.Type == "single" {
 		exampleString = fmt.Sprintf("%s: your_value", utils.ToSnakeCase(metadataInfo.Name))
 	} else {
-		exampleString = utils.ToSnakeCase(metadataInfo.Name) + `:
+		exampleString = fmt.Sprintf(`%[1]v:
   - value 1
-  - value 2`
+  - value 2
+
+or %[1]v: ['value_1', 'value_2']`, utils.ToSnakeCase(metadataInfo.Name))
 	}
 
 	entries := []string{
