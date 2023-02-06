@@ -63,6 +63,7 @@ func (m *UpdateMDsveXPlugins) up() error {
 			return err
 		}
 
+		gatekeeper := "rehypeExternalLinks"
 		migrationTriggers := []string{
 			patterns[remarkExtLinksImport],
 			patterns[remarkSlugImport],
@@ -72,7 +73,7 @@ func (m *UpdateMDsveXPlugins) up() error {
 			patterns[rehypeSlugUsage],
 		}
 
-		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
+		if mustMigrate(fileContent, gatekeeper) && patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
