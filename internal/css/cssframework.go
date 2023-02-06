@@ -383,7 +383,7 @@ func copyAdditionalConfigFiles(embeddedResources map[string]string, cssLib *CSSL
 func copyStylesheets(embeddedResources map[string]string, cssLib *CSSLib) error {
 
 	switch cssLib.Name {
-	case Scss, VanillaCSS:
+	case Bootstrap, Bulma, Scss, VanillaCSS:
 		// Copying tw-preflight.css file
 		sourceFile := embeddedResources[ResetCSSFileId]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "tw-preflight.css")
