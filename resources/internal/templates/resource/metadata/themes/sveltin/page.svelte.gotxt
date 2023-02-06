@@ -7,8 +7,8 @@
 	$: ({ metadata } = data);
 </script>
 {{ $mdName := .Metadata.Name | ToVariableName}}
-<div class="artifact-container">
-	<div class="content">
+<div class="page-wrapper">
+	<div class="page-wrapper__content">
 		<h1>Grouped by {{ .Metadata.Name | Capitalize }}</h1>
 		{#if metadata.length != 0}
 			{#each metadata as {{ $mdName}} }

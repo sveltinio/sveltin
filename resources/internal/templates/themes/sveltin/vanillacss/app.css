@@ -5,9 +5,9 @@
 	--dark: #2c2c35;
 	--orange: #fed7aa;
 	--deep-dark: #1e2028;
-	--color-text-base: #464a5d;
-	--color-text-muted: #a0a1b2;
-	--color-text-accent: #0b7599;
+	--base: #464a5d;
+	--muted: #a0a1b2;
+	--accent: #0b7599;
 }
 
 html {
@@ -28,9 +28,7 @@ main {
 }
 
 h1 {
-	color: var(--color-text-base);
-	margin-top: 0.75rem /* 12px */;
-	margin-bottom: 32px;
+	color: var(--base);
 	margin-left: auto;
 	margin-right: auto;
 	transition-property: all;
@@ -66,7 +64,7 @@ pre[class*='language-'] {
 	justify-content: center;
 }
 
-.artifact-container {
+.page-wrapper {
 	color: var(--dark);
 	margin-top: 1.75rem;
 	margin-bottom: 1.75rem;
@@ -79,35 +77,28 @@ pre[class*='language-'] {
 	padding: 2.75rem;
 }
 
-.artifact-container > .content {
+.page-wrapper__content {
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
 }
 
-.artifact-container > .content h1 {
-	text-align: left;
-	line-height: 2rem /* 32px */;
-	font-size: 1.5rem /* 24px */;
+:is(.page-wrapper, .page-wrapper__content) h1 {
+	margin-bottom: 2rem;
 	font-weight: 500;
-	margin-left: 0px;
-	margin-right: 0px;
+	font-size: 1.875rem;
+	line-height: 2.25rem;
 }
 
-.artifact-container > .content h2 {
-	text-align: left;
-	font-size: 1.25rem /* 20px */;
-	font-weight: 400;
-	line-height: 1.75rem /* 28px */;
-	margin-top: 0.5rem /* 8px */;
-	margin-bottom: 0.5rem /* 8px */;
-	margin-left: 0px;
-	margin-right: 0px;
+.page-wrapper__content h2 {
+	font-weight: 500;
+	font-size: 1.5rem;
+	line-height: 2rem;
 }
 
 .message {
-	padding: 0.5rem 1rem /* 8px 16px */;
-	border-radius: 0.375rem /* 6px */;
+	padding: 0.5rem 1rem;
+	border-radius: 0.375rem;
 }
 
 .message--warning {
@@ -115,8 +106,8 @@ pre[class*='language-'] {
 }
 
 .text-default {
-	font-size: 1rem /* 16px */;
-	line-height: 1.5rem /* 24px */;
+	font-size: 1rem;
+	line-height: 1.5rem;
 }
 
 .sr-only {

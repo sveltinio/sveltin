@@ -8,11 +8,11 @@
 /* additional colours */
 $white: #ffffff;
 $dark: #2c2c35;
-$orange: #fed7aa;
 $deep-dark: #1e2028;
-$color-text-base: #464a5d;
-$color-text-muted: #a0a1b2;
-$color-text-accent: #0b7599;
+$base: #464a5d;
+$muted: #a0a1b2;
+$cyan: #0b7599;
+$orange: #fed7aa;
 
 $spacer: 1rem;
 $spacers: (
@@ -252,8 +252,8 @@ $utilities: map-merge(
 						map-merge(
 							map-get(map-get($utilities, 'color'), 'values'),
 							(
-								'teal': $color-text-accent,
-								'muted': $color-text-muted,
+								'cyan': $cyan,
+								'muted': $muted,
 								'dark': $dark,
 							)
 						),

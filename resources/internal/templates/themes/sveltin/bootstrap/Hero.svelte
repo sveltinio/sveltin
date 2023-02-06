@@ -28,26 +28,26 @@
 
 <style lang="scss">
 	section {
-		max-width: 80rem /* 1280px */;
+		max-width: 80rem;
 		margin-left: auto;
 		margin-right: auto;
-		padding-top: 11rem /* 176px */;
-		padding-bottom: 11rem /* 176px */;
-		padding-left: 1.5rem /* 24px */;
-		padding-right: 1.5rem /* 24px */;
+		padding-top: 11rem;
+		padding-bottom: 11rem;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
 	}
 
 	h1 {
-		font-size: 1.875rem /* 30px */;
+		font-size: 1.875rem;
 		font-weight: 700;
 		text-align: center;
-		letter-spacing: -0.05em;
-		padding-bottom: 1rem /* 16px */;
+		letter-spacing: -0.025em;
 		line-height: 1.25;
+		padding-bottom: 1rem;
 	}
 
 	.accent {
-		color: $color-text-accent;
+		color: $cyan;
 		font-style: italic;
 		font-weight: 400;
 		display: block;
@@ -61,18 +61,18 @@
 		width: 100%;
 		margin-left: auto;
 		margin-right: auto;
-		margin-top: 1rem /* 16px */;
+		margin-top: 1rem;
 	}
 
 	@media (min-width: 640px) {
 		h1 {
-			font-size: 2.25rem /* 36px */;
+			font-size: 2.25rem;
 		}
 	}
 
 	@media (min-width: 1024px) {
 		h1 {
-			font-size: 3rem /* 48px */;
+			font-size: 3rem;
 		}
 	}
 
@@ -81,56 +81,44 @@
 			position: relative;
 			display: inline-flex;
 			align-items: center;
-			padding-top: 0.5rem /* 8px */;
-			padding-right: 0.5rem /* 8px */;
-			padding-bottom: 0.5rem /* 8px */;
-			padding-left: 0.5rem /* 8px */;
-			font-size: 0.875rem /* 14px */;
+			padding-top: 0.5rem;
+			padding-right: 0.5rem;
+			padding-bottom: 0.5rem;
+			padding-left: 0.5rem;
+			font-size: 0.875rem;
 			font-weight: 500;
-			border-width: 2px;
-			border-style: solid;
+			line-height: 1.25rem;
+			border: 2px solid $base;
+
+			&:focus {
+				outline: 2px solid transparent;
+				outline-offset: 2px;
+			}
 		}
 
 		.hero-btn--base {
 			margin-left: -1px;
 			color: $dark;
-			border-top-right-radius: 0.5rem /* 8px */;
-			border-bottom-right-radius: 0.5rem /* 8px */;
-			border-color: $color-text-base;
-
-			&:focus {
-				z-index: 10;
-				outline: 2px solid transparent;
-				outline-offset: 2px;
-			}
+			border-top-right-radius: 0.5rem;
+			border-bottom-right-radius: 0.5rem;
 		}
 
 		.hero-btn--accent {
 			color: $white;
-			background-color: $color-text-base;
-			border-top-left-radius: 0.5rem /* 8px */;
-			border-bottom-left-radius: 0.5rem /* 8px */;
-			border-color: $color-text-base;
+			background-color: $base;
+			border-top-left-radius: 0.5rem;
+			border-bottom-left-radius: 0.5rem;
 
 			&:hover {
 				color: $white;
 				background-color: $dark;
 			}
-
-			&:focus {
-				z-index: 10;
-				outline: 2px solid transparent;
-				outline-offset: 2px;
-				border-color: $white;
-			}
 		}
 
 		@media only screen and (min-width: 1024px) {
 			.hero-btn {
-				padding-top: 0.5rem /* 8px */;
-				padding-right: 0.75rem /* 8px */;
-				padding-bottom: 0.5rem /* 8px */;
-				padding-left: 0.75rem /* 8px */;
+				padding-right: 2rem;
+				padding-left: 2rem;
 			}
 		}
 	}

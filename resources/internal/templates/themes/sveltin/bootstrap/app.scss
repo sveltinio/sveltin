@@ -6,9 +6,9 @@
 @import url(./tw-preflight.css);
 
 /* Import only what you need from Bootstrap */
-@import 'bootstrap/scss/root';
-@import 'bootstrap/scss/reboot';
-@import 'bootstrap/scss/type';
+//@import 'bootstrap/scss/root';
+//@import 'bootstrap/scss/reboot';
+//@import 'bootstrap/scss/type';
 //@import 'bootstrap/scss/accordion';
 //@import 'bootstrap/scss/alert';
 //@import 'bootstrap/scss/badge';
@@ -57,9 +57,7 @@ main {
 }
 
 h1 {
-	color: $color-text-base;
-	margin-top: 0.75rem /* 12px */;
-	margin-bottom: 32px;
+	color: $base;
 	margin-left: auto;
 	margin-right: auto;
 	transition-property: all;
@@ -95,7 +93,7 @@ pre[class*='language-'] {
 	justify-content: center;
 }
 
-.artifact-container {
+.page-wrapper {
 	color: $dark;
 	margin-top: 1.75rem;
 	margin-bottom: 1.75rem;
@@ -107,36 +105,29 @@ pre[class*='language-'] {
 	justify-content: center;
 	padding: 2.75rem;
 
-	> .content {
+	&__content {
 		margin-left: auto;
 		margin-right: auto;
 		width: 100%;
 
-		h1 {
-			text-align: left;
-			line-height: 2rem /* 32px */;
-			font-size: 1.5rem /* 24px */;
-			font-weight: 500;
-			margin-left: 0px;
-			margin-right: 0px;
-			margin-bottom: 32px;
-		}
 		h2 {
-			text-align: left;
-			font-size: 1.25rem /* 20px */;
-			font-weight: 400;
-			line-height: 1.75rem /* 28px */;
-			margin-top: 0.5rem /* 8px */;
-			margin-bottom: 0.5rem /* 8px */;
-			margin-left: 0px;
-			margin-right: 0px;
+			font-weight: 500;
+			font-size: 1.5rem;
+			line-height: 2rem;
 		}
+	}
+
+	:is(&, &__content) h1 {
+		margin-bottom: 2rem;
+		font-weight: 500;
+		font-size: 1.875rem;
+		line-height: 2.25rem;
 	}
 }
 
 .message {
-	padding: 0.5rem 1rem /* 8px 16px */;
-	border-radius: 0.375rem /* 6px */;
+	padding: 0.5rem 1rem;
+	border-radius: 0.375rem;
 }
 
 .message--warning {
@@ -144,8 +135,20 @@ pre[class*='language-'] {
 }
 
 .text-default {
-	font-size: 1rem /* 16px */;
-	line-height: 1.5rem /* 24px */;
+	font-size: 1rem;
+	line-height: 1.5rem;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
 }
 
 .markdown-body {

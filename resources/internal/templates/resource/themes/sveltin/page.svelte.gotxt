@@ -38,8 +38,8 @@
 	current={ {{ $varName }}IndexPage.title}
 />
 
-<section class="artifact-container">
-	<div class="content">
+<section class="page-wrapper">
+	<div class="page-wrapper__content">
 		{#if items.length != 0}
 			<h1>{toTitle(resourceName)}</h1>
 			<div class="cards">
@@ -59,7 +59,7 @@
 				{/each}
 			</div>
 		{:else}
-		<h2 class="message warning">
+		<h2 class="message message--warning">
 			Nothing to show here! Create some content first and reload the page:
 			<span><pre><code class="text-default">sveltin new content {pathname}/getting-started</code></pre></span>
 		</h2>

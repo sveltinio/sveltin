@@ -4,12 +4,12 @@
 
 @layer base {
 	:root {
-		--pure-white: #ffffff;
-		--dark: #2c2c35 /*haiti*/;
-		--deep-dark: #1e2028 /* pearl */;
-		--color-text-base: #464a5d /*river*/;
-		--color-text-muted: #a0a1b2 /* santa */;
-		--color-text-accent: #0b7599 /* cege */;
+		--white: #ffffff;
+		--dark: #2c2c35;
+		--deep-dark: #1e2028;
+		--base: #464a5d;
+		--muted: #a0a1b2;
+		--cyan: #0b7599;
 	}
 
 	html {
@@ -17,16 +17,12 @@
 		scroll-behavior: smooth;
 	}
 
-	* {
-		box-sizing: border-box;
-	}
-
 	body {
 		@apply bg-white mx-auto font-sans;
 	}
 
 	h1 {
-		@apply mx-auto mt-3 mb-8 transition-all leading-4;
+		@apply mx-auto text-skin-base transition-all;
 	}
 
 	code[class*='language-'] {
@@ -54,39 +50,27 @@
 	@apply relative min-h-screen w-full flex flex-col justify-center;
 }
 
-.hero-btn {
-	@apply relative inline-flex items-center pl-2 pr-2 pt-2 pb-2 text-sm font-medium border-2;
-}
-
-.hero-btn-accent {
-	@apply relative inline-flex items-center px-2 py-2 text-sm font-medium text-white bg-river border-2 border-river rounded-l-lg hover:bg-haiti focus:z-10 focus:outline-none focus:ring-1 focus:ring-river focus:border-white lg:px-8;
-}
-
-.hero-btn-base {
-	@apply relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium border-2 border-river rounded-r-lg focus:z-10 focus:outline-none focus:ring-1 focus:ring-auburn focus:border-auburn lg:px-8;
-}
-
-.artifact-container {
+.page-wrapper {
 	@apply text-skin-dark flex flex-col justify-center p-11 mx-auto my-7 max-w-4xl;
 }
 
-.content {
+.page-wrapper__content {
 	@apply w-full mx-auto text-gray-800 leading-6;
 }
 
-.content h1 {
-	@apply text-left leading-8 text-2xl font-medium mx-auto break-words;
+:is(.page-wrapper, .page-wrapper__content) h1 {
+	@apply mb-8 text-3xl font-medium;
 }
 
-.content h2 {
-	@apply text-left text-xl font-normal leading-7 my-2 mx-0;
+.page-wrapper__content h2 {
+	@apply text-2xl font-medium;
 }
 
 .message {
 	@apply py-2 px-4 rounded-md;
 }
 
-.warning {
+.message--warning {
 	@apply bg-orange-200;
 }
 

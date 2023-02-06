@@ -6,15 +6,11 @@ $body-overflow-y: auto;
 /* additional colours */
 $white: #ffffff;
 $dark: #2c2c35;
-$orange: #fed7aa;
 $deep-dark: #1e2028;
-$color-text-base: #464a5d;
-$color-text-muted: #a0a1b2;
-$color-text-accent: #0b7599;
-$grey-dark: #464a5d /*river*/;
-$grey-darker: #1e2028 /* pearl */;
-$grey-light: #a0a1b2 /* santa */;
-$cyan: #0b7599 /* cege */;
+$base: #464a5d;
+$muted: #a0a1b2;
+$cyan: #0b7599;
+$orange: #fed7aa;
 
 /* breakpoints */
 $sm: 640px;
@@ -22,6 +18,13 @@ $md: 768px;
 $lg: 1024px;
 $xl: 1280px;
 $xxl: 1536px;
+
+/* screen sizes */
+$mobile: 640px;
+$tablet: 768px;
+$desktop: 1024px;
+$widescreen: 1280px;
+$fullhd: 1536px;
 
 /* sizes */
 $size-1: 3rem;
@@ -32,11 +35,6 @@ $size-5: 1.25rem;
 $size-6: 1rem;
 $size-7: 0.875rem;
 
-/* spacing */
-$spacing-shortcuts: (
-	'margin': 'mg',
-	'padding': 'pg',
-);
 $spacing-horizontal: 'x';
 $spacing-vertical: 'y';
 $spacing-values: (
@@ -70,4 +68,5 @@ $spacing-values: (
 	'72': 18rem,
 	'80': 20rem,
 	'96': 24rem,
+	'auto': auto,
 );

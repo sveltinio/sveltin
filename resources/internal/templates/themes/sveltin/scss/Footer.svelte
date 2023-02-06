@@ -5,23 +5,21 @@
 </script>
 
 <footer>
-	<div class="content">
-		<div class="wrapper">
-			<div>
-				<a href="/">
-					<img
-						src={logoSrc}
-						alt="sveltin logo"
-						style="width: 100px; height: 48px;"
-					/>
-					<span class="sr-only">Sveltin Logo</span>
-				</a>
-			</div>
+	<div class="wrapper">
+		<div class="content">
+			<a href="/">
+				<img
+					src={logoSrc}
+					alt="sveltin logo"
+					style="width: 100px; height: 48px;"
+				/>
+				<span class="sr-only">Sveltin Logo</span>
+			</a>
 			<p>
 				The CLI to Boost Your Productivity creating SvelteKit powered
 				static websites.
 			</p>
-			<p><strong>You are running Sveltin v{sveltinVersion}</strong></p>
+			<p class="semibold">You are running Sveltin v{sveltinVersion}</p>
 		</div>
 	</div>
 </footer>
@@ -29,59 +27,62 @@
 <style lang="scss">
 	footer {
 		width: 100%;
-		background-color: rgb(30 32 40 / 1);
+		background-color: $deep-dark;
 		font-size: 0.875rem;
 		line-height: 1.25rem;
-		color: $color-text-muted;
+		color: $muted;
+	}
 
-		> .content {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			flex-wrap: wrap;
-			width: 100%;
-			padding-top: 2rem;
-			padding-right: 1.25rem;
-			padding-bottom: 1.5rem;
-			padding-left: 1.25rem;
-			margin-left: auto;
-			margin-right: auto;
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		width: 100%;
+		padding-top: 2rem;
+		padding-right: 1.25rem;
+		padding-bottom: 1.5rem;
+		padding-left: 1.25rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
 
-			> .wrapper {
-				flex-shrink: 0;
-				text-align: left;
-				width: 18rem;
+	.content {
+		flex-shrink: 0;
+		text-align: left;
+		width: 18rem;
 
-				> p {
-					margin-top: 1.5rem;
-					font-size: 0.875rem;
-					color: $color-text-muted;
-				}
-			}
+		p {
+			margin-top: 1.5rem;
+			font-size: 0.875rem;
+			color: $muted;
 		}
 	}
 
+	.semibold {
+		font-weight: 600;
+	}
+
 	@media (min-width: 640px) {
-		footer > .content {
+		.wrapper {
 			padding-left: 1.5rem;
 			padding-right: 1.5rem;
 		}
 	}
 
 	@media (min-width: 768px) {
-		footer > .content {
+		.wrapper {
 			flex-direction: row;
 			align-items: center;
 		}
 	}
 
 	@media (min-width: 1024px) {
-		footer > .content {
+		.wrapper {
 			padding-left: 3rem;
 			padding-right: 3rem;
 			padding-top: 3rem;
 			padding-bottom: 3rem;
-			align-items: flex-start;
 			flex-wrap: nowrap;
 		}
 	}

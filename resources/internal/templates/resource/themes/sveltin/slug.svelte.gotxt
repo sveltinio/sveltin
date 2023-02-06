@@ -43,7 +43,7 @@
 	current={slugPageData.title}
 />
 
-<article class="artifact-container">
+<article class="page-wrapper">
 		<h1>{current.metadata.title}</h1>
 		<div class="entry-meta">
 			{#if current.metadata.created_at}

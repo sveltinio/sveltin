@@ -8,8 +8,8 @@
 	$: itemsCounter = metadata.items.length;
 </script>
 
-<div class="artifact-container">
-	<div class="content">
+<div class="page-wrapper">
+	<div class="page-wrapper__content">
 		{#if metadata}
 			<h2>{slug}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
 			<ul>

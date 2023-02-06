@@ -2,12 +2,20 @@
 	import { Link } from '@sveltinio/essentials';
 </script>
 
-<section>
-	<h1>
-		Your Sveltin project is <span class="accent">up & running!</span>
+<section class="mx-auto px-6 py-44 container is-max-widescreen">
+	<h1
+		class="pb-4 has-text-centered has-text-weight-bold is-size-3-mobile is-size-2-tablet is-size-1-desktop"
+	>
+		Your Sveltin project is <span
+			class="is-block accent is-italic has-text-weight-normal is-capitalized"
+			>up & running!</span
+		>
 	</h1>
 
-	<div class="buttons-wrapper">
+	<div
+		class="is-relative mx-auto is-inline-flex is-flex-direction-row is-justify-content-center m-4"
+		style="width: 100%;"
+	>
 		<Link
 			id="quickStartLink"
 			external
@@ -29,23 +37,9 @@
 <style lang="scss">
 	@import 'bulma/sass/utilities/_all';
 
-	section {
-		max-width: 80rem /* 1280px */;
-		margin-left: auto;
-		margin-right: auto;
-		padding-top: 11rem /* 176px */;
-		padding-bottom: 11rem /* 176px */;
-		padding-left: 1.5rem /* 24px */;
-		padding-right: 1.5rem /* 24px */;
-	}
-
 	h1 {
-		font-size: 1.875rem /* 30px */;
-		font-weight: 700;
-		text-align: center;
-		letter-spacing: -0.05em;
-		padding-bottom: 1rem /* 16px */;
 		line-height: 1.25;
+		letter-spacing: -0.025em;
 
 		@include from($sm) {
 			font-size: 2.25rem /* 36px */;
@@ -57,21 +51,7 @@
 	}
 
 	.accent {
-		color: $color-text-accent;
-		font-style: italic;
-		font-weight: 400;
-		display: block;
-		text-transform: capitalize;
-	}
-
-	.buttons-wrapper {
-		position: relative;
-		display: inline-flex;
-		justify-content: center;
-		width: 100%;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 1rem /* 16px */;
+		color: $cyan;
 	}
 
 	:global {
@@ -79,52 +59,43 @@
 			position: relative;
 			display: inline-flex;
 			align-items: center;
-			padding-top: 0.5rem /* 8px */;
-			padding-right: 0.5rem /* 8px */;
-			padding-bottom: 0.5rem /* 8px */;
-			padding-left: 0.5rem /* 8px */;
-			font-size: 0.875rem /* 14px */;
+			padding-top: 0.5rem;
+			padding-right: 0.5rem;
+			padding-bottom: 0.5rem;
+			padding-left: 0.5rem;
+			font-size: 0.875rem;
 			font-weight: 500;
-			border-width: 2px;
-			border-style: solid;
+			line-height: 1.25rem;
+			border: 2px solid $base;
+
+			&:focus {
+				outline: 2px solid transparent;
+				outline-offset: 2px;
+			}
 
 			@include from($lg) {
-				padding-left: 0.75rem /* 8px */;
-				padding-right: 0.75rem /* 8px */;
+				padding-right: 2rem;
+				padding-left: 2rem;
 			}
 		}
 
 		.hero-btn--base {
 			margin-left: -1px;
 			color: $dark;
-			border-top-right-radius: 0.5rem /* 8px */;
-			border-bottom-right-radius: 0.5rem /* 8px */;
-			border-color: $color-text-base;
-
-			&:focus {
-				z-index: 10;
-				outline: 2px solid transparent;
-				outline-offset: 2px;
-			}
+			border-top-right-radius: 0.5rem;
+			border-bottom-right-radius: 0.5rem;
 		}
 
 		.hero-btn--accent {
 			color: $white;
-			background-color: $color-text-base;
-			border-top-left-radius: 0.5rem /* 8px */;
-			border-bottom-left-radius: 0.5rem /* 8px */;
-			border-color: $color-text-base;
+			font-weight: bold;
+			background-color: $base;
+			border-top-left-radius: 0.5rem;
+			border-bottom-left-radius: 0.5rem;
 
 			&:hover {
 				color: $white;
 				background-color: $dark;
-			}
-
-			&:focus {
-				z-index: 10;
-				outline: 2px solid transparent;
-				outline-offset: 2px;
-				border-color: $white;
 			}
 		}
 	}
