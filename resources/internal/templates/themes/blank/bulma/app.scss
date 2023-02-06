@@ -1,21 +1,41 @@
+@charset "utf-8";
+@import url(./tw-preflight.css);
+
 /*
- * Write your global styles here, in SCSS syntax.
  * Variables and mixins from the src/variables.scss file are available here without importing
  */
 
 /* Import only what you need from Bulma */
 @import 'bulma/sass/utilities/_all';
-@import 'bulma/sass/base/_all';
+//@import 'bulma/sass/base/_all';
 //@import 'bulma/sass/elements/_all';
 //@import 'bulma/sass/form/_all';
 //@import 'bulma/sass/components/_all';
 //@import 'bulma/sass/grid/_all';
-//@import 'bulma/sass/helpers/_all';
+@import 'bulma/sass/helpers/_all';
 //@import 'bulma/sass/layout/_all';
 
 html {
 	height: 100%;
 	scroll-behavior: smooth;
+}
+
+body {
+	height: 100%;
+	line-height: 1.5;
+	background-color: $white;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+a {
+	color: currentColor;
+	text-decoration: none;
+
+	&:hover {
+		color: currentColor;
+		text-decoration: none;
+	}
 }
 
 code[class*='language-'] {
@@ -27,23 +47,12 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-@media only screen and (min-width: 1024px) {
-	code[class*='language-'] {
-		font-size: 1rem !important;
-	}
-
-	code[class*='language-'],
-	pre[class*='language-'] {
-		line-height: 25px;
-	}
-}
-
 .message {
 	padding: 0.5rem 1rem /* 8px 16px */;
 	border-radius: 0.375rem /* 6px */;
 }
 
-.warning {
+.message--warning {
 	background-color: rgb(254 215 170);
 }
 
@@ -53,4 +62,25 @@ pre[class*='language-'] {
 	max-width: 980px;
 	margin: 0 auto;
 	padding: 45px;
+
+	a {
+		color: currentColor;
+		text-decoration: none;
+
+		&:hover {
+			color: currentColor;
+			text-decoration: none;
+		}
+	}
+}
+
+@media only screen and (min-width: 1024px) {
+	code[class*='language-'] {
+		font-size: 1rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 25px;
+	}
 }

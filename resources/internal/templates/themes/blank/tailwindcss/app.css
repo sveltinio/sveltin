@@ -33,18 +33,16 @@
 	}
 }
 
-@layer components {
-	.message {
-		@apply py-2 px-4 rounded-md;
-	}
+.message {
+	@apply py-2 px-4 rounded-md;
+}
 
-	.warning {
-		@apply bg-orange-200;
-	}
+.message--warning {
+	@apply bg-orange-200;
+}
 
-	.text-default {
-		@apply text-base leading-6;
-	}
+.text-default {
+	@apply text-base leading-6;
 }
 
 .markdown-body {
