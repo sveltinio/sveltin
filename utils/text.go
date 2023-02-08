@@ -16,8 +16,13 @@ import (
 	"golang.org/x/text/language"
 )
 
-// IsEmpty returns true if a string is empty.
+// IsEmpty returns true if the string is empty.
 func IsEmpty(txt string) bool {
+	return len(txt) == 0
+}
+
+// IsEmptySlice returns true if the string slice is empty.
+func IsEmptySlice(txt []string) bool {
 	return len(txt) == 0
 }
 

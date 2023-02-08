@@ -140,3 +140,20 @@ func appendToFile(fs afero.Fs, filename string, contentToAppend []string, logger
 		}
 	}
 }
+
+func getTextInBetween(text string, start string, end string) string {
+	startIndex := strings.Index(text, start)
+	if startIndex == -1 {
+		return ""
+	}
+	endIndex := strings.Index(text, end) + len(end)
+	if endIndex == -1 {
+		return ""
+	}
+	return text[startIndex:endIndex]
+}
+
+func replaceTextInBetween(old, new, start, end string) string {
+	textInBetween := getTextInBetween(old, start, end)
+	return strings.ReplaceAll(old, textInBetween, new)
+}

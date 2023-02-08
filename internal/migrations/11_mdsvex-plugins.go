@@ -10,10 +10,12 @@ package migrations
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // UpdateMDsveXPlugins is the struct representing the migration update the defaults.js.ts file.
@@ -75,9 +77,11 @@ func (m *UpdateMDsveXPlugins) up() error {
 
 		if mustMigrate(fileContent, gatekeeper) && patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
-			if _, err := m.runMigration(fileContent, ""); err != nil {
+			updatedContent := []byte(fixRehypeAutoLinkHeadingsUsage(fileContent))
+			if _, err := m.runMigration(updatedContent, ""); err != nil {
 				return err
 			}
+
 		}
 	}
 
@@ -214,4 +218,32 @@ func newReplaceRehypeSlugUsageRule(line, prevLine string) *migrationRule {
 			return line
 		},
 	}
+}
+
+//=============================================================================
+
+func fixRehypeAutoLinkHeadingsUsage(content []byte) []byte {
+	data := string(content)
+	var start string
+	var end string
+
+	reStart := regexp.MustCompile(`\(rehypeAutoLinkHeadings`)
+	matchStart := reStart.FindStringSubmatch(data)
+	if !utils.IsEmptySlice(matchStart) {
+		start = matchStart[0]
+	}
+
+	reEnd := regexp.MustCompile(`(behavior:\s+'wrap'\s+\}\))`)
+	matchEnd := reEnd.FindStringSubmatch(data)
+	if !utils.IsEmptySlice(matchEnd) {
+		end = matchEnd[0]
+	}
+
+	if !utils.IsEmpty(start) && !utils.IsEmpty(end) {
+		newStr := "rehypeAutoLinkHeadings, { behavior: 'wrap' }"
+		updatedContent := replaceTextInBetween(data, newStr, start, end)
+		return []byte(updatedContent)
+	}
+
+	return []byte("")
 }
