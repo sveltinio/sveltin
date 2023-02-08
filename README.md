@@ -321,7 +321,7 @@ Read more [here][contributing].
 Sveltin leverages many great open source libraries:
 
 | Name                                                    | Version   | License      |
-| :------------------------------------------------------ | :-------: | -----------: |
+| :------------------------------------------------------ | :-------: | :----------- |
 | [bubble](https://github.com/charmbracelet/bubbles)      | `0.15.0`  | MIT          |
 | [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.1`  | MIT          |
 | [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.6.0`   | MIT          |
