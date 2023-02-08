@@ -18,7 +18,7 @@ import (
 )
 
 var npmPackagesMap = map[string]string{
-	"@indaco/svelte-iconoir":   "^3.3.0",
+	"@indaco/svelte-iconoir":   "^3.3.1",
 	"@sveltinio/essentials":    "^0.5.2",
 	"@sveltinio/media-content": "^0.3.6",
 	"@sveltinio/seo":           "^0.2.1",
