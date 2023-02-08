@@ -125,7 +125,7 @@ var BootstrapSveltinThemeFilesMap = EmbeddedFSEntry{
 	"reset_css":      "internal/templates/themes/tw-preflight.css",
 	"app_css":        "internal/templates/themes/sveltin/bootstrap/app.scss",
 	"variables_scss": "internal/templates/themes/sveltin/bootstrap/variables.scss",
-	"hero":           "internal/templates/themes/sveltin/bootstrap/Hero.svelte",
+	"cta":            "internal/templates/themes/sveltin/bootstrap/CTA.svelte",
 	"footer":         "internal/templates/themes/sveltin/bootstrap/Footer.svelte",
 	"error":          "internal/templates/themes/error.styled.svelte",
 }
@@ -143,7 +143,7 @@ var BootstrapBlankThemeFilesMap = EmbeddedFSEntry{
 	"reset_css":      "internal/templates/themes/tw-preflight.css",
 	"app_css":        "internal/templates/themes/blank/bootstrap/app.scss",
 	"variables_scss": "internal/templates/themes/blank/bootstrap/variables.scss",
-	"hero":           "internal/templates/themes/blank/bootstrap/Hero.svelte",
+	"cta":            "internal/templates/themes/blank/bootstrap/CTA.svelte",
 	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
 
@@ -162,7 +162,7 @@ var BulmaSveltinThemeFilesMap = EmbeddedFSEntry{
 	"reset_css":      "internal/templates/themes/tw-preflight.css",
 	"app_css":        "internal/templates/themes/sveltin/bulma/app.scss",
 	"variables_scss": "internal/templates/themes/sveltin/bulma/variables.scss",
-	"hero":           "internal/templates/themes/sveltin/bulma/Hero.svelte",
+	"cta":            "internal/templates/themes/sveltin/bulma/CTA.svelte",
 	"footer":         "internal/templates/themes/sveltin/bulma/Footer.svelte",
 	"error":          "internal/templates/themes/error.styled.svelte",
 }
@@ -180,7 +180,7 @@ var BulmaBlankThemeFilesMap = EmbeddedFSEntry{
 	"reset_css":      "internal/templates/themes/tw-preflight.css",
 	"app_css":        "internal/templates/themes/blank/bulma/app.scss",
 	"variables_scss": "internal/templates/themes/blank/bulma/variables.scss",
-	"hero":           "internal/templates/themes/blank/bulma/Hero.svelte",
+	"cta":            "internal/templates/themes/blank/bulma/CTA.svelte",
 	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
 
@@ -199,7 +199,7 @@ var SassSveltinThemeFilesMap = EmbeddedFSEntry{
 	"reset_css":      "internal/templates/themes/tw-preflight.css",
 	"app_css":        "internal/templates/themes/sveltin/scss/app.scss",
 	"variables_scss": "internal/templates/themes/sveltin/scss/variables.scss",
-	"hero":           "internal/templates/themes/sveltin/scss/Hero.svelte",
+	"cta":            "internal/templates/themes/sveltin/scss/CTA.svelte",
 	"footer":         "internal/templates/themes/sveltin/scss/Footer.svelte",
 	"error":          "internal/templates/themes/error.styled.svelte",
 }
@@ -217,7 +217,7 @@ var SassBlankThemeFilesMap = EmbeddedFSEntry{
 	"reset_css":      "internal/templates/themes/tw-preflight.css",
 	"app_css":        "internal/templates/themes/blank/scss/app.scss",
 	"variables_scss": "internal/templates/themes/blank/scss/variables.scss",
-	"hero":           "internal/templates/themes/blank/scss/Hero.svelte",
+	"cta":            "internal/templates/themes/blank/scss/CTA.svelte",
 	"error":          "internal/templates/themes/error.unstyled.svelte",
 }
 
@@ -237,7 +237,7 @@ var TailwindSveltinThemeFilesMap = EmbeddedFSEntry{
 	"postcss":             "internal/templates/themes/sveltin/tailwindcss/postcss.config.cjs",
 	"reset_css":           "internal/templates/themes/tw-preflight.css",
 	"app_css":             "internal/templates/themes/sveltin/tailwindcss/app.css",
-	"hero":                "internal/templates/themes/sveltin/tailwindcss/Hero.svelte",
+	"cta":                 "internal/templates/themes/sveltin/tailwindcss/CTA.svelte",
 	"footer":              "internal/templates/themes/sveltin/tailwindcss/Footer.svelte",
 	"error":               "internal/templates/themes/error.styled.svelte",
 }
@@ -256,7 +256,7 @@ var TailwindBlankThemeFilesMap = EmbeddedFSEntry{
 	"app_html":            "internal/templates/themes/blank/tailwindcss/app.html",
 	"reset_css":           "internal/templates/themes/tw-preflight.css",
 	"app_css":             "internal/templates/themes/blank/tailwindcss/app.css",
-	"hero":                "internal/templates/themes/blank/tailwindcss/Hero.svelte",
+	"cta":                 "internal/templates/themes/blank/tailwindcss/CTA.svelte",
 	"error":               "internal/templates/themes/error.unstyled.svelte",
 }
 
@@ -274,7 +274,7 @@ var VanillaSveltinThemeFilesMap = EmbeddedFSEntry{
 	"mdsvex_config": "internal/templates/themes/mdsvex.config.js.gotxt",
 	"reset_css":     "internal/templates/themes/tw-preflight.css",
 	"app_css":       "internal/templates/themes/sveltin/vanillacss/app.css",
-	"hero":          "internal/templates/themes/sveltin/vanillacss/Hero.svelte",
+	"cta":           "internal/templates/themes/sveltin/vanillacss/CTA.svelte",
 	"footer":        "internal/templates/themes/sveltin/vanillacss/Footer.svelte",
 	"error":         "internal/templates/themes/error.styled.svelte",
 }
@@ -291,6 +291,6 @@ var VanillaBlankThemeFilesMap = EmbeddedFSEntry{
 	"mdsvex_config": "internal/templates/themes/mdsvex.config.js.gotxt",
 	"reset_css":     "internal/templates/themes/tw-preflight.css",
 	"app_css":       "internal/templates/themes/blank/vanillacss/app.css",
-	"hero":          "internal/templates/themes/blank/vanillacss/Hero.svelte",
+	"cta":           "internal/templates/themes/blank/vanillacss/CTA.svelte",
 	"error":         "internal/templates/themes/error.unstyled.svelte",
 }

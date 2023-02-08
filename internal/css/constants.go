@@ -33,7 +33,7 @@ const (
 	SvelteConfigFileId   string = "svelte_config"
 	MDsveXFileId         string = "mdsvex_config"
 	ViteConfigFileId     string = "vite_config"
-	HeroFileId           string = "hero"
+	CTAFileId            string = "cta"
 	FooterFileId         string = "footer"
 	TailwindConfigFileId string = "tailwind_css_config"
 	PostCSSFileId        string = "postcss"

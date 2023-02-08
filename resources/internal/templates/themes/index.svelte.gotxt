@@ -3,7 +3,7 @@
 	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
-	import Hero from '$themes/{{ .Theme.Name }}/partials/Hero.svelte';
+	import CTA from '$themes/{{ .Theme.Name }}/partials/CTA.svelte';
 	import { getFavicon } from '$lib/utils/strings.js';
 
 	const homePage: SEOWebPageMetadata = {
@@ -26,4 +26,4 @@
 <JsonLdWebPage data={homePage} />
 <!-- End of SEO Section -->
 
-<Hero />
+<CTA />

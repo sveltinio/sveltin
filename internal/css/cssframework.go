@@ -137,9 +137,9 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying Hero.svelte component
-	sourceFile = embeddedResources[HeroFileId]
-	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Hero.svelte")
+	// Copying CTA.svelte component
+	sourceFile = embeddedResources[CTAFileId]
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "CTA.svelte")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
@@ -243,9 +243,9 @@ func makeUnstyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying Hero.svelte component
-	sourceFile = embeddedResources[HeroFileId]
-	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Hero.svelte")
+	// Copying CTA.svelte component
+	sourceFile = embeddedResources[CTAFileId]
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "CTA.svelte")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}

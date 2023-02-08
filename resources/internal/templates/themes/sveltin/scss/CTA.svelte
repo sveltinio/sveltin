@@ -13,7 +13,7 @@
 			external
 			icon={false}
 			href="https://docs.sveltin.io/quick-start"
-			class="hero-btn hero-btn--accent">Quick Start</Link
+			class="cta-btn cta-btn--accent">Quick Start</Link
 		>
 
 		<Link
@@ -21,7 +21,7 @@
 			external
 			icon={false}
 			href="https://docs.sveltin.io"
-			class="hero-btn hero-btn--base">Read the Docs</Link
+			class="cta-btn cta-btn--base">Read the Docs</Link
 		>
 	</div>
 </section>
@@ -77,7 +77,7 @@
 	}
 
 	:global {
-		.hero-btn {
+		.cta-btn {
 			position: relative;
 			display: inline-flex;
 			align-items: center;
@@ -96,14 +96,14 @@
 			}
 		}
 
-		.hero-btn--base {
+		.cta-btn--base {
 			margin-left: -1px;
 			color: $dark;
 			border-top-right-radius: 0.5rem;
 			border-bottom-right-radius: 0.5rem;
 		}
 
-		.hero-btn--accent {
+		.cta-btn--accent {
 			color: $white;
 			background-color: $base;
 			border-top-left-radius: 0.5rem;
@@ -116,7 +116,7 @@
 		}
 
 		@media only screen and (min-width: 1024px) {
-			.hero-btn {
+			.cta-btn {
 				padding-right: 2rem;
 				padding-left: 2rem;
 			}
