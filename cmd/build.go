@@ -31,7 +31,7 @@ Command used to build a production version of your static website.
 It wraps vite build command.
 
 Ensure to edit env.production and .sveltin.toml files to reflect
-your production environment
+your production environment.
 `,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),

@@ -146,7 +146,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	dotEnvTplData := &config.TemplateData{
 		Name: DotEnvProdFile,
 		Vite: &tpltypes.ViteData{
-			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+			BaseURL: fmt.Sprintf("https://%s", projectName),
 		},
 	}
 	envFile := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
@@ -372,7 +372,7 @@ func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *c
 		Name: ProjectSettingsFile,
 		ProjectSettings: &tpltypes.ProjectSettings{
 			Name:    projectName,
-			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+			BaseURL: fmt.Sprintf("https://%s", projectName),
 			Sitemap: tpltypes.SitemapData{
 				ChangeFreq: "monthly",
 				Priority:   0.5,

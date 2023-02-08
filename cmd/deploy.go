@@ -180,7 +180,7 @@ func deployCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&isBackup, "backup", "b", true, "create a tar archive for the existing content on the remote FTP server")
 	cmd.Flags().BoolVarP(&isDryRun, "dryRun", "d", false, "dry run")
 	cmd.Flags().StringArrayVarP(&withExclude, "exclude", "e", []string{".htaccess"}, "list of files to not be deleted from the FTP server. Default: .htaccess")
-	cmd.Flags().StringVar(&withExcludeFile, "withExcludeFile", "", "path to the file containing the list of files to not be deleted from the FTP server.")
+	cmd.Flags().StringVar(&withExcludeFile, "withExcludeFile", "", "path to the file containing the list of files to not be deleted from the FTP server")
 }
 
 func init() {

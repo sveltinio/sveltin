@@ -23,8 +23,6 @@ var generateRssCmd = &cobra.Command{
 	Short: "Generate the RSS feed for your Sveltin project",
 	Long: resources.GetASCIIArt() + `
 Command used to generate the RSS feed (rss.xml) file for your website.
-
-It makes use of the .env.production file to reflect the base url for your website.
 `,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),

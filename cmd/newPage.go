@@ -35,7 +35,7 @@ var newPageCmd = &cobra.Command{
 Command used to create a new public page route selecting between a svelte component-based page and a markdown page.
 
 Pages are Svelte components written in .svelte or .svx (for markdown) files.
-The filename determines the route so, creating a page named "about" will generate the following route /about/+page.(svelte|svx)
+The filename determines the route so, creating a page named "about" will generate the following route /about/+page.(svelte|svx).
 `,
 	Run: NewPageCmdRun,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

@@ -123,7 +123,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 
 func metadataCmdFlags(cmd *cobra.Command) {
 	// to flag
-	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to.")
+	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to")
 	err := cmd.RegisterFlagCompletionFunc("to", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		availableResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
 		return availableResources, cobra.ShellCompDirectiveDefault

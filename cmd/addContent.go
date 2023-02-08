@@ -119,14 +119,14 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 
 func contentCmdFlags(cmd *cobra.Command) {
 	// to flag
-	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to.")
+	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to")
 	err := cmd.RegisterFlagCompletionFunc("to", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		availableResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
 		return availableResources, cobra.ShellCompDirectiveDefault
 	})
 	utils.ExitIfError(err)
 	// sample flag
-	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file.")
+	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file")
 }
 
 func init() {
