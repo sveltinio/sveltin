@@ -316,6 +316,27 @@ Contribution of any kind including documentation, themes, tutorials, blog posts,
 
 Read more [here][contributing].
 
+## Dependencies
+
+Sveltin leverages many great open source libraries:
+
+| Name                                                    | Version   | License      |
+| :------------------------------------------------------ | :-------: | -----------: |
+| [bubble](https://github.com/charmbracelet/bubbles)      | `0.15.0`  | MIT          |
+| [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.1`  | MIT          |
+| [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.6.0`   | MIT          |
+| [validator](https://github.com/go-playground/validator) | `10.11.2` | MIT          |
+| [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
+| [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
+| [is](https://github.com/matryer/is)                     | `1.4.0`   | MIT          |
+| [afero](https://github.com/spf13/afero)                 | `1.9.3`   | Apache-2.0   |
+| [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
+| [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |
+| [prompti](https://github.com/sveltinio/prompti)         | `0.1.1`   | MIT          |
+| [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
+| [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
+| [text](https://golang.org/x/text)                       | `0.6.0`   | BSD-3-Clause |
+
 ## :free: License
 
 Sveltin is free and open-source software licensed under the Apache 2.0 License.
