@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sveltinio/sveltin/common"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -115,4 +116,21 @@ func Today() string {
 // CurrentYear returns the current calendar year as a string.
 func CurrentYear() string {
 	return time.Now().Format("2006")
+}
+
+// ConvertJSStringToStringArray returns a JS/TS array of string from a comma separated JS/TS string as input.
+func ConvertJSStringToStringArray(value string) string {
+	res := strings.Trim(value, " ")
+	res = strings.ReplaceAll(res, "'", "")
+	res = strings.ReplaceAll(res, "\"", "")
+	res1 := strings.Split(res, ",")
+	res1 = common.RemoveEmpty(res1)
+
+	var newKeywords []string
+	for _, v := range res1 {
+		_v := strings.Trim(v, " ")
+		newKeywords = append(newKeywords, fmt.Sprintf("'%s'", _v))
+
+	}
+	return fmt.Sprintf("[%s]", strings.Join(newKeywords, ", "))
 }

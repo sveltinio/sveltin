@@ -27,8 +27,9 @@ const (
 	themeConfigConst
 	themeConfigExport
 	themeNameProp
-	// mdsvex.config.js file migration
+	// mdsvex.config.js & package.json files migration
 	headingsImport
+	mdastUtilToString
 	remarkExtLinks
 	remarkExtLinksImport
 	remarkExtLinksUsage
@@ -37,11 +38,15 @@ const (
 	remarkSlugUsage
 	rehypePlugins
 	rehypeSlugUsage
+	unistUtilVisit
 	// src/lib/utils/headings.js file migration
 	headingsTitleProp
 	// config/website.js.ts migration
 	importIWebSiteSeoType
 	iwebsiteSeoTypeUsage
+	keywordsProp
+	webmasterProp
+	contactEmailProp
 	// config/menu.js.ts migration
 	importIMenuItemSeoType
 	imenuitemSeoTypeUsage
@@ -76,7 +81,7 @@ var patterns = map[migrationTriggerId]string{
 	sveltindts:             `export type ResourceContent`,
 	svelteKitBuildFolder:   `SVELTEKIT_BUILD_FOLDER`,
 	svelteKitBuildComment:  `^*# The folder where adapter-static`,
-	sitemap:                `^sitemap`,
+	sitemap:                `\bsitemap\b`,
 	prerenderConst:         `^export const prerender`,
 	prerenderEnabled:       `enabled`,
 	trailingSlash:          `\btrailingSlash\b`,
@@ -84,6 +89,7 @@ var patterns = map[migrationTriggerId]string{
 	themeConfigExport:      `^export default config`,
 	themeNameProp:          `\bname:\b`,
 	headingsImport:         `import headings from './src/lib/utils/headings.js`,
+	mdastUtilToString:      `"mdast-util-to-string"`,
 	remarkExtLinks:         `"remark-external-links"`,
 	remarkExtLinksImport:   `^import remarkExternalLinks`,
 	remarkExtLinksUsage:    `\[remarkExternalLinks`,
@@ -92,9 +98,13 @@ var patterns = map[migrationTriggerId]string{
 	remarkSlugUsage:        `remarkSlug,`,
 	rehypePlugins:          `rehypePlugins:[\t\s]+\[`,
 	rehypeSlugUsage:        `rehypeSlug\[`,
+	unistUtilVisit:         `"unist-util-visit`,
 	headingsTitleProp:      `title:`,
 	importIWebSiteSeoType:  `\{\s+IWebSite\s+\}`,
 	iwebsiteSeoTypeUsage:   `\bIWebSite\b`,
+	keywordsProp:           `\bkeywords\b`,
+	webmasterProp:          `\bwebmaster\b`,
+	contactEmailProp:       `\bcontactEmail\b`,
 	importIMenuItemSeoType: `\{\s+IMenuItem\s+\}`,
 	imenuitemSeoTypeUsage:  `\bIMenuItem\b`,
 	icontententryTypeUsage: `\bContentEntry\b`,

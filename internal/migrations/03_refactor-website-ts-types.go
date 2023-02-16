@@ -9,10 +9,12 @@ package migrations
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // RefactorWebSiteTSTypes is the struct representing the migration update the defaults.js.ts file.
@@ -65,6 +67,10 @@ func (m *RefactorWebSiteTSTypes) up() error {
 		migrationTriggers := []string{
 			patterns[importIWebSiteSeoType],
 			patterns[iwebsiteSeoTypeUsage],
+			patterns[keywordsProp],
+			patterns[sitemap],
+			patterns[webmasterProp],
+			patterns[contactEmailProp],
 		}
 		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
@@ -82,9 +88,17 @@ func (m *RefactorWebSiteTSTypes) up() error {
 func (m *RefactorWebSiteTSTypes) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
+		var prevLine string
+		if i > 0 {
+			prevLine = lines[i-1]
+		}
 		rules := []*migrationRule{
 			newWebSiteTSImportRule(line),
 			newWebSiteTSUsageRule(line),
+			replaceKeywordsPropRule(line),
+			addCommentToSitemapPropRule(line),
+			replaceWebmasterPropRule(line),
+			replaceContactEmailPropRule(line, prevLine),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -138,6 +152,74 @@ func newWebSiteTSUsageRule(line string) *migrationRule {
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
 			return "Sveltin.WebSite"
+		},
+	}
+}
+
+func replaceKeywordsPropRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[keywordsProp],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			splitted := strings.Split(line, ":")
+			key, value := splitted[0], splitted[1]
+
+			pattern := regexp.MustCompile(`[',"].*[',"]`)
+			match := pattern.FindStringSubmatch(value)
+			if len(match) == 1 {
+				return fmt.Sprintf("%s: %s,", key, utils.ConvertJSStringToStringArray(value))
+			}
+			return line
+		},
+	}
+}
+
+func addCommentToSitemapPropRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[sitemap],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			message := `
+	/**
+	 * ! [sveltin migrate] @IMPORTANT
+	 * sitemap has been moved as prop out from WebSite types.
+	 *
+	 * It is now configured in sveltin.json file. Reflect your sitemap config there.
+	 */
+`
+			var sb strings.Builder
+			sb.WriteString(message)
+			sb.WriteString(line)
+			return sb.String()
+		},
+	}
+}
+
+func replaceWebmasterPropRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[webmasterProp],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			return "creator"
+		},
+	}
+}
+
+func replaceContactEmailPropRule(line, prevLine string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[contactEmailProp],
+		replaceFullLine: false,
+		replacerFunc: func(string) string {
+			prevLinePattern := regexp.MustCompile(`\baddress\b`)
+			match := prevLinePattern.FindStringSubmatch(prevLine)
+			if len(match) == 1 {
+				return "email"
+			}
+			return "contactEmail"
 		},
 	}
 }

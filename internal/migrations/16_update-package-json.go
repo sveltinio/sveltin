@@ -143,6 +143,8 @@ func (m *UpdatePackageJson) runMigration(content []byte, file string) ([]byte, e
 		rules := []*migrationRule{
 			newRemarkExternalLinksRule(line),
 			newRemarkSlugRule(line),
+			newRemoveMdastUtilToString(line),
+			newRemoveUnistUtilVisit(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
 			lines[i] = res
@@ -174,6 +176,28 @@ func newRemarkSlugRule(line string) *migrationRule {
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return "\"@sveltinio/remark-headings\":\"^1.0.1\","
+		},
+	}
+}
+
+func newRemoveMdastUtilToString(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[mdastUtilToString],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newRemoveUnistUtilVisit(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[unistUtilVisit],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
 		},
 	}
 }
