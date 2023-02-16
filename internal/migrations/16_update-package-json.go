@@ -21,7 +21,7 @@ var npmPackagesMap = map[string]string{
 	"@indaco/svelte-iconoir":   "^3.3.1",
 	"@sveltinio/essentials":    "^0.6.1",
 	"@sveltinio/media-content": "^0.3.8",
-	"@sveltinio/seo":           "^0.3.1",
+	"@sveltinio/seo":           "^0.3.2",
 	"@sveltinio/services":      "^0.3.4",
 	"@sveltinio/widgets":       "^0.6.1",
 	"@sveltejs/adapter-static": "2.0.1",
