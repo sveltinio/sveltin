@@ -43,18 +43,18 @@ func AskPageNameHandler(inputs []string) (string, error) {
 	}
 }
 
-// SelectPageTypeHandler if not flag passed, prompts the user to select the page type when creating new page.
-func SelectPageTypeHandler(pageTypeFlag string) (string, error) {
+// SelectPageLanguageHandler if not flag passed, prompts the user to select the page type when creating new page.
+func SelectPageLanguageHandler(name string) (string, error) {
 	entries := []list.Item{
 		choose.Item{Name: Svelte, Desc: "Svelte"},
-		choose.Item{Name: Markdown, Desc: "Markdown in Svelte"},
+		choose.Item{Name: Markdown, Desc: "Markdown (mdsvex)"},
 	}
 
-	switch nameLenght := len(pageTypeFlag); {
+	switch nameLenght := len(name); {
 	case nameLenght == 0:
 		pagePromptContent := &choose.Config{
-			Title:    "What's the page type?",
-			ErrorMsg: "Please, provide a page type",
+			Title:    "How do you want to compose your page?",
+			ErrorMsg: "Please, provide a page language",
 		}
 		result, err := choose.Run(pagePromptContent, entries)
 		if err != nil {
@@ -63,10 +63,10 @@ func SelectPageTypeHandler(pageTypeFlag string) (string, error) {
 		return result, nil
 	case nameLenght != 0:
 		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, pageTypeFlag) {
+		if !common.Contains(valid, name) {
 			return "", sveltinerr.NewPageTypeNotValidError()
 		}
-		return pageTypeFlag, nil
+		return name, nil
 	default:
 		return "", sveltinerr.NewPageTypeNotValidError()
 	}

@@ -23,7 +23,16 @@ import (
 
 //=============================================================================
 
-var pageLanguage string
+// Supported Pages languages
+const (
+	Svelte   string = "svelte"
+	Markdown string = "markdown"
+)
+
+var (
+	withSvelte   bool
+	withMarkdown bool
+)
 
 //=============================================================================
 
@@ -57,15 +66,22 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageName, err := prompts.AskPageNameHandler(args)
 	utils.ExitIfError(err)
 
-	pageType, err := prompts.SelectPageTypeHandler(pageLanguage)
+	var pageLanguage string
+	if withSvelte {
+		pageLanguage = Svelte
+	} else if withMarkdown {
+		pageLanguage = Markdown
+	}
+
+	pageLanguage, err = prompts.SelectPageLanguageHandler(pageLanguage)
 	utils.ExitIfError(err)
 
 	pageData := &tpltypes.PageData{
-		Name: pageName,
-		Type: pageType,
+		Name:     pageName,
+		Language: pageLanguage,
 	}
 
-	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageType)
+	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageLanguage)
 	cfg.log.Plain(markup.H1(headingText))
 
 	// GET FOLDER: src/routes
@@ -93,11 +109,9 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func pageCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&pageLanguage, "language", "l", "", "Language to be used for the page. Possible values: svelte, markdown")
-	err := cmd.RegisterFlagCompletionFunc("language", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return []string{"svelte", "markdown"}, cobra.ShellCompDirectiveDefault
-	})
-	utils.ExitIfError(err)
+	cmd.Flags().BoolVarP(&withSvelte, Svelte, "s", false, "Use Svelte for the page content")
+	cmd.Flags().BoolVarP(&withMarkdown, Markdown, "m", false, "Use Markdown (mdsvex) for the page content")
+	cmd.MarkFlagsMutuallyExclusive(Svelte, Markdown)
 }
 
 func init() {
