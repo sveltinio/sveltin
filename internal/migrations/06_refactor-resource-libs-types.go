@@ -106,23 +106,6 @@ func (m *RefactorResourcesLibsTypes) up() error {
 				contentsToAppend = append(contentsToAppend, canonicalPageUrlFunction)
 			}
 
-			if isStringsLib(localFilePath) && mustMigrate(fileContent, "definePageKeywords") {
-				const definePageKeywordsFunction = `
-
-export const definePageKeywords = (keywords: Array<string>, others: string): string => {
-	let result = '';
-	if (keywords && keywords.length != 0) {
-		result = keywords.join(', ');
-	} else if (isNotEmpty(others)) {
-		result = others;
-	}
-
-	return result;
-};
-`
-				contentsToAppend = append(contentsToAppend, definePageKeywordsFunction)
-			}
-
 			appendToFile(m.getServices().fs, file, contentsToAppend, m.getServices().logger)
 
 		}

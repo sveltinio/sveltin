@@ -5,7 +5,7 @@
 	import { website } from '$config/website.js';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { canonicalPageUrl, definePageKeywords, capitalizeFirstLetter, getFavicon } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, capitalizeFirstLetter, getFavicon } from '$lib/utils/strings.js';
 
 	const title = '{{ .Page.Name }}';
 
@@ -17,7 +17,7 @@
 		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: capitalizeFirstLetter(title),
 		description: pageDescription,
-		keywords: definePageKeywords(pageKeywords, website.keywords),
+		keywords: pageKeywords || website.keywords,
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Article
