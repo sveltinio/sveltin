@@ -50,7 +50,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :information_source: SvelteKit versions
 
-> Latest tested SvelteKit version is [1.t.0](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.5.0). SvelteKit reached v1.x.x then no more breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions
+> Latest tested SvelteKit version is [1.7.1](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.7.1). SvelteKit reached v1.x.x then no more breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions
 
 ## :mega: Overview
 

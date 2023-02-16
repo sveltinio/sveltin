@@ -58,7 +58,7 @@ TO BE DONE
 
 ### Chores
 
-- `@sveltejs/kit` updated to `v1.7.0`
+- `@sveltejs/kit` updated to `v1.7.1`
 - `@sveltejs/adapter-static` updated to `v2.0.1`
 - `vite` updated to `v4.1.1`
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.)
