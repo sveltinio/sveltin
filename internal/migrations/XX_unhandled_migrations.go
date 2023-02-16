@@ -70,6 +70,12 @@ func (m *UnhandledMigration) up() error {
 	currentEssentialsVersionStr, _ := getDevDependency(fileContent, "@sveltinio/essentials")
 	currentEssentialsVersion, _ := versionAsNum(currentEssentialsVersionStr)
 
+	// @sveltinio/seo min version
+	const minSeoVersion = 0.3
+	// Retrieve @sveltinio/essentials version
+	currentSeoVersionStr, _ := getDevDependency(fileContent, "@sveltinio/seo")
+	currentSeoVersion, _ := versionAsNum(currentSeoVersionStr)
+
 	// @sveltinio/widgets min version
 	const minWidgetsVersion = 0.5
 	// Retrieve @sveltinio/widgets version
@@ -78,6 +84,7 @@ func (m *UnhandledMigration) up() error {
 
 	if exists &&
 		(currentEssentialsVersion < minEssentialsVersion ||
+			currentSeoVersion < minSeoVersion ||
 			currentWidgetsVersion < minWidgetsVersion) {
 		files := []string{}
 		walkFunc := func(file string, info os.FileInfo, err error) error {
@@ -128,6 +135,7 @@ func (m *UnhandledMigration) runMigration(content []byte, file string) ([]byte, 
 	for i, line := range lines {
 		rules := []*migrationRule{
 			newEssentialsImportRule(line),
+			newSeoImportRule(line),
 			newWidgetsImportRule(line),
 		}
 		if res, ok := applyMigrationRules(rules); ok {
@@ -181,6 +189,31 @@ func newEssentialsImportRule(line string) *migrationRule {
 	 *
 	 * Check the updated documentation page and reflect the changes:
 	 * https://github.com/sveltinio/components-library/tree/main/packages/essentials
+	 */
+`
+			var sb strings.Builder
+			sb.WriteString(message)
+			sb.WriteString(line)
+			return sb.String()
+		},
+	}
+}
+
+func newSeoImportRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[essentialsImport],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			message := `
+	/**
+	 * ! [sveltin migrate] @IMPORTANT
+	 * We detected usage of components from @sveltinio/seo.
+	 *
+	 * Latest versions of the package introduced changes the components interfaces.
+	 *
+	 * Check the updated documentation page and reflect the changes:
+	 * https://github.com/sveltinio/components-library/tree/main/packages/seo
 	 */
 `
 			var sb strings.Builder

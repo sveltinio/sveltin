@@ -153,7 +153,7 @@ func newReplaceIWebPageMedatadaRule(line string) *migrationRule {
 		trigger:         patterns[iwebpagemedataImport],
 		replaceFullLine: false,
 		replacerFunc: func(string) string {
-			return `SEOWebPageMetadata`
+			return `SEOWebPage`
 		},
 	}
 }

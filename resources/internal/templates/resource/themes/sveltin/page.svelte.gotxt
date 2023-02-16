@@ -1,14 +1,14 @@
 {{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
-	import { base, assets } from '$app/paths';
 	import type { PageData } from './$types';
-	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
+	import { base, assets } from '$app/paths';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
 	import { Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { canonicalPageUrl, toTitle, definePageKeywords, getFavicon } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, toTitle, getFavicon } from '$lib/utils/strings.js';
 
 	export let data: PageData;
 
@@ -18,14 +18,14 @@
 
 	$: ({ resourceName, items } = data);
 	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
-	$: {{ $resourceName }}IndexPage = <SEOWebPageMetadata> {
+	$: {{ $resourceName }}IndexPage = <SEOWebPage> {
 		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: toTitle(resourceName),
 		description: pageDescription,
-		keywords: definePageKeywords(pageKeywords, website.keywords),
+		keywords: pageKeywords || website.keywords,
 		image: getFavicon(website),
 		opengraph: {
-			type: OpenGraphType.Website
+			type: OpenGraphType.Article
 		},
 		twitter: {
 			type: TwitterCardType.Summary
@@ -35,11 +35,7 @@
 
 <PageMetaTags data={ {{ $resourceName }}IndexPage } />
 <JsonLdWebPage data={ {{ $resourceName }}IndexPage } />
-<JsonLdBreadcrumbs
-	baseURL={website.baseURL}
-	parent={resourceName}
-	current={ {{ $resourceName }}IndexPage.title }
-/>
+<JsonLdBreadcrumbs url={$page.url.href} />
 
 <section class="page-wrapper">
 	<div class="page-wrapper__content">

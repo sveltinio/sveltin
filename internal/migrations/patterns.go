@@ -64,6 +64,7 @@ const (
 	tsPath
 	// unhandled migrations where @sveltinio/* componets are used
 	essentialsImport
+	seoImport
 	widgetsImport
 )
 
@@ -110,5 +111,6 @@ var patterns = map[migrationTriggerId]string{
 	viteAlias:              `^\s+(alias)`,
 	tsPath:                 `^\s+"(paths)"`,
 	essentialsImport:       `(.*?)'@sveltinio\/essentials';$`,
+	seoImport:              `(.*?)'@sveltinio\/seo';$`,
 	widgetsImport:          `(.*?)'@sveltinio\/widgets';$`,
 }

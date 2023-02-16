@@ -1,11 +1,11 @@
 {{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
-	import { canonicalPageUrl, definePageKeywords, getCoverImagePath } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, getCoverImagePath } from '$lib/utils/strings.js';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { TOC, PagesNavigator } from '@sveltinio/widgets';
@@ -17,18 +17,18 @@
 	$: previous = before;
 	$: next = after;
 
-	$: {{ $resourceName }}SlugPage = <SEOWebPageMetadata>{
+	$: {{ $resourceName }}SlugPage = <SEOWebPage>{
 		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: current.metadata.title,
 		description: current.metadata.headline,
-		keywords: definePageKeywords(current.metadata.keywords, website.keywords),
+		keywords: current.metadata.keywords || website.keywords,
 		author: current.metadata.author,
 		image: getCoverImagePath(current, website),
 		opengraph: {
 			type: OpenGraphType.Article,
 			article: {
-				published_at: current.metadata.created_at,
-				modified_at: current.metadata.updated_at
+				published_at: new Date(current.metadata.created_at),
+				modified_at: new Date(current.metadata.updated_at)
 			}
 		},
 		twitter: {
@@ -39,11 +39,7 @@
 
 <PageMetaTags data={ {{ $resourceName }}SlugPage } />
 <JsonLdWebPage data={ {{ $resourceName }}SlugPage } />
-<JsonLdBreadcrumbs
-	baseURL={website.baseURL}
-	parent={current.resource}
-	current={ {{ $resourceName }}SlugPage.title }
-/>
+<JsonLdBreadcrumbs url={$page.url.href} />
 
 <article>
 	<h1>{current.metadata.title}</h1>
@@ -79,12 +75,12 @@
 		prev={ {
 			label: previous.metadata.title,
 			href: `${base}/${previous.resource}/${previous.metadata.slug}`,
-			alt: `link to ${previous.metadata.title}`
+			title: `link to ${previous.metadata.title}`
 		} }
 		next={ {
 			label: next.metadata.title,
 			href: `${base}/${next.resource}/${next.metadata.slug}`,
-			alt: `link to ${next.metadata.title}`
+			title: `link to ${next.metadata.title}`
 		} }
 	/>
 </article>

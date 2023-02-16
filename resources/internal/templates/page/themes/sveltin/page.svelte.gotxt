@@ -1,6 +1,6 @@
 {{- $pageName := .Page.Name | ToVariableName -}}
 <script lang="ts">
-	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
@@ -13,7 +13,7 @@
 	// page keywords as comma separeted values
 	const pageKeywords: Array<string> = [];
 
-	const {{ $pageName }}Page: SEOWebPageMetadata = {
+	const {{ $pageName }}Page: SEOWebPage = {
 		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: capitalizeFirstLetter(title),
 		description: pageDescription,
@@ -30,7 +30,7 @@
 
 <PageMetaTags data={ {{ $pageName }}Page } />
 <JsonLdWebPage data={ {{ $pageName }}Page } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" current={ {{ $pageName }}Page.title } />
+<JsonLdBreadcrumbs url={$page.url.href} />
 
 <!-- Page markup-->
 <section class="page">

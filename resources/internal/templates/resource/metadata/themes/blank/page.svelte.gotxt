@@ -1,7 +1,7 @@
 {{- $mdName := .Metadata.Name | ToVariableName -}}
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { SEOWebPageMetadata } from '@sveltinio/seo/types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
@@ -13,7 +13,7 @@
 	const mdName = '{{ .Metadata.Name }}';
 	const mdPageDescription = 'Here the description for the {{ .Metadata.Name | Capitalize }} index page.';
 
-	const {{ $mdName }}IndexPage: SEOWebPageMetadata = {
+	const {{ $mdName }}IndexPage: SEOWebPage = {
 		url:   canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: capitalizeFirstLetter(mdName),
 		description: mdPageDescription,
@@ -25,7 +25,7 @@
 
 <PageMetaTags data={ {{ $mdName }}IndexPage } />
 <JsonLdWebPage data={ {{ $mdName }}IndexPage } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent="{{ .Metadata.Resource }}" current={ {{ $mdName }}IndexPage.title } />
+<JsonLdBreadcrumbs url={$page.url.href} />
 
 <div>
 	<div>

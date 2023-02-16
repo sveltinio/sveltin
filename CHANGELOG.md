@@ -9,30 +9,34 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 ### 🚀  New Features
 
 - `sveltin.json` file: to simplify settings across parts of the project
+- `deploy` command takes into account if _adapter-static_ has been configured to output pages and assets in [different folders](https://github.com/sveltejs/kit/tree/master/packages/adapter-static#pages). In this case, make sure to reflect them to `sveltin.json`
 - `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release.
 - `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell)
 - active helps: by using `TAB` after the command name shows a message about params or flags
 - mdsvex config: set a layout component for pages created by running `sveltin new page` command
 - SEO keywords per page
 
-### Fixed Bugs
+### Bug Fixes
 
-- `mdsvex.config.js`: missed `,` after `rehypeSlug` usage
-- page creation as "markdown" (`sveltin new page --as markdown`) generated a no-well formatted content
-- `deploy` command takes into account if `adapter-static` has been configured to output pages and assets in [different folders](https://github.com/sveltejs/kit/tree/master/packages/adapter-static#pages). In this case, make sure to reflect them to `sveltin.json`
-- logo on `Footer.svelte` when _sveltin_ theme not properly loaded
+- `mdsvex.config.js`: missed comma after _rehypeSlug_ usage
+- pages created as "markdown" were buggies
+- the execution of the commands after the project creation takes into account the theme choice. So, if you choose a "blank" theme when creating the project, by running commands to create pages, resources etc. consider that choice and scaffold the right artifacts without the need to cleanup code coming from the "sveltin" theme
+- logo on `Footer.svelte` when `sveltin` theme not properly loaded
 - import string for `ScrollToTopButton` component on `+layout.svelte` when `sveltin` theme
-- finally, the execution of the commands after the project creation takes into account the theme choice. So, if you choose a "blank" theme when creating the project, by running commands to create pages, resources etc. consider that choice and scaffold the right artifacts without the need to cleanup code coming from the "sveltin" theme
 
 ### Breakings
 
-- **add content cmd:** consistent usage compared to others by introducing the `--to` flag. The new way it works is:
+- **add content** command: consistent usage compared to others by introducing the `--to` flag. The new way it works is:
 
    `sveltin add content <title> --to <resource>`
 
-- **new page cmd:** page type flag renamed as `language` (in short `-l`) . The new way it works is:
+- **new page** command: set the language for the page content: `--svelte` (in short `-s`) or `--markdown` (in short `-m`). The new way it works is:
 
-   `sveltin new page about -l markdown`
+   `sveltin new page about --markdown`
+
+### Improvements
+
+TO BE DONE
 
 ### 🔧  Code Refactoring
 
@@ -45,19 +49,23 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 - **cmds:** prompt handlers moved to tui/prompts
 - `sveltin` theme: simplified components structure and styles. Lint style files with [stylelint](https://stylelint.io/)
 
+### Dependencies Updated
+
+- `charmbracelet/bubbles` updated to `v0.15.0`
+- `charmbracelet/bubbletea` updated to `v0.23.2`
+- `spf13/viper` updated to `v1.15.0`
+- `golang.org/x/text` updated to `v0.7.0`
+
 ### Chores
 
-- `@sveltejs/kit` updated to `v1.5.0`
-- `@sveltejs/adapter-static` updated to `v2.0.0`
+- `@sveltejs/kit` updated to `v1.7.0`
+- `@sveltejs/adapter-static` updated to `v2.0.1`
 - `vite` updated to `v4.1.1`
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.)
 - removing unused imports from page and slug svelte files
 - **go deps:**
   - [yinlog](https://github.com/sveltinio/yinlog) added
   - [prompti](https://github.com/sveltinio/prompti) added
-  - `charmbracelet/bubbles` updated to `v0.15.0`
-  - `spf13/viper` updated to `v1.15.0`
-  - `golang.org/x/text` updated to `v0.6.0`
 - **markup:**
   - tuning styles for `OL`
   - utility functions added to render colored text
@@ -102,7 +110,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.10.0...v0.10.1)
 
-### Fixed Bugs
+### Bug Fixes
 
 - set prerender to false for api index and slug files
 
@@ -123,7 +131,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.9.1...v0.10.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - api endpoints were still on old sveltekit routing mechanism. Updated and fixed an issue when building the project due to `prerender=true` on those files. `fallback: '200.html'` on [static adapter configuration](https://github.com/sveltejs/kit/tree/master/packages/adapter-static) made the magic.
 
@@ -161,7 +169,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.9.0...v0.9.1)
 
-### Fixed Bugs
+### Bug Fixes
 
 - make generated page variable reactive
 
@@ -189,7 +197,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.12...v0.9.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - variable name when creating new resource with name like customers/projects
 - **connection.go:** golangci SA1019
@@ -274,7 +282,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.11...v0.8.12)
 
-### Fixed Bugs
+### Bug Fixes
 
 - [#84](https://github.com/sveltinio/sveltin/issues/84)
 
@@ -292,7 +300,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.10...v0.8.11)
 
-### Fixed Bugs
+### Bug Fixes
 
 - import bootstrap variables for v5.2.0
 - **ci:** test workflow syntax
@@ -326,7 +334,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.9...v0.8.10)
 
-### Fixed Bugs
+### Bug Fixes
 
 - avoid typescript linting errors
 - [#68](https://github.com/sveltinio/sveltin/issues/68) param matchers name when '-' in resource and metadata name
@@ -378,7 +386,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.7...v0.8.8)
 
-### Fixed Bugs
+### Bug Fixes
 
 - svelte-check results with new tsconfig
 
@@ -399,7 +407,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.6...v0.8.7)
 
-### Fixed Bugs
+### Bug Fixes
 
 - remove optimizeDeps config from vite.config.js
 
@@ -435,7 +443,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.4...v0.8.5)
 
-### Fixed Bugs
+### Bug Fixes
 
 - **svelte.config.js:** trailingSlash
 
@@ -451,7 +459,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.3...v0.8.4)
 
-### Fixed Bugs
+### Bug Fixes
 
 - **vite.config.js:** aliases
 
@@ -470,7 +478,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.2...v0.8.3)
 
-### Fixed Bugs
+### Bug Fixes
 
 - resource and metadata names to kebab case string
 - **new:** temporarily hide the possibility to reuse an existing theme
@@ -498,7 +506,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.8.1...v0.8.2)
 
-### Fixed Bugs
+### Bug Fixes
 
 - remove dayjs as dep
 
@@ -539,7 +547,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.3...v0.8.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - metadata index page layout styles
 
@@ -592,7 +600,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.2...v0.7.3)
 
-### Fixed Bugs
+### Bug Fixes
 
 - interfaces names to match the new ones from the packages
 
@@ -616,7 +624,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.1...v0.7.2)
 
-### Fixed Bugs
+### Bug Fixes
 
 - speed up bulma & bootstrap loadings
 - colours and icons on windows
@@ -644,7 +652,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.7.0...v0.7.1)
 
-### Fixed Bugs
+### Bug Fixes
 
 - postcss for tailwind based projects
 
@@ -672,7 +680,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.6.1...v0.7.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - cards grid styles
 - mispelled fixed
@@ -702,7 +710,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.6.0...v0.6.1)
 
-### Fixed Bugs
+### Bug Fixes
 
 - set html scroll-behavior to smooth
 - exit if running sveltin commands from a not valid directory
@@ -715,7 +723,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.5...v0.6.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - remove type annotation, trivially inferred from a string literal
 
@@ -741,7 +749,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.4...v0.5.5)
 
-### Fixed Bugs
+### Bug Fixes
 
 - **libList.gotxt:** resource name variable
 
@@ -753,7 +761,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.3...v0.5.4)
 
-### Fixed Bugs
+### Bug Fixes
 
 - artifacts names in human readable way support added
 
@@ -769,7 +777,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.2...v0.5.3)
 
-### Fixed Bugs
+### Bug Fixes
 
 - favicons
 
@@ -781,7 +789,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.1...v0.5.2)
 
-### Fixed Bugs
+### Bug Fixes
 
 - **deploy.go:** --excludeFile flag renamed as --withExcludeFile
 
@@ -799,7 +807,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.5.0...v0.5.1)
 
-### Fixed Bugs
+### Bug Fixes
 
 - **svelte.config.js:** set `config.kit.prerender.default` to `true`
 
@@ -843,7 +851,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.3.1...v0.4.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - errors handling
 - **newContent.go:** template strings
@@ -879,7 +887,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.3.0...v0.3.1)
 
-### Fixed Bugs
+### Bug Fixes
 
 - env file templates with server port number
 - trailingSlash to always
@@ -897,7 +905,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.14...v0.3.0)
 
-### Fixed Bugs
+### Bug Fixes
 
 - typos
 - pages styles fixed to have center text
@@ -956,7 +964,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.10...v0.2.11)
 
-### Fixed Bugs
+### Bug Fixes
 
 - **app.html:** path to favicon, prism theme and script file
 
@@ -968,7 +976,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.9...v0.2.10)
 
-### Fixed Bugs
+### Bug Fixes
 
 - generate menu command used js instead of ts as file extension causing errors on loading
 
@@ -988,7 +996,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.7...v0.2.8)
 
-### Fixed Bugs
+### Bug Fixes
 
 - pages templates and variables names
 - image path on seo components
@@ -1010,7 +1018,7 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.2.5...v0.2.6)
 
-### Fixed Bugs
+### Bug Fixes
 
 - seo for pages
 - interfaces names to match the new ones from the packages

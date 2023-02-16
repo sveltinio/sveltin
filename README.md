@@ -50,7 +50,7 @@ Sveltin is a CLI (Command Line Interface) created to boost the developers produc
 
 ## :information_source: SvelteKit versions
 
-> Latest tested SvelteKit version is [1.5.0](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.5.0). SvelteKit reached v1.x.x so no breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions
+> Latest tested SvelteKit version is [1.t.0](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.5.0). SvelteKit reached v1.x.x then no more breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions
 
 ## :mega: Overview
 
@@ -83,13 +83,13 @@ cd myBlog
 # Install all the dependencies
 sveltin install
 
-# Create a public page as Svelte component
+# Create a public page and compose it with Svelte
 # (http://localhost:5173/contact)
-sveltin new page contact --language svelte
+sveltin new page contact --svelte
 
-# Create a public page as MDsveX component
+# Create a public page and compose it with Markdown
 # (http://localhost:5173/about)
-sveltin new page about --language markdown
+sveltin new page about --markdown
 
 # Create a 'posts' resource
 sveltin new resource posts
@@ -323,7 +323,7 @@ Sveltin leverages many great open source libraries:
 | Name                                                    | Version   | License      |
 | :------------------------------------------------------ | :-------: | :----------- |
 | [bubble](https://github.com/charmbracelet/bubbles)      | `0.15.0`  | MIT          |
-| [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.1`  | MIT          |
+| [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.2`  | MIT          |
 | [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.6.0`   | MIT          |
 | [validator](https://github.com/go-playground/validator) | `10.11.2` | MIT          |
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
@@ -335,7 +335,7 @@ Sveltin leverages many great open source libraries:
 | [prompti](https://github.com/sveltinio/prompti)         | `0.1.1`   | MIT          |
 | [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
 | [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
-| [text](https://golang.org/x/text)                       | `0.6.0`   | BSD-3-Clause |
+| [text](https://golang.org/x/text)                       | `0.7.0`   | BSD-3-Clause |
 
 ## :free: License
 
