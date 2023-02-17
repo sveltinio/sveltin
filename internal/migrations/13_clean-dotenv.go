@@ -65,7 +65,7 @@ func (m *CleanDotEnv) up() error {
 		}
 
 		migrationTriggers := []string{
-			patterns[sitemap],
+			patterns[sitemapProp],
 			patterns[svelteKitBuildFolder],
 			patterns[svelteKitBuildComment],
 		}
@@ -126,7 +126,7 @@ func (m *CleanDotEnv) runMigration(content []byte, file string) ([]byte, error) 
 func newDotEnvSitemapRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[sitemap],
+		trigger:         patterns[sitemapProp],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""

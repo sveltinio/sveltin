@@ -18,7 +18,7 @@ const (
 	// .env.production file migration
 	svelteKitBuildFolder
 	svelteKitBuildComment
-	sitemap
+	sitemapProp
 	// svelte.config.js file migration
 	prerenderConst
 	prerenderEnabled
@@ -81,7 +81,7 @@ var patterns = map[migrationTriggerId]string{
 	sveltindts:             `export type ResourceContent`,
 	svelteKitBuildFolder:   `SVELTEKIT_BUILD_FOLDER`,
 	svelteKitBuildComment:  `^*# The folder where adapter-static`,
-	sitemap:                `\bsitemap\b`,
+	sitemapProp:            `\bsitemap\b`,
 	prerenderConst:         `^export const prerender`,
 	prerenderEnabled:       `enabled`,
 	trailingSlash:          `\btrailingSlash\b`,

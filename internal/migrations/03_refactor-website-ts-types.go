@@ -64,15 +64,17 @@ func (m *RefactorWebSiteTSTypes) up() error {
 			return err
 		}
 
+		gatekeeper := "Sveltin.WebSite"
 		migrationTriggers := []string{
 			patterns[importIWebSiteSeoType],
 			patterns[iwebsiteSeoTypeUsage],
 			patterns[keywordsProp],
-			patterns[sitemap],
+			patterns[sitemapProp],
 			patterns[webmasterProp],
 			patterns[contactEmailProp],
 		}
-		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
+		if mustMigrate(fileContent, gatekeeper) &&
+			patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
@@ -164,11 +166,26 @@ func replaceKeywordsPropRule(line string) *migrationRule {
 		replacerFunc: func(string) string {
 			splitted := strings.Split(line, ":")
 			key, value := splitted[0], splitted[1]
-
-			pattern := regexp.MustCompile(`[',"].*[',"]`)
-			match := pattern.FindStringSubmatch(value)
-			if len(match) == 1 {
-				return fmt.Sprintf("%s: %s,", key, utils.ConvertJSStringToStringArray(value))
+			// prop name and value on a single line
+			if !utils.IsEmpty(value) {
+				pattern := regexp.MustCompile(`[',"].*[',"]`)
+				match := pattern.FindStringSubmatch(value)
+				if len(match) == 1 {
+					return fmt.Sprintf("%s: %s,", key, utils.ConvertJSStringToStringArray(value))
+				}
+			} else {
+				message := `
+	/**
+	 * ! [sveltin migrate] @IMPORTANT
+	 * keywords type changed to Array<string>.
+	 *
+	 * Update it accordingly.
+	 */
+`
+				var sb strings.Builder
+				sb.WriteString(message)
+				sb.WriteString(line)
+				return sb.String()
 			}
 			return line
 		},
@@ -178,7 +195,7 @@ func replaceKeywordsPropRule(line string) *migrationRule {
 func addCommentToSitemapPropRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		trigger:         patterns[sitemap],
+		trigger:         patterns[sitemapProp],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			message := `
