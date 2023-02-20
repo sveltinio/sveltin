@@ -8,7 +8,7 @@
 	import { canonicalPageUrl, getCoverImagePath } from '$lib/utils/strings.js';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { TOC, PagesNavigator } from '@sveltinio/widgets';
+	import { Breadcrumbs, TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
 
@@ -41,6 +41,7 @@
 <JsonLdWebPage data={ {{ $resourceName }}SlugPage } />
 <JsonLdBreadcrumbs url={$page.url.href} />
 
+<Breadcrumbs url={$page.url.href} />
 <article>
 	<h1>{current.metadata.title}</h1>
 	<div>

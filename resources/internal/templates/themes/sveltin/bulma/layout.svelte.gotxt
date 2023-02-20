@@ -29,4 +29,4 @@
 	<Footer logoSrc="{assets}/{website.logo}" />
 </div>
 
-<ScrollToTopButton />
+<ScrollToTopButton bounce />

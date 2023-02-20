@@ -20,4 +20,4 @@
 	<slot />
 </main>
 
-<ScrollToTopButton />
+<ScrollToTopButton bounce />

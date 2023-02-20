@@ -5,7 +5,7 @@
 	import { base, assets } from '$app/paths';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
-	import { Card, CardAction, CardImage } from '@sveltinio/widgets';
+	import { Breadcrumbs, Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { canonicalPageUrl, toTitle, getFavicon } from '$lib/utils/strings.js';
@@ -18,7 +18,7 @@
 
 	$: ({ resourceName, items } = data);
 	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
-	$: {{ $resourceName }}IndexPage = <SEOWebPage> {
+	$: {{ $resourceName }}IndexPage = <SEOWebPage>{
 		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: toTitle(resourceName),
 		description: pageDescription,
@@ -38,6 +38,7 @@
 <JsonLdBreadcrumbs url={$page.url.href} />
 
 <section class="page-wrapper">
+	<Breadcrumbs url={$page.url.href} />
 	<div class="page-wrapper__content">
 		{#if items.length != 0}
 			<h1>{toTitle(resourceName)}</h1>

@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { Breadcrumbs } from '@sveltinio/widgets';
 	import { canonicalPageUrl, getFavicon, capitalizeFirstLetter } from '$lib/utils/strings.js';
 
 	export let data: PageData;
@@ -29,6 +30,7 @@
 <JsonLdBreadcrumbs url={$page.url.href} />
 
 <div class="page-wrapper">
+	<Breadcrumbs url={$page.url.href} />
 	<div class="page-wrapper__content">
 		{#if metadata}
 			<h2>{slug}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
