@@ -66,7 +66,7 @@ Read the latest [Release Notes](https://docs.sveltin.io/release-notes).
 - **svelte.config.js:** postcss prop for preprocessor removed when vanillacss
 - component ScrollToTopButton added to the layout when blank theme
 - validation added to the project settings file
-- `@sveltejs/kit` updated to `v1.7.2`;
+- `@sveltejs/kit` updated to `v1.8.0`;
 - `@sveltejs/adapter-static` updated to `v2.0.1`;
 - `vite` updated to `v4.1.2`;
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.);
