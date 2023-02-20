@@ -30,6 +30,9 @@ func getDevDependency(content []byte, name string) (string, bool) {
 func versionAsNum(text string) (float64, error) {
 	re := regexp.MustCompile(`(\d+\.\d+)`)
 	match := re.FindStringSubmatch(text)
+	if len(match) == 1 {
+		return strconv.ParseFloat(match[1], 64)
+	}
+	return 0, fmt.Errorf("something wrong parsing: %s", text)
 
-	return strconv.ParseFloat(match[1], 64)
 }

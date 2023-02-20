@@ -67,25 +67,22 @@ func (m *UnhandledMigration) up() error {
 	// @sveltinio/essentials min version
 	const minEssentialsVersion = 0.5
 	// Retrieve @sveltinio/essentials version
-	currentEssentialsVersionStr, _ := getDevDependency(fileContent, "@sveltinio/essentials")
-	currentEssentialsVersion, _ := versionAsNum(currentEssentialsVersionStr)
+	currentEssentialsVersion := retrievePackageVersionNumber(fileContent, "@sveltinio/essentials")
 
 	// @sveltinio/seo min version
 	const minSeoVersion = 0.3
 	// Retrieve @sveltinio/essentials version
-	currentSeoVersionStr, _ := getDevDependency(fileContent, "@sveltinio/seo")
-	currentSeoVersion, _ := versionAsNum(currentSeoVersionStr)
+	currentSeoVersion := retrievePackageVersionNumber(fileContent, "@sveltinio/seo")
 
 	// @sveltinio/widgets min version
 	const minWidgetsVersion = 0.5
 	// Retrieve @sveltinio/widgets version
-	currentWidgetsVersionStr, _ := getDevDependency(fileContent, "@sveltinio/widgets")
-	currentWidgetsVersion, _ := versionAsNum(currentWidgetsVersionStr)
+	currentWidgetsVersion := retrievePackageVersionNumber(fileContent, "@sveltinio/widgets")
 
 	if exists &&
-		(currentEssentialsVersion < minEssentialsVersion ||
-			currentSeoVersion < minSeoVersion ||
-			currentWidgetsVersion < minWidgetsVersion) {
+		(isPreviousVersion(currentEssentialsVersion, minEssentialsVersion) ||
+			isPreviousVersion(currentSeoVersion, minSeoVersion) ||
+			isPreviousVersion(currentWidgetsVersion, minWidgetsVersion)) {
 		files := []string{}
 		walkFunc := func(file string, info os.FileInfo, err error) error {
 			if filepath.Ext(file) == ".svelte" {
@@ -120,7 +117,6 @@ func (m *UnhandledMigration) up() error {
 					}
 				}
 			}
-
 		}
 
 	}
@@ -247,4 +243,22 @@ func newWidgetsImportRule(line string) *migrationRule {
 			return sb.String()
 		},
 	}
+}
+
+//=============================================================================
+
+func retrievePackageVersionNumber(content []byte, name string) float64 {
+	currentVersionStr, res := getDevDependency(content, name)
+	var currentVersion float64
+	if res {
+		currentVersion, _ = versionAsNum(currentVersionStr)
+	}
+	return currentVersion
+}
+
+func isPreviousVersion(current, target float64) bool {
+	if current == 0 {
+		return false
+	}
+	return current < target
 }
