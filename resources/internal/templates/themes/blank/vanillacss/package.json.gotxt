@@ -27,7 +27,7 @@
 		"@sveltinio/widgets": "^0.6.1",
 		"@types/gtag.js": "^0.0.12",
 		"@types/lodash-es": "^4.17.6",
-		"@types/node": "^18.13.0",
+		"@types/node": "^18.14.0",
 		"@typescript-eslint/eslint-plugin": "^5.52.0",
 		"@typescript-eslint/parser": "^5.52.0",
 		"eslint": "^8.34.0",
@@ -49,6 +49,6 @@
 		"svelte-preprocess": "^5.0.1",
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5",
-		"vite": "^4.1.2"
+		"vite": "^4.1.3"
 	}
 }

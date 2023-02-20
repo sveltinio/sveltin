@@ -28,7 +28,7 @@
 		"@sveltinio/widgets": "^0.6.1",
 		"@types/gtag.js": "^0.0.12",
 		"@types/lodash-es": "^4.17.6",
-		"@types/node": "^18.13.0",
+		"@types/node": "^18.14.0",
 		"@typescript-eslint/eslint-plugin": "^5.52.0",
 		"@typescript-eslint/parser": "^5.52.0",
 		"bootstrap": "^5.2.3",
@@ -46,12 +46,12 @@
 		"remark-emoji": "^3.1.0",
 		"remark-reading-time": "1.0.1",
 		"rimraf": "^4.1.2",
-		"sass": "^1.58.0",
+		"sass": "^1.58.3",
 		"svelte": "^3.55.1",
 		"svelte-check": "^3.0.3",
 		"svelte-preprocess": "^5.0.1",
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5",
-		"vite": "^4.1.2"
+		"vite": "^4.1.3"
 	}
 }
