@@ -1,28 +1,28 @@
 # CHANGELOG
 
-## [v0.11.0](https://github.com/sveltinio/sveltin/releases/tag/v0.11.0) (2023-02-XX)
+## [v0.11.0](https://github.com/sveltinio/sveltin/releases/tag/v0.11.0) (2023-02-20)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.10.1...v0.11.0)
 
-Read the [Release Notes](https://docs.sveltin.io/release-notes).
+Read the latest [Release Notes](https://docs.sveltin.io/release-notes).
 
 ### 🚀  New Features
 
-- `sveltin.json` file: to simplify settings across parts of the project
-- `deploy` command takes into account if _adapter-static_ has been configured to output pages and assets in [different folders](https://github.com/sveltejs/kit/tree/master/packages/adapter-static#pages). In this case, make sure to reflect them to `sveltin.json`
-- `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release.
-- `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell)
-- active helps: by using `TAB` after the command name shows a message about params or flags
-- mdsvex config: set a layout component for pages created by running `sveltin new page` command
-- SEO keywords per page
+- `sveltin.json` file: to simplify settings across parts of the project;
+- `deploy` command takes into account if _adapter-static_ has been configured to output pages and assets in [different folders](https://github.com/sveltejs/kit/tree/master/packages/adapter-static#pages). In this case, make sure to reflect them to `sveltin.json`;
+- `migrate` command: added to easily upgrade/migrate existing sveltin project to the latest sveltin release;
+- `completion` command: added to generate the autocompletion script for the specified shell (bash, zsh, fish, powershell);
+- active helps: by using `TAB` after the command name shows a message about params or flags;
+- `mdsvex.config.js`: set a layout component for pages created by running `sveltin new page` command;
+- SEO keywords per page.
 
 ### Bug Fixes
 
-- `mdsvex.config.js`: missed comma after _rehypeSlug_ usage
-- pages created as "markdown" were buggies
-- the execution of the commands after the project creation takes into account the theme choice. So, if you choose a "blank" theme when creating the project, by running commands to create pages, resources etc. consider that choice and scaffold the right artifacts without the need to cleanup code coming from the "sveltin" theme
-- logo on `Footer.svelte` when `sveltin` theme not properly loaded
-- import string for `ScrollToTopButton` component on `+layout.svelte` when `sveltin` theme
+- `mdsvex.config.js`: missed comma after _rehypeSlug_ usage;
+- pages created as "markdown" were buggies;
+- the execution of the commands after the project creation takes into account the theme choice. So, if you choose a "blank" theme when creating the project, by running commands to create pages, resources etc. consider that choice and scaffold the right artifacts without the need to cleanup code coming from the "sveltin" theme;
+- logo on `Footer.svelte` when `sveltin` theme not properly loaded;
+- import string for `ScrollToTopButton` component on `+layout.svelte` when `sveltin` theme;
 
 ### Breakings
 
@@ -30,60 +30,67 @@ Read the [Release Notes](https://docs.sveltin.io/release-notes).
 
    `sveltin add content <title> --to <resource>`
 
-- **new page** command: set the language for the page content: `--svelte` (in short `-s`) or `--markdown` (in short `-m`). The new way it works is:
+- **new page** command: set the language for the page content: `--svelte` or `--markdown`. The new way it works is:
 
    `sveltin new page about --markdown`
 
-### Improvements
-
-TO BE DONE
-
 ### 🔧  Code Refactoring
 
-- removing dependency from `gopkg.in/yaml.v3` and make use of viper capabilities
-- removing dependency from `gopkg.in/github.com/vbauerster/mpb/v8`
-- **deploy:** make use of sveltin.json and tui redesigned (the progressbar component is now the one provided by [prompti](https://github.com/sveltinio/prompti))
-- renaming SveltinConfig struct as SveltinSettings
-- renaming ProjectData struct as EnvProductionData
-- fileNotFound error now display the file path
-- **cmds:** prompt handlers moved to tui/prompts
-- `sveltin` theme: simplified components structure and styles. Lint style files with [stylelint](https://stylelint.io/)
+- removing dependency from `gopkg.in/yaml.v3` and make use of viper capabilities;
+- removing dependency from `gopkg.in/github.com/vbauerster/mpb/v8`;
+- **deploy:** make use of sveltin.json and tui redesigned (the progressbar component is now the one provided by [prompti](https://github.com/sveltinio/prompti));
+- renaming SveltinConfig struct as SveltinSettings;
+- renaming ProjectData struct as EnvProductionData;
+- fileNotFound error now display the file path;
+- **cmds:** prompt handlers moved to tui/prompts;
+- `sveltin` theme: simplified components structure and styles. Lint style files with [stylelint](https://stylelint.io/);
 
 ### Dependencies Updated
 
-- `charmbracelet/bubbles` updated to `v0.15.0`
-- `charmbracelet/bubbletea` updated to `v0.23.2`
-- `spf13/viper` updated to `v1.15.0`
-- `golang.org/x/text` updated to `v0.7.0`
+- update `charmbracelet/bubbles` to `v0.15.0`
+- update `charmbracelet/bubbletea` to `v0.23.2`
+- update `spf13/viper` to `v1.15.0`
+- update `golang.org/x/text` to `v0.7.0`
 
 ### Chores
 
-- `@sveltejs/kit` updated to `v1.7.1`
-- `@sveltejs/adapter-static` updated to `v2.0.1`
-- `vite` updated to `v4.1.1`
-- overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.)
+- adding empty line at the end of commands chain log
+- **app.html:** remove prism.js loading. mdsvex includes it
+- consistent message formats across commands
+- prepend svelte-kit sync run to the build script
 - removing unused imports from page and slug svelte files
-- **go deps:**
-  - [yinlog](https://github.com/sveltinio/yinlog) added
-  - [prompti](https://github.com/sveltinio/prompti) added
-- **markup:**
-  - tuning styles for `OL`
-  - utility functions added to render colored text
-- **package.json:**
-  - `remark-preview`removed
-  - `remark-slug`removed
-  - `mdast-util-to-string` removed
-  - `unist-util-visit` removed
-  - `remark-external-links` replaced by `rehype-external-links`
+- detecting package manager message when no npmClient flag used only
+- tuning text colors and migrate message updated
 - **slug.svelte.gotxt:** format date metadata with time datetime tag
-- **vite.config.ts:** prevent [@indaco/svelte-iconoir](https://github.com/indaco/svelte-iconoir) from being externalized for SSR
+- **slug.ts.gotxt:** formatting - avoid blank lines
+- **svelte.config.js:** postcss prop for preprocessor removed when vanillacss
+- component ScrollToTopButton added to the layout when blank theme
+- validation added to the project settings file
+- `@sveltejs/kit` updated to `v1.7.2`;
+- `@sveltejs/adapter-static` updated to `v2.0.1`;
+- `vite` updated to `v4.1.2`;
+- overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.);
+- removing unused imports from page and slug svelte files;
+- **go deps:**
+  - [yinlog](https://github.com/sveltinio/yinlog) added;
+  - [prompti](https://github.com/sveltinio/prompti) added.
+- **markup:**
+  - tuning styles for `OL`;
+  - utility functions added to render colored text-
+- **package.json:**
+  - `remark-preview`removed;
+  - `remark-slug`removed;
+  - `mdast-util-to-string` removed;
+  - `unist-util-visit` removed;
+  - `remark-external-links` replaced by `rehype-external-links`;
+- **vite.config.ts:** prevent [@indaco/svelte-iconoir](https://github.com/indaco/svelte-iconoir) from being externalized for SSR.
 
 ### 📖  Documentation
 
 - **commands:**
-  - consistent short help messages
-  - `migrate` added
-  - `add content` flags
+  - consistent short help messages;
+  - `migrate` added;
+  - `add content` flags.
 
 ### Pull Requests
 
