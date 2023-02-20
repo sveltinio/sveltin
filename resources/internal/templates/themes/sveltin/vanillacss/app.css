@@ -77,13 +77,12 @@ pre[class*='language-'] {
 }
 
 .page-wrapper__content {
-	margin-left: auto;
-	margin-right: auto;
+	margin: 1rem auto;
 	width: 100%;
 }
 
 :is(.page-wrapper, .page-wrapper__content) h1 {
-	margin-bottom: 2rem;
+	margin: 2rem 0;
 	font-weight: 500;
 	font-size: 1.875rem;
 	line-height: 2.25rem;

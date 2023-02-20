@@ -70,8 +70,7 @@ pre[class*='language-'] {
 	padding: 2.75rem;
 
 	&__content {
-		margin-left: auto;
-		margin-right: auto;
+		margin: 1rem auto;
 		width: 100%;
 
 		h2 {
@@ -82,7 +81,7 @@ pre[class*='language-'] {
 	}
 
 	:is(&, &__content) h1 {
-		margin-bottom: 2rem;
+		margin: 2rem 0;
 		font-weight: 500;
 		font-size: 1.875rem;
 		line-height: 2.25rem;

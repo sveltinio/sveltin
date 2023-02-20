@@ -57,11 +57,11 @@
 }
 
 .page-wrapper__content {
-	@apply w-full mx-auto text-gray-800 leading-6;
+	@apply w-full my-4 mx-auto text-gray-800 leading-6;
 }
 
 :is(.page-wrapper, .page-wrapper__content) h1 {
-	@apply mb-8 text-3xl font-medium;
+	@apply my-8 text-3xl font-medium;
 }
 
 .page-wrapper__content h2 {
