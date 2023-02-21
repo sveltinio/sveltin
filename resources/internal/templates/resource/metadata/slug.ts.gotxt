@@ -1,9 +1,12 @@
 {{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
-import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
+import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
+import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 
-export async function load({ params }) {
-	const metadata = await groupedBy(params.slug);
+export const load = (async ({ params }) => {
+	const { slug } = params;
+	const metadata = await groupedBy(slug);
+
 	if (metadata) {
 		return {
 			slug: params.slug,
@@ -12,4 +15,4 @@ export async function load({ params }) {
 	}
 
 	throw error(404, 'Not found');
-}
+}) satisfies PageLoad;
