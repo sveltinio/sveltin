@@ -12,7 +12,7 @@
 </script>
 
 <JsonLdWebSite data={website} />
-<JsonLdSiteNavigationElements data={website} menuData={sortedMenu} />
+<JsonLdSiteNavigationElements baseURL={website.baseURL} data={sortedMenu} />
 
 <!-- GoogleFonts fonts={googleFonts} /> -->
 
