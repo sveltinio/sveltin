@@ -9,7 +9,7 @@ export const load = (async ({ params }) => {
 
 	if (metadata) {
 		return {
-			slug: params.slug,
+			slug,
 			metadata
 		};
 	}
