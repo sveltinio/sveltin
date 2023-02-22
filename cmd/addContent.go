@@ -167,21 +167,21 @@ func createContentLocalFolder(contentData *tpltypes.ContentData) *composer.Folde
 func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
-	// NEW FOLDER static/images
-	imagesFolder := composer.NewFolder("images")
-	// NEW FOLDER static/images/<resource_name>
-	resourceImagesFolder := composer.NewFolder(contentData.Resource)
-	// NEW FOLDER static/images/<resource_name>/<content_name>
-	contentImagesFolder := composer.NewFolder(contentData.Name)
+	// NEW FOLDER static/resources
+	allResourcesFolder := composer.NewFolder("resources")
+	// NEW FOLDER static/resources/<resource_name>
+	resourceFolder := composer.NewFolder(contentData.Resource)
+	// NEW FOLDER static/resources/<resource_name>/<content_name>
+	contentByResourceFolder := composer.NewFolder(contentData.Name)
 	// SET FOLDER STRUCTURE
-	resourceImagesFolder.Add(contentImagesFolder)
-	imagesFolder.Add(resourceImagesFolder)
-	staticFolder.Add(imagesFolder)
+	resourceFolder.Add(contentByResourceFolder)
+	allResourcesFolder.Add(resourceFolder)
+	staticFolder.Add(allResourcesFolder)
 
 	return staticFolder
 }
 
 func addSampleCoverImage(contentData *tpltypes.ContentData) error {
-	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "images", contentData.Resource, contentData.Name)).Name
+	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "resources", contentData.Resource, contentData.Name)).Name
 	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileId, saveTo)
 }

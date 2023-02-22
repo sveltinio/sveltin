@@ -61,7 +61,7 @@
 	</div>
 	{#if current.metadata.cover}
 		<img
-			src="{assets}/images/{current.resource}/{current.metadata.slug}/{current.metadata.cover}"
+			src="{assets}/resources/{current.resource}/{current.metadata.slug}/{current.metadata.cover}"
 			alt="cover image for {current.metadata.title}"
 		/>
 	{/if}

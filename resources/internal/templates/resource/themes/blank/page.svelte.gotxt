@@ -51,7 +51,7 @@
 					<CardImage
 						slot="cardImage"
 						alt={item.metadata.title}
-						src="{assets}/images/{item.resource}/{item.metadata.slug}/{item.metadata.cover}"
+						src="{assets}/resources/{item.resource}/{item.metadata.slug}/{item.metadata.cover}"
 					/>
 					<CardAction slot="cardAction" href="{base}/{item.resource}/{item.metadata.slug}" />
 				</Card>
