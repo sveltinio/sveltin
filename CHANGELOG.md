@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v0.11.0](https://github.com/sveltinio/sveltin/releases/tag/v0.11.0) (2023-02-21)
+## [v0.11.0](https://github.com/sveltinio/sveltin/releases/tag/v0.11.0) (2023-02-22)
 
 [Full Changelog](https://github.com/sveltinio/sveltin/compare/v0.10.1...v0.11.0)
 
@@ -68,7 +68,7 @@ Read the latest [Release Notes](https://docs.sveltin.io/release-notes).
 - validation added to the project settings file
 - `@sveltejs/kit` updated to `v1.8.3`;
 - `@sveltejs/adapter-static` updated to `v2.0.1`;
-- `vite` updated to `v4.1.2`;
+- `vite` updated to `v4.1.4`;
 - overall npm deps updated (`typescript`, `tslib`, `eslint`,`vite-plugin-svelte` etc.);
 - removing unused imports from page and slug svelte files;
 - **go deps:**
