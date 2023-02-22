@@ -92,11 +92,11 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
 	cfg.log.Plain(markup.H1(headingText))
 
-	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
+	// MAKE FOLDER STRUCTURE: content/<resource_name>/<content_name>
 	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)
 	utils.ExitIfError(err)
 
-	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
+	// MAKE FOLDER STRUCTURE: static/images/resources/<resource_name>/<content_name>
 	staticFolder, err := makeContentFolderStructure(StaticFolder, contentData)
 	utils.ExitIfError(err)
 
@@ -167,11 +167,11 @@ func createContentLocalFolder(contentData *tpltypes.ContentData) *composer.Folde
 func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
-	// NEW FOLDER static/resources
-	imagesFolder := composer.NewFolder("resources")
-	// NEW FOLDER static/resources/<resource_name>
+	// NEW FOLDER static/images
+	imagesFolder := composer.NewFolder("images")
+	// NEW FOLDER static/images/<resource_name>
 	resourceImagesFolder := composer.NewFolder(contentData.Resource)
-	// NEW FOLDER static/resources/<resource_name>/<content_name>
+	// NEW FOLDER static/images/<resource_name>/<content_name>
 	contentImagesFolder := composer.NewFolder(contentData.Name)
 	// SET FOLDER STRUCTURE
 	resourceImagesFolder.Add(contentImagesFolder)
@@ -182,6 +182,6 @@ func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Fo
 }
 
 func addSampleCoverImage(contentData *tpltypes.ContentData) error {
-	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "resources", contentData.Resource, contentData.Name)).Name
+	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "images", contentData.Resource, contentData.Name)).Name
 	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileId, saveTo)
 }

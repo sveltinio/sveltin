@@ -23,7 +23,7 @@
 		<slot />
 	</main>
 
-	<Footer logoSrc="{assets}/{website.logo}" />
+	<Footer logoSrc="{assets}/images/sveltin/{website.logo}" />
 </div>
 
 <ScrollToTopButton bounce />
