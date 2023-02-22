@@ -1,13 +1,26 @@
 ---
+layout: false
 title: {{ .Content.Name | ToTitle }}
 author: YOUR_NAME
 slug: {{ .Content.Name | ToSlug }}
 headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porttitor eget elit vel semper. Cras.
+keywords: ['keyword_1', 'keyword_2']
 created_at: {{ Today }}
 updated_at: {{ Today }}
 cover: dummy.jpeg
 draft: false
 ---
+
+<script lang="ts">
+  import { YouTube } from '@sveltinio/media-content';
+
+  const youtubeSampleVideoSettings: IYouTubeSettings = {
+    autoplay: false,
+    ccLangPref: 'it',
+    color: 'white',
+    controls: true
+  }
+</script>
 
 ## Headings
 
@@ -34,6 +47,16 @@ The blockquote element represents content that is quoted from another source, op
 > — <cite>Rob Pike[^1]</cite>
 
 [^1]: The above quote is excerpted from Rob Pike's [talk](https://www.youtube.com/watch?v=PAAkCSZUG1c) during Gopherfest, November 18, 2015.
+
+## Media
+
+Embed media content with [@sveltinio/media-content](https://github.com/sveltinio/components-library/tree/main/packages/media-content)
+
+<YouTube
+    id="pJcbZr5VlV4"
+    title="Svelte Summit Fall 2022 - Day 1"
+    settings={youtubeSampleVideoSettings}
+/>
 
 ## Tables
 

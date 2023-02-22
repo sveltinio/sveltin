@@ -1,8 +1,11 @@
-import path from 'path';
+import { resolve, join, dirname } from 'path';
 import { defineConfig } from 'vite';
 import { readFileSync } from 'fs';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const file = fileURLToPath(new URL('package.json', import.meta.url));
 const json = readFileSync(file, 'utf8');
@@ -28,9 +31,10 @@ const config = defineConfig({
 	},
 	resolve: {
 		alias: {
-			$config: path.resolve('config'),
-			$content: path.resolve('content'),
-			$themes: path.resolve('themes'),
+			$sveltin: resolve(join(__dirname, './src/sveltin')),
+			$config: resolve(join(__dirname, './config')),
+			$content: resolve(join(__dirname, './content')),
+			$themes: resolve(join(__dirname, './themes'))
 		},
 	},
 	plugins: [sveltekit()],

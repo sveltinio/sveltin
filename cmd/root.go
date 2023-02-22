@@ -44,7 +44,7 @@ type appConfig struct {
 
 const (
 	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.10.1"
+	CliVersion string = "0.11.0"
 )
 
 const (
@@ -70,16 +70,17 @@ const (
 
 // File IDs for a Sveltin project structure.
 const (
-	ApiIndexFile      string = "api_index"
-	ApiMetadataIndex  string = "api_metadata_index"
-	ApiSlugFile       string = "api_slug"
-	IndexFile         string = "index"
-	IndexEndpointFile string = "indexendpoint"
-	SlugFile          string = "slug"
-	SlugEndpointFile  string = "slugendpoint"
-	SlugLayoutFile    string = "sluglayout"
-	MDsveXFileID      string = "mdsvex"
-	DummyImgFileID    string = "dummy"
+	ApiIndexFileId      string = "api_index"
+	ApiMetadataIndexId  string = "api_metadata_index"
+	ApiSlugFileId       string = "api_slug"
+	IndexFileId         string = "index"
+	IndexEndpointFileId string = "indexendpoint"
+	SlugFileId          string = "slug"
+	SlugEndpointFileId  string = "slugendpoint"
+	SlugLayoutFileId    string = "sluglayout"
+	MDsveXFileId        string = "mdsvex"
+	DummyImgFileId      string = "dummy"
+	SveltinDTSFileId    string = "sveltin_d_ts"
 )
 
 // File names for a Sveltin project structure.
@@ -87,8 +88,17 @@ const (
 	ProjectSettingsFile string = "sveltin.json"
 	DefaultsConfigFile  string = "defaults.js.ts"
 	DotEnvProdFile      string = ".env.production"
+	WebSiteTSFile       string = "website.js.ts"
+	MenuTSFile          string = "menu.js.ts"
 	PackageJSONFile     string = "package.json"
 	MDsveXFile          string = "mdsvex.config.js"
+	SvelteConfigFile    string = "svelte.config.js"
+	LayoutTSFile        string = "+layout.ts"
+	HeadingsJSFile      string = "headings.js"
+	StringsTSFile       string = "strings.js.ts"
+	SveltinDTSFile      string = "sveltin.d.ts"
+	ViteConfigFile      string = "vite.config.ts"
+	TSConfigFile        string = "tsconfig.json"
 )
 
 // Matchers IDs
@@ -232,6 +242,6 @@ func isValidProject(checkIfLatestVersion bool) {
 // GetSveltinCommands returns an array of pointers to the implemented cobra.Command
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
-		initCmd, newCmd, addCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd, upgradeCmd,
+		initCmd, newCmd, addCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd, migrateCmd,
 	}
 }

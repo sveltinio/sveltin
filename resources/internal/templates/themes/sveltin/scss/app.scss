@@ -1,66 +1,24 @@
-/* CSS RESET by https://www.joshwcomeau.com/css/custom-css-reset/ */
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-* {
-	margin: 0;
-}
-html,
-body {
-	height: 100%;
-}
-body {
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
-}
-img,
-picture,
-video,
-canvas,
-svg {
-	display: block;
-	max-width: 100%;
-}
-input,
-button,
-textarea,
-select {
-	font: inherit;
-}
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	overflow-wrap: break-word;
-}
-#root,
-#__next {
-	isolation: isolate;
-}
+@charset "utf-8";
 
-/* END OF CSS RESET by */
+@import url('./tw-preflight.css');
+@import url('../static/css/github/github-markdown-light-5.2.0.css') screen;
+@import url('../static/css/prism/themes/prism-shades-of-purple.css') screen;
+
+/*
+ * Variables and mixins from the src/variables.scss file are available here without importing
+ */
 
 html {
+	height: 100%;
 	scroll-behavior: smooth;
 }
 
 body {
+	height: 100%;
+	line-height: 1.5;
 	background-color: $white;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-ol,
-ul,
-menu {
-	list-style: none;
-	margin: 0;
-	padding: 0;
 }
 
 main {
@@ -68,9 +26,7 @@ main {
 }
 
 h1 {
-	color: $color-text-base;
-	margin-top: 0.75rem;
-	margin-bottom: 32px;
+	color: $base;
 	margin-left: auto;
 	margin-right: auto;
 	transition-property: all;
@@ -79,8 +35,13 @@ h1 {
 }
 
 a {
+	color: currentcolor;
 	text-decoration: none;
-	color: inherit;
+
+	&:hover {
+		color: currentcolor;
+		text-decoration: none;
+	}
 }
 
 code[class*='language-'] {
@@ -92,17 +53,6 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-@media only screen and (min-width: 1024px) {
-	code[class*='language-'] {
-		font-size: 1rem !important;
-	}
-
-	code[class*='language-'],
-	pre[class*='language-'] {
-		line-height: 25px;
-	}
-}
-
 .main-container {
 	position: relative;
 	min-height: 100vh;
@@ -112,94 +62,31 @@ pre[class*='language-'] {
 	justify-content: center;
 }
 
-.btn {
-	position: relative;
-	display: inline-flex;
-	align-items: center;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-	font-size: 0.875rem;
-	font-weight: 500;
-	border-width: 2px;
-	border-style: solid;
-}
-
-.btn-accent {
-	color: $white;
-	background-color: $color-text-base;
-	border-top-left-radius: 0.5rem;
-	border-bottom-left-radius: 0.5rem;
-	border-color: $color-text-base;
-
-	&:hover {
-		background-color: $dark;
-	}
-
-	&:focus {
-		z-index: 10;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		border-color: $white;
-	}
-}
-
-.btn-base {
-	margin-left: -1px;
+.page-wrapper {
 	color: $dark;
-	border-top-right-radius: 0.5rem;
-	border-bottom-right-radius: 0.5rem;
-	border-color: $color-text-base;
-
-	&:focus {
-		z-index: 10;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-	}
-}
-
-.artifact-container {
-	color: $dark;
-	margin-top: 1.75rem;
-	margin-bottom: 1.75rem;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 1.75rem auto;
 	display: flex;
 	max-width: 56rem;
 	flex-direction: column;
 	justify-content: center;
 	padding: 2.75rem;
 
-	> .content {
-		margin-left: auto;
-		margin-right: auto;
+	&__content {
+		margin: 1rem auto;
 		width: 100%;
 
-		h1 {
-			text-align: left;
-			line-height: 2rem;
-			font-size: 1.5rem;
-			font-weight: 500;
-			margin-left: 0px;
-			margin-right: 0px;
-		}
-
 		h2 {
-			text-align: left;
-			font-size: 1.25rem;
-			font-weight: 400;
-			line-height: 1.75rem;
-			margin-top: 0.5rem;
-			margin-bottom: 0.5rem;
-			margin-left: 0px;
-			margin-right: 0px;
+			font-weight: 500;
+			font-size: 1.5rem;
+			line-height: 2rem;
 		}
+	}
 
-		ul li {
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
-		}
+	:is(&, &__content) h1 {
+		margin: 2rem 0;
+		font-weight: 500;
+		font-size: 1.875rem;
+		line-height: 2.25rem;
 	}
 }
 
@@ -208,8 +95,8 @@ pre[class*='language-'] {
 	border-radius: 0.375rem;
 }
 
-.warning {
-	background-color: rgb(254 215 170);
+.message--warning {
+	background-color: $orange;
 }
 
 .text-default {
@@ -235,20 +122,25 @@ pre[class*='language-'] {
 	max-width: 980px;
 	margin: 0 auto;
 	padding: 45px;
-}
 
-@media (min-width: 1024px) {
-	.subwrapper {
-		padding-left: 4rem;
-		padding-right: 4rem;
+	a {
+		color: currentcolor;
+		text-decoration: none;
 
-		> .herotext h1 {
-			font-size: 3rem;
+		&:hover {
+			color: currentcolor;
+			text-decoration: none;
 		}
 	}
+}
 
-	.btn {
-		padding-left: 2rem;
-		padding-right: 2rem;
+@media only screen and (min-width: 1024px) {
+	code[class*='language-'] {
+		font-size: 1rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 25px;
 	}
 }

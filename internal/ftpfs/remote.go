@@ -19,7 +19,7 @@ type RemoteServer interface {
 	Logout() error
 	Idle() error
 	MakeDirs([]string, bool) error
-	UploadFiles(afero.Fs, string, []string, bool) error
+	UploadFiles(afero.Fs, string, []string, bool, bool) error
 	DeleteAll([]string, bool) error
 	DoBackup(afero.Fs, string, bool) error
 }

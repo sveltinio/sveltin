@@ -6,11 +6,13 @@
 @import 'bootstrap/scss/utilities';
 
 /* additional colours */
-$dark: #2c2c35 /*haiti*/;
-$deep-dark: #1e2028 /* pearl */;
-$color-text-base: #464a5d /*river*/;
-$color-text-muted: #a0a1b2 /* santa */;
-$color-text-accent: #0b7599 /* cege */;
+$white: #ffffff;
+$dark: #2c2c35;
+$deep-dark: #1e2028;
+$base: #464a5d;
+$muted: #a0a1b2;
+$cyan: #0b7599;
+$orange: #fed7aa;
 
 $spacer: 1rem;
 $spacers: (
@@ -250,8 +252,8 @@ $utilities: map-merge(
 						map-merge(
 							map-get(map-get($utilities, 'color'), 'values'),
 							(
-								'teal': $color-text-accent,
-								'muted': $color-text-muted,
+								'cyan': $cyan,
+								'muted': $muted,
 								'dark': $dark,
 							)
 						),

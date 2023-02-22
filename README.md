@@ -6,7 +6,10 @@ The Smartest Way to Create SvelteKit powered static websites.
 </h2>
 <p align="center">
 <a href="https://sveltin.io/" target="_blank">
-        Website
+        Homepage
+    </a> |
+    <a href="https://docs.sveltin.io/release-notes" target="_blank">
+        Release Notes
     </a> |
     <a href="https://docs.sveltin.io/quick-start" target="_blank">
         Quick Start
@@ -32,7 +35,7 @@ The Smartest Way to Create SvelteKit powered static websites.
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.10.1-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.11.0-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
@@ -46,11 +49,11 @@ The Smartest Way to Create SvelteKit powered static websites.
 
 # Sveltin
 
-Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit powered static websites</strong>.
+Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit v1.x.x powered static websites</strong>.
 
-## :warning: Project Status
+## :information_source: SvelteKit versions
 
-> Sveltin is under active development and some changes are expected before we hit version 1.0. At the same time, we will do our best to follow the progress toward SvelteKit v1.0 (Latest SvelteKit tested version is **1.0.0-next-508**). If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions tab](https://github.com/sveltinio/sveltin/discussions) or open an [issue](https://github.com/sveltinio/sveltin/issues).
+> Latest tested SvelteKit version is [1.8.3](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.8.3). SvelteKit reached v1.x.x then no more breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions
 
 ## :mega: Overview
 
@@ -71,6 +74,8 @@ Sveltin provides:
 
 With few commands Sveltin flex the muscles 💪
 
+> **NOTE**: each command can be executed in interactive way so do not need to pass arguments and flags to it.
+
 ```bash
 # Create a project with TailwindCSS support
 sveltin init myBlog --css tailwindcss
@@ -81,20 +86,20 @@ cd myBlog
 # Install all the dependencies
 sveltin install
 
-# Create a public page as Svelte component
+# Create a public page and compose it with Svelte
 # (http://localhost:5173/contact)
-sveltin new page contact --as svelte
+sveltin new page contact --svelte
 
-# Create a public page as MDsveX component
+# Create a public page and compose it with Markdown
 # (http://localhost:5173/about)
-sveltin new page about --as markdown
+sveltin new page about --markdown
 
 # Create a 'posts' resource
 sveltin new resource posts
 
 # Add new content to the posts resource
 # (http://localhost:5173/posts/getting-started)
-sveltin add content posts/getting-started
+sveltin add content getting-started --to posts
 
 # Add a 'category' metadata
 # (http://localhost:5173/posts/category)
@@ -157,6 +162,10 @@ sudo chmod +x /usr/local/bin/sveltin
 
 ## :gear: CLI Commands & Options
 
+sveltin comes with a set of commands and subcommands to help dealing with your SvelteKit project.
+
+Each command can be executed with inline arguments or interactivly.
+
 ```bash
 $ sveltin -h
 
@@ -168,16 +177,17 @@ Usage:
 Available Commands:
   add         Add content and metadata to a resource
   build       Builds a production version of your static website
-  deploy      Deploy your website over FTP
+  completion  Generate the autocompletion script for the specified shell
+  deploy      Deploy the website over FTP
   generate    Generate static files (sitemap, rss, menu)
   help        Help about any command
   init        Initialize a new sveltin project
-  install     Install your project dependencies
+  install     Install the project dependencies
+  migrate     Migrate existing sveltin project files to the latest sveltin version ones
   new         Create nee resources, pages and themes
   preview     Preview the production version locally
   server      Run the development server
   update      Update your project dependencies
-  version     Print the version number of Sveltin
 
 Flags:
   -h, --help      help for sveltin
@@ -186,11 +196,7 @@ Flags:
 Use "sveltin [command] --help" for more information about a command.
 ```
 
-sveltin comes with a set of commands and subcommands to help dealing with your SvelteKit project.
-
-Each command can be executed with inline arguments or interactivly.
-
-## sveltin init
+### sveltin init
 
 `sveltin init` is the main command to scaffold a project.
 
@@ -205,12 +211,12 @@ Read more [here][init].
 Alias: `n`
 
 <details>
-    <summary>(Click to expand the list of avilable subcommands)</summary>
+    <summary>(Click to expand the list of available subcommands)</summary>
 
-| Subcommand |   Aliases    | Description                                                            |
-| :--------- | :----------: | :--------------------------------------------------------------------- |
-| [page]     |      p       | Command to create a new public page.                                   |
-| [resource] |   r, route   | Command to create a new resource.                                      |
+| Subcommand     | Aliases | Description                          |
+| :------------- | :-----: | :----------------------------------- |
+| [new-page]     |    p    | Command to create a new public page. |
+| [new-resource] |    r    | Command to create a new resource.    |
 
 </details>
 
@@ -223,12 +229,12 @@ Read more [here][new].
 Alias: `a`
 
 <details>
-    <summary>(Click to expand the list of avilable subcommands)</summary>
+    <summary>(Click to expand the list of available subcommands)</summary>
 
-| Subcommand |   Aliases    | Description                                                            |
-| :--------- | :----------: | :--------------------------------------------------------------------- |
-| [content]  |      c       | Command to create a new content for existing resource.                 |
-| [metadata] |      m       | Command to add a new metadata to your content as a Sveltekit resource. |
+| Subcommand     | Aliases | Description                                                            |
+| :------------- | :-----: | :--------------------------------------------------------------------- |
+| [add-content]  |    c    | Command to create a new content for existing resource.                 |
+| [add-metadata] |    m    | Command to add a new metadata to your content as a Sveltekit resource. |
 
 </details>
 
@@ -243,11 +249,11 @@ Alias: `g`
 <details>
     <summary>(Click to expand the list of avilable subcommands)</summary>
 
-| Subcommand | Description                                             |
-| :--------- | :------------------------------------------------------ |
-| [menu]     | Generate the menu config file for your Sveltin project. |
-| [sitemap]  | Generate a sitemap.xml file for your Sveltin project.   |
-| [rss]      | Generate a rss.xml file for your Sveltin project.       |
+| Subcommand         | Description                    |
+| :----------------- | :----------------------------- |
+| [generate-menu]    | Generate the menu config file. |
+| [generate-sitemap] | Generate a sitemap.xml.        |
+| [generate-rss]     | Generate a rss.xml file.       |
 
 </details>
 
@@ -265,9 +271,13 @@ Read more [here][install].
 
 `sveltin update` is used to update all depencencies from the `package.json` file.
 
-Alias: `u`
-
 Read more [here][update].
+
+### sveltin migrate
+
+`sveltin migrate` is used to migrate existing sveltin project files to the latest Sveltin version ones.
+
+Read more [here][migrate].
 
 ### sveltin server
 
@@ -297,31 +307,60 @@ Read more [here][preview].
 
 Read more [here][deploy].
 
+### sveltin completion
+
+`sveltin completion` generates the autocompletion script for the specified shell (bash|zsh|fish|powershell).
+
+Read more [here][completion].
+
 ## :bulb: Contributing
 
 Contribution of any kind including documentation, themes, tutorials, blog posts, bug reports, issues, feature requests, feature implementations, pull requests are more than welcome.
 
 Read more [here][contributing].
 
+## Dependencies
+
+Sveltin leverages many great open source libraries:
+
+| Name                                                    | Version   | License      |
+| :------------------------------------------------------ | :-------: | :----------- |
+| [bubble](https://github.com/charmbracelet/bubbles)      | `0.15.0`  | MIT          |
+| [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.2`  | MIT          |
+| [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.6.0`   | MIT          |
+| [validator](https://github.com/go-playground/validator) | `10.11.2` | MIT          |
+| [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
+| [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
+| [is](https://github.com/matryer/is)                     | `1.4.0`   | MIT          |
+| [afero](https://github.com/spf13/afero)                 | `1.9.3`   | Apache-2.0   |
+| [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
+| [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |
+| [prompti](https://github.com/sveltinio/prompti)         | `0.1.2`   | MIT          |
+| [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
+| [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
+| [text](https://golang.org/x/text)                       | `0.7.0`   | BSD-3-Clause |
+
 ## :free: License
 
 Sveltin is free and open-source software licensed under the Apache 2.0 License.
 
-[init]: https://docs.sveltin.io/cli/init/
-[new]: https://docs.sveltin.io/cli/new/
-[resource]: https://docs.sveltin.io/cli/new-resource/
-[page]: https://docs.sveltin.io/cli/new-page/
 [add]: https://docs.sveltin.io/cli/add/
-[content]: https://docs.sveltin.io/cli/add-content/
-[metadata]: https://docs.sveltin.io/cli/add-metadata/
-[generate]: https://docs.sveltin.io/cli/generate/
-[menu]: https://docs.sveltin.io/cli/generate-menu/
-[sitemap]: https://docs.sveltin.io/cli/generate-sitemap/
-[rss]: https://docs.sveltin.io/cli/generate-rss/
-[server]: https://docs.sveltin.io/cli/server/
-[install]: https://docs.sveltin.io/cli/install/
-[update]: https://docs.sveltin.io/cli/update/
+[add-content]: https://docs.sveltin.io/cli/add-content/
+[add-metadata]: https://docs.sveltin.io/cli/add-metadata/
 [build]: https://docs.sveltin.io/cli/build/
-[preview]: https://docs.sveltin.io/cli/preview/
-[deploy]: https://docs.sveltin.io/cli/deploy/
+[completion]: https://docs.sveltin.io/cli/completion/
 [contributing]: CONTRIBUTING.md
+[deploy]: https://docs.sveltin.io/cli/deploy/
+[generate]: https://docs.sveltin.io/cli/generate/
+[generate-menu]: https://docs.sveltin.io/cli/generate-menu/
+[generate-rss]: https://docs.sveltin.io/cli/generate-rss/
+[generate-sitemap]: https://docs.sveltin.io/cli/generate-sitemap/
+[init]: https://docs.sveltin.io/cli/init/
+[install]: https://docs.sveltin.io/cli/install/
+[migrate]: https://docs.sveltin.io/cli/migrate/
+[new]: https://docs.sveltin.io/cli/new/
+[new-page]: https://docs.sveltin.io/cli/new-page/
+[new-resource]: https://docs.sveltin.io/cli/new-resource/
+[preview]: https://docs.sveltin.io/cli/preview/
+[server]: https://docs.sveltin.io/cli/server/
+[update]: https://docs.sveltin.io/cli/update/

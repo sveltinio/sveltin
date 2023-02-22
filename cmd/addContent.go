@@ -56,13 +56,13 @@ Use the --template flag to select the right one to you. Valid options: blank or 
 Example:
 
 1. You have already created some resource by running "sveltin new resource"
-2. run: sveltin add content welcome
+2. run: sveltin add content welcome --to posts
 
 As result:
 
-- a new "my-first-post" folder within "content/posts" is created
+- a new "welcome" folder within "content/posts" is created
 - an index.svx file is placed there
-- a new "posts/my-first-port" folder created within the "static" folder to store images relative to the content
+- a new "posts/welcome" folder created within the "static" folder to store images relative to the content
 `,
 	Run: RunAddContentCmd,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -92,11 +92,11 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
 	cfg.log.Plain(markup.H1(headingText))
 
-	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
+	// MAKE FOLDER STRUCTURE: content/<resource_name>/<content_name>
 	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)
 	utils.ExitIfError(err)
 
-	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
+	// MAKE FOLDER STRUCTURE: static/images/resources/<resource_name>/<content_name>
 	staticFolder, err := makeContentFolderStructure(StaticFolder, contentData)
 	utils.ExitIfError(err)
 
@@ -119,14 +119,14 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 
 func contentCmdFlags(cmd *cobra.Command) {
 	// to flag
-	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to.")
+	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to")
 	err := cmd.RegisterFlagCompletionFunc("to", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		availableResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
 		return availableResources, cobra.ShellCompDirectiveDefault
 	})
 	utils.ExitIfError(err)
 	// sample flag
-	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file.")
+	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file")
 }
 
 func init() {
@@ -168,20 +168,20 @@ func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Fo
 	// GET FOLDER: static
 	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
 	// NEW FOLDER static/resources
-	imagesFolder := composer.NewFolder("resources")
+	allResourcesFolder := composer.NewFolder("resources")
 	// NEW FOLDER static/resources/<resource_name>
-	resourceImagesFolder := composer.NewFolder(contentData.Resource)
+	resourceFolder := composer.NewFolder(contentData.Resource)
 	// NEW FOLDER static/resources/<resource_name>/<content_name>
-	contentImagesFolder := composer.NewFolder(contentData.Name)
+	contentByResourceFolder := composer.NewFolder(contentData.Name)
 	// SET FOLDER STRUCTURE
-	resourceImagesFolder.Add(contentImagesFolder)
-	imagesFolder.Add(resourceImagesFolder)
-	staticFolder.Add(imagesFolder)
+	resourceFolder.Add(contentByResourceFolder)
+	allResourcesFolder.Add(resourceFolder)
+	staticFolder.Add(allResourcesFolder)
 
 	return staticFolder
 }
 
 func addSampleCoverImage(contentData *tpltypes.ContentData) error {
 	saveTo := cfg.fsManager.GetFolder(filepath.Join(StaticFolder, "resources", contentData.Resource, contentData.Name)).Name
-	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileID, saveTo)
+	return cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinImagesFS, DummyImgFileId, saveTo)
 }

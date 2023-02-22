@@ -20,7 +20,7 @@ var (
 			BorderStyle(lipgloss.NormalBorder()).
 			BorderBottom(true).
 			BorderForeground(slate).
-			Foreground(amber).
+			Foreground(blue).
 			MarginRight(2).
 			Render
 

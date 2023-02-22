@@ -1,52 +1,30 @@
-/* CSS RESET by https://www.joshwcomeau.com/css/custom-css-reset/ */
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-* {
-	margin: 0;
-}
-html,
-body {
-	height: 100%;
-}
-body {
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
-}
-img,
-picture,
-video,
-canvas,
-svg {
-	display: block;
-	max-width: 100%;
-}
-input,
-button,
-textarea,
-select {
-	font: inherit;
-}
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	overflow-wrap: break-word;
-}
-#root,
-#__next {
-	isolation: isolate;
-}
+@charset "utf-8";
 
-/* END OF CSS RESET by */
+@import url('./tw-preflight.css');
+@import url('../static/css/github/github-markdown-light-5.2.0.css') screen;
+@import url('../static/css/prism/themes/prism-shades-of-purple.css') screen;
 
 html {
+	height: 100%;
 	scroll-behavior: smooth;
+}
+
+body {
+	height: 100%;
+	line-height: 1.5;
+	background-color: $white;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+a {
+	color: currentcolor;
+	text-decoration: none;
+
+	&:hover {
+		color: currentcolor;
+		text-decoration: none;
+	}
 }
 
 code[class*='language-'] {
@@ -58,23 +36,12 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-@media only screen and (min-width: 1024px) {
-	code[class*='language-'] {
-		font-size: 1rem !important;
-	}
-
-	code[class*='language-'],
-	pre[class*='language-'] {
-		line-height: 25px;
-	}
-}
-
 .message {
 	padding: 0.5rem 1rem /* 8px 16px */;
 	border-radius: 0.375rem /* 6px */;
 }
 
-.warning {
+.message--warning {
 	background-color: rgb(254 215 170);
 }
 
@@ -84,4 +51,24 @@ pre[class*='language-'] {
 	max-width: 980px;
 	margin: 0 auto;
 	padding: 45px;
+}
+
+.markdown-body a {
+	color: currentcolor;
+	text-decoration: none;
+}
+.markdown-body a:hover {
+	color: currentcolor;
+	text-decoration: none;
+}
+
+@media only screen and (min-width: 1024px) {
+	code[class*='language-'] {
+		font-size: 1rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 25px;
+	}
 }

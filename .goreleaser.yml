@@ -61,23 +61,21 @@ scoop:
   license: 'Apache-2.0'
   skip_upload: false
 archives:
-  # Default format for Mac and Linux
-  - format: tar.gz
+  - rlcp: true
+    # Default format for Mac and Linux
+    format: tar.gz
     # When windows, use .zip instead.
     format_overrides:
       - goos: windows
         format: zip
     # Just the naming convention for tarballs... Example: msconsole_1.0.0_darwin_64bit
-    name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-    files:
-      - README.md
-      - LICENSE
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}-
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
 checksum:
   name_template: 'checksums.txt'
 snapshot:

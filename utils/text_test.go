@@ -24,7 +24,5 @@ func TestTextUtils(t *testing.T) {
 	is.Equal("GETTING-STARTED.md", ToMDFile("getting started", true))
 	is.Equal("loadCategory.ts", ToLibFile("category"))
 	is.Equal(time.Now().Format("02-Jan-2006"), Today())
-	is.Equal("2022", CurrentYear())
-	is.Equal(2, PlusOne(1))
-	is.Equal(3, Sum(1, 2))
+	is.Equal("2023", CurrentYear())
 }

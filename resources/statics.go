@@ -16,7 +16,8 @@ var SveltinStaticFS embed.FS
 
 // SveltinFilesFS is a map for entries in files folder.
 var SveltinFilesFS = EmbeddedFSEntry{
-	"mdsvex": "internal/statics/files/mdsvex.config.js",
+	"mdsvex":       "internal/statics/files/mdsvex.config.js",
+	"sveltin_d_ts": "internal/statics/files/sveltin.d.ts",
 }
 
 // SveltinImagesFS is a map for entries in images folder.

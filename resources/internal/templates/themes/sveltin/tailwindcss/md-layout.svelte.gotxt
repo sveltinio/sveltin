@@ -1,0 +1,48 @@
+<!--
+   A layout component for markdown content pages wrapping the mdsvex document.
+
+   **Note**: The pages affected are the ones created by running:
+   `sveltin new page --type markdown`
+
+   Refer to: https://mdsvex.pngwn.io/docs#layouts
+-->
+<script>
+	import { page } from '$app/stores';
+	import { website } from '$config/website.js';
+	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
+	import { canonicalPageUrl, getFavicon } from '$lib/utils/strings.js';
+
+	/* All values defined in frontmatter are available as props.*/
+	export let title;
+	export let headline;
+	export let keywords;
+
+	const mdPage = {
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
+		title: title,
+		description: headline,
+		keywords: keywords || website.keywords,
+		image: getFavicon(website),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	};
+</script>
+
+<PageMetaTags data={mdPage} />
+<JsonLdWebPage data={mdPage} />
+<JsonLdBreadcrumbs url={$page.url.href} />
+
+<!-- Page markup-->
+<section class="page">
+	<div class="content">
+		<div class="markdown-body">
+			<!-- the mdsvex content will be slotted in here -->
+			<slot />
+		</div>
+	</div>
+</section>

@@ -11,6 +11,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -26,9 +27,11 @@ import (
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
+	logger "github.com/sveltinio/yinlog"
 )
 
 //=============================================================================
@@ -81,8 +84,17 @@ sveltin init blog --css tailwindcss
 sveltin init blog --css vanillacss -t myTheme
 sveltin init portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git
 `,
-	Args: cobra.ExactArgs(1),
-	Run:  InitCmdRun,
+	DisableFlagsInUseLine: true,
+	Run:                   InitCmdRun,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		var comps []string
+		if len(args) == 0 {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the project"))
+		} else {
+			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags."))
+		}
+		return comps, cobra.ShellCompDirectiveDefault
+	},
 }
 
 // InitCmdRun is the actual work function.
@@ -98,7 +110,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	themeData, err := buildThemeData(themeSelection, withThemeName, projectName, cssLibName)
 	utils.ExitIfError(err)
 
-	npmClient := getSelectedNPMClient(npmClientName)
+	npmClient := getSelectedNPMClient(npmClientName, cfg.log)
 	npmClientName = npmClient.Name
 
 	cfg.log.Plain(markup.H1("Initializing a new Sveltin project"))
@@ -134,7 +146,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	dotEnvTplData := &config.TemplateData{
 		Name: DotEnvProdFile,
 		Vite: &tpltypes.ViteData{
-			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+			BaseURL: fmt.Sprintf("https://%s", projectName),
 		},
 	}
 	envFile := cfg.fsManager.NewDotEnvFile(projectName, dotEnvTplData)
@@ -160,9 +172,9 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	err = rootFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	// COPY FILE: mdsvex.config.js
-	saveTo := cfg.pathMaker.GetProjectRoot(projectName)
-	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, MDsveXFileID, saveTo)
+	// COPY FILE: sveltin.d.ts
+	saveTo := path.Join(cfg.pathMaker.GetProjectRoot(projectName), cfg.pathMaker.GetSrcFolder())
+	err = cfg.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, cfg.fs, resources.SveltinFilesFS, SveltinDTSFileId, saveTo)
 	utils.ExitIfError(err)
 
 	// SETUP THE CSS LIB
@@ -191,13 +203,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 
 	cfg.log.Success("Done\n")
 
-	projectConfigSummary := &config.ProjectConfig{
-		ProjectName:   projectName,
-		CSSLibName:    cssLibName,
-		ThemeName:     themeSelection,
-		NPMClientName: npmClient.Desc,
-	}
-
+	projectConfigSummary := config.NewProjectConfig(projectName, cssLibName, themeSelection, npmClient.Desc)
 	// NEXT STEPS
 	if themeData.ID != tpltypes.ExistingTheme {
 		feedbacks.ShowNewProjectNextStepsHelpMessage(projectConfigSummary)
@@ -208,9 +214,27 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func initCmdFlags(cmd *cobra.Command) {
+	// npmClient flag
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
+	err := cmd.RegisterFlagCompletionFunc("npmClient", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		installedNPMClients := utils.GetInstalledNPMClientList()
+		npmcNames := utils.GetNPMClientNames(installedNPMClients)
+		return npmcNames, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// theme flag
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The theme you are going to create or reuse")
+	err = cmd.RegisterFlagCompletionFunc("theme", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{tpltypes.BlankTheme, tpltypes.SveltinTheme}, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// css flag
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The CSS lib to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
+	err = cmd.RegisterFlagCompletionFunc("css", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return css.AvailableCSSLib, cobra.ShellCompDirectiveDefault
+	})
+	utils.ExitIfError(err)
+	// others
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
 	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
 }
@@ -228,7 +252,7 @@ func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName stri
 		defaultThemeName := strings.Join([]string{projectName, "theme"}, "_")
 		newThemePromptContent := &input.Config{
 			Initial:     defaultThemeName,
-			Message:     "What's the your new theme name?",
+			Message:     "What's your theme name?",
 			Placeholder: "Please, provide a name for your theme.",
 		}
 		themeName, err := input.Run(newThemePromptContent)
@@ -288,10 +312,10 @@ func getNewThemeName(value, projectName string) string {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func getSelectedNPMClient(npmcFlag string) npmc.NPMClient {
+func getSelectedNPMClient(npmcFlag string, logger *logger.Logger) npmc.NPMClient {
 	installedNPMClients := utils.GetInstalledNPMClientList()
 	npmcNames := utils.GetNPMClientNames(installedNPMClients)
-	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag)
+	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag, logger)
 	utils.ExitIfError(err)
 	return utils.GetSelectedNPMClient(installedNPMClients, client)
 }
@@ -348,7 +372,7 @@ func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *c
 		Name: ProjectSettingsFile,
 		ProjectSettings: &tpltypes.ProjectSettings{
 			Name:    projectName,
-			BaseURL: fmt.Sprintf("http://%s.com", projectName),
+			BaseURL: fmt.Sprintf("https://%s", projectName),
 			Sitemap: tpltypes.SitemapData{
 				ChangeFreq: "monthly",
 				Priority:   0.5,
@@ -386,8 +410,8 @@ func createProjectRoutesLocalFolder(themeData *tpltypes.ThemeData) *composer.Fol
 
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       helpers.GetResourceRouteFilename(IndexFile, cfg.settings),
-		TemplateID: IndexFile,
+		Name:       helpers.GetResourceRouteFilename(IndexFileId, cfg.settings),
+		TemplateID: IndexFileId,
 		TemplateData: &config.TemplateData{
 			Theme: themeData,
 		},

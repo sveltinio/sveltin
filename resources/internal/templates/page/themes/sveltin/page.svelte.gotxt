@@ -1,16 +1,23 @@
 {{- $pageName := .Page.Name | ToVariableName -}}
 <script lang="ts">
+	import type { SEOWebPage } from '@sveltinio/seo/types';
+	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
-	import type { IWebPageMetadata } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { getFavicon, getPageUrl } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, capitalizeFirstLetter, getFavicon } from '$lib/utils/strings.js';
 
-	const {{ $pageName }}Page: IWebPageMetadata = {
-		url: getPageUrl('{{ .Page.Name }}', website),
-		title: '{{ .Page.Name | ToTitle }}',
-		description: website.seoDescription,
-		keywords: website.keywords ? website.keywords : '',
+	const title = '{{ .Page.Name }}';
+
+	const pageDescription = `Here the description for the {{ .Page.Name | Capitalize }} page.`;
+	// page keywords as comma separeted values
+	const pageKeywords: Array<string> = [];
+
+	const {{ $pageName }}Page: SEOWebPage = {
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
+		title: capitalizeFirstLetter(title),
+		description: pageDescription,
+		keywords: pageKeywords || website.keywords,
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Article
@@ -23,7 +30,7 @@
 
 <PageMetaTags data={ {{ $pageName }}Page } />
 <JsonLdWebPage data={ {{ $pageName }}Page } />
-<JsonLdBreadcrumbs baseURL={website.baseURL} parent="" currentTitle={ {{ $pageName }}Page.title} />
+<JsonLdBreadcrumbs url={$page.url.href} />
 
 <!-- Page markup-->
 <section class="page">

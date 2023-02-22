@@ -79,8 +79,8 @@ func (s *SveltinFSManager) NewResourceContentFile(contentData *tpltypes.ContentD
 // NewPublicPageFile returns a pointer to a new 'public page' File.
 func (s *SveltinFSManager) NewPublicPageFile(pageData *tpltypes.PageData, projectSettings *tpltypes.ProjectSettings) *composer.File {
 	return &composer.File{
-		Name:       helpers.PublicPageFilename(pageData.Type),
-		TemplateID: pageData.Type,
+		Name:       helpers.PublicPageFilename(pageData.Language),
+		TemplateID: pageData.Language,
 		TemplateData: &config.TemplateData{
 			Page:            pageData,
 			ProjectSettings: projectSettings,

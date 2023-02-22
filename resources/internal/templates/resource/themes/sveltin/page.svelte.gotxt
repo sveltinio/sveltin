@@ -1,52 +1,65 @@
-{{ $varName := .Resource.Name | ToVariableName | ReplaceIfNested }}
+{{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
+	import { assets, base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
-	import { Card } from '@sveltinio/widgets';
+	import { Breadcrumbs, Card, CardAction, CardImage } from '@sveltinio/widgets';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { ToTitle, getFavicon, getPageUrl } from '$lib/utils/strings.js';
+	import { canonicalPageUrl, toTitle, getFavicon } from '$lib/utils/strings.js';
 
 	export let data: PageData;
-	$: ({ resourceName, items } = data);
 
-	$: {{ $varName }}IndexPage = {
-		url: getPageUrl(resourceName, website),
-		title: website.name,
-		description: 'Here you can find the list of all available {{ .Resource.Name }}.',
-		keywords: (website.keywords) ? website.keywords : '',
+	const pageDescription = `Here you can find the list of all available {{ .Resource.Name }}.`;
+	// page keywords as comma separeted values
+	const pageKeywords: Array<string> = [];
+
+	$: ({ resourceName, items } = data);
+	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g, '');
+	$: {{ $resourceName }}IndexPage = <SEOWebPage>{
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
+		title: toTitle(resourceName),
+		description: pageDescription,
+		keywords: pageKeywords || website.keywords,
 		image: getFavicon(website),
 		opengraph: {
-			type: OpenGraphType.Website
+			type: OpenGraphType.Article
 		},
 		twitter: {
 			type: TwitterCardType.Summary
 		}
 	};
-
-	$: pathname = $page.url.pathname.replace(/^(.)|(.)$/g,'');
 </script>
 
-<PageMetaTags data={ {{ $varName }}IndexPage } />
-<JsonLdWebPage data={ {{ $varName }}IndexPage } />
-<JsonLdBreadcrumbs
-	baseURL={website.baseURL}
-	parent={resourceName}
-	currentTitle={ {{ $varName }}IndexPage.title}
-/>
+<PageMetaTags data={ {{ $resourceName }}IndexPage } />
+<JsonLdWebPage data={ {{ $resourceName }}IndexPage } />
+<JsonLdBreadcrumbs url={$page.url.href} />
 
-<section class="artifact-container">
-	<div class="content">
+<section class="page-wrapper">
+	<Breadcrumbs url={$page.url.href} />
+	<div class="page-wrapper__content">
 		{#if items.length != 0}
-			<h1>{ToTitle(resourceName)}</h1>
+			<h1>{toTitle(resourceName)}</h1>
 			<div class="cards">
 				{#each items as item}
-					<Card {item} />
+					<Card
+					title={item.metadata.title}
+					content={item.metadata.headline}
+					href="{base}/{item.resource}/{item.metadata.slug}"
+					>
+						<CardImage
+							slot="cardImage"
+							alt={item.metadata.title}
+							src="{assets}/resources/{item.resource}/{item.metadata.slug}/{item.metadata.cover}"
+						/>
+						<CardAction slot="cardAction" href="{base}/{item.resource}/{item.metadata.slug}" />
+					</Card>
 				{/each}
 			</div>
 		{:else}
-		<h2 class="message warning">
+		<h2 class="message message--warning">
 			Nothing to show here! Create some content first and reload the page:
 			<span><pre><code class="text-default">sveltin new content {pathname}/getting-started</code></pre></span>
 		</h2>

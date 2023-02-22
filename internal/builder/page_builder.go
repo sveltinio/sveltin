@@ -77,6 +77,9 @@ func (b *PublicPageContentBuilder) setFuncs() {
 		"Capitalize": func(txt string) string {
 			return utils.ToTitle(txt)
 		},
+		"Today": func() string {
+			return utils.Today()
+		},
 		"ToTitle": func(text string) string {
 			return utils.ToTitle(text)
 		},

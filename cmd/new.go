@@ -14,8 +14,8 @@ import (
 var newCmd = &cobra.Command{
 	Use:     "new",
 	Aliases: []string{"n"},
-	Short:   "Create new resources, pages and themes",
-	Long: `Command used to creates SvelteKit routes in your project. A routes in Sveltin is both a public page or a resource.
+	Short:   "Create new resources and pages",
+	Long: `Command used to creates SvelteKit routes in your project. A route in Sveltin is both a public page and a resource.
 
 Examples:
 

@@ -66,16 +66,17 @@ func (c *MakeDirsCommand) execute() error {
 
 // UploadCommand implements the upload request.
 type UploadCommand struct {
-	Server       RemoteServer
-	AppFs        afero.Fs
-	LocalDirname string
-	Files        []string
-	DryRun       bool
-	Verbose      bool
+	Server          RemoteServer
+	AppFs           afero.Fs
+	LocalDirname    string
+	Files           []string
+	ReplaceBasePath bool
+	DryRun          bool
+	Verbose         bool
 }
 
 func (c *UploadCommand) execute() error {
-	return c.Server.UploadFiles(c.AppFs, c.LocalDirname, c.Files, c.DryRun)
+	return c.Server.UploadFiles(c.AppFs, c.LocalDirname, c.Files, c.ReplaceBasePath, c.DryRun)
 }
 
 // DeleteAllCommand implements the delete all request.

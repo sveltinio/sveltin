@@ -17,25 +17,16 @@ import (
 	"github.com/sveltinio/sveltin/common"
 )
 
-// Patterns used by MigrationRule
-const (
-	sitemapPattern               = `^sitemap`
-	svelteKitBuildPattern        = `^SVELTEKIT_BUILD_FOLDER`
-	svelteKitBuildCommentPattern = `^*# The folder where adaper-static`
-)
-
-//=============================================================================
-
-// UpdateDotEnvMigration is the struct representing the migration update the defaults.js.ts file.
-type UpdateDotEnvMigration struct {
+// CleanDotEnv is the struct representing the migration update the defaults.js.ts file.
+type CleanDotEnv struct {
 	Mediator IMigrationMediator
 	Services *MigrationServices
 	Data     *MigrationData
 }
 
 // MakeMigration implements IMigrationFactory interface.
-func (m *UpdateDotEnvMigration) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
-	return &UpdateDotEnvMigration{
+func (m *CleanDotEnv) MakeMigration(migrationManager *MigrationManager, services *MigrationServices, data *MigrationData) IMigration {
+	return &CleanDotEnv{
 		Mediator: migrationManager,
 		Services: services,
 		Data:     data,
@@ -43,11 +34,11 @@ func (m *UpdateDotEnvMigration) MakeMigration(migrationManager *MigrationManager
 }
 
 // implements IMigration interface.
-func (m *UpdateDotEnvMigration) getServices() *MigrationServices { return m.Services }
-func (m *UpdateDotEnvMigration) getData() *MigrationData         { return m.Data }
+func (m *CleanDotEnv) getServices() *MigrationServices { return m.Services }
+func (m *CleanDotEnv) getData() *MigrationData         { return m.Data }
 
-// Execute return error if migration execution over up and down methods fails (IMigration interface).
-func (m UpdateDotEnvMigration) Execute() error {
+// Migrate return error if migration execution over up and down methods fails (IMigration interface).
+func (m CleanDotEnv) Migrate() error {
 	if err := m.up(); err != nil {
 		return err
 	}
@@ -57,22 +48,30 @@ func (m UpdateDotEnvMigration) Execute() error {
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) up() error {
-
+func (m *CleanDotEnv) up() error {
 	if !m.Mediator.canRun(m) {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.PathToFile)
+	exists, err := common.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if err != nil {
 		return err
 	}
 
-	migrationTriggers := []string{sitemapPattern, svelteKitBuildPattern, svelteKitBuildCommentPattern}
 	if exists {
-		if fileContent, ok := isMigrationRequired(m, migrationTriggers, findStringMatcher); ok {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.PathToFile)))
-			if err := updateDotEnvFile(m, fileContent); err != nil {
+		fileContent, err := retrieveFileContent(m.getServices().fs, m.getData().TargetPath)
+		if err != nil {
+			return err
+		}
+
+		migrationTriggers := []string{
+			patterns[sitemapProp],
+			patterns[svelteKitBuildFolder],
+			patterns[svelteKitBuildComment],
+		}
+		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
+			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}
 		}
@@ -81,23 +80,21 @@ func (m *UpdateDotEnvMigration) up() error {
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) down() error {
+func (m *CleanDotEnv) down() error {
 	if err := m.Mediator.notifyAboutCompletion(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *UpdateDotEnvMigration) allowUp() error {
+func (m *CleanDotEnv) allowUp() error {
 	if err := m.up(); err != nil {
 		return err
 	}
 	return nil
 }
 
-//=============================================================================
-
-func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
+func (m *CleanDotEnv) runMigration(content []byte, file string) ([]byte, error) {
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		rules := []*migrationRule{
@@ -112,16 +109,16 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 		}
 	}
 	output := strings.Join(lines, "\n")
-	err := m.getServices().fs.Remove(m.Data.PathToFile)
+	err := m.getServices().fs.Remove(m.Data.TargetPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	cleanedOutput := removeMultiEmptyLines(output)
-	if err = afero.WriteFile(m.getServices().fs, m.Data.PathToFile, cleanedOutput, 0644); err != nil {
-		return err
+	if err = afero.WriteFile(m.getServices().fs, m.Data.TargetPath, cleanedOutput, 0644); err != nil {
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
 
 //=============================================================================
@@ -129,18 +126,7 @@ func updateDotEnvFile(m *UpdateDotEnvMigration, content []byte) error {
 func newDotEnvSitemapRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         sitemapPattern,
-		replaceFullLine: true,
-		replacerFunc: func(string) string {
-			return ""
-		},
-	}
-}
-
-func newDotEnvSvelteKitBuildCommentRule(line string) *migrationRule {
-	return &migrationRule{
-		value:           line,
-		pattern:         svelteKitBuildCommentPattern,
+		trigger:         patterns[sitemapProp],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -151,7 +137,18 @@ func newDotEnvSvelteKitBuildCommentRule(line string) *migrationRule {
 func newDotEnvSveltekitRule(line string) *migrationRule {
 	return &migrationRule{
 		value:           line,
-		pattern:         svelteKitBuildPattern,
+		trigger:         patterns[svelteKitBuildFolder],
+		replaceFullLine: true,
+		replacerFunc: func(string) string {
+			return ""
+		},
+	}
+}
+
+func newDotEnvSvelteKitBuildCommentRule(line string) *migrationRule {
+	return &migrationRule{
+		value:           line,
+		trigger:         patterns[svelteKitBuildComment],
 		replaceFullLine: true,
 		replacerFunc: func(string) string {
 			return ""
@@ -162,7 +159,7 @@ func newDotEnvSveltekitRule(line string) *migrationRule {
 // =============================================================================
 
 func removeMultiEmptyLines(content string) []byte {
-	rule := regexp.MustCompile(`[\n]+`)
+	rule := regexp.MustCompile(`^\n{1,}$`)
 	output := rule.ReplaceAllString(strings.TrimSpace(content), "\n")
 	return []byte(output)
 }

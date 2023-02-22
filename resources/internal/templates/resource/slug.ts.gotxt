@@ -1,7 +1,8 @@
-import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
+import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
+import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 
-export async function load({ params }) {
+export const load = (async ({ params }) => {
 	const { slug } = params;
 	const { status, current, previous, next } = await getSingle(slug);
 
@@ -10,13 +11,13 @@ export async function load({ params }) {
 			actual: current,
 			before: previous,
 			after: next,
-			{{if .Resource.Group}}
+			{{ if .Resource.Group -}}
 			mdsvexComponent: (await import(`../../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
-			{{else}}
+			{{ else -}}
 			mdsvexComponent: (await import(`../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
-			{{end}}
+			{{- end -}}
 		};
 	}
 
 	throw error(404, 'Not found');
-}
+}) satisfies PageLoad;

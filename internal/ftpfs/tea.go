@@ -12,8 +12,8 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-func mkDirTeaCmd(s *FTPServerConnection, path string, isDruRun bool) tea.Cmd {
-	if !isDruRun {
+func mkDirTeaCmd(s *FTPServerConnection, path string, dryRun bool) tea.Cmd {
+	if !dryRun {
 		if err := s.client.MakeDir(path); err != nil {
 			return func() tea.Msg {
 				return progressbar.IncrementErrMsg{Err: err}
@@ -26,17 +26,22 @@ func mkDirTeaCmd(s *FTPServerConnection, path string, isDruRun bool) tea.Cmd {
 	}
 }
 
-func uploadFileTeaCmd(s *FTPServerConnection, appFs afero.Fs, file, path string, isDryrun bool) tea.Cmd {
-	if !isDryrun {
+func uploadFileTeaCmd(s *FTPServerConnection, appFs afero.Fs, file, path string, replaceBasePath, dryRun bool) tea.Cmd {
+	if !dryRun {
 		fileBytes, err := afero.ReadFile(appFs, file)
 		if err != nil {
 			return func() tea.Msg {
 				return progressbar.IncrementErrMsg{Err: err}
 			}
 		}
+		var remoteFile string
+		if replaceBasePath {
+			remoteFile = utils.ToBasePath(file, path)
+		} else {
+			remoteFile = file
+		}
 
-		remoteFile := utils.ToBasePath(file, path)
-		if err = s.uploadSingle(remoteFile, bytes.NewBuffer(fileBytes), isDryrun); err != nil {
+		if err = s.uploadSingle(remoteFile, bytes.NewBuffer(fileBytes), dryRun); err != nil {
 			return func() tea.Msg {
 				return progressbar.IncrementErrMsg{Err: err}
 			}

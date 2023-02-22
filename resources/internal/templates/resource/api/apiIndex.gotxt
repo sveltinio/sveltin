@@ -1,17 +1,18 @@
-import { list } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
+import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
+import { list } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
+
 export const prerender = false;
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET() {
+export const GET = (async () => {
 	const data = await list();
 	const body = data.map((item) => ({
 		...item
 	}));
 
-	if (!body) {
-		throw error(404, 'Nothing here yet');
+	if (body) {
+		return new Response(JSON.stringify(body));
 	}
 
-	return new Response(JSON.stringify(body));
-}
+	throw error(404, 'Nothing here yet');
+}) satisfies RequestHandler;

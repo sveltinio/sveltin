@@ -9,6 +9,8 @@
 package migrations
 
 import (
+	"bytes"
+	"os"
 	"regexp"
 	"strings"
 
@@ -18,14 +20,17 @@ import (
 	"github.com/sveltinio/yinlog"
 )
 
+type matcherFunc = func([]byte, string, string) bool
+
 // IMigration is the interface defining the methods to be implemented by single migration.
 type IMigration interface {
-	Execute() error
+	Migrate() error
 	getServices() *MigrationServices
 	getData() *MigrationData
 	up() error
 	down() error
 	allowUp() error
+	runMigration([]byte, string) ([]byte, error)
 }
 
 // MigrationServices contains references to services used by the migrations.
@@ -48,7 +53,7 @@ func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pat
 
 // MigrationData is the struct with data used by migrations.
 type MigrationData struct {
-	PathToFile        string
+	TargetPath        string
 	CliVersion        string
 	ProjectCliVersion string
 }
@@ -56,36 +61,33 @@ type MigrationData struct {
 // MigrationRule is the struct with settings to be matched for running the migration.
 type migrationRule struct {
 	value           string
-	pattern         string
+	trigger         string
 	replaceFullLine bool
 	replacerFunc    func(string) string
 }
 
-type matcherFunc = func([]byte, string, string) ([]byte, bool)
-
 //=============================================================================
 
-func isMigrationRequired(m IMigration, patterns []string, matcher matcherFunc) ([]byte, bool) {
-	content, err := afero.ReadFile(m.getServices().fs, m.getData().PathToFile)
-	if err != nil {
-		return nil, false
-	}
+func mustMigrate(content []byte, gatekeeper string) bool {
+	return !bytes.Contains(content, []byte(gatekeeper))
+}
 
+func patternsMatched(content []byte, patterns []string, matcher matcherFunc) bool {
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		for _, pattern := range patterns {
-			if r, ok := matcher(content, pattern, line); ok {
-				return r, true
+			if matcher(content, pattern, line) {
+				return true
 			}
 			continue
 		}
 	}
-	return nil, false
+	return false
 }
 
 func applyMigrationRules(rules []*migrationRule) (string, bool) {
 	for _, r := range rules {
-		expression := regexp.MustCompile(r.pattern)
+		expression := regexp.MustCompile(r.trigger)
 
 		if expression.MatchString(r.value) {
 			if r.replaceFullLine {
@@ -97,13 +99,61 @@ func applyMigrationRules(rules []*migrationRule) (string, bool) {
 	return "", false
 }
 
-//=============================================================================
-
-func findStringMatcher(content []byte, pattern, line string) ([]byte, bool) {
+func findStringMatcher(content []byte, pattern, line string) bool {
 	rule := regexp.MustCompile(pattern)
 	matches := rule.FindString(line)
-	if len(matches) > 0 {
-		return content, true
+	return len(matches) > 0
+}
+
+//=============================================================================
+
+func retrieveFileContent(fs afero.Fs, pathToFile string) ([]byte, error) {
+	content, err := afero.ReadFile(fs, pathToFile)
+	if err != nil {
+		return nil, afero.ErrFileNotFound
 	}
-	return nil, false
+	return content, nil
+}
+
+func overwriteFile(m IMigration, content []byte) error {
+	err := m.getServices().fs.Remove(m.getData().TargetPath)
+	if err != nil {
+		return err
+	}
+
+	if err = afero.WriteFile(m.getServices().fs, m.getData().TargetPath, []byte(content), 0644); err != nil {
+		return err
+	}
+	return nil
+}
+
+func appendToFile(fs afero.Fs, filename string, contentToAppend []string, logger *yinlog.Logger) {
+	f, err := fs.OpenFile(filename, os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		logger.Fatalf("failed opening file: %s", err)
+	}
+	defer f.Close()
+
+	for _, content := range contentToAppend {
+		if _, err = f.WriteString(content); err != nil {
+			logger.Fatalf("failed writing to file: %s", err)
+		}
+	}
+}
+
+func getTextInBetween(text string, start string, end string) string {
+	startIndex := strings.Index(text, start)
+	if startIndex == -1 {
+		return ""
+	}
+	endIndex := strings.Index(text, end) + len(end)
+	if endIndex == -1 {
+		return ""
+	}
+	return text[startIndex:endIndex]
+}
+
+func replaceTextInBetween(old, new, start, end string) string {
+	textInBetween := getTextInBetween(old, start, end)
+	return strings.ReplaceAll(old, textInBetween, new)
 }

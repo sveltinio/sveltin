@@ -2,9 +2,9 @@
 {{- $resourceCounter := len $resources -}}
 {{- $contentValues := .Menu.Items.Content -}}
 {{- $withContent := .Menu.WithContent -}}
+import type { Sveltin } from '$sveltin';
 
-import type { IMenuItem } from '@sveltinio/seo/types';
-const menu: Array<IMenuItem> = [
+const menu: Array<Sveltin.MenuItem> = [
 	{
 		identifier: "home",
 		name: "Home",

@@ -71,7 +71,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 }
 
 func menuCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&withContentFlag, "full", "f", false, "Generate menu file including content names for all resources.")
+	cmd.Flags().BoolVarP(&withContentFlag, "full", "f", false, "Generate menu file including content names for all resources")
 }
 
 func init() {

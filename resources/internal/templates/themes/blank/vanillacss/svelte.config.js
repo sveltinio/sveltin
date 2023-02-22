@@ -10,7 +10,6 @@ const config = {
 	preprocess: [
 		mdsvex(mdsvexConfig),
 		preprocess({
-			postcss: false,
 			preserve: ['ld+json'],
 		}),
 	],
@@ -21,10 +20,8 @@ const config = {
 			fallback: '200.html',
 			precompress: true,
 		}),
-		trailingSlash: 'always',
 		prerender: {
 			crawl: true,
-			enabled: true,
 			entries: ['*'],
 		},
 	},

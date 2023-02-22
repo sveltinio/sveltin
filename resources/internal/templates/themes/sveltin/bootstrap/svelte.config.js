@@ -23,10 +23,8 @@ const config = {
 			fallback: '200.html',
 			precompress: true,
 		}),
-		trailingSlash: 'always',
 		prerender: {
 			crawl: true,
-			enabled: true,
 			entries: ['*'],
 		},
 	},

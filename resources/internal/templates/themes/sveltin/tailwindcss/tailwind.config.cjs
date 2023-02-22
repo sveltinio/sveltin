@@ -9,16 +9,16 @@ const config = {
 		extend: {
 			textColor: {
 				skin: {
-					white: 'var(--pure-white)',
+					white: 'var(--white)',
 					dark: 'var(--dark)',
-					base: 'var(--color-text-base)',
-					muted: 'var(--color-text-muted)',
-					accent: 'var(--color-text-accent)',
+					base: 'var(--base)',
+					muted: 'var(--muted)',
+					accent: 'var(--cyan)',
 				},
 			},
 			backgroundColor: {
 				skin: {
-					white: 'var(--pure-white)',
+					white: 'var(--white)',
 					dark: 'var(--dark)',
 					'deep-dark': 'var(--deep-dark)',
 				},

@@ -123,7 +123,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 
 func metadataCmdFlags(cmd *cobra.Command) {
 	// to flag
-	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to.")
+	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to")
 	err := cmd.RegisterFlagCompletionFunc("to", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		availableResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
 		return availableResources, cobra.ShellCompDirectiveDefault
@@ -210,7 +210,7 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 	resourceMedatadaRoutesFolder := composer.NewFolder(metadataData.Name)
 
 	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.server.ts}
-	for _, item := range []string{IndexFile, IndexEndpointFile} {
+	for _, item := range []string{IndexFileId, IndexEndpointFileId} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
@@ -226,7 +226,7 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
 	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
-	for _, item := range []string{SlugFile, SlugEndpointFile} {
+	for _, item := range []string{SlugFileId, SlugEndpointFileId} {
 		f := &composer.File{
 			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
 			TemplateID: item,
@@ -265,7 +265,7 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataData *tpltypes.Metada
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/+server.ts
 	resourceMetadataIndexAPIFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
-		TemplateID: ApiMetadataIndex,
+		TemplateID: ApiMetadataIndexId,
 		TemplateData: &config.TemplateData{
 			Settings: cfg.settings,
 			Metadata: metadataData,

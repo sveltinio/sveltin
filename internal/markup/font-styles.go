@@ -22,6 +22,18 @@ var (
 	Gray = lipgloss.NewStyle().Foreground(gray).Render
 	// Faint sets a rule for rendering the foreground color in a dimmer shade.
 	Faint = lipgloss.NewStyle().Faint(true).Render
+
+	// Green renders text in green
+	Green = lipgloss.NewStyle().Foreground(green).Render
+	// Amber renders text in amber
+	Amber = lipgloss.NewStyle().Foreground(amber).Render
+	// Yellow renders text in yellow
+	Yellow = lipgloss.NewStyle().Foreground(yellow).Render
+	// Purple renders text in purple
+	Purple = lipgloss.NewStyle().Foreground(purple).Render
+	// Blue renders text in blue
+	Blue = lipgloss.NewStyle().Foreground(blue).Render
+
 	// Bordered prints a bordered text.
 	Bordered = lipgloss.NewStyle().
 			Margin(1).

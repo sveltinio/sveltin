@@ -1,29 +1,34 @@
+{{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
+	import { assets, base } from '$app/paths';
+	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
+	import { canonicalPageUrl, getCoverImagePath } from '$lib/utils/strings.js';
 	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { getCoverImagePath, getSlugPageUrl } from '$lib/utils/strings.js';
+	import { Breadcrumbs, TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
-	$: ({ actual, before, after, mdsvexComponent } = data);
 
+	$: ({ actual, before, after, mdsvexComponent } = data);
 	$: current = actual;
 	$: previous = before;
 	$: next = after;
 
-	$: slugPageData = {
-		url: getSlugPageUrl(current, website),
+	$: {{ $resourceName }}SlugPage = <SEOWebPage>{
+		url: canonicalPageUrl($page.url.pathname, website.baseURL),
 		title: current.metadata.title,
 		description: current.metadata.headline,
-		keywords: website.keywords ? website.keywords : '',
+		keywords: current.metadata.keywords || website.keywords,
 		author: current.metadata.author,
 		image: getCoverImagePath(current, website),
 		opengraph: {
 			type: OpenGraphType.Article,
 			article: {
-				published_at: current.metadata.created_at,
-				modified_at: current.metadata.updated_at
+				published_at: new Date(current.metadata.created_at),
+				modified_at: new Date(current.metadata.updated_at)
 			}
 		},
 		twitter: {
@@ -32,69 +37,70 @@
 	};
 </script>
 
-<PageMetaTags data={slugPageData} />
-<JsonLdWebPage data={slugPageData} />
-<JsonLdBreadcrumbs
-	baseURL={website.baseURL}
-	parent={current.resource}
-	currentTitle={slugPageData.title}
-/>
+<PageMetaTags data={ {{ $resourceName }}SlugPage } />
+<JsonLdWebPage data={ {{ $resourceName }}SlugPage } />
+<JsonLdBreadcrumbs url={$page.url.href} />
 
+<Breadcrumbs url={$page.url.href} />
 <article>
-	<div style="padding: 20px">
-		<h1>{current.metadata.title}</h1>
-		<div>
-			{#if current.metadata.created_at}
-				<time datetime={current.metadata.created_at}>
-					Created At {current.metadata.created_at}
-				</time>
-			{/if}
-			{#if current.metadata.updated_at}
-				<time datetime={current.metadata.updated_at}>
-					Updated On {current.metadata.updated_at}
-				</time>
-			{/if}
-			{#if current.metadata.readingTime}
-				<p><span>{current.metadata.readingTime.text}</span></p>
-			{/if}
-		</div>
-		{#if current.metadata.cover}
-			<div>
-				<img
-					src={`/resources/${current.resource}/${current.metadata.slug}/${current.metadata.cover}`}
-					title={`cover for ${current.metadata.title}`}
-					alt={`cover for ${current.metadata.title}`}
-				/>
-			</div>
+	<h1>{current.metadata.title}</h1>
+	<div>
+		{#if current.metadata.created_at}
+			<time datetime={current.metadata.created_at}>
+				Created At {current.metadata.created_at}
+			</time>
 		{/if}
-		<div>
-			<h2 style="margin-top: 20px;">Table of Contents</h2>
-			<nav>
-				<ul>
-					{#each current.metadata.headings as item}
-						<li id={`toc_item_${item.id}}`}>
-							<a class="mdsvextoc-list-item-link parent" href={`#${item.id}`}>{item.title}</a>
-						</li>
-					{/each}
-				</ul>
-			</nav>
-
-			<div class="markdown-body">
-				<svelte:component this={mdsvexComponent} />
-			</div>
-		</div>
-
-		<div>
-			{#if previous.metadata.title}
-				<p>
-					Prev: <a href={`/${previous.resource}/${previous.metadata.slug}`}>
-						{previous.metadata.title}</a
-					>
-				</p>
-			{/if}
-			{#if next.metadata.title}
-				<p>Next:<a href={`/${next.resource}/${next.metadata.slug}`}> {next.metadata.title}</a></p>
-			{/if}
-		</div>
+		{#if current.metadata.updated_at}
+			<time datetime={current.metadata.updated_at}>
+				Updated On {current.metadata.updated_at}
+			</time>
+		{/if}
+		{#if current.metadata.readingTime}
+			<p><span>{current.metadata.readingTime.text}</span></p>
+		{/if}
 	</div>
+	{#if current.metadata.cover}
+		<img
+			src="{assets}/resources/{current.resource}/{current.metadata.slug}/{current.metadata.cover}"
+			alt="cover image for {current.metadata.title}"
+		/>
+	{/if}
+
+	<TOC data={current.metadata.headings} />
+
+	<div class="markdown-body">
+		<svelte:component this={mdsvexComponent} />
+	</div>
+
+	<PagesNavigator
+		prev={ {
+			label: previous.metadata.title,
+			href: `${base}/${previous.resource}/${previous.metadata.slug}`,
+			title: `link to ${previous.metadata.title}`
+		} }
+		next={ {
+			label: next.metadata.title,
+			href: `${base}/${next.resource}/${next.metadata.slug}`,
+			title: `link to ${next.metadata.title}`
+		} }
+	/>
 </article>
+
+<style>
+	article {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 16px auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+	h1 {
+		font-size: 2em;
+	}
+
+	img {
+		margin: 8px 0;
+	}
+</style>

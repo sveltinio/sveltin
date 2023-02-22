@@ -12,12 +12,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sveltinio/sveltin/common"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
-// IsEmpty returns true if a string is empty.
+// IsEmpty returns true if the string is empty.
 func IsEmpty(txt string) bool {
+	return len(txt) == 0
+}
+
+// IsEmptySlice returns true if the string slice is empty.
+func IsEmptySlice(txt []string) bool {
 	return len(txt) == 0
 }
 
@@ -112,17 +118,19 @@ func CurrentYear() string {
 	return time.Now().Format("2006")
 }
 
-// PlusOne adds one to the integer parameter.
-func PlusOne(x int) int {
-	return x + 1
-}
+// ConvertJSStringToStringArray returns a JS/TS array of string from a comma separated JS/TS string as input.
+func ConvertJSStringToStringArray(value string) string {
+	res := strings.Trim(value, " ")
+	res = strings.ReplaceAll(res, "'", "")
+	res = strings.ReplaceAll(res, "\"", "")
+	res1 := strings.Split(res, ",")
+	res1 = common.RemoveEmpty(res1)
 
-// MinusOne subtract one to the integer parameter.
-func MinusOne(x int) int {
-	return x - 1
-}
+	var newKeywords []string
+	for _, v := range res1 {
+		_v := strings.Trim(v, " ")
+		newKeywords = append(newKeywords, fmt.Sprintf("'%s'", _v))
 
-// Sum adds two integer values.
-func Sum(x int, y int) int {
-	return x + y
+	}
+	return fmt.Sprintf("[%s]", strings.Join(newKeywords, ", "))
 }

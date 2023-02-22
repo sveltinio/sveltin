@@ -69,14 +69,15 @@ func MakeDirsAction(conn *FTPServerConnection, dirs []string, dryRun bool) *Clie
 }
 
 // UploadAction creates and configures the concrete upload command.
-func UploadAction(conn *FTPServerConnection, appFs afero.Fs, localDirname string, files []string, dryRun bool) *Client {
+func UploadAction(conn *FTPServerConnection, appFs afero.Fs, localDirname string, files []string, replaceBasePath, dryRun bool) *Client {
 	return &Client{
 		Command: &UploadCommand{
-			Server:       conn,
-			AppFs:        appFs,
-			LocalDirname: localDirname,
-			Files:        files,
-			DryRun:       dryRun,
+			Server:          conn,
+			AppFs:           appFs,
+			LocalDirname:    localDirname,
+			Files:           files,
+			ReplaceBasePath: replaceBasePath,
+			DryRun:          dryRun,
 		},
 	}
 }

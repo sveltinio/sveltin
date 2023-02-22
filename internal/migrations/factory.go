@@ -9,17 +9,74 @@ package migrations
 
 import "fmt"
 
+// Migration is the type to identidy a migration.
+type Migration int
+
 // Migration identifiers.
 const (
-	ProjectSettingsMigrationID string = "projectSettings"
-	DefaultsConfigMigrationID  string = "defaultsConfig"
-	ThemeConfigMigrationID     string = "themeConfig"
-	DotEnvMigrationID          string = "dotenv"
-	PackageJSONMigrationID     string = "packagejson"
-	MDsveXMigrationID          string = "mdsvex"
+	ProjectSettings Migration = iota
+	DefaultsConfig
+	WebSiteTS
+	MenuTS
+	SveltinDTS
+	ResourceLibs
+	Layout
+	SvelteFiles
+	PageServerTS
+	SveltinioComponent
+	ThemeConfig
+	ThemeSveltinioComponents
+	MDsveXConfig
+	SvelteConfig
+	DotEnv
+	ViteConfig
+	TSConfig
+	PackageJSON
 )
 
-// IMigrationFactory declares a set of methods for creating each of the abstract products.
+var migrationNameMap = map[Migration]string{
+	ProjectSettings:          "project-settings",
+	DefaultsConfig:           "defaults-ts",
+	WebSiteTS:                "website-ts",
+	MenuTS:                   "menu-ts",
+	SveltinDTS:               "sveltin-dts",
+	ResourceLibs:             "lib-files-ts",
+	Layout:                   "layout-svelte",
+	SvelteFiles:              "pages-svelte",
+	PageServerTS:             "page-server-ts",
+	SveltinioComponent:       "sveltinio-components",
+	ThemeConfig:              "theme-config-js",
+	ThemeSveltinioComponents: "theme-sveltinio-components",
+	MDsveXConfig:             "mdsvex-config-js",
+	SvelteConfig:             "svelte-config-js",
+	DotEnv:                   "dotenv",
+	ViteConfig:               "vire-config-ts",
+	TSConfig:                 "ts-config-ts",
+	PackageJSON:              "package-json",
+}
+
+var migrationMap = map[Migration]IMigrationFactory{
+	ProjectSettings:          &AddUpdateProjectSettings{},
+	DefaultsConfig:           &RefactorDefaultsTSTypes{},
+	WebSiteTS:                &RefactorWebSiteTSTypes{},
+	MenuTS:                   &RefactorMenuTSTypes{},
+	SveltinDTS:               &OverwriteSveltinDTS{},
+	ResourceLibs:             &RefactorResourcesLibsTypes{},
+	Layout:                   &AddPrerenderTrailingToLayoutTS{},
+	SvelteFiles:              &RefactorSvelteFilesTypes{},
+	PageServerTS:             &RefactorPageServerTSTypes{},
+	SveltinioComponent:       &UnhandledMigration{},
+	ThemeConfig:              &RefactorThemeConfig{},
+	ThemeSveltinioComponents: &UnhandledMigration{},
+	MDsveXConfig:             &UpdateMDsveXPlugins{},
+	SvelteConfig:             &RemoveTrailingFromSvelteConfig{},
+	DotEnv:                   &CleanDotEnv{},
+	ViteConfig:               &AddAliasToViteConfig{},
+	TSConfig:                 &AddSveltinPathToTSConfig{},
+	PackageJSON:              &UpdatePackageJson{},
+}
+
+// IMigrationFactory declares a set of methods for creating each of the abstract migrations.
 type IMigrationFactory interface {
 	MakeMigration(*MigrationManager, *MigrationServices, *MigrationData) IMigration
 }
@@ -27,21 +84,10 @@ type IMigrationFactory interface {
 //=============================================================================
 
 // GetMigrationFactory picks the migration factory depending on the migration id.
-func GetMigrationFactory(id string) (IMigrationFactory, error) {
-	switch id {
-	case ProjectSettingsMigrationID:
-		return &ProjectSettingsMigration{}, nil
-	case DefaultsConfigMigrationID:
-		return &UpdateDefaultsConfigMigration{}, nil
-	case ThemeConfigMigrationID:
-		return &UpdateThemeConfigMigration{}, nil
-	case DotEnvMigrationID:
-		return &UpdateDotEnvMigration{}, nil
-	case PackageJSONMigrationID:
-		return &UpdatePkgJSONMigration{}, nil
-	case MDsveXMigrationID:
-		return &UpdateMDsveXMigration{}, nil
-	default:
-		return nil, fmt.Errorf("wrong migration id used")
+func GetMigrationFactory(id Migration) (IMigrationFactory, error) {
+	if migration, exists := migrationMap[id]; exists {
+		return migration, nil
 	}
+
+	return nil, fmt.Errorf("unknown migration id: %s", migrationNameMap[id])
 }

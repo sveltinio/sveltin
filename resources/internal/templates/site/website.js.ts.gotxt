@@ -1,34 +1,32 @@
-import type { IWebSite } from '@sveltinio/seo/types';
+import { name, baseurl } from '../sveltin.json';
+import type { Sveltin } from '$sveltin';
 
-const website: IWebSite = {
-	name: '{{ .ProjectName }}',
-	baseURL: '',
+const website: Sveltin.WebSite = {
+	name: name,
+	baseURL: baseurl,
 	language: 'en-GB',
-	title: '{{ .ProjectName }}',
+	title: name,
 	slogan: '',
 	description: '',
 	seoDescription: '',
-	favicon: 'favicon.ico',
+	favicon: 'favicon.png',
 	logo: 'logo.png',
-	copyright: '2022, {{ .ProjectName }}',
-	keywords: '',
+	copyright: '{{ CurrentYear }}'.concat(" - ", name),
+	keywords: [],
 	contactEmail: '',
-	sitemap: {
-		changefreq: 'weekly',
-		priority: 0.5
-	},
 	socials: {
 		linkedin: '',
 		twitter: '',
 		github: '',
 		facebook: '',
 		instagram: '',
-		youtube: ''
+		youtube: '',
+		mastodon: ''
 	},
-	webmaster: {
+	creator: {
 		name: 'YOUR_NAME_HERE',
 		address: 'Somewhere, World (Milky Way)',
-		contactEmail: ''
+		email: ''
 	}
 };
 

@@ -9,7 +9,6 @@ package feedbacks
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -47,7 +46,7 @@ func ShowNewProjectWithExistingThemeNextStepsHelpMessage(uc *config.ProjectConfi
 
 // ShowNewResourceHelpMessage prints an help message string for 'resource creation'.
 func ShowNewResourceHelpMessage(name string) {
-	exampleString := fmt.Sprintf("sveltin new content %s/getting-started", name)
+	exampleString := fmt.Sprintf("sveltin add content getting-started --to %s", name)
 	entries := []string{
 		markup.P("Start by adding content to it, e.g."),
 		markup.BR,
@@ -63,9 +62,11 @@ func ShowNewMetadataHelpMessage(metadataInfo *tpltypes.MetadataData) {
 	if metadataInfo.Type == "single" {
 		exampleString = fmt.Sprintf("%s: your_value", utils.ToSnakeCase(metadataInfo.Name))
 	} else {
-		exampleString = utils.ToSnakeCase(metadataInfo.Name) + `:
+		exampleString = fmt.Sprintf(`%[1]v:
   - value 1
-  - value 2`
+  - value 2
+
+or %[1]v: ['value_1', 'value_2']`, utils.ToSnakeCase(metadataInfo.Name))
 	}
 
 	entries := []string{
@@ -95,15 +96,6 @@ func ShowDryRunMessage() {
 	fmt.Println(markup.Bordered(markup.Centered(fmt.Sprintf("%s\n\n%s", markup.Underline("DRY-RUN MODE"), "Nothing will really happen! Just simulating the process."))))
 }
 
-// ShowDeploySummaryMessage prints a summary message string for commands like deploy.
-func ShowDeploySummaryMessage(numOfFolders, numOfFiles int) {
-	entries := map[string]string{
-		"Total number of created folders: ": strconv.Itoa(numOfFolders),
-		"Total number of copied files: ":    strconv.Itoa(numOfFiles),
-	}
-	fmt.Println(markup.NewULWithIconPrefix("SUMMARY", entries, markup.CheckMark))
-}
-
 // ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
 func ShowDeployCommandWarningMessages(isBackup bool) {
 	listLogger := logger.NewListLogger()
@@ -118,8 +110,34 @@ func ShowDeployCommandWarningMessages(isBackup bool) {
 	if isBackup {
 		listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
 	}
-	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude flag")
+	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude or --withExcludeFile flags")
 	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
+	listLogger.Render()
+}
+
+// ShowUpgradeCommandMessage display a set of useful information when running the upgrade command.
+func ShowUpgradeCommandMessage() {
+	listLogger := logger.NewListLogger()
+	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
+		Timestamp: false,
+		Colors:    true,
+		Labels:    true,
+		Icons:     true,
+	})
+
+	infoText := `
+ Sveltin will try to migrate as much as it can to make your project ready.
+
+ The main goal is to update sveltin internal files and make your project
+ compliant with the latest introduced by SvelteKit.
+
+ For sure, something will not be handled by the migrations. In this case,
+ you will see errors from SvelteKit by running the server as usual.
+`
+	listLogger.Title("\nMigrate Project Command")
+	listLogger.Append(logger.DefaultLevel, infoText)
+
+	listLogger.Append(logger.WarningLevel, markup.Amber("Ensure to commit your changes to keep track of what the command applies"))
 	listLogger.Render()
 }
 

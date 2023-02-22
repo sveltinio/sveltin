@@ -23,16 +23,16 @@ func TestPublicPageFilename(t *testing.T) {
 		{
 			pageData: &config.TemplateData{
 				Page: &tpltypes.PageData{
-					Name: "index",
-					Type: "svelte"},
+					Name:     "index",
+					Language: "svelte"},
 			},
 			want: "+page.svelte",
 		},
 		{
 			pageData: &config.TemplateData{
 				Page: &tpltypes.PageData{
-					Name: "about",
-					Type: "markdown",
+					Name:     "about",
+					Language: "markdown",
 				},
 			},
 			want: "+page.svx",
@@ -41,7 +41,7 @@ func TestPublicPageFilename(t *testing.T) {
 
 	for _, tc := range tests {
 		is := is.New(t)
-		is.Equal(PublicPageFilename(tc.pageData.Page.Type), tc.want)
+		is.Equal(PublicPageFilename(tc.pageData.Page.Language), tc.want)
 	}
 }
 

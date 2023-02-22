@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { website } from '$config/website.js';
-	import type { IWebPageMetadata } from '@sveltinio/seo/types';
+	import type { SEOWebPage } from '@sveltinio/seo/types';
 	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { PageMetaTags, JsonLdWebPage } from '@sveltinio/seo';
-	import Hero from '$themes/{{ .Theme.Name }}/partials/Hero.svelte';
+	import CTA from '$themes/{{ .Theme.Name }}/partials/CTA.svelte';
 	import { getFavicon } from '$lib/utils/strings.js';
 
-	const homePage: IWebPageMetadata = {
+	const homePage: SEOWebPage = {
 		url: website.baseURL,
 		title: website.title,
 		description: website.seoDescription,
-		keywords: (website.keywords) ? website.keywords : '',
+		keywords: (website.keywords) ? website.keywords : new Array<string>(),
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Website
@@ -26,4 +26,4 @@
 <JsonLdWebPage data={homePage} />
 <!-- End of SEO Section -->
 
-<Hero />
+<CTA />

@@ -56,7 +56,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 		return err
 	}
 	// Copying the package.json config file
-	sourceFile := embeddedResources[PackageJSONFileID]
+	sourceFile := embeddedResources[PackageJSONFileId]
 	template := helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content := template.Run(cssLib.EFS)
 	saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "package.json")
@@ -64,13 +64,21 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 		return err
 	}
 	// Copying svelte.config.js file
-	sourceFile = embeddedResources[SvelteConfigFileID]
+	sourceFile = embeddedResources[SvelteConfigFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
+	// Copying msdvex.config.js file
+	sourceFile = embeddedResources[MDsveXFileId]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "mdsvex.config.js")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
 	// Copying vite.config.ts file
-	sourceFile = embeddedResources[ViteConfigFileID]
+	sourceFile = embeddedResources[ViteConfigFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.ts")
@@ -84,7 +92,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	}
 
 	// Copying app.html file
-	sourceFile = embeddedResources[AppHTMLFileID]
+	sourceFile = embeddedResources[AppHTMLFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.html")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
@@ -96,7 +104,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	}
 
 	// Copying +layout.svelte. file
-	sourceFile = embeddedResources[LayoutFileID]
+	sourceFile = embeddedResources[LayoutFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
@@ -105,7 +113,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	}
 
 	// Copying +layout.ts. file
-	sourceFile = embeddedResources[LayoutTSFileID]
+	sourceFile = embeddedResources[LayoutTSFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.ts")
@@ -114,7 +122,7 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 	}
 
 	// Copying +error.svelte. file
-	sourceFile = embeddedResources[ErrorFileID]
+	sourceFile = embeddedResources[ErrorFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+error.svelte")
@@ -122,14 +130,21 @@ func makeSveltinStyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying Hero.svelte component
-	sourceFile = embeddedResources[HeroFileID]
-	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Hero.svelte")
+	// Copying md-layout.svelte. file
+	sourceFile = embeddedResources[MDLayoutFileId]
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "components", "md-layout.svelte")
+	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+		return err
+	}
+
+	// Copying CTA.svelte component
+	sourceFile = embeddedResources[CTAFileId]
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "CTA.svelte")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
 	// Copying Footer.svelte component
-	sourceFile = embeddedResources[FooterFileID]
+	sourceFile = embeddedResources[FooterFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Footer.svelte")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
@@ -145,7 +160,7 @@ func makeUnstyled(cssLib *CSSLib) error {
 	}
 
 	// Copying the package.json config file
-	sourceFile := embeddedResources[PackageJSONFileID]
+	sourceFile := embeddedResources[PackageJSONFileId]
 	template := helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content := template.Run(cssLib.EFS)
 	saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "package.json")
@@ -153,13 +168,23 @@ func makeUnstyled(cssLib *CSSLib) error {
 		return err
 	}
 	// Copying svelte.config.js file
-	sourceFile = embeddedResources[SvelteConfigFileID]
+	sourceFile = embeddedResources[SvelteConfigFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
+
+	// Copying msdvex.config.js file
+	sourceFile = embeddedResources[MDsveXFileId]
+	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
+	content = template.Run(cssLib.EFS)
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "mdsvex.config.js")
+	if err := helpers.WriteContentToDisk(cssLib.FS, saveAs, content); err != nil {
+		return err
+	}
+
 	// Copying vite.config.ts file
-	sourceFile = embeddedResources[ViteConfigFileID]
+	sourceFile = embeddedResources[ViteConfigFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.ts")
@@ -173,7 +198,7 @@ func makeUnstyled(cssLib *CSSLib) error {
 	}
 
 	// Copying app.html file
-	sourceFile = embeddedResources[AppHTMLFileID]
+	sourceFile = embeddedResources[AppHTMLFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.html")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
@@ -185,7 +210,7 @@ func makeUnstyled(cssLib *CSSLib) error {
 	}
 
 	// Copying +layout.svelte. file
-	sourceFile = embeddedResources[LayoutFileID]
+	sourceFile = embeddedResources[LayoutFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
@@ -194,7 +219,7 @@ func makeUnstyled(cssLib *CSSLib) error {
 	}
 
 	// Copying +layout.ts. file
-	sourceFile = embeddedResources[LayoutTSFileID]
+	sourceFile = embeddedResources[LayoutTSFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.ts")
@@ -203,7 +228,7 @@ func makeUnstyled(cssLib *CSSLib) error {
 	}
 
 	// Copying +error.svelte. file
-	sourceFile = embeddedResources[ErrorFileID]
+	sourceFile = embeddedResources[ErrorFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+error.svelte")
@@ -211,9 +236,16 @@ func makeUnstyled(cssLib *CSSLib) error {
 		return err
 	}
 
-	// Copying Hero.svelte component
-	sourceFile = embeddedResources[HeroFileID]
-	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "Hero.svelte")
+	// Copying md-layout.svelte. file
+	sourceFile = embeddedResources[MDLayoutFileId]
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "components", "md-layout.svelte")
+	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+		return err
+	}
+
+	// Copying CTA.svelte component
+	sourceFile = embeddedResources[CTAFileId]
+	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "themes", cssLib.TplData.Theme.Name, "partials", "CTA.svelte")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
@@ -227,7 +259,7 @@ func makeTheme(cssLib *CSSLib) error {
 		return err
 	}
 	// Copying the package.json config file
-	sourceFile := embeddedResources[PackageJSONFileID]
+	sourceFile := embeddedResources[PackageJSONFileId]
 	template := helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content := template.Run(cssLib.EFS)
 	saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "package.json")
@@ -235,13 +267,13 @@ func makeTheme(cssLib *CSSLib) error {
 		return err
 	}
 	// Copying svelte.config.js file
-	sourceFile = embeddedResources[SvelteConfigFileID]
+	sourceFile = embeddedResources[SvelteConfigFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "svelte.config.js")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
 	}
 	// Copying vite.config.ts file
-	sourceFile = embeddedResources[ViteConfigFileID]
+	sourceFile = embeddedResources[ViteConfigFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "vite.config.ts")
@@ -255,7 +287,7 @@ func makeTheme(cssLib *CSSLib) error {
 	}
 
 	// Copying app.html file
-	sourceFile = embeddedResources[AppHTMLFileID]
+	sourceFile = embeddedResources[AppHTMLFileId]
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.html")
 	if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 		return err
@@ -267,7 +299,7 @@ func makeTheme(cssLib *CSSLib) error {
 	}
 
 	// Copying +layout.svelte. file
-	sourceFile = embeddedResources[LayoutFileID]
+	sourceFile = embeddedResources[LayoutFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.svelte")
@@ -276,7 +308,7 @@ func makeTheme(cssLib *CSSLib) error {
 	}
 
 	// Copying +layout.ts. file
-	sourceFile = embeddedResources[LayoutTSFileID]
+	sourceFile = embeddedResources[LayoutTSFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+layout.ts")
@@ -285,7 +317,7 @@ func makeTheme(cssLib *CSSLib) error {
 	}
 
 	// Copying +error.svelte. file
-	sourceFile = embeddedResources[ErrorFileID]
+	sourceFile = embeddedResources[ErrorFileId]
 	template = helpers.BuildTemplate(sourceFile, nil, cssLib.TplData)
 	content = template.Run(cssLib.EFS)
 	saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "routes", "+error.svelte")
@@ -333,13 +365,13 @@ func makeResourcesMapForUnstyled(cssLib *CSSLib) (map[string]string, error) {
 func copyAdditionalConfigFiles(embeddedResources map[string]string, cssLib *CSSLib) error {
 	if cssLib.Name == TailwindCSS {
 		// Copying tailwindcss config file
-		sourceFile := embeddedResources[TailwindConfigFileID]
+		sourceFile := embeddedResources[TailwindConfigFileId]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "tailwind.config.cjs")
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
 		// Copying postcss config file
-		sourceFile = embeddedResources[PostCSSFileID]
+		sourceFile = embeddedResources[PostCSSFileId]
 		saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "postcss.config.cjs")
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
@@ -349,26 +381,41 @@ func copyAdditionalConfigFiles(embeddedResources map[string]string, cssLib *CSSL
 }
 
 func copyStylesheets(embeddedResources map[string]string, cssLib *CSSLib) error {
-	if cssLib.Name == TailwindCSS || cssLib.Name == VanillaCSS {
+
+	switch cssLib.Name {
+	case Bootstrap, Bulma, Scss, VanillaCSS:
+		// Copying tw-preflight.css file
+		sourceFile := embeddedResources[ResetCSSFileId]
+		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "tw-preflight.css")
+		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+			return err
+		}
+	default:
+		break
+	}
+
+	switch cssLib.Name {
+	case TailwindCSS, VanillaCSS:
 		// Copying app.css file
-		sourceFile := embeddedResources[AppCSSFileID]
+		sourceFile := embeddedResources[AppCSSFileId]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.css")
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
-	} else {
+	case Bootstrap, Bulma, Scss:
 		// Copying app.scss file
-		sourceFile := embeddedResources[AppCSSFileID]
+		sourceFile := embeddedResources[AppCSSFileId]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.scss")
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
 		// Copying variables.scss file
-		sourceFile = embeddedResources[VariablesFileID]
+		sourceFile = embeddedResources[VariablesFileId]
 		saveAs = filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "_variables.scss")
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
