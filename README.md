@@ -144,7 +144,7 @@ scoop install sveltinio/sveltin
 
 ### Go Install
 
-Installation is done by using the `go install` command. In this case, ensure to have **Go (v1.17 or higher) installed** on your machine:
+Installation is done by using the `go install` command. In this case, ensure to have **Go (v1.18 or higher) installed** on your machine:
 
 ```bash
 go install github.com/sveltinio/sveltin@latest
