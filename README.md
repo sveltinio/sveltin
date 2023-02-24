@@ -331,7 +331,7 @@ Sveltin leverages many great open source libraries:
 | [validator](https://github.com/go-playground/validator) | `10.11.2` | MIT          |
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
 | [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
-| [is](https://github.com/matryer/is)                     | `1.4.0`   | MIT          |
+| [is](https://github.com/matryer/is)                     | `1.4.1`   | MIT          |
 | [afero](https://github.com/spf13/afero)                 | `1.9.4`   | Apache-2.0   |
 | [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
 | [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |

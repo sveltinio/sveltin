@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.2
 	github.com/gosimple/slug v1.13.1
 	github.com/jlaffaye/ftp v0.1.0
-	github.com/matryer/is v1.4.0
+	github.com/matryer/is v1.4.1
 	github.com/spf13/afero v1.9.4
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
