@@ -19,7 +19,7 @@
 		"@popperjs/core": "^2.11.6",
 		"@sveltejs/adapter-static": "2.0.1",
 		"@sveltejs/kit": "1.8.3",
-		"@sveltejs/vite-plugin-svelte": "^2.0.2",
+		"@sveltejs/vite-plugin-svelte": "^2.0.3",
 		"@sveltinio/essentials": "^0.6.1",
 		"@sveltinio/media-content": "^0.3.8",
 		"@sveltinio/remark-headings": "^1.0.1",
