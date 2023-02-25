@@ -4,7 +4,7 @@
 	export let logoSrc: string;
 </script>
 
-<footer class="w-full text-sm text-skin-muted bg-skin-deep-dark">
+<footer class="w-full text-sm text-muted bg-deepDark">
 	<div
 		class="flex flex-col items-start flex-wrap w-full px-5 pb-6 pt-8 mx-auto md:items-center md:flex-row lg:px-12 lg:py-12 lg:items-start lg:flex-nowrap"
 	>

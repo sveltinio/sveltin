@@ -7,29 +7,17 @@ const config = {
 	],
 	theme: {
 		extend: {
-			textColor: {
-				skin: {
-					white: 'var(--white)',
-					dark: 'var(--dark)',
-					base: 'var(--base)',
-					muted: 'var(--muted)',
-					accent: 'var(--cyan)',
-				},
-			},
-			backgroundColor: {
-				skin: {
-					white: 'var(--white)',
-					dark: 'var(--dark)',
-					'deep-dark': 'var(--deep-dark)',
-				},
-			},
 			colors: {
-				haiti: '#2c2c35',
-				pearl: '#1e2028',
-				river: '#464a5d',
-				santa: '#a0a1b2',
-				cege: '#0B7599',
-				auburn: '#9e2a2a',
+				base: 'var(--base)',
+				muted: 'var(--muted)',
+				accent: 'var(--cyan)',
+				dark: 'var(--dark)',
+				deepDark: 'var(--deep-dark)',
+				river: 'var(--river)',
+				haiti: 'var(--haiti)',
+				pearl: 'var(--pearl)',
+				sant: 'var(--santa)',
+				cege: 'var(--cege)',
 			},
 			fontFamily: {
 				mono: ['"IBM Plex Mono"', 'ui-monospace'],

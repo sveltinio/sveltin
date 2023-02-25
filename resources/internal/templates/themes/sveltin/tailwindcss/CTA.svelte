@@ -4,10 +4,10 @@
 
 <section class="mx-auto px-6 py-44 max-w-7xl">
 	<h1
-		class="pb-4 mx-auto text-center text-skin-base text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl lg:leading-tight"
+		class="pb-4 mx-auto text-center text-base text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl lg:leading-tight"
 	>
 		Your Sveltin project is <span
-			class="block italic font-normal text-skin-accent capitalize"
+			class="block italic font-normal text-accent capitalize"
 			>up & running!</span
 		>
 	</h1>
