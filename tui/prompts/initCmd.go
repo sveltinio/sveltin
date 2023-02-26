@@ -7,19 +7,11 @@ import (
 	"github.com/sveltinio/prompti/choose"
 	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	logger "github.com/sveltinio/yinlog"
-)
-
-// names for the available CSS Lib options
-const (
-	Bootstrap   string = "bootstrap"
-	Bulma       string = "bulma"
-	Scss        string = "scss"
-	TailwindCSS string = "tailwindcss"
-	VanillaCSS  string = "vanillacss"
 )
 
 //=============================================================================
@@ -49,11 +41,12 @@ func AskProjectNameHandler(inputs []string) (string, error) {
 // SelectCSSLibHandler if no flag passed, prompts the user to select the CSS lib to be used with the project.
 func SelectCSSLibHandler(cssLibName string) (string, error) {
 	entries := []list.Item{
-		choose.Item{Name: Bootstrap, Desc: "Bootstrap"},
-		choose.Item{Name: Bulma, Desc: "Bulma"},
-		choose.Item{Name: Scss, Desc: "Scss/Sass"},
-		choose.Item{Name: TailwindCSS, Desc: "Tailwind CSS"},
-		choose.Item{Name: VanillaCSS, Desc: "Vanilla CSS"},
+		choose.Item{Name: css.Bootstrap, Desc: "Bootstrap"},
+		choose.Item{Name: css.Bulma, Desc: "Bulma"},
+		choose.Item{Name: css.Scss, Desc: "Scss/Sass"},
+		choose.Item{Name: css.TailwindCSS, Desc: "Tailwind CSS"},
+		choose.Item{Name: css.UnoCSS, Desc: "UnoCSS"},
+		choose.Item{Name: css.VanillaCSS, Desc: "Vanilla CSS"},
 	}
 
 	switch nameLenght := len(cssLibName); {

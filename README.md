@@ -35,7 +35,7 @@ The Smartest Way to Create SvelteKit powered static websites.
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/releases" target="_blank">
-        <img src="https://img.shields.io/badge/version-v0.11.0-success?style=flat-square&logo=none" alt="sveltin cli version" />
+        <img src="https://img.shields.io/badge/version-v0.12.0-success?style=flat-square&logo=none" alt="sveltin cli version" />
     </a>
     &nbsp;
     <a href="https://github.com/sveltinio/sveltin/actions/workflows/release.yml" target="_blank">
@@ -67,7 +67,7 @@ Sveltin is a simple, quick and powerful CLI to:
 
 Sveltin provides:
 
-- Out-of-the-box support for vanilla CSS, Sass/SCSS, Tailwind CSS, Bulma and Bootstrap
+- Out-of-the-box support for Bootstrap, Bulma, Sass/SCSS, Tailwind CSS, UnoCSS and vanilla CSS
 - Ready to use Svelte [components](https://github.com/sveltinio/sveltin-components-library)
 
 ## :rocket: Quick Start

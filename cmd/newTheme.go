@@ -140,7 +140,9 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 }
 
 func newThemeCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The name of the CSS framework to use. Possible values: vanillacss, tailwindcss, bulma, bootstrap, scss")
+	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
+		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
+			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 }
 
@@ -164,19 +166,19 @@ func isValidForThemeMaker() {
 
 func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
-	case VanillaCSS:
+	case css.VanillaCSS:
 		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
 		return vanillaCSS.Setup(false)
-	case Scss:
+	case css.Scss:
 		scss := css.NewScss(efs, cfg.fs, cfg.settings, tplData)
 		return scss.Setup(false)
-	case TailwindCSS:
+	case css.TailwindCSS:
 		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.settings, tplData)
 		return tailwind.Setup(false)
-	case Bulma:
+	case css.Bulma:
 		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
 		return bulma.Setup(false)
-	case Bootstrap:
+	case css.Bootstrap:
 		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.settings, tplData)
 		return boostrap.Setup(false)
 	default:

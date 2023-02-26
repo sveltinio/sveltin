@@ -235,7 +235,6 @@ var TailwindSveltinThemeFilesMap = EmbeddedFSEntry{
 	"mdsvex_config":       "internal/templates/themes/mdsvex.config.js.gotxt",
 	"app_html":            "internal/templates/themes/sveltin/tailwindcss/app.html",
 	"postcss":             "internal/templates/themes/sveltin/tailwindcss/postcss.config.cjs",
-	"reset_css":           "internal/templates/themes/tw-preflight.css",
 	"app_css":             "internal/templates/themes/sveltin/tailwindcss/app.css",
 	"cta":                 "internal/templates/themes/sveltin/tailwindcss/CTA.svelte",
 	"footer":              "internal/templates/themes/sveltin/tailwindcss/Footer.svelte",
@@ -254,10 +253,46 @@ var TailwindBlankThemeFilesMap = EmbeddedFSEntry{
 	"layout_ts":           "internal/templates/themes/layout.ts.gotxt",
 	"mdsvex_config":       "internal/templates/themes/mdsvex.config.js.gotxt",
 	"app_html":            "internal/templates/themes/blank/tailwindcss/app.html",
-	"reset_css":           "internal/templates/themes/tw-preflight.css",
 	"app_css":             "internal/templates/themes/blank/tailwindcss/app.css",
 	"cta":                 "internal/templates/themes/blank/tailwindcss/CTA.svelte",
 	"error":               "internal/templates/themes/error.unstyled.svelte",
+}
+
+//=============================================================================
+
+// UnoCSSSveltinThemeFilesMap is the map for the styled templates file whe using tailwind css.
+var UnoCSSSveltinThemeFilesMap = EmbeddedFSEntry{
+	"package_json":  "internal/templates/themes/sveltin/unocss/package.json.gotxt",
+	"svelte_config": "internal/templates/themes/sveltin/unocss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/sveltin/unocss/vite.config.ts.gotxt",
+	"unocss_config": "internal/templates/themes/sveltin/unocss/unocss.config.ts",
+	"layout":        "internal/templates/themes/sveltin/unocss/layout.svelte.gotxt",
+	"md_layout":     "internal/templates/themes/sveltin/unocss/md-layout.svelte.gotxt",
+	"layout_ts":     "internal/templates/themes/layout.ts.gotxt",
+	"mdsvex_config": "internal/templates/themes/mdsvex.config.js.gotxt",
+	"app_html":      "internal/templates/themes/sveltin/unocss/app.html",
+	"postcss":       "internal/templates/themes/sveltin/unocss/postcss.config.cjs",
+	"app_css":       "internal/templates/themes/sveltin/unocss/app.css",
+	"cta":           "internal/templates/themes/sveltin/unocss/CTA.svelte",
+	"footer":        "internal/templates/themes/sveltin/unocss/Footer.svelte",
+	"error":         "internal/templates/themes/error.styled.svelte",
+}
+
+// UnoCSSBlankThemeFilesMap is the map for the unstyled templates file whe using tailwind css.
+var UnoCSSBlankThemeFilesMap = EmbeddedFSEntry{
+	"package_json":  "internal/templates/themes/blank/unocss/package.json.gotxt",
+	"svelte_config": "internal/templates/themes/blank/unocss/svelte.config.js",
+	"vite_config":   "internal/templates/themes/blank/unocss/vite.config.ts.gotxt",
+	"unocss_config": "internal/templates/themes/blank/unocss/unocss.config.ts",
+	"postcss":       "internal/templates/themes/blank/unocss/postcss.config.cjs",
+	"layout":        "internal/templates/themes/blank/unocss/layout.svelte.gotxt",
+	"md_layout":     "internal/templates/themes/blank/unocss/md-layout.svelte.gotxt",
+	"layout_ts":     "internal/templates/themes/layout.ts.gotxt",
+	"mdsvex_config": "internal/templates/themes/mdsvex.config.js.gotxt",
+	"app_html":      "internal/templates/themes/blank/unocss/app.html",
+	"app_css":       "internal/templates/themes/blank/unocss/app.css",
+	"cta":           "internal/templates/themes/blank/unocss/CTA.svelte",
+	"error":         "internal/templates/themes/error.unstyled.svelte",
 }
 
 //=============================================================================

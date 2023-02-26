@@ -1,0 +1,51 @@
+import { resolve, join, dirname } from 'path';
+import { defineConfig } from 'vite';
+import { readFileSync } from 'fs';
+import { sveltekit } from '@sveltejs/kit/vite';
+import UnoCSS from 'unocss/vite';
+import { extractorSvelte } from '@unocss/core';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const file = fileURLToPath(new URL('package.json', import.meta.url));
+const json = readFileSync(file, 'utf8');
+const pkg = JSON.parse(json);
+
+const config = defineConfig({
+	clearScreen: false,
+	define: {
+		'process.env.VITE_SVELTEKIT_VERSION': JSON.stringify(
+			String(pkg.devDependencies['@sveltejs/kit'])
+		),
+		'process.env.VITE_BUILD_TIME': JSON.stringify(
+			new Date().toISOString()
+		),
+	},
+	server: {
+		port: {{ .Vite.Port }},
+		fs: {
+			// Allow serving files from one level up to the project root
+			// Alternatevaly set server.fs.strict to false
+			allow: ['..']
+		},
+	},
+	resolve: {
+		alias: {
+			$sveltin: resolve(join(__dirname, './src/sveltin')),
+			$config: resolve(join(__dirname, './config')),
+			$content: resolve(join(__dirname, './content')),
+			$themes: resolve(join(__dirname, './themes'))
+		},
+	},
+	plugins: [
+		UnoCSS({
+			extractors: [extractorSvelte]
+		}),
+		sveltekit()
+	],
+	ssr: { noExternal: ['@indaco/svelte-iconoir/**'] }
+});
+
+export default config;

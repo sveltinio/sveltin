@@ -1,0 +1,25 @@
+<script lang="ts">
+	import '@unocss/reset/tailwind.css';
+	import 'uno.css';
+	import '../app.css';
+	import { website } from '$config/website.js';
+	//import { googleFonts } from '$config/externals.js';
+	import { menu } from '$config/menu.js';
+	import orderBy from 'lodash-es/orderBy.js';
+	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
+	import { ScrollToTopButton } from '@sveltinio/widgets';
+	//import { GoogleFonts } from '@sveltinio/services';
+
+	const sortedMenu = orderBy(menu, 'weight');
+</script>
+
+<JsonLdWebSite data={website} />
+<JsonLdSiteNavigationElements baseURL={website.baseURL} data={sortedMenu} />
+
+<!-- <GoogleFonts fonts={googleFonts} /> -->
+
+<main>
+	<slot />
+</main>
+
+<ScrollToTopButton bounce />

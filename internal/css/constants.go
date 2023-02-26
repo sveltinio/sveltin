@@ -13,6 +13,7 @@ const (
 	Bulma       string = "bulma"
 	Scss        string = "scss"
 	TailwindCSS string = "tailwindcss"
+	UnoCSS      string = "unocss"
 	VanillaCSS  string = "vanillacss"
 )
 
@@ -36,5 +37,6 @@ const (
 	CTAFileId            string = "cta"
 	FooterFileId         string = "footer"
 	TailwindConfigFileId string = "tailwind_css_config"
+	UnoCSSConfigFileId   string = "unocss_config"
 	PostCSSFileId        string = "postcss"
 )

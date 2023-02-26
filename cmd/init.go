@@ -49,15 +49,6 @@ const (
 	StyleNone    string = "none"
 )
 
-// names for the available CSS Lib options
-const (
-	Bootstrap   string = "bootstrap"
-	Bulma       string = "bulma"
-	Scss        string = "scss"
-	TailwindCSS string = "tailwindcss"
-	VanillaCSS  string = "vanillacss"
-)
-
 // names for config files
 const (
 	Defaults  string = "defaults"
@@ -229,7 +220,9 @@ func initCmdFlags(cmd *cobra.Command) {
 	})
 	utils.ExitIfError(err)
 	// css flag
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "", "The CSS lib to use. Valid: vanillacss, tailwindcss, bulma, bootstrap, scss")
+	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
+		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
+			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
 	err = cmd.RegisterFlagCompletionFunc("css", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return css.AvailableCSSLib, cobra.ShellCompDirectiveDefault
 	})
@@ -322,23 +315,35 @@ func getSelectedNPMClient(npmcFlag string, logger *logger.Logger) npmc.NPMClient
 
 func setupCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
-	case VanillaCSS:
-		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
-		return vanillaCSS.Setup(true)
-	case Scss:
-		scss := css.NewScss(efs, cfg.fs, cfg.settings, tplData)
-		return scss.Setup(true)
-	case TailwindCSS:
-		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.settings, tplData)
-		return tailwind.Setup(true)
-	case Bulma:
-		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
-		return bulma.Setup(true)
-	case Bootstrap:
+	case css.Bootstrap:
 		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.settings, tplData)
 		return boostrap.Setup(true)
+	case css.Bulma:
+		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
+		return bulma.Setup(true)
+	case css.Scss:
+		scss := css.NewScss(efs, cfg.fs, cfg.settings, tplData)
+		return scss.Setup(true)
+	case css.TailwindCSS:
+		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.settings, tplData)
+		return tailwind.Setup(true)
+	case css.UnoCSS:
+		unocss := css.NewUnoCSS(efs, cfg.fs, cfg.settings, tplData)
+		return unocss.Setup(true)
+	case css.VanillaCSS:
+		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
+		return vanillaCSS.Setup(true)
 	default:
-		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
+		return sveltinerr.NewOptionNotValidError(
+			tplData.Theme.CSSLib,
+			[]string{
+				css.Bootstrap,
+				css.Bulma,
+				css.Scss,
+				css.TailwindCSS,
+				css.UnoCSS,
+				css.VanillaCSS,
+			})
 	}
 }
 

@@ -338,6 +338,8 @@ func makeResourcesMapForStyled(cssLib *CSSLib) (map[string]string, error) {
 		return resources.SassSveltinThemeFilesMap, nil
 	case TailwindCSS:
 		return resources.TailwindSveltinThemeFilesMap, nil
+	case UnoCSS:
+		return resources.UnoCSSSveltinThemeFilesMap, nil
 	case VanillaCSS:
 		return resources.VanillaSveltinThemeFilesMap, nil
 	default:
@@ -355,6 +357,8 @@ func makeResourcesMapForUnstyled(cssLib *CSSLib) (map[string]string, error) {
 		return resources.SassBlankThemeFilesMap, nil
 	case TailwindCSS:
 		return resources.TailwindBlankThemeFilesMap, nil
+	case UnoCSS:
+		return resources.UnoCSSBlankThemeFilesMap, nil
 	case VanillaCSS:
 		return resources.VanillaBlankThemeFilesMap, nil
 	default:
@@ -363,7 +367,8 @@ func makeResourcesMapForUnstyled(cssLib *CSSLib) (map[string]string, error) {
 }
 
 func copyAdditionalConfigFiles(embeddedResources map[string]string, cssLib *CSSLib) error {
-	if cssLib.Name == TailwindCSS {
+	switch cssLib.Name {
+	case TailwindCSS:
 		// Copying tailwindcss config file
 		sourceFile := embeddedResources[TailwindConfigFileId]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "tailwind.config.cjs")
@@ -376,26 +381,23 @@ func copyAdditionalConfigFiles(embeddedResources map[string]string, cssLib *CSSL
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
+	case UnoCSS:
+		// Copying unocss config file
+		sourceFile := embeddedResources[UnoCSSConfigFileId]
+		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "unocss.config.ts")
+		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+			return err
+		}
+	default:
+		return nil
 	}
 	return nil
 }
 
 func copyStylesheets(embeddedResources map[string]string, cssLib *CSSLib) error {
-
+	// Copying specifc files for lib.
 	switch cssLib.Name {
-	case Bootstrap, Bulma, Scss, VanillaCSS:
-		// Copying tw-preflight.css file
-		sourceFile := embeddedResources[ResetCSSFileId]
-		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "tw-preflight.css")
-		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
-			return err
-		}
-	default:
-		break
-	}
-
-	switch cssLib.Name {
-	case TailwindCSS, VanillaCSS:
+	case TailwindCSS, UnoCSS, VanillaCSS:
 		// Copying app.css file
 		sourceFile := embeddedResources[AppCSSFileId]
 		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "app.css")
@@ -415,6 +417,20 @@ func copyStylesheets(embeddedResources map[string]string, cssLib *CSSLib) error 
 		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
 			return err
 		}
+	default:
+		break
+	}
+
+	// Copying tw-preflight.css file when bootstrap, bulma, scss and vabilla css.
+	switch cssLib.Name {
+	case Bootstrap, Bulma, Scss, VanillaCSS:
+		sourceFile := embeddedResources[ResetCSSFileId]
+		saveAs := filepath.Join(cssLib.Settings.GetProjectRoot(), cssLib.TplData.ProjectName, "src", "tw-preflight.css")
+		if err := common.MoveFile(cssLib.EFS, cssLib.FS, sourceFile, saveAs, false); err != nil {
+			return err
+		}
+	default:
+		break
 	}
 
 	return nil
