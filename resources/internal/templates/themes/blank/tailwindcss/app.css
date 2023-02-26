@@ -50,5 +50,9 @@
 }
 
 .markdown-body {
-	@apply mx-auto p-11 prose-base;
+	@apply mx-auto prose prose-gray text-justify;
+}
+
+.max-width-none {
+	@apply max-w-none;
 }

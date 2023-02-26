@@ -1,5 +1,8 @@
 /* Variables and mixins declared here will be available in all other SCSS files */
 /* https://github.com/jgthms/bulma/issues/1293 */
+
+@import 'bulma/sass/utilities/initial-variables';
+
 $family-sans-serif: 'IBM Plex Sans', sans-serif;
 $body-overflow-y: auto;
 
@@ -11,6 +14,10 @@ $base: #464a5d;
 $muted: #a0a1b2;
 $cyan: #0b7599;
 $orange: #fed7aa;
+$gray-900: #111827;
+
+/* Overriding Bulma’s initial variables */
+$grey-light: $muted;
 
 /* breakpoints */
 $sm: 640px;

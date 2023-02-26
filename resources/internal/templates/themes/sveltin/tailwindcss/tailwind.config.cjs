@@ -37,6 +37,13 @@ const config = {
 					'"Segoe UI Symbol"',
 				],
 			},
+			typography: {
+				DEFAULT: {
+					css: {
+						a: { 'text-decoration': 'none' },
+					},
+				},
+			},
 		},
 	},
 	plugins: [

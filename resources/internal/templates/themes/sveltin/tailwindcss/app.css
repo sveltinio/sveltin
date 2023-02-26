@@ -13,7 +13,12 @@
 		--deep-dark: #1e2028;
 		--base: #464a5d;
 		--muted: #a0a1b2;
+		--river: #464a5d;
 		--cyan: #0b7599;
+		--haiti: #2c2c35;
+		--pearl: #1e2028;
+		--santa: #a0a1b2;
+		--cege: #0b7599;
 	}
 
 	html {
@@ -26,7 +31,7 @@
 	}
 
 	h1 {
-		@apply mx-auto text-skin-base transition-all;
+		@apply mx-auto text-base transition-all;
 	}
 
 	code[class*='language-'] {
@@ -55,7 +60,7 @@
 }
 
 .page-wrapper {
-	@apply text-skin-dark flex flex-col justify-center p-11 mx-auto my-7 max-w-4xl;
+	@apply text-dark flex flex-col justify-center p-11 mx-auto my-7 max-w-4xl;
 }
 
 .page-wrapper__content {
@@ -83,5 +88,9 @@
 }
 
 .markdown-body {
-	@apply mx-auto p-11 prose-base;
+	@apply mx-auto prose prose-gray text-justify;
+}
+
+.max-width-none {
+	@apply max-w-none;
 }

@@ -5,6 +5,17 @@ const config = {
 		'./src/routes/*.{html,svelte,js,ts}',
 		'./themes/**/*.{html,svelte,js,ts}',
 	],
+	theme: {
+		extend: {
+			typography: {
+				DEFAULT: {
+					css: {
+						a: { 'text-decoration': 'none' },
+					},
+				},
+			},
+		},
+	},
 	plugins: [
 		require('@tailwindcss/typography'),
 		require('@tailwindcss/line-clamp'),

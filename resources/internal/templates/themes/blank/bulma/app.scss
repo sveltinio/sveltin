@@ -51,20 +51,31 @@ pre[class*='language-'] {
 }
 
 .message {
-	padding: 0.5rem 1rem /* 8px 16px */;
-	border-radius: 0.375rem /* 6px */;
+	padding: 0.5rem 1rem;
+	border-radius: 0.375rem;
 }
 
 .message--warning {
-	background-color: rgb(254 215 170);
+	background-color: $orange;
 }
 
+/* Overriding styles inherit from github-markdown-light-5.2.0.css */
 .markdown-body {
 	box-sizing: border-box;
-	min-width: 200px;
-	max-width: 980px;
-	margin: 0 auto;
-	padding: 45px;
+	margin: 3rem auto 0.75rem;
+	text-align: justify;
+	font-size: 1rem;
+	line-height: 1.75;
+
+	h2 {
+		color: $gray-900;
+		font-weight: 500;
+		font-size: 1.5em;
+		margin-top: 2em;
+		margin-bottom: 1em;
+		line-height: 1.3333333;
+		border: 0 solid;
+	}
 
 	a {
 		color: currentcolor;
@@ -75,6 +86,10 @@ pre[class*='language-'] {
 			text-decoration: none;
 		}
 	}
+}
+
+.max-width-none {
+	max-width: none;
 }
 
 @media only screen and (min-width: 1024px) {

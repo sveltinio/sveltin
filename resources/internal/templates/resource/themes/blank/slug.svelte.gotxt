@@ -68,7 +68,7 @@
 
 	<TOC data={current.metadata.headings} />
 
-	<div class="markdown-body">
+	<div class="markdown-body max-width-none">
 		<svelte:component this={mdsvexComponent} />
 	</div>
 

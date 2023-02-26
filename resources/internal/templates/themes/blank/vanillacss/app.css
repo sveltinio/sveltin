@@ -4,6 +4,11 @@
 @import url('../static/css/github/github-markdown-light-5.2.0.css') screen;
 @import url('../static/css/prism/themes/prism-shades-of-purple.css') screen;
 
+:root {
+	--gray-900: #111827;
+	--orange: #fed7aa;
+}
+
 html {
 	height: 100%;
 	scroll-behavior: smooth;
@@ -37,29 +42,45 @@ pre[class*='language-'] {
 }
 
 .message {
-	padding: 0.5rem 1rem /* 8px 16px */;
-	border-radius: 0.375rem /* 6px */;
+	padding: 0.5rem 1rem;
+	border-radius: 0.375rem;
 }
 
 .message--warning {
-	background-color: rgb(254 215 170);
+	background-color: var(--orange);
 }
 
+/* Overriding styles inherit from github-markdown-light-5.2.0.css */
 .markdown-body {
 	box-sizing: border-box;
-	min-width: 200px;
-	max-width: 980px;
-	margin: 0 auto;
-	padding: 45px;
+	margin: 3rem auto 0.75rem;
+	text-align: justify;
+	font-size: 1rem;
+	line-height: 1.75;
+}
+
+.markdown-body h2 {
+	color: var(--gray-900);
+	font-weight: 500;
+	font-size: 1.5em;
+	margin-top: 2em;
+	margin-bottom: 1em;
+	line-height: 1.3333333;
+	border: 0 solid;
 }
 
 .markdown-body a {
 	color: currentcolor;
 	text-decoration: none;
 }
+
 .markdown-body a:hover {
 	color: currentcolor;
 	text-decoration: none;
+}
+
+.max-width-none {
+	max-width: none;
 }
 
 @media only screen and (min-width: 1024px) {

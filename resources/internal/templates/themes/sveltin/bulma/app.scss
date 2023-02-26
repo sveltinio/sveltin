@@ -101,20 +101,37 @@ pre[class*='language-'] {
 	line-height: 1.5rem;
 }
 
+/* Overriding styles inherit from github-markdown-light-5.2.0.css */
 .markdown-body {
 	box-sizing: border-box;
-	min-width: 200px;
-	max-width: 980px;
-	margin: 0 auto;
-	padding: 45px;
+	margin: 3rem auto 0.75rem;
+	text-align: justify;
+	font-size: 1rem;
+	line-height: 1.75;
+
+	h2 {
+		color: $gray-900;
+		font-weight: 500;
+		font-size: 1.5em;
+		margin-top: 2em;
+		margin-bottom: 1em;
+		line-height: 1.3333333;
+		border: 0 solid;
+	}
+
+	a {
+		color: currentcolor;
+		text-decoration: none;
+
+		&:hover {
+			color: currentcolor;
+			text-decoration: none;
+		}
+	}
 }
 
-.markdown-body a {
-	color: currentcolor;
-}
-
-.markdown-body a:hover {
-	text-decoration: none;
+.max-width-none {
+	max-width: none;
 }
 
 @media only screen and (min-width: 1024px) {
