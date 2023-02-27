@@ -247,8 +247,8 @@ github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKs
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/subosito/gotenv v1.4.2 h1:X1TuBLAMDFbaTAChgCBLu3DU3UPyELpnF2jjJ2cz/S8=
 github.com/subosito/gotenv v1.4.2/go.mod h1:ayKnFf/c6rvx/2iiLrJUk1e6plDbT3edrFNGqEflhK0=
-github.com/sveltinio/prompti v0.1.2 h1:JOXQKleeky5mVqhwnZPKRlpCkTxNDzQfrys+IYd3iiA=
-github.com/sveltinio/prompti v0.1.2/go.mod h1:O/ASAKmzfMig7e/wfR+y5KLn1ekUDT4VWJG+azLljxk=
+github.com/sveltinio/prompti v0.2.0 h1:BQqbgVAinaAZKPmsAV6EgPHXlK0DoO1g4YeUJ27BLEM=
+github.com/sveltinio/prompti v0.2.0/go.mod h1:MNu4ZxWsJHaVKAbNW68CHhoCP1TYP/CaCBNBd0GBr3E=
 github.com/sveltinio/yinlog v0.0.0-20221118112034-06b093f34e21 h1:ugjHtoxHdFv4Wur0tk9TF5u+kbhUQ5ALJciisKsfUmI=
 github.com/sveltinio/yinlog v0.0.0-20221118112034-06b093f34e21/go.mod h1:qwqj9aRSjfvxDFkgN9IbqmY8EGQ1pfBnbemJzZigxX4=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=

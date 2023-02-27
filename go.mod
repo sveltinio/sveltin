@@ -13,7 +13,7 @@ require (
 	github.com/spf13/afero v1.9.4
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
-	github.com/sveltinio/prompti v0.1.2
+	github.com/sveltinio/prompti v0.2.0
 	github.com/sveltinio/yinlog v0.0.0-20221118112034-06b093f34e21
 	github.com/tidwall/gjson v1.14.4
 	github.com/tidwall/sjson v1.2.5

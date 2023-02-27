@@ -335,7 +335,7 @@ Sveltin leverages many great open source libraries:
 | [afero](https://github.com/spf13/afero)                 | `1.9.4`   | Apache-2.0   |
 | [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
 | [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |
-| [prompti](https://github.com/sveltinio/prompti)         | `0.1.2`   | MIT          |
+| [prompti](https://github.com/sveltinio/prompti)         | `0.2.0`   | MIT          |
 | [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
 | [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
 | [text](https://golang.org/x/text)                       | `0.7.0`   | BSD-3-Clause |
