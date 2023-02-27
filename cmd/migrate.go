@@ -14,11 +14,11 @@ import (
 	"sort"
 
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/prompti/confirm"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -42,7 +42,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 
 	feedbacks.ShowUpgradeCommandMessage()
 
-	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})
+	isConfirm, err := prompts.ConfirmMigration("Continue?")
 	utils.ExitIfError(err)
 
 	if isConfirm {
