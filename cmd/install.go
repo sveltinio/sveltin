@@ -13,22 +13,26 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var installCmd = &cobra.Command{
-	Use:     "install",
-	Aliases: []string{"i"},
-	Short:   "Install your project dependencies",
-	Long: resources.GetASCIIArt() + `
-Command used to install all dependencies from the 'package.json' file.
+var (
+	installCmdShortMsg = "Install your project dependencies"
+	installCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to install all dependencies from the 'package.json' file.
 
-It wraps (npm|pnpm|yarn) install.
-`,
+It wraps (npm|pnpm|yarn) install.`)
+)
+
+//=============================================================================
+
+var installCmd = &cobra.Command{
+	Use:                   "install",
+	Aliases:               []string{"i"},
+	Short:                 installCmdShortMsg,
+	Long:                  installCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunInstallCmd,

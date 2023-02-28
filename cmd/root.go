@@ -23,7 +23,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
-	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/utils"
 	logger "github.com/sveltinio/yinlog"
 )
 
@@ -39,8 +39,6 @@ type appConfig struct {
 	startersMap     map[string]config.StarterTemplate
 	fs              afero.Fs
 }
-
-// =============================================================================
 
 const (
 	// CliVersion is the current sveltin cli version number.
@@ -108,6 +106,18 @@ const (
 )
 
 var (
+	rootCmdShortMsg = "sveltin is the main command to work with SvelteKit powered static websites."
+	rootCmdLongMsg  = utils.MakeCmdLongMsg(`A powerful CLI for your SvelteKit powered static website!
+
+sveltin is the main command used to boost your productivity
+while creating a new production-ready SvelteKit project.
+
+Resources:
+  Documentation           -> https://docs.sveltin.io
+  A helpful quick-start   -> https://docs.sveltin.io/quick-start`)
+)
+
+var (
 	// YamlConfig is used by yaml.Unmarshal to decode the YAML file.
 	YamlConfig    []byte
 	npmClientName string
@@ -120,18 +130,8 @@ var rootCmd = &cobra.Command{
 	Use:              "sveltin",
 	Version:          CliVersion,
 	TraverseChildren: true,
-	Short:            "sveltin is the main command to work with SvelteKit powered static websites.",
-	Long: resources.GetASCIIArt() + `
-A powerful CLI for your SvelteKit powered static website!
-
-sveltin is the main command used to boost your productivity
-while creating a new production-ready SvelteKit project.
-
-Resources:
-  Documentation           -> https://docs.sveltin.io
-  A helpful quick-start   -> https://docs.sveltin.io/quick-start
-
-`,
+	Short:            rootCmdShortMsg,
+	Long:             rootCmdLongMsg,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

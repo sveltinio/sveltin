@@ -9,28 +9,33 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/utils"
+)
+
+//=============================================================================
+
+var (
+	generateCmdGroupId    = "generate"
+	generateCmdGroupTitle = "Available subcommands:"
+	generateCmdShortMsg   = "Generate static files (sitemap, rss, menu)"
+	generateCmdLongMsg    = utils.MakeCmdLongMsg("Command used to generate static files through its own subcommands.")
 )
 
 //=============================================================================
 
 var generateCmd = &cobra.Command{
-	Use:     "generate",
-	Aliases: []string{"g"},
-	Short:   "Generate static files (sitemap, rss, menu)",
-	Long: resources.GetASCIIArt() + `
-Command used to generate static files through its own subcommands.
-
-Run 'sveltin generate -h' for further details.
-`,
+	Use:                   "generate",
+	Aliases:               []string{"g"},
+	Short:                 generateCmdShortMsg,
+	Long:                  generateCmdLongMsg,
 	ValidArgs:             []string{"menu", "rss", "sitemap"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	DisableFlagsInUseLine: true,
 }
 
 func init() {
-	generateCmd.AddGroup(&cobra.Group{ID: "generate", Title: "Available subcommands:"})
-	generateCmd.SetHelpCommandGroupID("generate")
-	generateCmd.SetCompletionCommandGroupID("generate")
+	generateCmd.AddGroup(&cobra.Group{ID: generateCmdGroupId, Title: generateCmdGroupTitle})
+	generateCmd.SetHelpCommandGroupID(generateCmdGroupId)
+	generateCmd.SetCompletionCommandGroupID(generateCmdGroupId)
 	rootCmd.AddCommand(generateCmd)
 }

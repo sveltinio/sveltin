@@ -36,13 +36,6 @@ import (
 
 //=============================================================================
 
-var (
-	withCSSLib     string
-	withThemeName  string
-	withPortNumber string
-	withGit        bool
-)
-
 // names for the available style options
 const (
 	StyleDefault string = "default"
@@ -58,23 +51,29 @@ const (
 	DotEnv    string = "dotenv"
 )
 
+var (
+	initCmdExample = `sveltin init blog --css tailwindcss
+sveltin init blog --css unocss -n pnpm -p 3030 --git`
+	initCmdShortMsg = "Initialize a new Sveltin project"
+	initCmdLongMsg  = utils.MakeCmdLongMsg("Command used to initialize/scaffold a new sveltin project.")
+)
+
+var (
+	withCSSLib     string
+	withThemeName  string
+	withPortNumber string
+	withGit        bool
+)
+
 //=============================================================================
 
 // initCmd represents the init command
 var initCmd = &cobra.Command{
-	Use:     "init [name]",
-	Aliases: []string{"create"},
-	Short:   "Initialize a new Sveltin project",
-	Long: resources.GetASCIIArt() + `
-Command used to initialize/scaffold a new sveltin project.
-
-Examples:
-
-sveltin init blog
-sveltin init blog --css tailwindcss
-sveltin init blog --css vanillacss -t myTheme
-sveltin init portfolio -c tailwindcss -t paper -n pnpm -p 3030 --git
-`,
+	Use:                   "init [name]",
+	Aliases:               []string{"create"},
+	Example:               initCmdExample,
+	Short:                 initCmdShortMsg,
+	Long:                  initCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Run:                   InitCmdRun,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -201,7 +200,6 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	} else {
 		feedbacks.ShowNewProjectWithExistingThemeNextStepsHelpMessage(projectConfigSummary)
 	}
-
 }
 
 func initCmdFlags(cmd *cobra.Command) {

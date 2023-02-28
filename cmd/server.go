@@ -13,20 +13,24 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
+var (
+	serverCmdShortMsg = "Run the development server (vite)"
+	serverCmdLongMsg  = utils.MakeCmdLongMsg("It wraps vite dev to start a development server.")
+)
+
+//=============================================================================
+
 var serverCmd = &cobra.Command{
-	Use:     "server",
-	Aliases: []string{"s", "serve", "run", "dev"},
-	Short:   "Run the development server (vite)",
-	Long: resources.GetASCIIArt() + `
-It wraps vite dev to start a development server
-`,
+	Use:                   "server",
+	Aliases:               []string{"s", "serve", "run", "dev"},
+	Short:                 serverCmdShortMsg,
+	Long:                  serverCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunServerCmd,

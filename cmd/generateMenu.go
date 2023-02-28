@@ -16,6 +16,18 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
+//=============================================================================
+
+var (
+	generateMenuCmdExample  = "sveltin generate menu --full"
+	generateMenuCmdShortMsg = "Generate the menu file for your Sveltin project"
+	generateMenuCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to generate the menu (menu.js.ts) file into the 'config' folder to be used by Svelte components.
+
+By default it list all resources and public pages.
+
+The --full flag will includes content names for all resources too.`)
+)
+
 var (
 	withContentFlag bool
 )
@@ -24,17 +36,12 @@ var (
 
 var generateMenuCmd = &cobra.Command{
 	Use:     "menu",
-	GroupID: "generate",
-	Short:   "Generate the menu file for your Sveltin project",
-	Long: resources.GetASCIIArt() + `
-Command used to generate the menu (menu.js.ts) file into the 'config' folder to be used by Svelte components.
-
-By default it list all resources and public pages.
-
-The --full flag will includes content names for all resources too.
-`,
-	Args: cobra.ExactArgs(0),
-	Run:  RunGenerateMenuCmd,
+	GroupID: generateCmdGroupId,
+	Example: generateMenuCmdExample,
+	Short:   generateMenuCmdShortMsg,
+	Long:    generateMenuCmdLongMsg,
+	Args:    cobra.ExactArgs(0),
+	Run:     RunGenerateMenuCmd,
 }
 
 // RunGenerateMenuCmd is the actual work function.

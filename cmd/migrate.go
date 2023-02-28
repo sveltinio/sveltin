@@ -16,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
-	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
@@ -24,12 +23,17 @@ import (
 
 //=============================================================================
 
+var (
+	migrateCmdShortMsg = "Migrate your project to the latest Sveltin version"
+	migrateCmdLongMsg  = utils.MakeCmdLongMsg("Command used to migrate your project files to the latest Sveltin version.")
+)
+
+//=============================================================================
+
 var migrateCmd = &cobra.Command{
-	Use:   "migrate",
-	Short: "Migrate your project to the latest Sveltin version",
-	Long: resources.GetASCIIArt() + `
-Command used to migrate your project files to the latest Sveltin version.
-`,
+	Use:                   "migrate",
+	Short:                 migrateCmdShortMsg,
+	Long:                  migrateCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunMigrateCmd,

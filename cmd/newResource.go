@@ -30,19 +30,9 @@ import (
 //=============================================================================
 
 var (
-	group          string
-	withSlugLayout bool
-)
-
-//=============================================================================
-
-var newResourceCmd = &cobra.Command{
-	Use:     "resource [name]",
-	Aliases: []string{"r"},
-	GroupID: "new",
-	Short:   "Create a new resource (route)",
-	Long: resources.GetASCIIArt() + `
-Command used to create new resources.
+	newResourceCmdExample  = "sveltin new resource posts"
+	newResourceCmdShortMsg = "Create a new resource (route)"
+	newResourceCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to create new resources.
 
 Why "resource" instead of "route"?
 Although a resource is basically a route on SvelteKit router, a resource is not an empty route. The retional behind
@@ -57,8 +47,23 @@ This command:
 - Add the resource as route within the "src/routes" folder, creating its own folder
 - Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name>
 - Scaffold +page.svelte component and +page.serve.ts endpoint to list all the content belongs to a resource
-- Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page
-	`,
+- Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page`)
+)
+
+var (
+	group          string
+	withSlugLayout bool
+)
+
+//=============================================================================
+
+var newResourceCmd = &cobra.Command{
+	Use:                   "resource [name]",
+	Aliases:               []string{"r"},
+	GroupID:               newCmdGroupId,
+	Example:               newResourceCmdExample,
+	Short:                 newResourceCmdShortMsg,
+	Long:                  newResourceCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Run:                   RunNewResourceCmd,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {

@@ -30,6 +30,15 @@ const (
 )
 
 var (
+	newPageCmdExample  = "sveltin new page about --markdown"
+	newPageCmdShortMsg = "Create a new page route"
+	newPageCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to create a new public page route selecting between a svelte component-based page and a markdown page.
+
+Pages are Svelte components written in .svelte or .svx (for markdown) files.
+The filename determines the route so, creating a page named "about" will generate the following route /about/+page.(svelte|svx).`)
+)
+
+var (
 	withSvelte   bool
 	withMarkdown bool
 )
@@ -37,17 +46,13 @@ var (
 //=============================================================================
 
 var newPageCmd = &cobra.Command{
-	Use:     "page [name]",
+	Use:     "page [name] --[svelte|markdown]",
 	Aliases: []string{"p"},
-	GroupID: "new",
-	Short:   "Create a new page route",
-	Long: resources.GetASCIIArt() + `
-Command used to create a new public page route selecting between a svelte component-based page and a markdown page.
-
-Pages are Svelte components written in .svelte or .svx (for markdown) files.
-The filename determines the route so, creating a page named "about" will generate the following route /about/+page.(svelte|svx).
-`,
-	Run: NewPageCmdRun,
+	GroupID: newCmdGroupId,
+	Example: newPageCmdExample,
+	Short:   newPageCmdShortMsg,
+	Long:    newPageCmdLongMsg,
+	Run:     NewPageCmdRun,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var comps []string
 		if len(args) == 0 {

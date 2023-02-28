@@ -28,6 +28,22 @@ import (
 //=============================================================================
 
 var (
+	addContentExample = `sveltin add content welcome --to posts:
+
+By running the command above generates:
+- a "welcome" folder within "content/posts"
+- an index.svx file within "content/posts/welcome"
+- a "posts/welcome" folder within "static/resources" folder to store images or others relative to the content. All files are then accessible via frontmatter variables. E.g. a cover image accessible via the 'cover' variable on the yaml frontmatter.`
+	addContentCmdShortMsg = "Add new content to an existing resource"
+	addContentCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to create a new markdown file as content and a folder to store the statics used by the content itself.
+
+New file can contain just the frontmatter or a sample content.
+Use the --template flag to select the right one to you. Valid options: blank or sample
+
+**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.`)
+)
+
+var (
 	resourceNameForContent string
 	withSampleContent      bool
 )
@@ -42,30 +58,13 @@ const (
 //=============================================================================
 
 var addContentCmd = &cobra.Command{
-	Use:     "content [name]",
+	Use:     "content [name] --to [resource] [--sample]",
 	Aliases: []string{"c"},
-	GroupID: "add",
-	Short:   "Add new content to an existing resource",
-	Long: resources.GetASCIIArt() + `
-Command used to create a new markdown file as content and a folder to store the statics used by the content itself.
-
-New file can contain just the frontmatter or a sample content.
-Use the --template flag to select the right one to you. Valid options: blank or sample
-
-**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.
-
-Example:
-
-1. You have already created some resource by running "sveltin new resource"
-2. run: sveltin add content welcome --to posts
-
-As result:
-
-- a new "welcome" folder within "content/posts" is created
-- an index.svx file is placed there
-- a new "posts/welcome" folder created within the "static" folder to store images relative to the content
-`,
-	Run: RunAddContentCmd,
+	GroupID: addCmdGroupId,
+	Example: addContentExample,
+	Short:   addContentCmdShortMsg,
+	Long:    addContentCmdLongMsg,
+	Run:     RunAddContentCmd,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var comps []string
 		if len(args) == 0 {

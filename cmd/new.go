@@ -9,19 +9,25 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/sveltin/utils"
 )
 
+//=============================================================================
+
+var (
+	newCmdGroupId    = "new"
+	newCmdGroupTitle = "Available subcommands:"
+	newCmdShortMsg   = "Create new resources and pages"
+	newCmdLongMsg    = utils.MakeCmdLongMsg("Command used to creates SvelteKit routes in your project. A route in Sveltin is both a public page and a resource.")
+)
+
+//=============================================================================
+
 var newCmd = &cobra.Command{
-	Use:     "new",
-	Aliases: []string{"n"},
-	Short:   "Create new resources and pages",
-	Long: `Command used to creates SvelteKit routes in your project. A route in Sveltin is both a public page and a resource.
-
-Examples:
-
-sveltin new page about
-sveltin new resource posts
-`,
+	Use:                   "new",
+	Aliases:               []string{"n"},
+	Short:                 newCmdShortMsg,
+	Long:                  newCmdLongMsg,
 	ValidArgs:             []string{"page", "resource"},
 	ArgAliases:            []string{"p", "r"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
@@ -29,8 +35,8 @@ sveltin new resource posts
 }
 
 func init() {
-	newCmd.AddGroup(&cobra.Group{ID: "new", Title: "Available subcommands:"})
-	newCmd.SetHelpCommandGroupID("new")
-	newCmd.SetCompletionCommandGroupID("new")
+	newCmd.AddGroup(&cobra.Group{ID: newCmdGroupId, Title: newCmdGroupTitle})
+	newCmd.SetHelpCommandGroupID(newCmdGroupId)
+	newCmd.SetCompletionCommandGroupID(newCmdGroupId)
 	rootCmd.AddCommand(newCmd)
 }

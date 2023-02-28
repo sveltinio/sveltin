@@ -18,13 +18,18 @@ import (
 
 //=============================================================================
 
+var (
+	generateSitemapCmdShortMsg = "Generate the sitemap file for your Sveltin project"
+	generateSitemapCmdLongMsg  = utils.MakeCmdLongMsg("Command used to generate the sitemap (sitemap.xml) file for your website.")
+)
+
+//=============================================================================
+
 var generateSitemapCmd = &cobra.Command{
-	Use:     "sitemap",
-	GroupID: "generate",
-	Short:   "Generate the sitemap file for your Sveltin project",
-	Long: resources.GetASCIIArt() + `
-Command used to generate the sitemap (sitemap.xml) file for your website.
-`,
+	Use:                   "sitemap",
+	GroupID:               generateCmdGroupId,
+	Short:                 generateSitemapCmdShortMsg,
+	Long:                  generateSitemapCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunGenerateSitemapCmd,

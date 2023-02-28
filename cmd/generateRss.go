@@ -18,13 +18,18 @@ import (
 
 //=============================================================================
 
+var (
+	generateRssCmdShortMsg = "Generate the RSS feed for your Sveltin project"
+	generateRssCmdLongMsg  = utils.MakeCmdLongMsg("Command used to generate the RSS feed (rss.xml) file for your website.")
+)
+
+//=============================================================================
+
 var generateRssCmd = &cobra.Command{
-	Use:     "rss",
-	GroupID: "generate",
-	Short:   "Generate the RSS feed for your Sveltin project",
-	Long: resources.GetASCIIArt() + `
-Command used to generate the RSS feed (rss.xml) file for your website.
-`,
+	Use:                   "rss",
+	GroupID:               generateCmdGroupId,
+	Short:                 generateRssCmdShortMsg,
+	Long:                  generateRssCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunGenerateRSSCmd,

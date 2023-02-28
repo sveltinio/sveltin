@@ -15,11 +15,11 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
-// completionCmd represents the completion command
-var completionCmd = &cobra.Command{
-	Use:   "completion [bash|zsh|fish|powershell]",
-	Short: "Generate the autocompletion script for the specified shell",
-	Long: fmt.Sprintf(`To load completions:
+//=============================================================================
+
+var (
+	completionCmdShortMsg = "Generate the autocompletion script for the specified shell"
+	completionCmdLongMsg  = fmt.Sprintf(`To load completions:
 
 Bash:
 
@@ -57,7 +57,18 @@ PowerShell:
   # To load completions for every new session, run:
   PS> %[1]s completion powershell > %[1]s.ps1
   # and source this file from your PowerShell profile.
-`, rootCmd.Name()),
+`, rootCmd.Name())
+	completionCmdExample = "sveltin completion zsh"
+)
+
+//=============================================================================
+
+// completionCmd represents the completion command
+var completionCmd = &cobra.Command{
+	Use:                   "completion [bash|zsh|fish|powershell]",
+	Example:               completionCmdExample,
+	Short:                 completionCmdShortMsg,
+	Long:                  completionCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),

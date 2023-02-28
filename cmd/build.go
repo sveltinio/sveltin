@@ -14,25 +14,30 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var buildCmd = &cobra.Command{
-	Use:     "build",
-	Aliases: []string{"b"},
-	Short:   "Builds a production version of your static website",
-	Long: resources.GetASCIIArt() + `
-Command used to build a production version of your static website.
+var (
+	buildCmdShortMsg = "Builds a production version of your static website"
+	buildCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to build a production version of your static website.
 
 It wraps vite build command.
 
 Ensure to edit env.production and .sveltin.toml files to reflect
 your production environment.
-`,
+`)
+)
+
+//=============================================================================
+
+var buildCmd = &cobra.Command{
+	Use:                   "build",
+	Aliases:               []string{"b"},
+	Short:                 buildCmdShortMsg,
+	Long:                  buildCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunBuildCmd,

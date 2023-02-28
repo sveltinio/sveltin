@@ -13,22 +13,26 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var previewCmd = &cobra.Command{
-	Use:   "preview",
-	Short: "Preview the production version locally",
-	Long: resources.GetASCIIArt() + `
-Command used to start the production version locally.
+var (
+	previewCmdShortMsg = "Preview the production version locally"
+	previewCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to start the production version locally.
 
 Run after sveltin build (or vite build), you can start the production version locally with sveltin preview.
 
-It wraps vite preview command.
-`,
+It wraps vite preview command.`)
+)
+
+//=============================================================================
+
+var previewCmd = &cobra.Command{
+	Use:                   "preview",
+	Short:                 previewCmdShortMsg,
+	Long:                  previewCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunPreviewCmd,

@@ -13,21 +13,25 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
-var updateCmd = &cobra.Command{
-	Use:   "update",
-	Short: "Update your project dependencies",
-	Long: resources.GetASCIIArt() + `
-Command used to update all dependencies from the 'package.json' file.
+var (
+	updateCmdShortMsg = "Update your project dependencies"
+	updateCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to update all dependencies from the 'package.json' file.
 
-It wraps (npm|pnpm|yarn) update.
-`,
+It wraps (npm|pnpm|yarn) update.`)
+)
+
+//=============================================================================
+
+var updateCmd = &cobra.Command{
+	Use:                   "update",
+	Short:                 updateCmdShortMsg,
+	Long:                  updateCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   RunUpdateCmd,

@@ -33,20 +33,22 @@ import (
 
 //=============================================================================
 
+var (
+	newThemeCmdExample  = "sveltin new theme paper --css tailwindcss"
+	newThemeCmdShortMsg = "Create a new theme reusable theme"
+	newThemeCmdLongMsg  = utils.MakeCmdLongMsg("Command used to create a new theme for projects so that can be shared with others and reused.")
+)
+
+//=============================================================================
+
 var newThemeCmd = &cobra.Command{
 	Use:     "theme [name]",
 	Aliases: []string{"t"},
-	GroupID: "new",
-	Short:   "Create a new theme reusable theme",
-	Long: resources.GetASCIIArt() + `
-Command used to create a new theme for projects so that can be shared with others and reused.
-
-Examples:
-
-sveltin new theme paper
-sveltin new theme paper --css tailwindcss
-`,
-	Run: NewThemeCmdRun,
+	GroupID: newCmdGroupId,
+	Example: newThemeCmdExample,
+	Short:   newThemeCmdShortMsg,
+	Long:    newThemeCmdLongMsg,
+	Run:     NewThemeCmdRun,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var comps []string
 		if len(args) == 0 {

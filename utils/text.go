@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/resources"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -133,4 +134,10 @@ func ConvertJSStringToStringArray(value string) string {
 
 	}
 	return fmt.Sprintf("[%s]", strings.Join(newKeywords, ", "))
+}
+
+// MakeCmdLongMsg returns the string used for the command long help message.
+func MakeCmdLongMsg(text string) string {
+	return fmt.Sprintf(`%s
+%s`, resources.GetASCIIArt(), text)
 }

@@ -26,6 +26,8 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
+// =============================================================================
+
 // EntryType describes the different types of an Entry
 type EntryType int
 
@@ -36,18 +38,24 @@ const (
 )
 
 var (
+	deployCmdShortMsg = "Deploy your website over FTP"
+	deployCmdLongMsg  = utils.MakeCmdLongMsg("Command used to deploy the project on your hosting platform over FTP.")
+)
+
+var (
 	isDryRun        bool
 	isBackup        bool
 	withExclude     []string
 	withExcludeFile string
 )
 
+//=============================================================================
+
 var deployCmd = &cobra.Command{
-	Use:     "deploy",
-	Aliases: []string{"publish"},
-	Short:   "Deploy your website over FTP",
-	Long: `Command used to deploy the project on your hosting platform over FTP.
-`,
+	Use:                   "deploy",
+	Aliases:               []string{"publish"},
+	Short:                 deployCmdShortMsg,
+	Long:                  deployCmdLongMsg,
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
 	Run:                   DeployCmdRun,
