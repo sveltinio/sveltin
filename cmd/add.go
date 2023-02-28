@@ -27,5 +27,8 @@ Run 'sveltin add -h' for further details.
 }
 
 func init() {
+	addCmd.AddGroup(&cobra.Group{ID: "add", Title: "Available subcommands:"})
+	addCmd.SetHelpCommandGroupID("add")
+	addCmd.SetCompletionCommandGroupID("add")
 	rootCmd.AddCommand(addCmd)
 }

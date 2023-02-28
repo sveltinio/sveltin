@@ -29,5 +29,8 @@ sveltin new resource posts
 }
 
 func init() {
+	newCmd.AddGroup(&cobra.Group{ID: "new", Title: "Available subcommands:"})
+	newCmd.SetHelpCommandGroupID("new")
+	newCmd.SetCompletionCommandGroupID("new")
 	rootCmd.AddCommand(newCmd)
 }

@@ -39,6 +39,7 @@ var (
 var newPageCmd = &cobra.Command{
 	Use:     "page [name]",
 	Aliases: []string{"p"},
+	GroupID: "new",
 	Short:   "Create a new page route",
 	Long: resources.GetASCIIArt() + `
 Command used to create a new public page route selecting between a svelte component-based page and a markdown page.

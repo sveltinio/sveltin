@@ -39,6 +39,7 @@ var (
 var newResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Aliases: []string{"r"},
+	GroupID: "new",
 	Short:   "Create a new resource (route)",
 	Long: resources.GetASCIIArt() + `
 Command used to create new resources.
@@ -73,6 +74,7 @@ This command:
 
 // RunNewResourceCmd is the actual work function.
 func RunNewResourceCmd(cmd *cobra.Command, args []string) {
+
 	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
 	isValidProject(true)
 

@@ -19,8 +19,9 @@ import (
 //=============================================================================
 
 var generateRssCmd = &cobra.Command{
-	Use:   "rss",
-	Short: "Generate the RSS feed for your Sveltin project",
+	Use:     "rss",
+	GroupID: "generate",
+	Short:   "Generate the RSS feed for your Sveltin project",
 	Long: resources.GetASCIIArt() + `
 Command used to generate the RSS feed (rss.xml) file for your website.
 `,

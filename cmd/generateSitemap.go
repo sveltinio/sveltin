@@ -19,8 +19,9 @@ import (
 //=============================================================================
 
 var generateSitemapCmd = &cobra.Command{
-	Use:   "sitemap",
-	Short: "Generate the sitemap file for your Sveltin project",
+	Use:     "sitemap",
+	GroupID: "generate",
+	Short:   "Generate the sitemap file for your Sveltin project",
 	Long: resources.GetASCIIArt() + `
 Command used to generate the sitemap (sitemap.xml) file for your website.
 `,

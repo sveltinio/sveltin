@@ -29,5 +29,8 @@ Run 'sveltin generate -h' for further details.
 }
 
 func init() {
+	generateCmd.AddGroup(&cobra.Group{ID: "generate", Title: "Available subcommands:"})
+	generateCmd.SetHelpCommandGroupID("generate")
+	generateCmd.SetCompletionCommandGroupID("generate")
 	rootCmd.AddCommand(generateCmd)
 }
