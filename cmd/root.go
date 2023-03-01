@@ -40,9 +40,11 @@ type appConfig struct {
 	fs              afero.Fs
 }
 
+//=============================================================================
+
 const (
 	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.12.0"
+	CliVersion string = "0.10.0"
 )
 
 const (
@@ -105,9 +107,13 @@ const (
 	GenericMatcher string = "generic_matcher"
 )
 
+//=============================================================================
+
 var (
+	// Short description shown in the 'help' output.
 	rootCmdShortMsg = "sveltin is the main command to work with SvelteKit powered static websites."
-	rootCmdLongMsg  = utils.MakeCmdLongMsg(`A powerful CLI for your SvelteKit powered static website!
+	// Long message shown in the 'help <this-command>' output.
+	rootCmdLongMsg = utils.MakeCmdLongMsg(`A powerful CLI for your SvelteKit powered static website!
 
 sveltin is the main command used to boost your productivity
 while creating a new production-ready SvelteKit project.
@@ -118,11 +124,12 @@ Resources:
 )
 
 var (
-	// YamlConfig is used by yaml.Unmarshal to decode the YAML file.
-	YamlConfig    []byte
 	npmClientName string
 	cfg           appConfig
 )
+
+// YamlConfig is used by yaml.Unmarshal to decode the YAML file.
+var YamlConfig []byte
 
 //=============================================================================
 
@@ -140,6 +147,7 @@ func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
+// Command initialization.
 func init() {
 	cobra.OnInitialize(loadSveltinSettings, initAppConfig)
 }
@@ -213,33 +221,39 @@ func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error
 	return
 }
 
-/** isValidProject returns an error if sveltin cannot find:
- * - package.json file within the current folder
- * - sveltin.json within the current folder
- */
-func isValidProject(checkIfLatestVersion bool) {
+//=============================================================================
+
+var preRunHook = func(cmd *cobra.Command, args []string) {
+	isValidProject()
+	isPre011VersionProject()
+}
+
+// Exit if cannot find a package.json file within the current folder.
+func isValidProject() {
 	cwd, _ := os.Getwd()
-	pathToFile := filepath.Join(cwd, "package.json")
+	pathToFile := filepath.Join(cwd, PackageJSONFile)
 	exists, _ := afero.Exists(cfg.fs, pathToFile)
 	if !exists {
 		err := sveltinerr.NewNotValidProjectError(pathToFile)
+		cfg.log.Fatalf("%s", err.Error())
+	}
+}
+
+// Exit if cannot find a sveltin.json within the current folder (sveltin < v0.11.0).
+func isPre011VersionProject() {
+	cwd, _ := os.Getwd()
+	pathToFile := filepath.Join(cwd, ProjectSettingsFile)
+	exists, _ := afero.Exists(cfg.fs, pathToFile)
+	if !exists {
+		err := sveltinerr.NewNotLatestVersionError(pathToFile)
 		cfg.log.Fatalf("\n%s", err.Error())
 	}
-
-	if checkIfLatestVersion {
-		pathToFile = filepath.Join(cwd, ProjectSettingsFile)
-		exists, _ = afero.Exists(cfg.fs, pathToFile)
-		if !exists {
-			err := sveltinerr.NewNotLatestVersionError(pathToFile)
-			cfg.log.Fatalf("\n%s", err.Error())
-		}
-	}
-
 }
 
 //=============================================================================
 
-// GetSveltinCommands returns an array of pointers to the implemented cobra.Command
+// GetSveltinCommands returns an array of pointers to the implemented cobra.Command.
+// Used to generate command documentations.
 func GetSveltinCommands() []*cobra.Command {
 	return []*cobra.Command{
 		initCmd, newCmd, addCmd, generateCmd, installCmd, updateCmd, serverCmd, buildCmd, previewCmd, deployCmd, migrateCmd,

@@ -30,9 +30,12 @@ import (
 //=============================================================================
 
 var (
-	newResourceCmdExample  = "sveltin new resource posts"
+	// How to use the command.
+	newResourceCmdExample = "sveltin new resource posts"
+	// Short description shown in the 'help' output.
 	newResourceCmdShortMsg = "Create a new resource (route)"
-	newResourceCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to create new resources.
+	// Long message shown in the 'help <this-command>' output.
+	newResourceCmdLongMsg = utils.MakeCmdLongMsg(`Command used to create new resources.
 
 Why "resource" instead of "route"?
 Although a resource is basically a route on SvelteKit router, a resource is not an empty route. The retional behind
@@ -50,6 +53,18 @@ This command:
 - Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page`)
 )
 
+// Adding Active Help messages enhancing shell completions.
+var newResourceCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the resource"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
+}
+
+// Bind command flags.
 var (
 	group          string
 	withSlugLayout bool
@@ -64,25 +79,13 @@ var newResourceCmd = &cobra.Command{
 	Example:               newResourceCmdExample,
 	Short:                 newResourceCmdShortMsg,
 	Long:                  newResourceCmdLongMsg,
+	ValidArgsFunction:     newResourceCmdValidArgsFunc,
 	DisableFlagsInUseLine: true,
 	Run:                   RunNewResourceCmd,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		if len(args) == 0 {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the resource"))
-		} else {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-		}
-		return comps, cobra.ShellCompDirectiveDefault
-	},
 }
 
 // RunNewResourceCmd is the actual work function.
 func RunNewResourceCmd(cmd *cobra.Command, args []string) {
-
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	resourceName, err := prompts.AskResourceNameHandler(args)
 	utils.ExitIfError(err)
 
@@ -134,11 +137,13 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	feedbacks.ShowNewResourceHelpMessage(resourceName)
 }
 
+// Assign flags to the command.
 func resourceCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&group, "group", "g", "", "Group name for resource routes (https://kit.svelte.dev/docs/advanced-routing#advanced-layouts)")
 	cmd.Flags().BoolVarP(&withSlugLayout, "slug", "", false, "Use a different layout for the slug pages (https://kit.svelte.dev/docs/advanced-routing#advanced-layouts-layout)")
 }
 
+// Command initialization.
 func init() {
 	newCmd.AddCommand(newResourceCmd)
 	resourceCmdFlags(newResourceCmd)

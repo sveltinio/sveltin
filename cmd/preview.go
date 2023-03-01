@@ -13,19 +13,29 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
 var (
+	// Short description shown in the 'help' output.
 	previewCmdShortMsg = "Preview the production version locally"
-	previewCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to start the production version locally.
+	// Long message shown in the 'help <this-command>' output.
+	previewCmdLongMsg = utils.MakeCmdLongMsg(`Command used to start the production version locally.
 
 Run after sveltin build (or vite build), you can start the production version locally with sveltin preview.
 
 It wraps vite preview command.`)
 )
+
+// Adding Active Help messages enhancing shell completions.
+var previewCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
+}
 
 //=============================================================================
 
@@ -33,16 +43,15 @@ var previewCmd = &cobra.Command{
 	Use:                   "preview",
 	Short:                 previewCmdShortMsg,
 	Long:                  previewCmdLongMsg,
-	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
+	ValidArgsFunction:     previewCmdValidArgsFunc,
+	DisableFlagsInUseLine: true,
+	PreRun:                preRunHook,
 	Run:                   RunPreviewCmd,
 }
 
 // RunPreviewCmd is the actual work function.
 func RunPreviewCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	cfg.log.Plain(markup.H1("Preview your Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
@@ -53,6 +62,7 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 }
 
+// Command initialization.
 func init() {
 	rootCmd.AddCommand(previewCmd)
 }

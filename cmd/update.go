@@ -20,11 +20,20 @@ import (
 //=============================================================================
 
 var (
+	// Short description shown in the 'help' output.
 	updateCmdShortMsg = "Update your project dependencies"
-	updateCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to update all dependencies from the 'package.json' file.
+	// Long message shown in the 'help <this-command>' output.
+	updateCmdLongMsg = utils.MakeCmdLongMsg(`Command used to update all dependencies from the 'package.json' file.
 
 It wraps (npm|pnpm|yarn) update.`)
 )
+
+// Adding Active Help messages enhancing shell completions.
+var updateCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
+}
 
 //=============================================================================
 
@@ -32,21 +41,15 @@ var updateCmd = &cobra.Command{
 	Use:                   "update",
 	Short:                 updateCmdShortMsg,
 	Long:                  updateCmdLongMsg,
-	DisableFlagsInUseLine: true,
+	ValidArgsFunction:     updateCmdValidArgsFunc,
 	Args:                  cobra.ExactArgs(0),
+	DisableFlagsInUseLine: true,
+	PreRun:                preRunHook,
 	Run:                   RunUpdateCmd,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument."))
-		return comps, cobra.ShellCompDirectiveDefault
-	},
 }
 
 // RunUpdateCmd is the actual work function.
 func RunUpdateCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	cfg.log.Plain(markup.H1("Updating all dependencies"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
@@ -59,6 +62,7 @@ func RunUpdateCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
+// Command initialization.
 func init() {
 	rootCmd.AddCommand(updateCmd)
 }

@@ -16,6 +16,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
@@ -24,9 +25,18 @@ import (
 //=============================================================================
 
 var (
+	// Short description shown in the 'help' output.
 	migrateCmdShortMsg = "Migrate your project to the latest Sveltin version"
-	migrateCmdLongMsg  = utils.MakeCmdLongMsg("Command used to migrate your project files to the latest Sveltin version.")
+	// Long message shown in the 'help <this-command>' output.
+	migrateCmdLongMsg = utils.MakeCmdLongMsg("Command used to migrate your project files to the latest Sveltin version.")
 )
+
+// Adding Active Help messages enhancing shell completions.
+var migrateCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
+}
 
 //=============================================================================
 
@@ -34,16 +44,15 @@ var migrateCmd = &cobra.Command{
 	Use:                   "migrate",
 	Short:                 migrateCmdShortMsg,
 	Long:                  migrateCmdLongMsg,
-	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
+	ValidArgsFunction:     migrateCmdValidArgsFunc,
+	DisableFlagsInUseLine: true,
+	PreRun:                preRunHook,
 	Run:                   RunMigrateCmd,
 }
 
 // RunMigrateCmd is the actual work function.
 func RunMigrateCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands from a not valid directory.
-	isValidProject(false)
-
 	feedbacks.ShowUpgradeCommandMessage()
 
 	isConfirm, err := prompts.ConfirmMigration("Continue?")
@@ -116,9 +125,12 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 	}
 }
 
+// Command initialization.
 func init() {
 	rootCmd.AddCommand(migrateCmd)
 }
+
+//=============================================================================
 
 func sortedMigrationMap(m map[migrations.Migration]string) []int {
 	keys := make([]int, 0)

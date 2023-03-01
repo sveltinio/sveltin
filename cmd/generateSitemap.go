@@ -13,15 +13,25 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
 
 //=============================================================================
 
 var (
+	// Short description shown in the 'help' output.
 	generateSitemapCmdShortMsg = "Generate the sitemap file for your Sveltin project"
-	generateSitemapCmdLongMsg  = utils.MakeCmdLongMsg("Command used to generate the sitemap (sitemap.xml) file for your website.")
+	// Long message shown in the 'help <this-command>' output.
+	generateSitemapCmdLongMsg = utils.MakeCmdLongMsg("Command used to generate the sitemap (sitemap.xml) file for your website.")
 )
+
+// Adding Active Help messages enhancing shell completions.
+var generateSitemapCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
+}
 
 //=============================================================================
 
@@ -30,16 +40,14 @@ var generateSitemapCmd = &cobra.Command{
 	GroupID:               generateCmdGroupId,
 	Short:                 generateSitemapCmdShortMsg,
 	Long:                  generateSitemapCmdLongMsg,
-	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
+	ValidArgsFunction:     generateSitemapCmdValidArgsFunc,
+	DisableFlagsInUseLine: true,
 	Run:                   RunGenerateSitemapCmd,
 }
 
 // RunGenerateSitemapCmd is the actual work function.
 func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	cfg.log.Plain(markup.H1("Generating the sitemap file"))
 
 	cfg.log.Info("Getting list of all resources contents")
@@ -69,6 +77,7 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
+// Command initialization.
 func init() {
 	generateCmd.AddCommand(generateSitemapCmd)
 }

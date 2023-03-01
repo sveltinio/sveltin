@@ -19,15 +19,19 @@ import (
 //=============================================================================
 
 var (
-	generateMenuCmdExample  = "sveltin generate menu --full"
+	// How to use the command.
+	generateMenuCmdExample = "sveltin generate menu --full"
+	// Short description shown in the 'help' output.
 	generateMenuCmdShortMsg = "Generate the menu file for your Sveltin project"
-	generateMenuCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to generate the menu (menu.js.ts) file into the 'config' folder to be used by Svelte components.
+	// Long message shown in the 'help <this-command>' output.
+	generateMenuCmdLongMsg = utils.MakeCmdLongMsg(`Command used to generate the menu (menu.js.ts) file into the 'config' folder to be used by Svelte components.
 
 By default it list all resources and public pages.
 
 The --full flag will includes content names for all resources too.`)
 )
 
+// Bind command flags.
 var (
 	withContentFlag bool
 )
@@ -46,9 +50,6 @@ var generateMenuCmd = &cobra.Command{
 
 // RunGenerateMenuCmd is the actual work function.
 func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	cfg.log.Plain(markup.H1("Generating the menu structure file"))
 
 	cfg.log.Info("Getting list of all resources contents")
@@ -78,10 +79,12 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
+// Assign flags to the command.
 func menuCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&withContentFlag, "full", "f", false, "Generate menu file including content names for all resources")
 }
 
+// Command initialization.
 func init() {
 	generateCmd.AddCommand(generateMenuCmd)
 	menuCmdFlags(generateMenuCmd)

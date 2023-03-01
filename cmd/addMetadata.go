@@ -29,9 +29,12 @@ import (
 //=============================================================================
 
 var (
-	addMetadataCmdExample  = "sveltin add metadata category --to posts --as single"
+	// How to use the command.
+	addMetadataCmdExample = "sveltin add metadata category --to posts --as single"
+	// Short description shown in the 'help' output.
 	addMetadataCmdShortMsg = "Add metadata to an existing resource"
-	addMetadataCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to add new metadata for your content to an existing resource.
+	// Long message shown in the 'help <this-command>' output.
+	addMetadataCmdLongMsg = utils.MakeCmdLongMsg(`Command used to add new metadata for your content to an existing resource.
 
 **Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.
 
@@ -44,6 +47,18 @@ Metadata Types:
 - list: 1:many relationship (e.g. tags)`)
 )
 
+// Adding Active Help messages enhancing shell completions.
+var addMetadataCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the metadata"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
+}
+
+// Bind command flags.
 var (
 	resourceNameForMetadata string
 	metadataType            string
@@ -52,29 +67,18 @@ var (
 //=============================================================================
 
 var addMetadataCmd = &cobra.Command{
-	Use:     "metadata [name] --to [resource] --as [single|list]",
-	Aliases: []string{"m"},
-	GroupID: addCmdGroupId,
-	Example: addMetadataCmdExample,
-	Short:   addMetadataCmdShortMsg,
-	Long:    addMetadataCmdLongMsg,
-	Run:     RunAddMetadataCmd,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		if len(args) == 0 {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the metadata"))
-		} else {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-		}
-		return comps, cobra.ShellCompDirectiveDefault
-	},
+	Use:               "metadata [name] --to [resource] --as [single|list]",
+	Aliases:           []string{"m"},
+	GroupID:           addCmdGroupId,
+	Example:           addMetadataCmdExample,
+	Short:             addMetadataCmdShortMsg,
+	Long:              addMetadataCmdLongMsg,
+	ValidArgsFunction: addMetadataCmdValidArgsFunc,
+	Run:               RunAddMetadataCmd,
 }
 
 // RunAddMetadataCmd is the actual work function.
 func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	mdName, err := prompts.AskMetadataNameHandler(args)
 	utils.ExitIfError(err)
 
@@ -122,6 +126,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	feedbacks.ShowNewMetadataHelpMessage(metadataTemplateData)
 }
 
+// Assign flags to the command.
 func metadataCmdFlags(cmd *cobra.Command) {
 	// to flag
 	cmd.Flags().StringVarP(&resourceNameForMetadata, "to", "t", "", "Name of the resource the new metadata is belongs to")
@@ -138,6 +143,7 @@ func metadataCmdFlags(cmd *cobra.Command) {
 	utils.ExitIfError(err)
 }
 
+// Command initialization.
 func init() {
 	metadataCmdFlags(addMetadataCmd)
 	addCmd.AddCommand(addMetadataCmd)

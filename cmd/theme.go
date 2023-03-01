@@ -34,37 +34,51 @@ import (
 //=============================================================================
 
 var (
-	newThemeCmdExample  = "sveltin new theme paper --css tailwindcss"
-	newThemeCmdShortMsg = "Create a new theme reusable theme"
-	newThemeCmdLongMsg  = utils.MakeCmdLongMsg("Command used to create a new theme for projects so that can be shared with others and reused.")
+	// How to use the command.
+	themeCmdExample = "sveltin new theme paper --css tailwindcss"
+	// Short description shown in the 'help' output.
+	themeCmdShortMsg = "Create a new theme reusable theme"
+	// Long message shown in the 'help <this-command>' output.
+	themeCmdLongMsg = utils.MakeCmdLongMsg("Command used to create a new theme for projects so that can be shared with others and reused.")
 )
+
+// Adding Active Help messages enhancing shell completions.
+var themeCmdValidArgFunction = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the theme"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, "This command does not take any more arguments but accepts flags")
+	}
+	return comps, cobra.ShellCompDirectiveNoFileComp
+}
+
+// Run before the main Run function of init command to check and alert about newer version.
+var themeCmdPreRunHook = func(cmd *cobra.Command, args []string) {
+	pwd, _ := os.Getwd()
+	pathToPkgJSON := filepath.Join(pwd, "package.json")
+	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
+	if exists {
+		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
+		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+	}
+}
 
 //=============================================================================
 
-var newThemeCmd = &cobra.Command{
-	Use:     "theme [name]",
-	Aliases: []string{"t"},
-	GroupID: newCmdGroupId,
-	Example: newThemeCmdExample,
-	Short:   newThemeCmdShortMsg,
-	Long:    newThemeCmdLongMsg,
-	Run:     NewThemeCmdRun,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		if len(args) == 0 {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the theme"))
-		} else {
-			comps = cobra.AppendActiveHelp(comps, "This command does not take any more arguments but accepts flags")
-		}
-		return comps, cobra.ShellCompDirectiveNoFileComp
-	},
+var themeCmd = &cobra.Command{
+	Use:               "theme [name]",
+	Aliases:           []string{"t"},
+	Example:           themeCmdExample,
+	Short:             themeCmdShortMsg,
+	Long:              themeCmdLongMsg,
+	ValidArgsFunction: themeCmdValidArgFunction,
+	PersistentPreRun:  themeCmdPreRunHook,
+	Run:               ThemeCmdRun,
 }
 
-// NewThemeCmdRun is the actual work function.
-func NewThemeCmdRun(cmd *cobra.Command, args []string) {
-	// Exit if running the command from an existing sveltin project folder.
-	isValidForThemeMaker()
-
+// ThemeCmdRun is the actual work function.
+func ThemeCmdRun(cmd *cobra.Command, args []string) {
 	themeName, err := prompts.AskThemeName(args)
 	utils.ExitIfError(err)
 	cfg.log.Info(themeName)
@@ -142,30 +156,21 @@ func NewThemeCmdRun(cmd *cobra.Command, args []string) {
 	feedbacks.ShowNewThemeHelpMessage(projectConfigSummary)
 }
 
-func newThemeCmdFlags(cmd *cobra.Command) {
+// Assign flags to the command.
+func themeCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
 		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
 			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
 }
 
+// Command initialization.
 func init() {
-	newThemeCmdFlags(newThemeCmd)
-	//newCmd.AddCommand(newThemeCmd)
+	themeCmdFlags(themeCmd)
+	//rootCmd.AddCommand(themeCmd)
 }
 
 //=============================================================================
-
-// isValidForThemeMaker returns error if find the package.json file within the current folder.
-func isValidForThemeMaker() {
-	pwd, _ := os.Getwd()
-	pathToPkgJSON := filepath.Join(pwd, "package.json")
-	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
-	if exists {
-		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
-		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
-	}
-}
 
 func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
@@ -188,5 +193,3 @@ func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData
 		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
 	}
 }
-
-//=============================================================================

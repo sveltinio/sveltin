@@ -18,8 +18,10 @@ import (
 //=============================================================================
 
 var (
+	// Short description shown in the 'help' output.
 	completionCmdShortMsg = "Generate the autocompletion script for the specified shell"
-	completionCmdLongMsg  = fmt.Sprintf(`To load completions:
+	// Long message shown in the 'help <this-command>' output.
+	completionCmdLongMsg = fmt.Sprintf(`To load completions:
 
 Bash:
 
@@ -63,15 +65,15 @@ PowerShell:
 
 //=============================================================================
 
-// completionCmd represents the completion command
 var completionCmd = &cobra.Command{
 	Use:                   "completion [bash|zsh|fish|powershell]",
 	Example:               completionCmdExample,
 	Short:                 completionCmdShortMsg,
 	Long:                  completionCmdLongMsg,
-	DisableFlagsInUseLine: true,
-	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+	DisableFlagsInUseLine: true,
+	PreRun:                preRunHook,
 	RunE:                  RunCompletionCmd,
 }
 
@@ -90,6 +92,7 @@ func RunCompletionCmd(cmd *cobra.Command, args []string) error {
 	return sveltinerr.NewShellCompletionError()
 }
 
+// Command initialization.
 func init() {
 	rootCmd.AddCommand(completionCmd)
 }

@@ -20,9 +20,18 @@ import (
 //=============================================================================
 
 var (
+	// Short description shown in the 'help' output.
 	serverCmdShortMsg = "Run the development server (vite)"
-	serverCmdLongMsg  = utils.MakeCmdLongMsg("It wraps vite dev to start a development server.")
+	// Long message shown in the 'help <this-command>' output.
+	serverCmdLongMsg = utils.MakeCmdLongMsg("It wraps vite dev to start a development server.")
 )
+
+// Adding Active Help messages enhancing shell completions.
+var serverCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
+}
 
 //=============================================================================
 
@@ -31,21 +40,15 @@ var serverCmd = &cobra.Command{
 	Aliases:               []string{"s", "serve", "run", "dev"},
 	Short:                 serverCmdShortMsg,
 	Long:                  serverCmdLongMsg,
-	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
+	ValidArgsFunction:     serverCmdValidArgsFunc,
+	DisableFlagsInUseLine: true,
+	PreRun:                preRunHook,
 	Run:                   RunServerCmd,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument."))
-		return comps, cobra.ShellCompDirectiveDefault
-	},
 }
 
 // RunServerCmd is the actual work function.
 func RunServerCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	cfg.log.Plain(markup.H1("Running the Vite server"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
@@ -56,6 +59,7 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 }
 
+// Command initialization.
 func init() {
 	rootCmd.AddCommand(serverCmd)
 }

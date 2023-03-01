@@ -28,20 +28,34 @@ import (
 
 // =============================================================================
 
-// EntryType describes the different types of an Entry
+// EntryType describes the different types of an Entry.
 type EntryType int
 
-// The differents types of an Entry
+//=============================================================================
+
+// The differents types of an Entry.
 const (
 	EntryTypeFolder EntryType = 0
 	EntryTypeFile   EntryType = 1
 )
 
+//=============================================================================
+
 var (
+	// Short description shown in the 'help' output.
 	deployCmdShortMsg = "Deploy your website over FTP"
-	deployCmdLongMsg  = utils.MakeCmdLongMsg("Command used to deploy the project on your hosting platform over FTP.")
+	// Long message shown in the 'help <this-command>' output.
+	deployCmdLongMsg = utils.MakeCmdLongMsg("Command used to deploy the project on your hosting platform over FTP.")
 )
 
+// Adding Active Help messages enhancing shell completions.
+var deployCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument but accepts flags."))
+	return comps, cobra.ShellCompDirectiveDefault
+}
+
+// Bind command flags.
 var (
 	isDryRun        bool
 	isBackup        bool
@@ -56,21 +70,15 @@ var deployCmd = &cobra.Command{
 	Aliases:               []string{"publish"},
 	Short:                 deployCmdShortMsg,
 	Long:                  deployCmdLongMsg,
-	DisableFlagsInUseLine: true,
 	Args:                  cobra.ExactArgs(0),
+	ValidArgsFunction:     deployCmdValidArgsFunc,
+	DisableFlagsInUseLine: true,
+	PreRun:                preRunHook,
 	Run:                   DeployCmdRun,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument but accepts flags."))
-		return comps, cobra.ShellCompDirectiveDefault
-	},
 }
 
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	cfg.log.Plain(markup.H1("Deploy your website to the FTP server"))
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
@@ -184,6 +192,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	}
 }
 
+// Assign flags to the command.
 func deployCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&isBackup, "backup", "b", true, "create a tar archive for the existing content on the remote FTP server")
 	cmd.Flags().BoolVarP(&isDryRun, "dryRun", "d", false, "dry run")
@@ -191,6 +200,7 @@ func deployCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&withExcludeFile, "withExcludeFile", "", "path to the file containing the list of files to not be deleted from the FTP server")
 }
 
+// Command initialization.
 func init() {
 	deployCmdFlags(deployCmd)
 	rootCmd.AddCommand(deployCmd)

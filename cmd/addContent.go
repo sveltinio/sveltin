@@ -27,27 +27,6 @@ import (
 
 //=============================================================================
 
-var (
-	addContentExample = `sveltin add content welcome --to posts:
-
-By running the command above generates:
-- a "welcome" folder within "content/posts"
-- an index.svx file within "content/posts/welcome"
-- a "posts/welcome" folder within "static/resources" folder to store images or others relative to the content. All files are then accessible via frontmatter variables. E.g. a cover image accessible via the 'cover' variable on the yaml frontmatter.`
-	addContentCmdShortMsg = "Add new content to an existing resource"
-	addContentCmdLongMsg  = utils.MakeCmdLongMsg(`Command used to create a new markdown file as content and a folder to store the statics used by the content itself.
-
-New file can contain just the frontmatter or a sample content.
-Use the --template flag to select the right one to you. Valid options: blank or sample
-
-**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.`)
-)
-
-var (
-	resourceNameForContent string
-	withSampleContent      bool
-)
-
 const (
 	// Blank represents the fontmatter-only template id used when generating the content file.
 	Blank string = "blank"
@@ -57,30 +36,57 @@ const (
 
 //=============================================================================
 
+var (
+	// How to use the command.
+	addContentExample = `sveltin add content welcome --to posts:
+
+By running the command above generates:
+- a "welcome" folder within "content/posts"
+- an index.svx file within "content/posts/welcome"
+- a "posts/welcome" folder within "static/resources" folder to store images or others relative to the content. All files are then accessible via frontmatter variables. E.g. a cover image accessible via the 'cover' variable on the yaml frontmatter.`
+	// Short description shown in the 'help' output.
+	addContentCmdShortMsg = "Add new content to an existing resource"
+	// Long message shown in the 'help <this-command>' output.
+	addContentCmdLongMsg = utils.MakeCmdLongMsg(`Command used to create a new markdown file as content and a folder to store the statics used by the content itself.
+
+New file can contain just the frontmatter or a sample content.
+Use the --template flag to select the right one to you. Valid options: blank or sample
+
+**Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.`)
+)
+
+// Adding Active Help messages enhancing shell completions.
+var addContentCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the content"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
+}
+
+// Bind command flags.
+var (
+	resourceNameForContent string
+	withSampleContent      bool
+)
+
+//=============================================================================
+
 var addContentCmd = &cobra.Command{
-	Use:     "content [name] --to [resource] [--sample]",
-	Aliases: []string{"c"},
-	GroupID: addCmdGroupId,
-	Example: addContentExample,
-	Short:   addContentCmdShortMsg,
-	Long:    addContentCmdLongMsg,
-	Run:     RunAddContentCmd,
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		var comps []string
-		if len(args) == 0 {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the content"))
-		} else {
-			comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-		}
-		return comps, cobra.ShellCompDirectiveDefault
-	},
+	Use:               "content [name] --to [resource] [--sample]",
+	Aliases:           []string{"c"},
+	GroupID:           addCmdGroupId,
+	Example:           addContentExample,
+	Short:             addContentCmdShortMsg,
+	Long:              addContentCmdLongMsg,
+	ValidArgsFunction: addContentCmdValidArgsFunc,
+	Run:               RunAddContentCmd,
 }
 
 // RunAddContentCmd is the actual work function.
 func RunAddContentCmd(cmd *cobra.Command, args []string) {
-	// Exit if running sveltin commands either from a not valid directory or not latest sveltin version.
-	isValidProject(true)
-
 	contentName, err := prompts.AskContentNameHandler(args)
 	utils.ExitIfError(err)
 
@@ -117,6 +123,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
+// Assign flags to the command.
 func contentCmdFlags(cmd *cobra.Command) {
 	// to flag
 	cmd.Flags().StringVarP(&resourceNameForContent, "to", "t", "", "Name of the resource the new content is belongs to")
@@ -129,6 +136,7 @@ func contentCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file")
 }
 
+// Command initialization.
 func init() {
 	contentCmdFlags(addContentCmd)
 	addCmd.AddCommand(addContentCmd)
