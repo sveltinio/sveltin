@@ -44,7 +44,7 @@ type appConfig struct {
 
 const (
 	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.10.0"
+	CliVersion string = "0.12.0"
 )
 
 const (
