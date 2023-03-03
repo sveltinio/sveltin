@@ -9,9 +9,10 @@ package utils
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
-	"time"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/resources"
 	"golang.org/x/text/cases"
@@ -109,16 +110,6 @@ func ReplaceIfNested(txt string) string {
 	return strings.ReplaceAll(txt, "/", "_")
 }
 
-// Today returns the current date as formatted string "DD-ShortMonth-YYYY".
-func Today() string {
-	return time.Now().Format("02-Jan-2006")
-}
-
-// CurrentYear returns the current calendar year as a string.
-func CurrentYear() string {
-	return time.Now().Format("2006")
-}
-
 // ConvertJSStringToStringArray returns a JS/TS array of string from a comma separated JS/TS string as input.
 func ConvertJSStringToStringArray(value string) string {
 	res := strings.Trim(value, " ")
@@ -140,4 +131,40 @@ func ConvertJSStringToStringArray(value string) string {
 func MakeCmdLongMsg(text string) string {
 	return fmt.Sprintf(`%s
 %s`, resources.GetASCIIArt(), text)
+}
+
+// ReplaceLast returns a copy of the given string with the lastnon-overlapping instances of the old string replaced with the new one.
+func ReplaceLast(s, old, new string) string {
+	idx := strings.LastIndex(s, old)
+	if idx == -1 {
+		return s
+	}
+	return s[:idx] + new + s[idx+len(old):]
+}
+
+// ToFloat64 converts the given string to a float64.
+func ToFloat64(s string) (float64, error) {
+	value, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0, err
+	}
+	return value, nil
+}
+
+// SemVersionToFloat converts a given semantic version string as float64.
+func SemVersionToFloat(v string) float64 {
+	if IsEmpty(v) {
+		return 0
+	}
+	// to make semversion string looks like a float
+	vCleaned := ReplaceLast(v, ".", "")
+	// convert to float64
+	f, err := ToFloat64(vCleaned)
+	if err != nil {
+		// Light: red-500, Dark: red-500
+		redColor := lipgloss.AdaptiveColor{Light: "#ef4444", Dark: "#ef4444"}
+		redText := lipgloss.NewStyle().Foreground(redColor).Render
+		fmt.Println(redText(err.Error()))
+	}
+	return f
 }

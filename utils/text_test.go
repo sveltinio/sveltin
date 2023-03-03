@@ -2,7 +2,6 @@ package utils
 
 import (
 	"testing"
-	"time"
 
 	"github.com/matryer/is"
 )
@@ -23,6 +22,4 @@ func TestTextUtils(t *testing.T) {
 	is.Equal("getting-started.md", ToMDFile("getting started", false))
 	is.Equal("GETTING-STARTED.md", ToMDFile("getting started", true))
 	is.Equal("loadCategory.ts", ToLibFile("category"))
-	is.Equal(time.Now().Format("02-Jan-2006"), Today())
-	is.Equal("2023", CurrentYear())
 }
