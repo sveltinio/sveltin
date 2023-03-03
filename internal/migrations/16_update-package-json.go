@@ -14,7 +14,7 @@ import (
 
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/tidwall/sjson"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 var npmPackagesMap = map[string]string{
@@ -84,12 +84,13 @@ func (m *UpdatePackageJson) up() error {
 		if err != nil {
 			return err
 		}
-		updatedContent := fileContent
 
+		updatedContent := fileContent
 		migrationTriggers := []string{
 			patterns[remarkExtLinks],
 			patterns[remarkSlug],
 		}
+
 		isMigrate := patternsMatched(fileContent, migrationTriggers, findStringMatcher)
 		if isMigrate {
 			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
@@ -98,13 +99,20 @@ func (m *UpdatePackageJson) up() error {
 			}
 		}
 
-		updateVersion := false
+		var updateVersion = false
 		for name, nextVersion := range npmPackagesMap {
 			currentVersion, ok := getDevDependency(fileContent, name)
+
 			if ok && !isEqual(currentVersion, nextVersion) {
-				updateVersion = true
 				m.getServices().logger.Info(fmt.Sprintf("Bump %s to %s", name, nextVersion))
-				if updatedContent, err = updateDevDependency(m, updatedContent, name, nextVersion); err != nil {
+				updateVersion = true
+
+				updatedContent, err = utils.SetJsonStringValue(
+					updatedContent,
+					fmt.Sprintf("devDependencies.%s", name),
+					nextVersion,
+				)
+				if err != nil {
 					return err
 				}
 			}
@@ -200,10 +208,4 @@ func newRemoveUnistUtilVisit(line string) *migrationRule {
 			return ""
 		},
 	}
-}
-
-//=============================================================================
-
-func updateDevDependency(m *UpdatePackageJson, content []byte, name, value string) ([]byte, error) {
-	return sjson.SetBytes(content, fmt.Sprintf("devDependencies.%s", name), value)
 }

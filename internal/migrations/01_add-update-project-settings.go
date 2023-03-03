@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -142,11 +141,6 @@ func addProjectSettingsFile(m *AddUpdateProjectSettings) error {
 }
 
 func makeThemeData(m *AddUpdateProjectSettings) (*tpltypes.ThemeData, error) {
-	const (
-		blankThemeId   string = "blank"
-		sveltinThemeId string = "sveltin"
-	)
-
 	themeData := &tpltypes.ThemeData{}
 	files, err := afero.ReadDir(m.getServices().fs, m.getServices().pathMaker.GetThemesFolder())
 	if err != nil {
@@ -155,10 +149,10 @@ func makeThemeData(m *AddUpdateProjectSettings) (*tpltypes.ThemeData, error) {
 
 	for _, file := range files {
 		if file.IsDir() {
-			if strings.HasPrefix(file.Name(), sveltinThemeId) {
-				themeData.ID = sveltinThemeId
+			if strings.HasPrefix(file.Name(), tpltypes.SveltinTheme) {
+				themeData.ID = tpltypes.SveltinTheme
 			} else {
-				themeData.ID = blankThemeId
+				themeData.ID = tpltypes.BlankTheme
 			}
 			themeData.Name = file.Name()
 		}
@@ -172,7 +166,10 @@ func updateFileContent(m *AddUpdateProjectSettings) error {
 		return err
 	}
 
-	newContent := bytes.Replace(content, []byte(m.Data.ProjectCliVersion), []byte(m.Data.CliVersion), -1)
+	newContent, err := utils.SetJsonStringValue(content, "sveltin.version", m.Data.CliVersion)
+	if err != nil {
+		return err
+	}
 
 	if err = afero.WriteFile(m.getServices().fs, m.Data.TargetPath, newContent, 0666); err != nil {
 		return err
