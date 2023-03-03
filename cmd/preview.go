@@ -17,8 +17,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	previewCmdShortMsg = "Preview the production version locally"
@@ -30,13 +28,6 @@ Run after sveltin build (or vite build), you can start the production version lo
 It wraps vite preview command.`)
 )
 
-// Adding Active Help messages enhancing shell completions.
-var previewCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
-
 //=============================================================================
 
 var previewCmd = &cobra.Command{
@@ -44,7 +35,7 @@ var previewCmd = &cobra.Command{
 	Short:                 previewCmdShortMsg,
 	Long:                  previewCmdLongMsg,
 	Args:                  cobra.ExactArgs(0),
-	ValidArgsFunction:     previewCmdValidArgsFunc,
+	ValidArgsFunction:     previewCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	PreRun:                preRunHook,
 	Run:                   RunPreviewCmd,
@@ -65,4 +56,13 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	rootCmd.AddCommand(previewCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func previewCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }

@@ -17,21 +17,12 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	generateSitemapCmdShortMsg = "Generate the sitemap file for your Sveltin project"
 	// Long message shown in the 'help <this-command>' output.
 	generateSitemapCmdLongMsg = utils.MakeCmdLongMsg("Command used to generate the sitemap (sitemap.xml) file for your website.")
 )
-
-// Adding Active Help messages enhancing shell completions.
-var generateSitemapCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
 
 //=============================================================================
 
@@ -41,7 +32,7 @@ var generateSitemapCmd = &cobra.Command{
 	Short:                 generateSitemapCmdShortMsg,
 	Long:                  generateSitemapCmdLongMsg,
 	Args:                  cobra.ExactArgs(0),
-	ValidArgsFunction:     generateSitemapCmdValidArgsFunc,
+	ValidArgsFunction:     generateSitemapCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	Run:                   RunGenerateSitemapCmd,
 }
@@ -80,4 +71,13 @@ func RunGenerateSitemapCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	generateCmd.AddCommand(generateSitemapCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func generateSitemapCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }

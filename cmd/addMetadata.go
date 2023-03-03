@@ -26,8 +26,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// How to use the command.
 	addMetadataCmdExample = "sveltin add metadata category --to posts --as single"
@@ -47,17 +45,6 @@ Metadata Types:
 - list: 1:many relationship (e.g. tags)`)
 )
 
-// Adding Active Help messages enhancing shell completions.
-var addMetadataCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	if len(args) == 0 {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the metadata"))
-	} else {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-	}
-	return comps, cobra.ShellCompDirectiveDefault
-}
-
 // Bind command flags.
 var (
 	resourceNameForMetadata string
@@ -73,7 +60,7 @@ var addMetadataCmd = &cobra.Command{
 	Example:           addMetadataCmdExample,
 	Short:             addMetadataCmdShortMsg,
 	Long:              addMetadataCmdLongMsg,
-	ValidArgsFunction: addMetadataCmdValidArgsFunc,
+	ValidArgsFunction: addMetadataCmdValidArgs,
 	Run:               RunAddMetadataCmd,
 }
 
@@ -126,6 +113,14 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	feedbacks.ShowNewMetadataHelpMessage(metadataTemplateData)
 }
 
+// Command initialization.
+func init() {
+	metadataCmdFlags(addMetadataCmd)
+	addCmd.AddCommand(addMetadataCmd)
+}
+
+//=============================================================================
+
 // Assign flags to the command.
 func metadataCmdFlags(cmd *cobra.Command) {
 	// to flag
@@ -143,10 +138,15 @@ func metadataCmdFlags(cmd *cobra.Command) {
 	utils.ExitIfError(err)
 }
 
-// Command initialization.
-func init() {
-	metadataCmdFlags(addMetadataCmd)
-	addCmd.AddCommand(addMetadataCmd)
+// Adding Active Help messages enhancing shell completions.
+func addMetadataCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the metadata"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
 }
 
 //=============================================================================
@@ -166,8 +166,6 @@ func makeOrAddContentForMetadataToProjectStructure(folderName string, metadataDa
 		return nil, sveltinerr.NewDefaultError(err)
 	}
 }
-
-//=============================================================================
 
 func createOrAddContentForMetadataToLibLocalFolder(metadataData *tpltypes.MetadataData) *composer.Folder {
 	// NEW FILE: api<metadata_name>.ts file into src/lib/<resource_name> folder

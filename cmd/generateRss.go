@@ -17,21 +17,12 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	generateRssCmdShortMsg = "Generate the RSS feed for your Sveltin project"
 	// Long message shown in the 'help <this-command>' output.
 	generateRssCmdLongMsg = utils.MakeCmdLongMsg("Command used to generate the RSS feed (rss.xml) file for your website.")
 )
-
-// Adding Active Help messages enhancing shell completions.
-var generateRssCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
 
 //=============================================================================
 
@@ -41,7 +32,7 @@ var generateRssCmd = &cobra.Command{
 	Short:                 generateRssCmdShortMsg,
 	Long:                  generateRssCmdLongMsg,
 	Args:                  cobra.ExactArgs(0),
-	ValidArgsFunction:     generateRssCmdValidArgsFunc,
+	ValidArgsFunction:     generateRssCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	Run:                   RunGenerateRSSCmd,
 }
@@ -80,4 +71,13 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	generateCmd.AddCommand(generateRssCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func generateRssCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }

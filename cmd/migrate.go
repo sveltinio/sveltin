@@ -22,21 +22,12 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	migrateCmdShortMsg = "Migrate your project to the latest Sveltin version"
 	// Long message shown in the 'help <this-command>' output.
 	migrateCmdLongMsg = utils.MakeCmdLongMsg("Command used to migrate your project files to the latest Sveltin version.")
 )
-
-// Adding Active Help messages enhancing shell completions.
-var migrateCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
 
 //=============================================================================
 
@@ -45,7 +36,7 @@ var migrateCmd = &cobra.Command{
 	Short:                 migrateCmdShortMsg,
 	Long:                  migrateCmdLongMsg,
 	Args:                  cobra.ExactArgs(0),
-	ValidArgsFunction:     migrateCmdValidArgsFunc,
+	ValidArgsFunction:     migrateCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	PreRun:                preRunHook,
 	Run:                   RunMigrateCmd,
@@ -128,6 +119,15 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	rootCmd.AddCommand(migrateCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func migrateCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }
 
 //=============================================================================

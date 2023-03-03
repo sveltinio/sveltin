@@ -12,3 +12,9 @@ type PageData struct {
 	Name     string
 	Language string
 }
+
+// Supported languages for pages.
+const (
+	Svelte   string = "svelte"
+	Markdown string = "markdown"
+)

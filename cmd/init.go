@@ -34,8 +34,6 @@ import (
 	logger "github.com/sveltinio/yinlog"
 )
 
-//=============================================================================
-
 // names for the available style options.
 const (
 	StyleDefault string = "default"
@@ -51,8 +49,6 @@ const (
 	DotEnv    string = "dotenv"
 )
 
-//=============================================================================
-
 var (
 	// How to use the command.
 	initCmdExample = `sveltin init blog --css tailwindcss
@@ -62,17 +58,6 @@ sveltin init blog --css unocss -n pnpm -p 3030 --git`
 	// Long message shown in the 'help <this-command>' output.
 	initCmdLongMsg = utils.MakeCmdLongMsg("Command used to initialize/scaffold a new sveltin project.")
 )
-
-// Adding Active Help messages enhancing shell completions.
-var initCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	if len(args) == 0 {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the project"))
-	} else {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags."))
-	}
-	return comps, cobra.ShellCompDirectiveDefault
-}
 
 // Bind command flags.
 var (
@@ -90,8 +75,9 @@ var initCmd = &cobra.Command{
 	Example:           initCmdExample,
 	Short:             initCmdShortMsg,
 	Long:              initCmdLongMsg,
-	ValidArgsFunction: initCmdValidArgsFunc,
-	Run:               InitCmdRun,
+	ValidArgsFunction: initCmdValidArgs,
+
+	Run: InitCmdRun,
 }
 
 // InitCmdRun is the actual work function.
@@ -209,6 +195,14 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	}
 }
 
+// Command initialization.
+func init() {
+	initCmdFlags(initCmd)
+	rootCmd.AddCommand(initCmd)
+}
+
+//=============================================================================
+
 // Assign flags to the command.
 func initCmdFlags(cmd *cobra.Command) {
 	// npmClient flag
@@ -219,12 +213,14 @@ func initCmdFlags(cmd *cobra.Command) {
 		return npmcNames, cobra.ShellCompDirectiveDefault
 	})
 	utils.ExitIfError(err)
+
 	// theme flag
 	cmd.Flags().StringVarP(&withThemeName, "theme", "t", "", "The theme you are going to create or reuse")
 	err = cmd.RegisterFlagCompletionFunc("theme", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{tpltypes.BlankTheme, tpltypes.SveltinTheme}, cobra.ShellCompDirectiveDefault
 	})
 	utils.ExitIfError(err)
+
 	// css flag
 	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
 		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
@@ -233,15 +229,21 @@ func initCmdFlags(cmd *cobra.Command) {
 		return css.AvailableCSSLib, cobra.ShellCompDirectiveDefault
 	})
 	utils.ExitIfError(err)
+
 	// others
 	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
 	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
 }
 
-// Command initialization.
-func init() {
-	initCmdFlags(initCmd)
-	rootCmd.AddCommand(initCmd)
+// Adding Active Help messages enhancing shell completions.
+func initCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the project"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags."))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
 }
 
 //=============================================================================
@@ -391,7 +393,9 @@ func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *c
 			},
 			Theme: *themeData,
 			Sveltin: tpltypes.SveltinCLIData{
-				Version: CliVersion,
+				Version:              CliVersion,
+				EnableUpdateNotifier: utils.NewTrue(),
+				LastCheck:            utils.TodayISO(),
 			},
 		},
 	}

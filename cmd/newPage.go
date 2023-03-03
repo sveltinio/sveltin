@@ -21,16 +21,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
-// Supported languages for pages.
-const (
-	Svelte   string = "svelte"
-	Markdown string = "markdown"
-)
-
-//=============================================================================
-
 var (
 	// How to use the command.
 	newPageCmdExample = "sveltin new page about --markdown"
@@ -42,17 +32,6 @@ var (
 Pages are Svelte components written in .svelte or .svx (for markdown) files.
 The filename determines the route so, creating a page named "about" will generate the following route /about/+page.(svelte|svx).`)
 )
-
-// Adding Active Help messages enhancing shell completions.
-var newPageCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	if len(args) == 0 {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the page"))
-	} else {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-	}
-	return comps, cobra.ShellCompDirectiveDefault
-}
 
 // Bind command flags.
 var (
@@ -69,7 +48,7 @@ var newPageCmd = &cobra.Command{
 	Example:           newPageCmdExample,
 	Short:             newPageCmdShortMsg,
 	Long:              newPageCmdLongMsg,
-	ValidArgsFunction: newPageCmdValidArgsFunc,
+	ValidArgsFunction: newPageCmdValidArgs,
 	Run:               NewPageCmdRun,
 }
 
@@ -80,9 +59,9 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 
 	var pageLanguage string
 	if withSvelte {
-		pageLanguage = Svelte
+		pageLanguage = tpltypes.Svelte
 	} else if withMarkdown {
-		pageLanguage = Markdown
+		pageLanguage = tpltypes.Markdown
 	}
 
 	pageLanguage, err = prompts.SelectPageLanguageHandler(pageLanguage)
@@ -120,15 +99,28 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
-// Assign flags to the command.
-func pageCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&withSvelte, Svelte, "s", false, "Use Svelte for the page content")
-	cmd.Flags().BoolVarP(&withMarkdown, Markdown, "m", false, "Use Markdown (mdsvex) for the page content")
-	cmd.MarkFlagsMutuallyExclusive(Svelte, Markdown)
-}
-
 // Command initialization.
 func init() {
 	newCmd.AddCommand(newPageCmd)
 	pageCmdFlags(newPageCmd)
+}
+
+//=============================================================================
+
+// Assign flags to the command.
+func pageCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVarP(&withSvelte, tpltypes.Svelte, "s", false, "Use Svelte for the page content")
+	cmd.Flags().BoolVarP(&withMarkdown, tpltypes.Markdown, "m", false, "Use Markdown (mdsvex) for the page content")
+	cmd.MarkFlagsMutuallyExclusive(tpltypes.Svelte, tpltypes.Markdown)
+}
+
+// Adding Active Help messages enhancing shell completions.
+func newPageCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the page"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
 }

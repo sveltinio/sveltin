@@ -14,6 +14,7 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/sveltinio/sveltin/config"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -43,10 +44,10 @@ func (b *ResContentBuilder) SetEmbeddedResources(res map[string]string) {
 
 func (b *ResContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
-	case Blank:
+	case tpltypes.Blank:
 		b.PathToTplFile = b.EmbeddedResources[b.TemplateID]
 		return nil
-	case Sample:
+	case tpltypes.Sample:
 		b.PathToTplFile = b.EmbeddedResources[b.TemplateID]
 		return nil
 	default:

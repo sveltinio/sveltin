@@ -25,6 +25,8 @@ var (
 
 	// Green renders text in green
 	Green = lipgloss.NewStyle().Foreground(green).Render
+	// Red renders text in red
+	Red = lipgloss.NewStyle().Foreground(red).Render
 	// Amber renders text in amber
 	Amber = lipgloss.NewStyle().Foreground(amber).Render
 	// Yellow renders text in yellow

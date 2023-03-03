@@ -17,8 +17,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	installCmdShortMsg = "Install your project dependencies"
@@ -28,13 +26,6 @@ var (
 It wraps (npm|pnpm|yarn) install.`)
 )
 
-// Adding Active Help messages enhancing shell completions.
-var installCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
-
 //=============================================================================
 
 var installCmd = &cobra.Command{
@@ -43,7 +34,7 @@ var installCmd = &cobra.Command{
 	Short:                 installCmdShortMsg,
 	Long:                  installCmdLongMsg,
 	Args:                  cobra.ExactArgs(0),
-	ValidArgsFunction:     installCmdValidArgsFunc,
+	ValidArgsFunction:     installCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	PreRun:                preRunHook,
 	Run:                   RunInstallCmd,
@@ -66,4 +57,13 @@ func RunInstallCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	rootCmd.AddCommand(installCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func installCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }

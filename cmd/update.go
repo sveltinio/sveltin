@@ -17,8 +17,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	updateCmdShortMsg = "Update your project dependencies"
@@ -28,20 +26,13 @@ var (
 It wraps (npm|pnpm|yarn) update.`)
 )
 
-// Adding Active Help messages enhancing shell completions.
-var updateCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
-
 //=============================================================================
 
 var updateCmd = &cobra.Command{
 	Use:                   "update",
 	Short:                 updateCmdShortMsg,
 	Long:                  updateCmdLongMsg,
-	ValidArgsFunction:     updateCmdValidArgsFunc,
+	ValidArgsFunction:     updateCmdValidArgs,
 	Args:                  cobra.ExactArgs(0),
 	DisableFlagsInUseLine: true,
 	PreRun:                preRunHook,
@@ -65,4 +56,13 @@ func RunUpdateCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	rootCmd.AddCommand(updateCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func updateCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }

@@ -50,7 +50,9 @@ const (
 	packageManagerCommandNotValidError
 	execSystemCommandError
 	execSystemCommandErrorWithMsg
-	shellCompletionError
+	shellCompletionCommandError
+	checkReleaseError
+	parseResponseError
 )
 
 var (
@@ -166,13 +168,13 @@ func NewNotValidProjectSettingsError(err error) error {
 	var errorMsg []string
 	if errors.As(err, &ve) {
 		for _, fieldErr := range ve {
-			formatErrorMsg := fmt.Sprintf("- Field: %s -> %s", strings.ToLower(fieldErr.Field()), messageTag(fieldErr.Tag()))
+			formatErrorMsg := fmt.Sprintf("- Field: %s -> %s", fieldErr.Field(), messageTag(fieldErr.Tag()))
 			errorMsg = append(errorMsg, formatErrorMsg)
 		}
 	}
 
 	placeholderText := `
-Missing required attributes! Check your "sveltin.json" file!
+The "sveltin.json" file has invalid fields!
 
 %s`
 
@@ -338,10 +340,22 @@ func NewExecSystemCommandErrorWithMsg(err error) error {
 	return newSveltinError(execSystemCommandErrorWithMsg, "ExecSystemCommandErrorWithMsg", "System Command Execution Failure", errN.Error(), errN)
 }
 
-// NewShellCompletionError ...
-func NewShellCompletionError() error {
+// NewShellCompletionCommandError ...
+func NewShellCompletionCommandError() error {
 	err := errors.New("it seems you provided a not valid shell name. Valid  [bash|zsh|fish|powershell]")
-	return newSveltinError(shellCompletionError, "CompletionShellError", "Invalid shell name", err.Error(), err)
+	return newSveltinError(shellCompletionCommandError, "CompletionShellCommandError", "Invalid shell name", err.Error(), err)
+}
+
+// NewCheckReleaseError ...
+func NewCheckReleaseError(url string) error {
+	err := fmt.Errorf("unable to get info from %s", url)
+	return newSveltinError(checkReleaseError, "CheckReleaseError", "Check you internet connection", err.Error(), err)
+}
+
+// NewParseResponseError ...
+func NewParseResponseError(err error) error {
+	errN := fmt.Errorf("something went wrong parsing response data received from %s", err.Error())
+	return newSveltinError(parseResponseError, "ParseResponseError", "Parse response data", errN.Error(), err)
 }
 
 //=============================================================================
@@ -349,11 +363,13 @@ func NewShellCompletionError() error {
 func messageTag(tag string) string {
 	switch tag {
 	case "required":
-		return "This field is required"
+		return "Required"
 	case "semver":
 		return "Invalid value: not adhere to the semantic version format"
 	case "oneof":
 		return "Invalid value: not a valid options"
+	case "dateiso":
+		return "Invalid date format: must be YYYY-MM-DD"
 	default:
 		return tag
 	}

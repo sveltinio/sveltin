@@ -16,8 +16,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// How to use the command.
 	generateMenuCmdExample = "sveltin generate menu --full"
@@ -79,13 +77,15 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
-// Assign flags to the command.
-func menuCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&withContentFlag, "full", "f", false, "Generate menu file including content names for all resources")
-}
-
 // Command initialization.
 func init() {
 	generateCmd.AddCommand(generateMenuCmd)
 	menuCmdFlags(generateMenuCmd)
+}
+
+//=============================================================================
+
+// Assign flags to the command.
+func menuCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVarP(&withContentFlag, "full", "f", false, "Generate menu file including content names for all resources")
 }

@@ -15,7 +15,12 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 )
 
-//=============================================================================
+const (
+	bash       string = "bash"
+	zsh        string = "zsh"
+	fish       string = "fish"
+	powershell string = "powershell"
+)
 
 var (
 	// Short description shown in the 'help' output.
@@ -71,7 +76,7 @@ var completionCmd = &cobra.Command{
 	Short:                 completionCmdShortMsg,
 	Long:                  completionCmdLongMsg,
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
-	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+	ValidArgs:             []string{bash, zsh, fish, powershell},
 	DisableFlagsInUseLine: true,
 	PreRun:                preRunHook,
 	RunE:                  RunCompletionCmd,
@@ -80,16 +85,16 @@ var completionCmd = &cobra.Command{
 // RunCompletionCmd is the actual work function.
 func RunCompletionCmd(cmd *cobra.Command, args []string) error {
 	switch args[0] {
-	case "bash":
+	case bash:
 		return cmd.Root().GenBashCompletion(os.Stdout)
-	case "zsh":
+	case zsh:
 		return cmd.Root().GenZshCompletion(os.Stdout)
-	case "fish":
+	case fish:
 		return cmd.Root().GenFishCompletion(os.Stdout, true)
-	case "powershell":
+	case powershell:
 		return cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
 	}
-	return sveltinerr.NewShellCompletionError()
+	return sveltinerr.NewShellCompletionCommandError()
 }
 
 // Command initialization.

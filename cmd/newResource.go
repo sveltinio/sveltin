@@ -27,8 +27,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//=============================================================================
-
 var (
 	// How to use the command.
 	newResourceCmdExample = "sveltin new resource posts"
@@ -53,17 +51,6 @@ This command:
 - Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page`)
 )
 
-// Adding Active Help messages enhancing shell completions.
-var newResourceCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	if len(args) == 0 {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the resource"))
-	} else {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-	}
-	return comps, cobra.ShellCompDirectiveDefault
-}
-
 // Bind command flags.
 var (
 	group          string
@@ -79,7 +66,7 @@ var newResourceCmd = &cobra.Command{
 	Example:               newResourceCmdExample,
 	Short:                 newResourceCmdShortMsg,
 	Long:                  newResourceCmdLongMsg,
-	ValidArgsFunction:     newResourceCmdValidArgsFunc,
+	ValidArgsFunction:     newResourceCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	Run:                   RunNewResourceCmd,
 }
@@ -137,16 +124,29 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	feedbacks.ShowNewResourceHelpMessage(resourceName)
 }
 
+// Command initialization.
+func init() {
+	newCmd.AddCommand(newResourceCmd)
+	resourceCmdFlags(newResourceCmd)
+}
+
+//=============================================================================
+
 // Assign flags to the command.
 func resourceCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&group, "group", "g", "", "Group name for resource routes (https://kit.svelte.dev/docs/advanced-routing#advanced-layouts)")
 	cmd.Flags().BoolVarP(&withSlugLayout, "slug", "", false, "Use a different layout for the slug pages (https://kit.svelte.dev/docs/advanced-routing#advanced-layouts-layout)")
 }
 
-// Command initialization.
-func init() {
-	newCmd.AddCommand(newResourceCmd)
-	resourceCmdFlags(newResourceCmd)
+// Adding Active Help messages enhancing shell completions.
+func newResourceCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the resource"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
 }
 
 //=============================================================================

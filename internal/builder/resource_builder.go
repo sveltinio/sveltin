@@ -13,6 +13,7 @@ import (
 
 	"github.com/sveltinio/sveltin/config"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -55,7 +56,7 @@ func (b *ResourceContentBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[GenericMatcher]
 		return nil
 	case Index:
-		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+		if b.TemplateData.ProjectSettings.Theme.Style == tpltypes.Blank {
 			b.PathToTplFile = b.EmbeddedResources[IndexThemeBlank]
 		} else {
 			b.PathToTplFile = b.EmbeddedResources[IndexThemeSveltin]
@@ -65,7 +66,7 @@ func (b *ResourceContentBuilder) setPathToTplFile() error {
 		b.PathToTplFile = b.EmbeddedResources[IndexEndpoint]
 		return nil
 	case Slug:
-		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+		if b.TemplateData.ProjectSettings.Theme.Style == tpltypes.Blank {
 			b.PathToTplFile = b.EmbeddedResources[SlugThemeBlank]
 		} else {
 			b.PathToTplFile = b.EmbeddedResources[SlugThemeSveltin]

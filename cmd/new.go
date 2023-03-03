@@ -12,8 +12,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// The group id under subcommands are grouped in the 'help' output.
 	newCmdGroupId = "new"

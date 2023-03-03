@@ -24,13 +24,6 @@ const (
 )
 
 const (
-	// Blank represents the fontmatter-only template id used when generating the content file.
-	Blank string = "blank"
-	// Sample represents the sample-content template id used when generating the content file.
-	Sample string = "sample"
-
-	//=============================================================================
-
 	// Svelte set svelte as the language used to scaffold a new page.
 	Svelte string = "svelte"
 	// SvelteThemeBlank set svelte as the language used to scaffold a new page when new theme.

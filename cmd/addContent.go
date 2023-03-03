@@ -25,17 +25,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
-const (
-	// Blank represents the fontmatter-only template id used when generating the content file.
-	Blank string = "blank"
-	// Sample represents the sample-content template id used when generating the content file.
-	Sample string = "sample"
-)
-
-//=============================================================================
-
 var (
 	// How to use the command.
 	addContentExample = `sveltin add content welcome --to posts:
@@ -55,17 +44,6 @@ Use the --template flag to select the right one to you. Valid options: blank or 
 **Note**: This command needs an existing resource created by running: sveltin new resource <resource_name>.`)
 )
 
-// Adding Active Help messages enhancing shell completions.
-var addContentCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	if len(args) == 0 {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the content"))
-	} else {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
-	}
-	return comps, cobra.ShellCompDirectiveDefault
-}
-
 // Bind command flags.
 var (
 	resourceNameForContent string
@@ -81,7 +59,7 @@ var addContentCmd = &cobra.Command{
 	Example:           addContentExample,
 	Short:             addContentCmdShortMsg,
 	Long:              addContentCmdLongMsg,
-	ValidArgsFunction: addContentCmdValidArgsFunc,
+	ValidArgsFunction: addContentCmdValidArgs,
 	Run:               RunAddContentCmd,
 }
 
@@ -123,6 +101,14 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Success("Done\n")
 }
 
+// Command initialization.
+func init() {
+	contentCmdFlags(addContentCmd)
+	addCmd.AddCommand(addContentCmd)
+}
+
+//=============================================================================
+
 // Assign flags to the command.
 func contentCmdFlags(cmd *cobra.Command) {
 	// to flag
@@ -136,10 +122,15 @@ func contentCmdFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&withSampleContent, "sample", "s", false, "Add sample content to the markdown file")
 }
 
-// Command initialization.
-func init() {
-	contentCmdFlags(addContentCmd)
-	addCmd.AddCommand(addContentCmd)
+// Adding Active Help messages enhancing shell completions.
+func addContentCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the content"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
+	}
+	return comps, cobra.ShellCompDirectiveDefault
 }
 
 //=============================================================================

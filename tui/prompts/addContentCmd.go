@@ -8,15 +8,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-const (
-	// Blank represents the fontmatter-only template id used when generating the content file.
-	Blank string = "blank"
-	// Sample represents the sample-content template id used when generating the content file.
-	Sample string = "sample"
-)
-
-//=============================================================================
-
 // AskContentNameHandler if not value, prompts the user to set the content name.
 func AskContentNameHandler(inputs []string) (string, error) {
 	switch numOfArgs := len(inputs); {

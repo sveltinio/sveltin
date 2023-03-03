@@ -17,21 +17,12 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	serverCmdShortMsg = "Run the development server (vite)"
 	// Long message shown in the 'help <this-command>' output.
 	serverCmdLongMsg = utils.MakeCmdLongMsg("It wraps vite dev to start a development server.")
 )
-
-// Adding Active Help messages enhancing shell completions.
-var serverCmdValidArgsFunc = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
-	return comps, cobra.ShellCompDirectiveDefault
-}
 
 //=============================================================================
 
@@ -41,7 +32,7 @@ var serverCmd = &cobra.Command{
 	Short:                 serverCmdShortMsg,
 	Long:                  serverCmdLongMsg,
 	Args:                  cobra.ExactArgs(0),
-	ValidArgsFunction:     serverCmdValidArgsFunc,
+	ValidArgsFunction:     serverCmdValidArgs,
 	DisableFlagsInUseLine: true,
 	PreRun:                preRunHook,
 	Run:                   RunServerCmd,
@@ -62,4 +53,13 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 // Command initialization.
 func init() {
 	rootCmd.AddCommand(serverCmd)
+}
+
+//=============================================================================
+
+// Adding Active Help messages enhancing shell completions.
+func serverCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any argument or flag."))
+	return comps, cobra.ShellCompDirectiveDefault
 }

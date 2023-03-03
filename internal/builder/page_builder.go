@@ -13,6 +13,7 @@ import (
 
 	"github.com/sveltinio/sveltin/config"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -43,14 +44,14 @@ func (b *PublicPageContentBuilder) SetEmbeddedResources(res map[string]string) {
 func (b *PublicPageContentBuilder) setPathToTplFile() error {
 	switch b.TemplateID {
 	case Svelte:
-		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+		if b.TemplateData.ProjectSettings.Theme.Style == tpltypes.Blank {
 			b.PathToTplFile = b.EmbeddedResources[SvelteThemeBlank]
 		} else {
 			b.PathToTplFile = b.EmbeddedResources[SvelteThemeSveltin]
 		}
 		return nil
 	case Markdown:
-		if b.TemplateData.ProjectSettings.Theme.Style == Blank {
+		if b.TemplateData.ProjectSettings.Theme.Style == tpltypes.Blank {
 			b.PathToTplFile = b.EmbeddedResources[MarkdownThemeBlank]
 		} else {
 			b.PathToTplFile = b.EmbeddedResources[MarkdownThemeSveltin]

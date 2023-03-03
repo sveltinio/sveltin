@@ -16,6 +16,8 @@ var (
 	slate = lipgloss.AdaptiveColor{Light: "#475569", Dark: "#64748b"}
 	// Light: green-600, Dark: green-500
 	green = lipgloss.AdaptiveColor{Light: "#16a34a", Dark: "#22c55e"}
+	// Light: red-500, Dark: red-500
+	red = lipgloss.AdaptiveColor{Light: "#ef4444", Dark: "#ef4444"}
 	// Light: gray-600, Dark: gray-500
 	gray = lipgloss.AdaptiveColor{Light: "#4b5563", Dark: "#64748b"}
 	// Light: yellow-600, Dark: yellow-500

@@ -31,8 +31,6 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
-//=============================================================================
-
 var (
 	// How to use the command.
 	themeCmdExample = "sveltin new theme paper --css tailwindcss"
@@ -41,28 +39,6 @@ var (
 	// Long message shown in the 'help <this-command>' output.
 	themeCmdLongMsg = utils.MakeCmdLongMsg("Command used to create a new theme for projects so that can be shared with others and reused.")
 )
-
-// Adding Active Help messages enhancing shell completions.
-var themeCmdValidArgFunction = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	var comps []string
-	if len(args) == 0 {
-		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the theme"))
-	} else {
-		comps = cobra.AppendActiveHelp(comps, "This command does not take any more arguments but accepts flags")
-	}
-	return comps, cobra.ShellCompDirectiveNoFileComp
-}
-
-// Run before the main Run function of init command to check and alert about newer version.
-var themeCmdPreRunHook = func(cmd *cobra.Command, args []string) {
-	pwd, _ := os.Getwd()
-	pathToPkgJSON := filepath.Join(pwd, "package.json")
-	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
-	if exists {
-		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
-		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
-	}
-}
 
 //=============================================================================
 
@@ -100,7 +76,6 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 
 	gitClient := shell.NewGitClient()
 	err = gitClient.RunGitClone(themeStarterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
-	// TO BE REMOVED: err = utils.GitClone(themeStarterTemplate.URL, pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// NEW FILE: config/defaults.js
@@ -156,14 +131,6 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 	feedbacks.ShowNewThemeHelpMessage(projectConfigSummary)
 }
 
-// Assign flags to the command.
-func themeCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
-		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
-			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
-	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
-}
-
 // Command initialization.
 func init() {
 	themeCmdFlags(themeCmd)
@@ -172,24 +139,65 @@ func init() {
 
 //=============================================================================
 
+// Assign flags to the command.
+func themeCmdFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
+		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
+			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
+	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
+}
+
+// Adding Active Help messages enhancing shell completions.
+func themeCmdValidArgFunction(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	var comps []string
+	if len(args) == 0 {
+		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("You must choose a name for the theme"))
+	} else {
+		comps = cobra.AppendActiveHelp(comps, "This command does not take any more arguments but accepts flags")
+	}
+	return comps, cobra.ShellCompDirectiveNoFileComp
+}
+
+// Run before the main Run function of init command to check and alert about newer version.
+func themeCmdPreRunHook(cmd *cobra.Command, args []string) {
+	pwd, _ := os.Getwd()
+	pathToPkgJSON := filepath.Join(pwd, "package.json")
+	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
+	if exists {
+		err := sveltinerr.NewNotEmptyProjectError(pathToPkgJSON)
+		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))
+	}
+}
+
+//=============================================================================
+
 func setupThemeCSSLib(efs *embed.FS, cfg appConfig, tplData *config.TemplateData) error {
 	switch tplData.Theme.CSSLib {
-	case css.VanillaCSS:
-		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
-		return vanillaCSS.Setup(false)
+	case css.Bootstrap:
+		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.settings, tplData)
+		return boostrap.Setup(false)
+	case css.Bulma:
+		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
+		return bulma.Setup(false)
 	case css.Scss:
 		scss := css.NewScss(efs, cfg.fs, cfg.settings, tplData)
 		return scss.Setup(false)
 	case css.TailwindCSS:
 		tailwind := css.NewTailwindCSS(efs, cfg.fs, cfg.settings, tplData)
 		return tailwind.Setup(false)
-	case css.Bulma:
-		bulma := css.NewBulma(efs, cfg.fs, cfg.settings, tplData)
-		return bulma.Setup(false)
-	case css.Bootstrap:
-		boostrap := css.NewBootstrap(efs, cfg.fs, cfg.settings, tplData)
-		return boostrap.Setup(false)
+	case css.VanillaCSS:
+		vanillaCSS := css.NewVanillaCSS(efs, cfg.fs, cfg.settings, tplData)
+		return vanillaCSS.Setup(false)
 	default:
-		return sveltinerr.NewOptionNotValidError(tplData.Theme.CSSLib, []string{"vanillacss", "tailwindcss", "bulma", "bootstrap", "scss"})
+		return sveltinerr.NewOptionNotValidError(
+			tplData.Theme.CSSLib,
+			[]string{
+				css.Bootstrap,
+				css.Bulma,
+				css.Scss,
+				css.TailwindCSS,
+				css.UnoCSS,
+				css.VanillaCSS,
+			})
 	}
 }
