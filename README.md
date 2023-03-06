@@ -332,13 +332,13 @@ Sveltin leverages many great open source libraries:
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
 | [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
 | [is](https://github.com/matryer/is)                     | `1.4.1`   | MIT          |
-| [afero](https://github.com/spf13/afero)                 | `1.9.4`   | Apache-2.0   |
+| [afero](https://github.com/spf13/afero)                 | `1.9.5`   | Apache-2.0   |
 | [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
 | [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |
 | [prompti](https://github.com/sveltinio/prompti)         | `0.2.0`   | MIT          |
 | [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
 | [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
-| [text](https://golang.org/x/text)                       | `0.7.0`   | BSD-3-Clause |
+| [text](https://golang.org/x/text)                       | `0.8.0`   | BSD-3-Clause |
 
 ## :free: License
 
