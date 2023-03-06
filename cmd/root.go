@@ -229,14 +229,34 @@ func allExceptInitCmdPreRunHook(cmd *cobra.Command, args []string) {
 	isPre011VersionProject()
 }
 
-// Exit if cannot find a package.json file within the current folder.
+// Exit if cannot find the current directory is not a valid folder structure and some files do not exists.
 func isValidProject() {
+	foldersToCheck := []string{ConfigFolder, StaticFolder, ThemesFolder}
+	filesToCheck := []string{
+		PackageJSONFile,
+		ProjectSettingsFile,
+		MDsveXFile,
+		SvelteConfigFile,
+		ViteConfigFile,
+	}
 	cwd, _ := os.Getwd()
-	pathToFile := filepath.Join(cwd, PackageJSONFile)
-	exists, _ := afero.Exists(cfg.fs, pathToFile)
-	if !exists {
-		err := sveltinerr.NewNotValidProjectError(pathToFile)
-		cfg.log.Fatalf("%s", err.Error())
+
+	for _, folder := range foldersToCheck {
+		pathToFolder := filepath.Join(cwd, folder)
+		exists, _ := afero.DirExists(cfg.fs, pathToFolder)
+		if !exists {
+			err := sveltinerr.NewNotValidProjectError(pathToFolder, "folder")
+			cfg.log.Fatalf("%s", err.Error())
+		}
+	}
+
+	for _, file := range filesToCheck {
+		pathToFile := filepath.Join(cwd, file)
+		exists, _ := afero.Exists(cfg.fs, pathToFile)
+		if !exists {
+			err := sveltinerr.NewNotValidProjectError(pathToFile, "file")
+			cfg.log.Fatalf("%s", err.Error())
+		}
 	}
 }
 

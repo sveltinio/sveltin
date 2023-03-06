@@ -113,20 +113,20 @@ func NewNotImplementYetError() error {
 }
 
 // NewNotValidProjectError ...
-func NewNotValidProjectError(pathToFile string) error {
+func NewNotValidProjectError(pathTo string, pathType string) error {
 	placeholderText := `
-This is related to sveltin not being able to find
-the package.json file within the current directory:
+This is related to Sveltin not being able to find the %s:
 
 "%s"
 
-Ensure you are running the command from a valid project.
-`
+within the current directory.
 
-	msg := fmt.Sprintf(placeholderText, filepath.Dir(pathToFile))
-	err := fmt.Errorf(`no package.json file!%s `, msg)
+Ensure you are running Sveltin commands from within a valid project.`
 
-	return newSveltinError(notValidProjectError, "NotValidProjectError", "Sveltin Project Not Found", msg, err)
+	msg := fmt.Sprintf(placeholderText, pathType, pathTo)
+	err := fmt.Errorf("%s", msg)
+
+	return newSveltinError(notValidProjectError, "NotValidProjectError", "Not A Valid Sveltin Project", msg, err)
 }
 
 // NewNotLatestVersionError ...
