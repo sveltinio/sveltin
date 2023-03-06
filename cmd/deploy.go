@@ -16,13 +16,12 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/prompti/confirm"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/ftpfs"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/tui/activehelps"
-	"github.com/sveltinio/sveltin/tui/feedbacks"
+	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -39,7 +38,13 @@ var (
 	// Short description shown in the 'help' output.
 	deployCmdShortMsg = "Deploy your website over FTP"
 	// Long message shown in the 'help <this-command>' output.
-	deployCmdLongMsg = utils.MakeCmdLongMsg("Command used to deploy the project on your hosting platform over FTP.")
+	deployCmdLongMsg = utils.MakeCmdLongMsg(`Command used to deploy the project on your hosting platform over FTP.
+
+Before running the command:
+
+- update the ".env.production" file to reflects your FTP server settings;
+- "svelte.config.js" and "sveltin.json" files share the same **adapter** configurations;
+- run "sveltin build" first.`)
 )
 
 // Bind command flags.
@@ -67,6 +72,7 @@ var deployCmd = &cobra.Command{
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Deploy your website to the FTP server"))
+	cfg.log.Important("Run: \"sveltin deploy --help\" to ensure the pre-requisites are in place.")
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
 	if len(withExcludeFile) != 0 {
@@ -92,13 +98,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	err = noOpAction.Run()
 	utils.ExitIfError(err)
 
-	feedbacks.ShowDeployCommandWarningMessages(isBackup)
-
-	if isDryRun {
-		feedbacks.ShowDryRunMessage()
-	}
-
-	isConfirm, err := confirm.Run(&confirm.Config{Question: "Continue?"})
+	isConfirm, err := prompts.ConfirmDeploy(isDryRun, isBackup)
 	utils.ExitIfError(err)
 
 	if isConfirm {
@@ -217,30 +217,31 @@ func newFTPConnectionConfig(data tpltypes.EnvProductionData) *ftpfs.FTPConnectio
 
 func walkLocal(fs afero.Fs, fType EntryType, dirname string, replaceBasePath bool) ([]string, error) {
 	fList := []string{}
-	err := afero.Walk(cfg.fs, dirname,
-		func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
-			switch fType {
-			case EntryTypeFolder:
-				if info.IsDir() {
-					// kit.prerender.pages content must be copied without the parent folder name
-					if replaceBasePath {
-						_path := utils.ToBasePath(path, dirname)
-						fList = append(fList, _path)
-						// kit.prerender.assets must be copied as whole folder
-					} else {
-						fList = append(fList, path)
-					}
-				}
-			case EntryTypeFile:
-				if !info.IsDir() && info.Name() != dirname {
+	var walkFunc = func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		switch fType {
+		case EntryTypeFolder:
+			if info.IsDir() {
+				// kit.prerender.pages content must be copied without the parent folder name
+				if replaceBasePath {
+					_path := utils.ToBasePath(path, dirname)
+					fList = append(fList, _path)
+					// kit.prerender.assets must be copied as whole folder
+				} else {
 					fList = append(fList, path)
 				}
 			}
-			return nil
-		})
+		case EntryTypeFile:
+			if !info.IsDir() && info.Name() != dirname {
+				fList = append(fList, path)
+			}
+		}
+		return nil
+	}
+
+	err := afero.Walk(cfg.fs, dirname, walkFunc)
 	sort.Strings(fList)
 	return fList, err
 }

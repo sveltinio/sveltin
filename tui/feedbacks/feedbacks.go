@@ -14,7 +14,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
-	logger "github.com/sveltinio/yinlog"
 )
 
 // ShowNewProjectNextStepsHelpMessage prints an help message as next steps for a project creation.
@@ -89,56 +88,6 @@ func ShowNewThemeHelpMessage(pc *config.ProjectConfig) {
 	nextStepsMsg := markup.NewOLWithTitle("Next Steps", steps)
 
 	fmt.Printf("%s\n%s\n", nextStepsMsg, themingInfoMessage())
-}
-
-// ShowDryRunMessage prints a message box for commands supporting the 'dry-run mode'.
-func ShowDryRunMessage() {
-	fmt.Println(markup.Bordered(markup.Centered(fmt.Sprintf("%s\n\n%s", markup.Underline("DRY-RUN MODE"), "Nothing will really happen! Just simulating the process."))))
-}
-
-// ShowDeployCommandWarningMessages display a set of useful information for the deploy over FTP process.
-func ShowDeployCommandWarningMessages(isBackup bool) {
-	listLogger := logger.NewListLogger()
-	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
-		Timestamp: false,
-		Colors:    true,
-		Labels:    true,
-		Icons:     true,
-	})
-
-	listLogger.Title("Be aware! The deploy command will perform the following actions")
-	if isBackup {
-		listLogger.Append(logger.WarningLevel, "Create a backup of the existing content on the remote folder")
-	}
-	listLogger.Append(logger.WarningLevel, "Delete existing content except what specified with --exclude or --withExcludeFile flags")
-	listLogger.Append(logger.WarningLevel, "Upload content to the remote folder")
-	listLogger.Render()
-}
-
-// ShowUpgradeCommandMessage display a set of useful information when running the upgrade command.
-func ShowUpgradeCommandMessage() {
-	listLogger := logger.NewListLogger()
-	listLogger.Logger.Printer.SetPrinterOptions(&logger.PrinterOptions{
-		Timestamp: false,
-		Colors:    true,
-		Labels:    true,
-		Icons:     true,
-	})
-
-	infoText := `
- Sveltin will try to migrate as much as it can to make your project ready.
-
- The main goal is to update sveltin internal files and make your project
- compliant with the latest introduced by SvelteKit.
-
- For sure, something will not be handled by the migrations. In this case,
- you will see errors from SvelteKit by running the server as usual.
-`
-	listLogger.Title("\nMigrate Project Command")
-	listLogger.Append(logger.DefaultLevel, infoText)
-
-	listLogger.Append(logger.WarningLevel, markup.Amber("Ensure to commit your changes to keep track of what the command applies"))
-	listLogger.Render()
 }
 
 func devServerInfoMessage() string {

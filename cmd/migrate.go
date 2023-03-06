@@ -17,7 +17,6 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
 	"github.com/sveltinio/sveltin/tui/activehelps"
-	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -44,9 +43,7 @@ var migrateCmd = &cobra.Command{
 
 // RunMigrateCmd is the actual work function.
 func RunMigrateCmd(cmd *cobra.Command, args []string) {
-	feedbacks.ShowUpgradeCommandMessage()
-
-	isConfirm, err := prompts.ConfirmMigration("Continue?")
+	isConfirm, err := prompts.ConfirmMigration()
 	utils.ExitIfError(err)
 
 	if isConfirm {
