@@ -36,7 +36,7 @@ var installCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(0),
 	ValidArgsFunction:     installCmdValidArgs,
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	Run:                   RunInstallCmd,
 }
 

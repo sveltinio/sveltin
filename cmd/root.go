@@ -12,8 +12,8 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,13 +21,14 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/fsm"
+	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/notifier"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
+	projectvalidator "github.com/sveltinio/sveltin/internal/validator"
 	"github.com/sveltinio/sveltin/utils"
 	logger "github.com/sveltinio/yinlog"
 )
-
-//=============================================================================
 
 type appConfig struct {
 	log             *logger.Logger
@@ -40,12 +41,8 @@ type appConfig struct {
 	fs              afero.Fs
 }
 
-//=============================================================================
-
-const (
-	// CliVersion is the current sveltin cli version number.
-	CliVersion string = "0.12.0"
-)
+// CliVersion is the current sveltin cli version number.
+const CliVersion string = "0.12.0"
 
 const (
 	// SvelteKitStarter is a string representing the project starter id.
@@ -107,8 +104,6 @@ const (
 	GenericMatcher string = "generic_matcher"
 )
 
-//=============================================================================
-
 var (
 	// Short description shown in the 'help' output.
 	rootCmdShortMsg = "sveltin is the main command to work with SvelteKit powered static websites."
@@ -130,6 +125,9 @@ var (
 
 // YamlConfig is used by yaml.Unmarshal to decode the YAML file.
 var YamlConfig []byte
+
+// Bind choice to continue with installed version when a newer one is available.
+var releaseNotifierHandler bool
 
 //=============================================================================
 
@@ -154,6 +152,19 @@ func init() {
 
 //=============================================================================
 
+func loadSveltinSettings() {
+	viper.SetConfigType("yaml")
+	err := viper.ReadConfig(bytes.NewBuffer(YamlConfig))
+	if err != nil {
+		return
+	}
+
+	err = viper.Unmarshal(&cfg.settings)
+	if err != nil {
+		cfg.log.Fatal(err.Error())
+	}
+}
+
 func initAppConfig() {
 	cfg.log = logger.New()
 	cfg.log.Printer.SetPrinterOptions(&logger.PrinterOptions{
@@ -170,20 +181,6 @@ func initAppConfig() {
 	cfg.fs = afero.NewOsFs()
 }
 
-func loadSveltinSettings() {
-	viper.SetConfigType("yaml")
-	err := viper.ReadConfig(bytes.NewBuffer(YamlConfig))
-	if err != nil {
-		return
-	}
-
-	err = viper.Unmarshal(&cfg.settings)
-	if err != nil {
-		cfg.log.Fatal(err.Error())
-	}
-
-}
-
 func loadProjectSettings(filename string) (prjConfig tpltypes.ProjectSettings, err error) {
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
@@ -196,8 +193,7 @@ func loadProjectSettings(filename string) (prjConfig tpltypes.ProjectSettings, e
 	}
 
 	err = viper.Unmarshal(&prjConfig)
-
-	validate := validator.New()
+	validate := projectvalidator.Init()
 	if err := validate.Struct(&prjConfig); err != nil {
 		nErr := sveltinerr.NewNotValidProjectSettingsError(err)
 		cfg.log.Fatalf("%s\n", nErr)
@@ -223,8 +219,13 @@ func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error
 
 //=============================================================================
 
-var preRunHook = func(cmd *cobra.Command, args []string) {
+func isPreRelease() bool {
+	return strings.Contains(CliVersion, "-pre")
+}
+
+func allExceptInitCmdPreRunHook(cmd *cobra.Command, args []string) {
 	isValidProject()
+	handleReleaseNotifier(notifier.AllExceptInitCmd)
 	isPre011VersionProject()
 }
 
@@ -247,6 +248,53 @@ func isPre011VersionProject() {
 	if !exists {
 		err := sveltinerr.NewNotLatestVersionError(pathToFile)
 		cfg.log.Fatalf("\n%s", err.Error())
+	}
+}
+
+func handleReleaseNotifier(cmdName string) {
+	if !isPreRelease() {
+		cwd, _ := os.Getwd()
+		var isCheckUpdates *bool
+		var lastCheck string
+
+		switch cmdName {
+		case notifier.InitCmd:
+			isCheckUpdates = utils.NewTrue()
+		case notifier.AllExceptInitCmd:
+			isCheckUpdates = cfg.projectSettings.Sveltin.CheckUpdates
+			lastCheck = cfg.projectSettings.Sveltin.LastCheck
+		}
+
+		// Create a new ReleaseMonitor object.
+		newReleaseMonitor := notifier.NewReleaseMonitor(isCheckUpdates, CliVersion, lastCheck)
+		// Create observer/subscribe objects.
+		cmdObserver := notifier.CommandObserver{
+			Id: cmdName,
+		}
+		sveltinJsonObserver := notifier.SveltinJsonObserver{
+			Id:         cmdName,
+			Fs:         cfg.fs,
+			TargetPath: filepath.Join(cwd, ProjectSettingsFile),
+		}
+
+		// Register the Observers to the ReleaseMonitor.
+		_, err := newReleaseMonitor.Register(&cmdObserver)
+		if err != nil {
+			cfg.log.Important(markup.Faint(err.Error()))
+		}
+		_, err = newReleaseMonitor.Register(&sveltinJsonObserver)
+		if err != nil {
+			cfg.log.Important(markup.Faint(err.Error()))
+		}
+
+		// Start the ReleaseNotifier.
+		if releaseNotifierHandler, err = newReleaseMonitor.Notify(); err != nil {
+			cfg.log.Fatal(err.Error())
+		}
+
+		if !releaseNotifierHandler {
+			os.Exit(1)
+		}
 	}
 }
 

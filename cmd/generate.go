@@ -32,7 +32,7 @@ var generateCmd = &cobra.Command{
 	Long:                  generateCmdLongMsg,
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	ValidArgs:             []string{"menu", "rss", "sitemap"},
-	PersistentPreRun:      preRunHook,
+	PersistentPreRun:      allExceptInitCmdPreRunHook,
 	DisableFlagsInUseLine: true,
 }
 

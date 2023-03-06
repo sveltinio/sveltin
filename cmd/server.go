@@ -34,7 +34,7 @@ var serverCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(0),
 	ValidArgsFunction:     serverCmdValidArgs,
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	Run:                   RunServerCmd,
 }
 

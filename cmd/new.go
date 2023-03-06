@@ -34,7 +34,7 @@ var newCmd = &cobra.Command{
 	ArgAliases:            []string{"p", "r"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	DisableFlagsInUseLine: true,
-	PersistentPreRun:      preRunHook,
+	PersistentPreRun:      allExceptInitCmdPreRunHook,
 }
 
 // Command initialization.

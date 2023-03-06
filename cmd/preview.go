@@ -37,7 +37,7 @@ var previewCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(0),
 	ValidArgsFunction:     previewCmdValidArgs,
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	Run:                   RunPreviewCmd,
 }
 

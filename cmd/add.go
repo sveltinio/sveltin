@@ -34,7 +34,7 @@ var addCmd = &cobra.Command{
 	ArgAliases:            []string{"c", "m"},
 	ValidArgs:             []string{"content", "metadata"},
 	DisableFlagsInUseLine: true,
-	PersistentPreRun:      preRunHook,
+	PersistentPreRun:      allExceptInitCmdPreRunHook,
 }
 
 // Command initialization.

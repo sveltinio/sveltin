@@ -78,7 +78,7 @@ var completionCmd = &cobra.Command{
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	ValidArgs:             []string{bash, zsh, fish, powershell},
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	RunE:                  RunCompletionCmd,
 }
 

@@ -45,7 +45,9 @@ type SvelteKitAdapterData struct {
 
 // SveltinCLIData is the struct used to map the sveltin cli props.
 type SveltinCLIData struct {
-	Version string `mapstructure:"version" json:"version" validate:"required,semver"`
+	Version      string `mapstructure:"version" json:"version" validate:"required,semver"`
+	CheckUpdates *bool  `mapstructure:"checkUpdates" json:"checkUpdates" validate:"required,boolean"`
+	LastCheck    string `mapstructure:"lastCheck" json:"lastCheck" validate:"required,dateiso"`
 }
 
 // SitemapData is the struct used to map the sitemap props.

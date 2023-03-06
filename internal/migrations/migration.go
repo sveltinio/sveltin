@@ -53,9 +53,11 @@ func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pat
 
 // MigrationData is the struct with data used by migrations.
 type MigrationData struct {
-	TargetPath        string
-	CliVersion        string
-	ProjectCliVersion string
+	TargetPath           string
+	CliVersion           string
+	ProjectCliVersion    string
+	EnableUpdateNotifier string
+	LastCheck            string
 }
 
 // MigrationRule is the struct with settings to be matched for running the migration.

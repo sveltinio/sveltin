@@ -120,7 +120,9 @@ func addProjectSettingsFile(m *AddUpdateProjectSettings) error {
 				Priority:   0.5,
 			},
 			Sveltin: tpltypes.SveltinCLIData{
-				Version: m.Data.CliVersion,
+				Version:      m.Data.CliVersion,
+				CheckUpdates: utils.NewTrue(),
+				LastCheck:    utils.TodayISO(),
 			},
 			Theme: *themeData,
 		},

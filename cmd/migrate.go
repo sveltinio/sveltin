@@ -38,7 +38,7 @@ var migrateCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(0),
 	ValidArgsFunction:     migrateCmdValidArgs,
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	Run:                   RunMigrateCmd,
 }
 

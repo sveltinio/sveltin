@@ -22,6 +22,7 @@
 	},
 	"sveltin": {
 		"version": "{{ $sveltin.Version }}",
-		"updateCheckedAt": "{{ $sveltin.UpdateCheckedAt }}"
+		"checkUpdates": {{ $sveltin.CheckUpdates }},
+		"lastCheck": "{{ $sveltin.LastCheck }}"
 	}
 }

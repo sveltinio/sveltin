@@ -40,7 +40,7 @@ var buildCmd = &cobra.Command{
 	Args:                  cobra.ExactArgs(0),
 	ValidArgsFunction:     buildCmdValidArgsFunc,
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	Run:                   RunBuildCmd,
 }
 

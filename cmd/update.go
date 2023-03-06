@@ -35,7 +35,7 @@ var updateCmd = &cobra.Command{
 	ValidArgsFunction:     updateCmdValidArgs,
 	Args:                  cobra.ExactArgs(0),
 	DisableFlagsInUseLine: true,
-	PreRun:                preRunHook,
+	PreRun:                allExceptInitCmdPreRunHook,
 	Run:                   RunUpdateCmd,
 }
 

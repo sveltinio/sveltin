@@ -23,6 +23,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/notifier"
 	"github.com/sveltinio/sveltin/internal/npmc"
 	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
@@ -76,8 +77,8 @@ var initCmd = &cobra.Command{
 	Short:             initCmdShortMsg,
 	Long:              initCmdLongMsg,
 	ValidArgsFunction: initCmdValidArgs,
-
-	Run: InitCmdRun,
+	PreRun:            initCmdPreRunHook,
+	Run:               InitCmdRun,
 }
 
 // InitCmdRun is the actual work function.
@@ -246,6 +247,11 @@ func initCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]s
 	return comps, cobra.ShellCompDirectiveDefault
 }
 
+// Run before the main Run function of init command to check and alert about newer version.
+func initCmdPreRunHook(cmd *cobra.Command, args []string) {
+	handleReleaseNotifier(notifier.InitCmd)
+}
+
 //=============================================================================
 
 func buildThemeData(themeSelection, themeFlagValue, projectName, cssLibName string) (*tpltypes.ThemeData, error) {
@@ -393,9 +399,9 @@ func newSveltinJsonTplData(projectName string, themeData *tpltypes.ThemeData) *c
 			},
 			Theme: *themeData,
 			Sveltin: tpltypes.SveltinCLIData{
-				Version:              CliVersion,
-				EnableUpdateNotifier: utils.NewTrue(),
-				LastCheck:            utils.TodayISO(),
+				Version:      CliVersion,
+				CheckUpdates: utils.NewTrue(),
+				LastCheck:    utils.TodayISO(),
 			},
 		},
 	}
