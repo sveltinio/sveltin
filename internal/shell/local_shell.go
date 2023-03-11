@@ -26,30 +26,19 @@ func (s *LocalShell) Execute(cmdName string, cmdOptions string, silentMode bool)
 	var cmd *exec.Cmd
 
 	args := strings.Split(cmdOptions, " ")
-	if len(args) < 1 || len(args) > 4 {
-		return sveltinerr.NewNumOfArgsNotValidError()
-	}
-
-	switch len(args) {
-	case 1:
-		cmd = exec.Command(cmdName, args[0])
-	case 2:
-		cmd = exec.Command(cmdName, args[0], args[1])
-	case 3:
-		cmd = exec.Command(cmdName, args[0], args[1], args[2])
-	case 4:
-		cmd = exec.Command(cmdName, args[0], args[1], args[2], args[3])
-	default:
-		err := errors.New("invalid number of arguments")
-		return sveltinerr.NewNumOfArgsNotValidErrorWithMessage(err)
-	}
+	cmd = exec.Command(cmdName, args[0:]...)
+	cmd.Stderr = os.Stderr
 
 	if !silentMode {
 		cmd.Stdout = os.Stdout
 	}
 
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	err := cmd.Start()
+	if err != nil {
+		return sveltinerr.NewExecSystemCommandErrorWithMsg(err)
+	}
+
+	return cmd.Wait()
 }
 
 // BackgroundExecute runs an action on the npm client in background.
