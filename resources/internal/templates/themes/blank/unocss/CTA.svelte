@@ -1,8 +1,12 @@
 <script>
+	import { sveltinVersion, sveltekitVersion } from '$config/defaults.js';
 	import { Link } from '@sveltinio/essentials';
 </script>
 
-<h1 class="text-xl">Your Sveltin project is up & running!</h1>
+<h1>Your Sveltin project is up & running!</h1>
+<h2>
+	You are running Sveltin v{sveltinVersion} on SvelteKit v{sveltekitVersion}
+</h2>
 
 <div>
 	<Link

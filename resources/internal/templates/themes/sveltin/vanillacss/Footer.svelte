@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sveltinVersion } from '$config/defaults.js';
+	import { sveltinVersion, sveltekitVersion } from '$config/defaults.js';
 
 	export let logoSrc: string;
 </script>
@@ -19,7 +19,9 @@
 				The CLI to Boost Your Productivity creating SvelteKit powered
 				static websites.
 			</p>
-			<p class="semibold">You are running Sveltin v{sveltinVersion}</p>
+			<p class="semibold">
+				You are running Sveltin v{sveltinVersion} on SvelteKit v{sveltekitVersion}
+			</p>
 		</div>
 	</div>
 </footer>

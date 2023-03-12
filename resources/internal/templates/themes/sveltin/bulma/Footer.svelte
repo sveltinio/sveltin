@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sveltinVersion } from '$config/defaults.js';
+	import { sveltinVersion, sveltekitVersion } from '$config/defaults.js';
 
 	export let logoSrc: string;
 </script>
@@ -28,7 +28,7 @@
 			<p
 				class="has-text-weight-semibold has-text-grey-light has-text-weight-medium mt-6 is-size-7"
 			>
-				You are running Sveltin v{sveltinVersion}
+				You are running Sveltin v{sveltinVersion} on SvelteKit v{sveltekitVersion}
 			</p>
 		</div>
 	</div>
