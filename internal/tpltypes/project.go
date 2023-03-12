@@ -39,8 +39,11 @@ type SvelteKitData struct {
 // Once Vite Support Import Assertions - https://github.com/vitejs/vite/issues/4934 - will be out from experimental
 // the same struct will be used to pass props directly to svelte through svelte.config.js file
 type SvelteKitAdapterData struct {
-	Pages  string `mapstructure:"pages" json:"pages" validate:"required"`
-	Assets string `mapstructure:"assets" json:"assets" validate:"required"`
+	Pages       string `mapstructure:"pages" json:"pages" validate:"required"`
+	Assets      string `mapstructure:"assets" json:"assets" validate:"required"`
+	Fallback    string `mapstructure:"fallback" json:"fallback" validate:"required"`
+	Precompress *bool  `mapstructure:"precompress" json:"precompress" validate:"boolean"`
+	Strict      *bool  `mapstructure:"strict" json:"strict" validate:"boolean"`
 }
 
 // SveltinCLIData is the struct used to map the sveltin cli props.
