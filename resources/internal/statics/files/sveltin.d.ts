@@ -3,6 +3,11 @@
  ** This file exists to allow using sveltin's features with no lock-in to the sveltinio packages.
  */
 export namespace Sveltin {
+	type MdSveXComponent = {
+		meta: Record<string, any>;
+		path: string;
+	};
+
 	export type ResourceContent = {
 		resource: string;
 		metadata: YAMLFrontmatter;
@@ -74,9 +79,7 @@ export namespace Sveltin {
 		baseURL: string;
 		language: string;
 		title: string;
-		slogan?: string;
 		description: string;
-		seoDescription?: string;
 		favicon?: string;
 		logo?: string;
 		copyright?: string;

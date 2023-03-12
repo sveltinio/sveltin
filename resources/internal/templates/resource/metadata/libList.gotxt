@@ -10,19 +10,15 @@ export const all = async (): Promise<Sveltin.ContentMetadata[]> => {
 	const values = ['title', 'slug', 'headline'];
 	const grouped = groupedByMany(mdName, data, values);
 
-	const mList: Array<Sveltin.ContentMetadata> = [];
-	grouped.map((elem) => {
-		const metadata: Sveltin.ContentMetadata = {
-			name: elem['name'],
-			items: []
-		};
-		elem['items'].forEach((e: Sveltin.YAMLFrontmatter) => {
-			metadata.items.push(e);
-		});
-		mList.push(metadata);
-	});
+	return grouped.reduce((acc:  Array<Sveltin.ContentMetadata>, curr) => {
+		const { name, items } = curr;
 
-	return mList;
+		acc.push({
+			name,
+			items
+		} satisfies Sveltin.ContentMetadata);
+		return acc;
+	}, []) as Array<Sveltin.ContentMetadata>;
 };
 
 export const groupedBy = async (slug: string): Promise<Sveltin.ContentMetadata> => {

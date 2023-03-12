@@ -3,13 +3,13 @@ import type { Sveltin } from '$sveltin';
 export async function list() {
 	const contentFiles = import.meta.glob('/{{ .Settings.Paths.Content }}/{{ .Resource.Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
-	const contents = await Promise.all(
+	const contents: Array<Sveltin.MdSveXComponent> = await Promise.all(
 		contentFilesArray.map(async ([path, resolver]) => {
 			const data = await resolver();
-			const result: Sveltin.DynamicObject = {
+			const result = {
 				meta: data['metadata'],
 				path: path
-			};
+			} satisfies Sveltin.MdSveXComponent;
 			return result;
 		})
 	);
@@ -25,31 +25,32 @@ export async function getSingle(slug: string) {
 	const resourceName = '{{ $slugName }}';
 	const publishedByDate = await list();
 
-	const selected = publishedByDate.filter((item) => {
-		return item.meta['slug'] == slug;
-	});
+	const selected = publishedByDate.filter((item) => item.meta['slug'] == slug);
 
 	if (selected.length != 0) {
 		const selectedItemIndex = publishedByDate.findIndex((elem) => slug === elem.meta['slug']);
 		const selectedItem = publishedByDate[selectedItemIndex];
-		const current: Sveltin.ResourceContent = {
+
+		const current = {
 			resource: resourceName,
 			metadata: selectedItem.meta as Sveltin.YAMLFrontmatter
-		};
-		const previous: Sveltin.ResourceContent = {
+		} satisfies Sveltin.ResourceContent;
+
+		const previous = {
 			resource: resourceName,
-			metadata: <Sveltin.YAMLFrontmatter>{
+			metadata: {
 				title: publishedByDate[selectedItemIndex + 1]?.meta['title'],
 				slug: publishedByDate[selectedItemIndex + 1]?.meta['slug']
-			}
-		};
-		const next: Sveltin.ResourceContent = {
+			} as Sveltin.YAMLFrontmatter
+		} satisfies Sveltin.ResourceContent;
+
+		const next = {
 			resource: resourceName,
-			metadata: <Sveltin.YAMLFrontmatter>{
+			metadata: {
 				title: publishedByDate[selectedItemIndex - 1]?.meta['title'],
 				slug: publishedByDate[selectedItemIndex - 1]?.meta['slug']
-			}
-		};
+			} as Sveltin.YAMLFrontmatter
+		} satisfies Sveltin.ResourceContent;
 
 		return {
 			status: 200,
