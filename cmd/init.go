@@ -104,7 +104,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
 
 	gitClient := shell.NewGitClient()
-	err = gitClient.RunGitClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
+	err = gitClient.RunClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>

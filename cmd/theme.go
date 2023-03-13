@@ -75,7 +75,7 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
 
 	gitClient := shell.NewGitClient()
-	err = gitClient.RunGitClone(themeStarterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
+	err = gitClient.RunClone(themeStarterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
 	utils.ExitIfError(err)
 
 	// NEW FILE: config/defaults.js

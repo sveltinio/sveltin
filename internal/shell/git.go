@@ -52,7 +52,7 @@ func (s *GitShell) RunInit(localPath string, silentMode bool) error {
 }
 
 // RunGitClone execute 'git clone' command.
-func (s *GitShell) RunGitClone(repoURL, inpath string, silentMode bool) error {
+func (s *GitShell) RunClone(repoURL, inpath string, silentMode bool) error {
 	if repoURL == "" || inpath == "" {
 		return sveltinerr.NewNotValidArgumentsError()
 	}
