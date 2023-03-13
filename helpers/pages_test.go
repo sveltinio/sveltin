@@ -58,7 +58,7 @@ func TestGetResourceRouteFilename(t *testing.T) {
 		},
 		{
 			name: "indexendpoint",
-			want: "+page.server.ts",
+			want: "+page.ts",
 		},
 		{
 			name: "slug",
@@ -71,7 +71,7 @@ func TestGetResourceRouteFilename(t *testing.T) {
 	}
 	for _, tc := range tests {
 		is := is.New(t)
-		is.Equal(GetResourceRouteFilename(tc.name, &conf), tc.want)
+		is.Equal(GetRouteFilename(tc.name, &conf), tc.want)
 	}
 }
 

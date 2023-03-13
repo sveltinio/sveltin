@@ -12,8 +12,8 @@ import (
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 )
 
-// GetResourceRouteFilename returns a string representing the index and slug routes for a resource.
-func GetResourceRouteFilename(txt string, s *config.SveltinSettings) string {
+// GetRouteFilename returns a string representing the index and slug routes filename.
+func GetRouteFilename(txt string, s *config.SveltinSettings) string {
 	switch txt {
 	case "index":
 		return s.GetIndexPageFilename()

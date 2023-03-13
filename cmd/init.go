@@ -432,13 +432,14 @@ func createProjectRoutesLocalFolder(themeData *tpltypes.ThemeData) *composer.Fol
 
 	// NEW FILE: index.svelte
 	indexFile := &composer.File{
-		Name:       helpers.GetResourceRouteFilename(IndexFileId, cfg.settings),
+		Name:       helpers.GetRouteFilename(IndexFileId, cfg.settings),
 		TemplateID: IndexFileId,
 		TemplateData: &config.TemplateData{
 			Theme: themeData,
 		},
 	}
 	routesFolder.Add(indexFile)
+
 	return routesFolder
 }
 

@@ -13,9 +13,9 @@ pages:
   content: index.svx
   index: +page.svelte
   indexendpoint: +page.server.ts
-  slug: '+page.svelte'
-  slugendpoint: '+page.ts'
-  sluglayout: '+layout.svelte'
+  slug: +page.svelte
+  slugendpoint: +page.ts
+  sluglayout: +layout.svelte
 api:
   version: v1
   filename: +server.ts

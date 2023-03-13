@@ -246,11 +246,11 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceData.Name)
-	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.server.ts}
+	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.ts}
 	cfg.log.Info("Routes")
 	for _, item := range []string{IndexFileId, IndexEndpointFileId} {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
+			Name:       helpers.GetRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
 				Name:            resourceData.Name,
@@ -271,7 +271,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 	}
 	for _, item := range slugFiles {
 		f := &composer.File{
-			Name:       helpers.GetResourceRouteFilename(item, cfg.settings),
+			Name:       helpers.GetRouteFilename(item, cfg.settings),
 			TemplateID: item,
 			TemplateData: &config.TemplateData{
 				Name:            resourceData.Name,
