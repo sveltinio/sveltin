@@ -11,6 +11,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -67,22 +69,32 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageLanguage, err = prompts.SelectPageLanguageHandler(pageLanguage)
 	utils.ExitIfError(err)
 
+	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageLanguage)
+	cfg.log.Plain(markup.H1(headingText))
+
 	pageData := &tpltypes.PageData{
 		Name:     pageName,
 		Language: pageLanguage,
 	}
 
-	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageLanguage)
-	cfg.log.Plain(markup.H1(headingText))
-
 	// GET FOLDER: src/routes
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
 	// NEW FOLDER: src/routes/<page_name>
-	pageFolder := composer.NewFolder(pageName)
+	pageFolder := composer.NewFolder(pageData.Name)
 	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
 	pageFile := cfg.fsManager.NewPublicPageFile(pageData, &cfg.projectSettings)
 	utils.ExitIfError(err)
+
+	// NEW FILE: src/routes/<page_name>/+page.ts>
+	pageLoadFile := &composer.File{
+		Name:       helpers.GetRouteFilename(IndexEndpointFileId, cfg.settings),
+		TemplateID: IndexEndpointFileId,
+		TemplateData: &config.TemplateData{
+			Page: pageData,
+		},
+	}
+	pageFolder.Add(pageLoadFile)
 
 	// ADD TO THE ROUTES FOLDER
 	pageFolder.Add(pageFile)

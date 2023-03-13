@@ -14,7 +14,6 @@ export namespace Sveltin {
 	};
 
 	export type ResourceContent = {
-		resource: string;
 		metadata: YAMLFrontmatter;
 		html?: string;
 	};

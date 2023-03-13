@@ -1,0 +1,58 @@
+{{- $resourceName := .Resource.Name -}}
+{{- $resourceNameAsVar := $resourceName | ToVariableName | ReplaceIfNested -}}
+import type { PageLoad } from './$types';
+import type { Sveltin } from '$sveltin';
+import type { SEOWebPage } from '@sveltinio/seo/types';
+import { error } from '@sveltejs/kit';
+import { list } from '$lib/{{ .Resource.Name }}/load{{ $resourceNameAsVar | Capitalize }}';
+import { website } from '$config/website.js';
+import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+import { capitalizeFirstLetter, canonicalPageUrl, getSocialImage } from '$lib/utils/strings.js';
+
+//! Edit for page SEO related data.
+const pageTitle = '{{ $resourceName }}';
+const pageDescription = `Here you can find the list of all available ${pageTitle}.`;
+const pageKeywords: Array<string> = [];
+
+/*
+ * Returns values available to the page and page SEO data used
+ * by the SEO components in the root layout via the $page.data prop.
+ */
+export const load = (async ({ url }) => {
+	const resource = pageTitle;
+	const seoData = {
+		url: canonicalPageUrl(url.pathname, website.baseURL),
+		title: capitalizeFirstLetter(pageTitle),
+		description: pageDescription,
+		keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
+		image: getSocialImage(website.baseURL, '/images/sveltin', 'logo.png'),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	} satisfies SEOWebPage;
+
+	const data = await list();
+	const items = data.reduce((acc, curr) => {
+		const { meta } = curr;
+
+		acc.push({
+			metadata: meta as Sveltin.YAMLFrontmatter,
+			html: ''
+		} satisfies Sveltin.ResourceContent);
+
+		return acc;
+	}, []) as Array<Sveltin.ResourceContent>;
+
+	if (items) {
+		return {
+			resource,
+			seoData,
+			items
+		};
+	}
+
+	throw error(404, 'Not found');
+}) satisfies PageLoad;

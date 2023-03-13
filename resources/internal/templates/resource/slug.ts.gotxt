@@ -1,20 +1,55 @@
+{{- $resourceName := .Resource.Name -}}
+{{- $resourceNameAsVar := $resourceName | ToVariableName | ReplaceIfNested -}}
 import type { PageLoad } from './$types';
+import type { SEOWebPage } from '@sveltinio/seo/types';
 import { error } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
+import { website } from '$config/website.js';
+import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
+import { capitalizeFirstLetter, canonicalPageUrl, getCoverImagePath } from '$lib/utils/strings.js';
 
-export const load = (async ({ params }) => {
+/*
+ * Returns values available to the page and page SEO data used
+ * by the SEO components in the root layout via the $page.data prop.
+ */
+export const load = (async ({ url, params }) => {
 	const { slug } = params;
-	const { status, current, previous, next } = await getSingle(slug);
+	const { resource, status, current, previous, next } = await getSingle(slug);
+	const { metadata } = current;
+
+	const baseUrl = dev ? url.origin : website.baseURL;
+
+	const seoData = {
+		url: canonicalPageUrl(url.pathname, baseUrl),
+		title: capitalizeFirstLetter(metadata.title),
+		description: metadata.headline,
+		keywords: metadata.keywords.length != 0 ? metadata.keywords : website.keywords,
+		author: metadata.author,
+		image: getCoverImagePath(current, website),
+		opengraph: {
+			type: OpenGraphType.Article,
+			article: {
+				published_at: new Date(metadata.created_at),
+				modified_at: new Date(metadata.updated_at)
+			}
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	} satisfies SEOWebPage;
 
 	if (status == 200) {
 		return {
-			actual: current,
-			before: previous,
-			after: next,
+			resource,
+			seoData,
+			current,
+			previous,
+			next,
 			{{ if .Resource.Group -}}
-			mdsvexComponent: (await import(`../../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
+			mdsvexComponent: (await import(`../../../../../content/${resource}/${slug}/index.svx`)).default
 			{{ else -}}
-			mdsvexComponent: (await import(`../../../../content/{{ .Resource.Name }}/${slug}/index.svx`)).default
+			mdsvexComponent: (await import(`../../../../content/${resource}/${slug}/index.svx`)).default
 			{{- end -}}
 		};
 	}

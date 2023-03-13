@@ -1,18 +1,28 @@
 <script lang="ts">
 	import '../app.scss';
+	import { page } from '$app/stores';
 	import { website } from '$config/website.js';
 	//import { googleFonts } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
 	import orderBy from 'lodash-es/orderBy.js';
-	import { JsonLdSiteNavigationElements, JsonLdWebSite } from '@sveltinio/seo';
+	import {
+		JsonLdWebSite,
+		JsonLdBreadcrumbs,
+		JsonLdSiteNavigationElements,
+		JsonLdWebPage,
+		PageMetaTags
+	} from '@sveltinio/seo';
 	import { ScrollToTopButton } from '@sveltinio/widgets';
 	//import { GoogleFonts } from '@sveltinio/services';
 
 	const sortedMenu = orderBy(menu, 'weight');
 </script>
 
+<PageMetaTags data={$page.data.seoData} />
 <JsonLdWebSite data={website} />
+<JsonLdBreadcrumbs url={$page.url.href} />
 <JsonLdSiteNavigationElements baseURL={website.baseURL} data={sortedMenu} />
+<JsonLdWebPage data={$page.data.seoData} />
 
 <!-- GoogleFonts fonts={googleFonts} /> -->
 

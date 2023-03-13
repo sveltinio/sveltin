@@ -2,31 +2,29 @@
 import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { error } from '@sveltejs/kit';
-import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
+import { all } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 import { capitalizeFirstLetter, canonicalPageUrl, getFavicon } from '$lib/utils/strings.js';
 
 //! Edit for page SEO related data.
-let pageTitle = '';
-let pageDescription = '';
+const pageTitle = '{{ .Metadata.Name }}';
+const pageDescription = `Description for ${pageTitle} metadata.`;
 const pageKeywords: Array<string> = [];
 
 /*
  * Returns values available to the page and page SEO data used
  * by the SEO components in the root layout via the $page.data prop.
  */
-export const load = (async ({ url, params }) => {
-	const { slug } = params;
-	pageTitle = slug;
-	pageDescription = `Description for ${pageTitle}.`;
+export const load = (async ({ url }) => {
+	const mdName = pageTitle;
+	const data = await all();
 
-	const metadata = await groupedBy(slug);
 	const seoData = {
 		url: canonicalPageUrl(url.pathname, website.baseURL),
 		title: capitalizeFirstLetter(pageTitle),
 		description: pageDescription,
-		keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
+		keywords: keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Article
@@ -36,13 +34,13 @@ export const load = (async ({ url, params }) => {
 		}
 	} satisfies SEOWebPage;
 
-	if (metadata) {
+	if (data) {
 		return {
-			mdName: slug,
+			mdName,
 			seoData,
-			metadata
+			metadata: data
 		};
 	}
 
-	throw error(404, 'Not found');
+	throw error(404, `${mdName} not found!`);
 }) satisfies PageLoad;

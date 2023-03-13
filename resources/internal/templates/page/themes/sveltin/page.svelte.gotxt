@@ -1,42 +1,9 @@
-{{- $pageName := .Page.Name | ToVariableName -}}
-<script lang="ts">
-	import type { SEOWebPage } from '@sveltinio/seo/types';
-	import { page } from '$app/stores';
-	import { website } from '$config/website.js';
-	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-	import { PageMetaTags, JsonLdWebPage, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { canonicalPageUrl, capitalizeFirstLetter, getFavicon } from '$lib/utils/strings.js';
-
-	const title = '{{ .Page.Name }}';
-
-	const pageDescription = `Here the description for the {{ .Page.Name | Capitalize }} page.`;
-	// page keywords as comma separeted values
-	const pageKeywords: Array<string> = [];
-
-	const {{ $pageName }}Page: SEOWebPage = {
-		url: canonicalPageUrl($page.url.pathname, website.baseURL),
-		title: capitalizeFirstLetter(title),
-		description: pageDescription,
-		keywords: pageKeywords || website.keywords,
-		image: getFavicon(website),
-		opengraph: {
-			type: OpenGraphType.Article
-		},
-		twitter: {
-			type: TwitterCardType.Summary
-		}
-	};
-</script>
-
-<PageMetaTags data={ {{ $pageName }}Page } />
-<JsonLdWebPage data={ {{ $pageName }}Page } />
-<JsonLdBreadcrumbs url={$page.url.href} />
-
+{{- $pageName := .Page.Name | Capitalize -}}
 <!-- Page markup-->
 <section class="page">
 	<div class="content">
 		<div class="centered">
-			<h1>This is the {{ .Page.Name | Capitalize }} page</h1>
+			<h1>This is the {{ $pageName }} page</h1>
 		</div>
 	</div>
 </section>

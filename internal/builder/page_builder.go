@@ -57,6 +57,9 @@ func (b *PublicPageContentBuilder) setPathToTplFile() error {
 			b.PathToTplFile = b.EmbeddedResources[MarkdownThemeSveltin]
 		}
 		return nil
+	case IndexEndpoint:
+		b.PathToTplFile = b.EmbeddedResources[IndexEndpoint]
+		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
 		return sveltinerr.NewDefaultError(errN)

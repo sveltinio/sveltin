@@ -46,6 +46,7 @@ var ProjectFilesMap = EmbeddedFSEntry{
 	"license":          "internal/templates/misc/LICENSE.gotxt",
 	"index":            "internal/templates/themes/index.svelte.gotxt",
 	"index_notheme":    "internal/templates/themes/index.notheme.svelte.gotxt",
+	"indexendpoint":    "internal/templates/themes/index.ts.gotxt",
 	"theme_config":     "internal/templates/themes/theme.config.js.gotxt",
 }
 
@@ -54,7 +55,7 @@ var ResourceFilesMap = EmbeddedFSEntry{
 	"lib":           "internal/templates/resource/lib.gotxt",
 	"index_blank":   "internal/templates/resource/themes/blank/page.svelte.gotxt",
 	"index_sveltin": "internal/templates/resource/themes/sveltin/page.svelte.gotxt",
-	"indexendpoint": "internal/templates/resource/page.server.ts.gotxt",
+	"indexendpoint": "internal/templates/resource/page.ts.gotxt",
 	"slug_blank":    "internal/templates/resource/themes/blank/slug.svelte.gotxt",
 	"slug_sveltin":  "internal/templates/resource/themes/sveltin/slug.svelte.gotxt",
 	"slugendpoint":  "internal/templates/resource/slug.ts.gotxt",
@@ -82,7 +83,7 @@ var MetadataFilesMap = EmbeddedFSEntry{
 	"lib_list":      "internal/templates/resource/metadata/libList.gotxt",
 	"index_blank":   "internal/templates/resource/metadata/themes/blank/page.svelte.gotxt",
 	"index_sveltin": "internal/templates/resource/metadata/themes/sveltin/page.svelte.gotxt",
-	"indexendpoint": "internal/templates/resource/metadata/page.server.ts.gotxt",
+	"indexendpoint": "internal/templates/resource/metadata/page.ts.gotxt",
 	"slug_blank":    "internal/templates/resource/metadata/themes/blank/slug.svelte.gotxt",
 	"slug_sveltin":  "internal/templates/resource/metadata/themes/sveltin/slug.svelte.gotxt",
 	"slugendpoint":  "internal/templates/resource/metadata/slug.ts.gotxt",
@@ -94,6 +95,7 @@ var PageFilesMap = EmbeddedFSEntry{
 	"svelte_sveltin":   "internal/templates/page/themes/sveltin/page.svelte.gotxt",
 	"markdown_blank":   "internal/templates/page/themes/blank/page.svx.gotxt",
 	"markdown_sveltin": "internal/templates/page/themes/sveltin/page.svx.gotxt",
+	"indexendpoint":    "internal/templates/page/page.ts.gotxt",
 }
 
 // ContentFilesMap is the map for the content template files.

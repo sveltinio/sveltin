@@ -26,22 +26,19 @@ export async function list(orderdByDate: boolean = true) {
 
 {{ $slugName := .Resource.Name | ToSlug}}
 export async function getSingle(slug: string) {
-	const resourceName = '{{ $slugName }}';
-	const publishedByDate = await list();
-
-	const selected = publishedByDate.filter((item) => item.meta['slug'] == slug);
+	const resource = '{{ $slugName }}';
+	const contentList = await list();
+	const selected = contentList.filter((item) => item.meta['slug'] == slug);
 
 	if (selected.length != 0) {
 		const selectedIndex = contentList.findIndex((elem) => slug === elem.meta['slug']);
 		const selected = contentList[selectedIndex];
 
 		const current = {
-			resource: resourceName,
 			metadata: selected.meta as Sveltin.YAMLFrontmatter
 		} satisfies Sveltin.ResourceContent;
 
 		const previous = {
-			resource: resourceName,
 			metadata: {
 				title: contentList[selectedIndex + 1]?.meta['title'],
 				slug: contentList[selectedIndex + 1]?.meta['slug']
@@ -49,7 +46,6 @@ export async function getSingle(slug: string) {
 		} satisfies Sveltin.ResourceContent;
 
 		const next = {
-			resource: resourceName,
 			metadata: {
 				title: contentList[selectedIndex - 1]?.meta['title'],
 				slug: contentList[selectedIndex - 1]?.meta['slug']
@@ -58,6 +54,7 @@ export async function getSingle(slug: string) {
 
 		return {
 			status: 200,
+			resource,
 			current,
 			previous,
 			next

@@ -33,7 +33,7 @@ func TestSveltinResourceFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("internal/templates/resource/lib.gotxt", ResourceFilesMap["lib"])
 	is.Equal("internal/templates/resource/themes/blank/page.svelte.gotxt", ResourceFilesMap["index_blank"])
-	is.Equal("internal/templates/resource/page.server.ts.gotxt", ResourceFilesMap["indexendpoint"])
+	is.Equal("internal/templates/resource/page.ts.gotxt", ResourceFilesMap["indexendpoint"])
 	is.Equal("internal/templates/resource/themes/sveltin/slug.svelte.gotxt", ResourceFilesMap["slug_sveltin"])
 	is.Equal("internal/templates/resource/slug.ts.gotxt", ResourceFilesMap["slugendpoint"])
 }
@@ -51,7 +51,7 @@ func TestSveltinMetadataFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("internal/templates/resource/metadata/libList.gotxt", MetadataFilesMap["lib_list"])
 	is.Equal("internal/templates/resource/metadata/themes/blank/page.svelte.gotxt", MetadataFilesMap["index_blank"])
-	is.Equal("internal/templates/resource/metadata/page.server.ts.gotxt", MetadataFilesMap["indexendpoint"])
+	is.Equal("internal/templates/resource/metadata/page.ts.gotxt", MetadataFilesMap["indexendpoint"])
 	is.Equal("internal/templates/resource/metadata/themes/sveltin/slug.svelte.gotxt", MetadataFilesMap["slug_sveltin"])
 	is.Equal("internal/templates/resource/metadata/slug.ts.gotxt", MetadataFilesMap["slugendpoint"])
 }

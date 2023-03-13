@@ -1,45 +1,13 @@
-{{- $resourceName := .Resource.Name | ToVariableName | ReplaceIfNested -}}
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { SEOWebPage } from '@sveltinio/seo/types';
 	import { assets, base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { website } from '$config/website.js';
-	import { canonicalPageUrl, getCoverImagePath } from '$lib/utils/strings.js';
-	import { JsonLdWebPage, PageMetaTags, JsonLdBreadcrumbs } from '@sveltinio/seo';
-	import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 	import { Breadcrumbs, TOC, PagesNavigator } from '@sveltinio/widgets';
 
 	export let data: PageData;
 
-	$: ({ actual, before, after, mdsvexComponent } = data);
-	$: current = actual;
-	$: previous = before;
-	$: next = after;
-
-	$: {{ $resourceName }}SlugPage = <SEOWebPage>{
-		url: canonicalPageUrl($page.url.pathname, website.baseURL),
-		title: current.metadata.title,
-		description: current.metadata.headline,
-		keywords: current.metadata.keywords || website.keywords,
-		author: current.metadata.author,
-		image: getCoverImagePath(current, website),
-		opengraph: {
-			type: OpenGraphType.Article,
-			article: {
-				published_at: new Date(current.metadata.created_at),
-				modified_at: new Date(current.metadata.updated_at)
-			}
-		},
-		twitter: {
-			type: TwitterCardType.Summary
-		}
-	};
+	$: ({ resource, current, previous, next, mdsvexComponent } = data);
 </script>
-
-<PageMetaTags data={ {{ $resourceName }}SlugPage } />
-<JsonLdWebPage data={ {{ $resourceName }}SlugPage } />
-<JsonLdBreadcrumbs url={$page.url.href} />
 
 <article class="page-wrapper">
 	<Breadcrumbs url={$page.url.href} />
@@ -62,7 +30,7 @@
 	{#if current.metadata.cover}
 		<div class="cover">
 			<img
-				src="{assets}/resources/{current.resource}/{current.metadata.slug}/{current.metadata.cover}"
+				src="{assets}/resources/{resource}/{current.metadata.slug}/{current.metadata.cover}"
 				alt="cover image for {current.metadata.title}"
 			/>
 		</div>
@@ -77,12 +45,12 @@
 	<PagesNavigator
 		prev={ {
 			label: previous.metadata.title,
-			href: `${base}/${previous.resource}/${previous.metadata.slug}`,
+			href: `${base}/${resource}/${previous.metadata.slug}`,
 			title: `link to ${previous.metadata.title}`
 		} }
 		next={ {
 			label: next.metadata.title,
-			href: `${base}/${next.resource}/${next.metadata.slug}`,
+			href: `${base}/${resource}/${next.metadata.slug}`,
 			title: `link to ${next.metadata.title}`
 		} }
 	/>

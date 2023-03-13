@@ -77,6 +77,9 @@ func (b *ProjectBuilder) setPathToTplFile() error {
 			b.PathToTplFile = b.EmbeddedResources[IndexPage]
 		}
 		return nil
+	case IndexEndpoint:
+		b.PathToTplFile = b.EmbeddedResources[IndexEndpoint]
+		return nil
 	default:
 		errN := errors.New("FileNotFound on EmbeddedFS")
 		return sveltinerr.NewDefaultError(errN)
