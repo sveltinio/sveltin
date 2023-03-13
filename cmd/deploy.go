@@ -43,8 +43,8 @@ var (
 Before running the command:
 
 - update the ".env.production" file to reflects your FTP server settings;
-- "svelte.config.js" and "sveltin.json" files share the same **adapter** configurations;
-- run "sveltin build" first.`)
+- check the **sveltekit.adapter** config in "sveltin.json" files to adapt it to your choices;
+- run "sveltin build".`)
 )
 
 // Bind command flags.
