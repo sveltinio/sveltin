@@ -8,14 +8,8 @@ import (
 	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/common"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
-)
-
-const (
-	// Svelte set svelte as the language used to scaffold a new page
-	Svelte string = "svelte"
-	// Markdown set markdown as the language used to scaffold a new page
-	Markdown string = "markdown"
 )
 
 //=============================================================================
@@ -46,8 +40,8 @@ func AskPageNameHandler(inputs []string) (string, error) {
 // SelectPageLanguageHandler if not flag passed, prompts the user to select the page type when creating new page.
 func SelectPageLanguageHandler(name string) (string, error) {
 	entries := []list.Item{
-		choose.Item{Name: Svelte, Desc: "Svelte"},
-		choose.Item{Name: Markdown, Desc: "Markdown (mdsvex)"},
+		choose.Item{Name: tpltypes.Svelte, Desc: "Svelte"},
+		choose.Item{Name: tpltypes.Markdown, Desc: "Markdown (mdsvex)"},
 	}
 
 	switch nameLenght := len(name); {
