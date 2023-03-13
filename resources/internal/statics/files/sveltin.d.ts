@@ -3,6 +3,11 @@
  ** This file exists to allow using sveltin's features with no lock-in to the sveltinio packages.
  */
 export namespace Sveltin {
+	type MdSveXResolver = {
+		default: Object;
+		metadata: Object;
+	};
+
 	type MdSveXComponent = {
 		meta: Record<string, any>;
 		path: string;
