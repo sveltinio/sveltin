@@ -52,22 +52,11 @@ func TestGetResourceRouteFilename(t *testing.T) {
 		name string
 		want string
 	}{
-		{
-			name: "index",
-			want: "+page.svelte",
-		},
-		{
-			name: "indexendpoint",
-			want: "+page.ts",
-		},
-		{
-			name: "slug",
-			want: "+page.svelte",
-		},
-		{
-			name: "slugendpoint",
-			want: "+page.ts",
-		},
+		{name: "index", want: "+page.svelte"},
+		{name: "index_pageload", want: "+page.ts"},
+		{name: "slug", want: "+page.svelte"},
+		{name: "slug_pageload", want: "+page.ts"},
+		{name: "slug_layout", want: "+layout.svelte"},
 	}
 	for _, tc := range tests {
 		is := is.New(t)
@@ -94,5 +83,6 @@ func loadConfigFile(filepath string) config.SveltinSettings {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	return settings
 }

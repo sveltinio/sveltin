@@ -88,8 +88,8 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 
 	// NEW FILE: src/routes/<page_name>/+page.ts>
 	pageLoadFile := &composer.File{
-		Name:       helpers.GetRouteFilename(IndexEndpointFileId, cfg.settings),
-		TemplateID: IndexEndpointFileId,
+		Name:       helpers.GetRouteFilename(IndexPageLoadFileId, cfg.settings),
+		TemplateID: IndexPageLoadFileId,
 		TemplateData: &config.TemplateData{
 			Page: pageData,
 		},

@@ -65,22 +65,22 @@ const (
 	ThemesFolder  string = "themes"
 )
 
-// File IDs for a Sveltin project structure.
+// File IDs for the Sveltin project structure.
 const (
 	ApiIndexFileId      string = "api_index"
 	ApiMetadataIndexId  string = "api_metadata_index"
 	ApiSlugFileId       string = "api_slug"
-	IndexFileId         string = "index"
-	IndexEndpointFileId string = "indexendpoint"
-	SlugFileId          string = "slug"
-	SlugEndpointFileId  string = "slugendpoint"
-	SlugLayoutFileId    string = "sluglayout"
+	IndexPageFileId     string = "index"
+	IndexPageLoadFileId string = "index_pageload"
+	SlugPageFileId      string = "slug"
+	SlugPageLoadFileId  string = "slug_pageload"
+	SlugLayoutFileId    string = "slug_layout"
 	MDsveXFileId        string = "mdsvex"
 	DummyImgFileId      string = "dummy"
 	SveltinDTSFileId    string = "sveltin_d_ts"
 )
 
-// File names for a Sveltin project structure.
+// File names for the Sveltin project structure.
 const (
 	ProjectSettingsFile string = "sveltin.json"
 	DefaultsConfigFile  string = "defaults.js.ts"

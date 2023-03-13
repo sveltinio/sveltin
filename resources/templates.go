@@ -46,20 +46,20 @@ var ProjectFilesMap = EmbeddedFSEntry{
 	"license":          "templates/misc/LICENSE.gotxt",
 	"index":            "templates/themes/index.svelte.gotxt",
 	"index_notheme":    "templates/themes/index.notheme.svelte.gotxt",
-	"indexendpoint":    "templates/themes/index.ts.gotxt",
+	"index_pageload":   "templates/themes/index.ts.gotxt",
 	"theme_config":     "templates/themes/theme.config.js.gotxt",
 }
 
 // ResourceFilesMap is the map for the resource template files.
 var ResourceFilesMap = EmbeddedFSEntry{
-	"lib":           "templates/resource/lib.gotxt",
-	"index_blank":   "templates/resource/themes/blank/page.svelte.gotxt",
-	"index_sveltin": "templates/resource/themes/sveltin/page.svelte.gotxt",
-	"indexendpoint": "templates/resource/page.ts.gotxt",
-	"slug_blank":    "templates/resource/themes/blank/slug.svelte.gotxt",
-	"slug_sveltin":  "templates/resource/themes/sveltin/slug.svelte.gotxt",
-	"slugendpoint":  "templates/resource/slug.ts.gotxt",
-	"sluglayout":    "templates/resource/layout.svelte.gotxt",
+	"lib":            "templates/resource/lib.gotxt",
+	"index_blank":    "templates/resource/themes/blank/page.svelte.gotxt",
+	"index_sveltin":  "templates/resource/themes/sveltin/page.svelte.gotxt",
+	"index_pageload": "templates/resource/page.ts.gotxt",
+	"slug_blank":     "templates/resource/themes/blank/slug.svelte.gotxt",
+	"slug_sveltin":   "templates/resource/themes/sveltin/slug.svelte.gotxt",
+	"slug_pageload":  "templates/resource/slug.ts.gotxt",
+	"slug_layout":    "templates/resource/layout.svelte.gotxt",
 }
 
 // APIFilesMap is the map for the api template files.
@@ -79,14 +79,14 @@ var MatchersFilesMap = EmbeddedFSEntry{
 
 // MetadataFilesMap is the map for the metadata template files.
 var MetadataFilesMap = EmbeddedFSEntry{
-	"lib_single":    "templates/resource/metadata/libSingle.gotxt",
-	"lib_list":      "templates/resource/metadata/libList.gotxt",
-	"index_blank":   "templates/resource/metadata/themes/blank/page.svelte.gotxt",
-	"index_sveltin": "templates/resource/metadata/themes/sveltin/page.svelte.gotxt",
-	"indexendpoint": "templates/resource/metadata/page.ts.gotxt",
-	"slug_blank":    "templates/resource/metadata/themes/blank/slug.svelte.gotxt",
-	"slug_sveltin":  "templates/resource/metadata/themes/sveltin/slug.svelte.gotxt",
-	"slugendpoint":  "templates/resource/metadata/slug.ts.gotxt",
+	"lib_single":     "templates/resource/metadata/libSingle.gotxt",
+	"lib_list":       "templates/resource/metadata/libList.gotxt",
+	"index_blank":    "templates/resource/metadata/themes/blank/page.svelte.gotxt",
+	"index_sveltin":  "templates/resource/metadata/themes/sveltin/page.svelte.gotxt",
+	"index_pageload": "templates/resource/metadata/page.ts.gotxt",
+	"slug_blank":     "templates/resource/metadata/themes/blank/slug.svelte.gotxt",
+	"slug_sveltin":   "templates/resource/metadata/themes/sveltin/slug.svelte.gotxt",
+	"slug_pageload":  "templates/resource/metadata/slug.ts.gotxt",
 }
 
 // PageFilesMap is the map for the page template files.
@@ -95,7 +95,7 @@ var PageFilesMap = EmbeddedFSEntry{
 	"svelte_sveltin":   "templates/page/themes/sveltin/page.svelte.gotxt",
 	"markdown_blank":   "templates/page/themes/blank/page.svx.gotxt",
 	"markdown_sveltin": "templates/page/themes/sveltin/page.svx.gotxt",
-	"indexendpoint":    "templates/page/page.ts.gotxt",
+	"index_pageload":   "templates/page/page.ts.gotxt",
 }
 
 // ContentFilesMap is the map for the content template files.

@@ -73,7 +73,7 @@ const (
 	// IndexThemeSveltin is the string for the 'index' file when sveltin theme.
 	IndexThemeSveltin string = "index_sveltin"
 	// IndexEndpoint is the string for the 'index.ts' file.
-	IndexEndpoint string = "indexendpoint"
+	IndexPageLoad string = "index_pageload"
 	// Slug is the string for the 'slug' file.
 	Slug string = "slug"
 	// SlugThemeBlank is the string for the 'slug' file when new theme.
@@ -81,9 +81,9 @@ const (
 	// SlugThemeSveltin is the string for the 'slug' file when sveltin theme.
 	SlugThemeSveltin string = "slug_sveltin"
 	// SlugEndpoint is the string for the 'slug' file.
-	SlugEndpoint string = "slugendpoint"
+	SlugPageLoad string = "slug_pageload"
 	// SlugLayout is the string from the 'layout' file
-	SlugLayout string = "sluglayout"
+	SlugLayout string = "slug_layout"
 
 	//=============================================================================
 

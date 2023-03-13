@@ -63,8 +63,8 @@ func (b *MetadataContentBuilder) setPathToTplFile() error {
 			b.PathToTplFile = b.EmbeddedResources[IndexThemeSveltin]
 		}
 		return nil
-	case IndexEndpoint:
-		b.PathToTplFile = b.EmbeddedResources[IndexEndpoint]
+	case IndexPageLoad:
+		b.PathToTplFile = b.EmbeddedResources[IndexPageLoad]
 		return nil
 	case Slug:
 		if b.TemplateData.ProjectSettings.Theme.Style == tpltypes.Blank {
@@ -73,8 +73,8 @@ func (b *MetadataContentBuilder) setPathToTplFile() error {
 			b.PathToTplFile = b.EmbeddedResources[SlugThemeSveltin]
 		}
 		return nil
-	case SlugEndpoint:
-		b.PathToTplFile = b.EmbeddedResources[SlugEndpoint]
+	case SlugPageLoad:
+		b.PathToTplFile = b.EmbeddedResources[SlugPageLoad]
 		return nil
 	case Lib:
 		if b.TemplateData.Metadata.Type == "single" {

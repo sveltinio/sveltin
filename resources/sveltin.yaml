@@ -12,10 +12,10 @@ paths:
 pages:
   content: index.svx
   index: +page.svelte
-  indexendpoint: +page.ts
+  index_pageload: +page.ts
   slug: +page.svelte
-  slugendpoint: +page.ts
-  sluglayout: +layout.svelte
+  slug_pageload: +page.ts
+  slug_layout: +layout.svelte
 api:
   version: v1
   filename: +server.ts

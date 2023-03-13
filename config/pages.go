@@ -11,8 +11,8 @@ package config
 type Pages struct {
 	Content       string `mapstructure:"content"`
 	Index         string `mapstructure:"index"`
-	IndexEndpoint string `mapstructure:"indexendpoint"`
+	IndexEndpoint string `mapstructure:"index_pageload"`
 	Slug          string `mapstructure:"slug"`
-	SlugEndpoint  string `mapstructure:"slugendpoint"`
-	SlugLayout    string `mapstructure:"sluglayout"`
+	SlugEndpoint  string `mapstructure:"slug_pageload"`
+	SlugLayout    string `mapstructure:"slug_layout"`
 }

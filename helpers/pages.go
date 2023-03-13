@@ -17,13 +17,13 @@ func GetRouteFilename(txt string, s *config.SveltinSettings) string {
 	switch txt {
 	case "index":
 		return s.GetIndexPageFilename()
-	case "indexendpoint":
+	case "index_pageload":
 		return s.GetIndexEndpointFilename()
 	case "slug":
 		return s.GetSlugPageFilename()
-	case "slugendpoint":
+	case "slug_pageload":
 		return s.GetSlugEndpointFilename()
-	case "sluglayout":
+	case "slug_layout":
 		return s.GetSlugLayoutFilename()
 	default:
 		return ""
