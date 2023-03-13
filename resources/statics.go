@@ -11,16 +11,16 @@ import "embed"
 
 // SveltinStaticFS is the name for the embedded assets used by Sveltin.
 //
-//go:embed internal/statics/*
+//go:embed statics/*
 var SveltinStaticFS embed.FS
 
 // SveltinFilesFS is a map for entries in files folder.
 var SveltinFilesFS = EmbeddedFSEntry{
-	"mdsvex":       "internal/statics/files/mdsvex.config.js",
-	"sveltin_d_ts": "internal/statics/files/sveltin.d.ts",
+	"mdsvex":       "statics/files/mdsvex.config.js",
+	"sveltin_d_ts": "statics/files/sveltin.d.ts",
 }
 
 // SveltinImagesFS is a map for entries in images folder.
 var SveltinImagesFS = EmbeddedFSEntry{
-	"dummy": "internal/statics/images/dummy.jpeg",
+	"dummy": "statics/images/dummy.jpeg",
 }

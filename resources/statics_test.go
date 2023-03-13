@@ -8,10 +8,10 @@ import (
 
 func TestSveltinFilesFS(t *testing.T) {
 	is := is.New(t)
-	is.Equal("internal/statics/files/mdsvex.config.js", SveltinFilesFS["mdsvex"])
+	is.Equal("statics/files/mdsvex.config.js", SveltinFilesFS["mdsvex"])
 }
 
 func TestSveltinStaticsFS(t *testing.T) {
 	is := is.New(t)
-	is.Equal("internal/statics/images/dummy.jpeg", SveltinImagesFS["dummy"])
+	is.Equal("statics/images/dummy.jpeg", SveltinImagesFS["dummy"])
 }

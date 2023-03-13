@@ -38,7 +38,7 @@ func TestTemplates(t *testing.T) {
 	}
 
 	tplConfig := BuildTemplate(pathToTplFile, nil, data)
-	is.Equal("internal/templates/themes/theme.config.js.gotxt", tplConfig.PathToTplFile)
+	is.Equal("templates/themes/theme.config.js.gotxt", tplConfig.PathToTplFile)
 
 	var dummyFuncMap template.FuncMap
 	is.Equal(reflect.TypeOf(dummyFuncMap), reflect.TypeOf(tplConfig.Funcs))
