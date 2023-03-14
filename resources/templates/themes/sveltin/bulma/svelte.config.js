@@ -1,5 +1,5 @@
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
 import { mdsvex } from 'mdsvex';
