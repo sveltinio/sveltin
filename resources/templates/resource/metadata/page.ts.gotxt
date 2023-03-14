@@ -24,7 +24,7 @@ export const load = (async ({ url }) => {
 		url: canonicalPageUrl(url.pathname, website.baseURL),
 		title: capitalizeFirstLetter(pageTitle),
 		description: pageDescription,
-		keywords: keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
+		keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
 		image: getFavicon(website),
 		opengraph: {
 			type: OpenGraphType.Article
