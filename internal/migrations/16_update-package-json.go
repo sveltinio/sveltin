@@ -19,11 +19,11 @@ import (
 
 var npmPackagesMap = map[string]string{
 	"@indaco/svelte-iconoir":   "^3.3.1",
-	"@sveltinio/essentials":    "^0.6.1",
-	"@sveltinio/media-content": "^0.3.8",
-	"@sveltinio/seo":           "^0.3.5",
-	"@sveltinio/services":      "^0.3.4",
-	"@sveltinio/widgets":       "^0.6.1",
+	"@sveltinio/essentials":    "^0.7.0",
+	"@sveltinio/media-content": "^0.4.0",
+	"@sveltinio/seo":           "^0.4.0",
+	"@sveltinio/services":      "^0.4.0",
+	"@sveltinio/widgets":       "^0.7.0",
 	"@sveltejs/adapter-static": "2.0.1",
 	"@sveltejs/kit":            "1.11.0",
 	"@types/gtag.js":           "^0.0.12",
