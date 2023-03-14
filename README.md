@@ -118,7 +118,7 @@ Please see the [documentation](https://docs.sveltin.io) for more information abo
 ### :wrench: Prerequisites
 
 - Git
-- Node (v16.9.0 or higher is required)
+- Node (v16.19 LTS or higher is required)
 
 ### OSX and Linux via Homebrew
 
@@ -335,7 +335,7 @@ Sveltin leverages many great open source libraries:
 | [afero](https://github.com/spf13/afero)                 | `1.9.5`   | Apache-2.0   |
 | [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
 | [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |
-| [prompti](https://github.com/sveltinio/prompti)         | `0.2.0`   | MIT          |
+| [prompti](https://github.com/sveltinio/prompti)         | `0.2.2`   | MIT          |
 | [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
 | [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
 | [text](https://golang.org/x/text)                       | `0.8.0`   | BSD-3-Clause |
