@@ -97,11 +97,11 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient(npmClientName, cfg.log)
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(markup.H1("Initializing a new Sveltin project"))
+	cfg.log.Plain(markup.H1("Setup a new Sveltin project"))
 
 	// Clone starter template github repository
 	starterTemplate := cfg.startersMap[SvelteKitStarter]
-	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", starterTemplate.Name))
+	cfg.log.Info(fmt.Sprintf("Getting the %s", starterTemplate.Name))
 
 	gitClient := shell.NewGitClient()
 	err = gitClient.RunClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
@@ -180,7 +180,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 
 	// INITIALIZE GIT REPO
 	if isInitGitRepo(withGit) {
-		cfg.log.Info("Initializing empty Git repository")
+		cfg.log.Info("Initializing an empty Git repository")
 		err = gitClient.RunInit(projectFolder.GetPath(), true)
 		utils.ExitIfError(err)
 	}
