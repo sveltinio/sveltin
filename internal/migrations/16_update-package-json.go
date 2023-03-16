@@ -25,15 +25,15 @@ var npmPackagesMap = map[string]string{
 	"@sveltinio/services":      "^0.4.0",
 	"@sveltinio/widgets":       "^0.7.0",
 	"@sveltejs/adapter-static": "2.0.1",
-	"@sveltejs/kit":            "1.11.0",
+	"@sveltejs/kit":            "1.12.0",
 	"@types/gtag.js":           "^0.0.12",
-	"rimraf":                   "^4.1.2",
-	"svelte":                   "^3.55.1",
-	"svelte-check":             "^3.0.4",
+	"rimraf":                   "^4.4.0",
+	"svelte":                   "^3.57.0",
+	"svelte-check":             "^3.1.4",
 	"svelte-preprocess":        "^5.0.1",
 	"tslib":                    "^2.5.0",
 	"typescript":               "^4.9.5",
-	"vite":                     "^4.1.4",
+	"vite":                     "^4.2.0",
 }
 
 //=============================================================================
