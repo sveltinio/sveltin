@@ -1,5 +1,5 @@
 <script>
-	import { Link } from '@sveltinio/essentials';
+	import { Link } from '@sveltinio/essentials/link';
 </script>
 
 <section>

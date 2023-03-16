@@ -11,11 +11,11 @@
 		JsonLdWebSite,
 		JsonLdBreadcrumbs,
 		JsonLdSiteNavigationElements,
-		JsonLdWebPage,
-		PageMetaTags
-	} from '@sveltinio/seo';
-	import { ScrollToTopButton } from '@sveltinio/widgets';
-	//import { GoogleFonts } from '@sveltinio/services';
+		JsonLdWebPage
+	} from '@sveltinio/seo/schemaorg';
+	import { PageMetaTags } from '@sveltinio/seo/metadata';
+	import { ScrollToTopButton } from '@sveltinio/widgets/scroll-to-top';
+	//import { GoogleFonts } from '@sveltinio/services/google';
 
 	const sortedMenu = orderBy(menu, 'weight');
 </script>

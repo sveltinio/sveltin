@@ -1,12 +1,12 @@
 {{- $resourceName := .Resource.Name -}}
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { assets, base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { capitalizeFirstLetter } from '$lib/utils/strings.js';
-	import { Breadcrumbs, Card, CardAction, CardImage } from '@sveltinio/widgets';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
+	import { Card, CardAction, CardImage } from '@sveltinio/widgets/card';
 
-	export let data: PageData;
+	export let data;
 
 	$: ({ resource, items } = data);
 </script>

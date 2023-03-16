@@ -1,12 +1,11 @@
 {{- $mdName := .Metadata.Name | ToVariableName -}}
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { Breadcrumbs } from '@sveltinio/widgets';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { capitalizeFirstLetter } from '$lib/utils/strings.js';
 
-	export let data: PageData;
+	export let data;
 
 	$: ({ mdName, metadata } = data);
 	$: itemsCounter = metadata.items.length;

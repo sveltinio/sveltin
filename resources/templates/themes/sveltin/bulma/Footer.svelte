@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Link } from '@sveltinio/essentials/link';
 	import { sveltinVersion, sveltekitVersion } from '$config/defaults.js';
 
 	export let logoSrc: string;
@@ -9,14 +10,14 @@
 		class="is-full is-flex is-flex-direction-column is-align-items-start mx-auto wrapper "
 	>
 		<div class="is-flex-shrink-0 has-text-left" style="width: 18rem">
-			<a href="/">
+			<Link id="quickStartLink" href="/">
 				<img
 					src={logoSrc}
 					alt="sveltin logo"
 					style="width: 100px; height: 48px;"
 				/>
-				<span class="is-sr-only">Sveltin Logo</span>
-			</a>
+				<span class="sr-only">Sveltin Logo</span>
+			</Link>
 
 			<p
 				class="has-text-grey-light has-text-weight-medium mt-6"

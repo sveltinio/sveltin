@@ -1,5 +1,5 @@
 <script>
-	import { Link } from '@sveltinio/essentials';
+	import { Link } from '@sveltinio/essentials/link';
 </script>
 
 <section class="mx-auto px-6 py-44 container is-max-widescreen">

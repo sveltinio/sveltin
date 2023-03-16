@@ -12,14 +12,15 @@ draft: false
 ---
 
 <script lang="ts">
-  import { YouTube } from '@sveltinio/media-content';
+import type { IYouTubeSettings } from '@sveltinio/media-content/types';
+import { YouTube } from '@sveltinio/media-content/youtube';
 
-  const youtubeSampleVideoSettings: IYouTubeSettings = {
+  const youtubeSampleVideoSettings = {
     autoplay: false,
-    ccLangPref: 'it',
+    ccLangPref: 'en',
     color: 'white',
     controls: true
-  }
+  } satisfies IYouTubeSettings;
 </script>
 
 ## Headings

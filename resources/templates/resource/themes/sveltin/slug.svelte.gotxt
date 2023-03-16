@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { assets, base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { Breadcrumbs, TOC, PagesNavigator } from '@sveltinio/widgets';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
+	import { TOC } from '@sveltinio/widgets/toc';
+	import { PagesNavigator } from '@sveltinio/widgets/pagesnavigator';
 
-	export let data: PageData;
+	export let data;
 
 	$: ({ resource, current, previous, next, mdsvexComponent } = data);
 </script>

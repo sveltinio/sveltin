@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Link } from '@sveltinio/essentials/link';
 	import { sveltinVersion, sveltekitVersion } from '$config/defaults.js';
 
 	export let logoSrc: string;
@@ -7,14 +8,15 @@
 <footer>
 	<div class="wrapper">
 		<div class="content">
-			<a href="/">
+			<Link id="quickStartLink" href="/">
 				<img
 					src={logoSrc}
 					alt="sveltin logo"
 					style="width: 100px; height: 48px;"
 				/>
 				<span class="sr-only">Sveltin Logo</span>
-			</a>
+			</Link>
+
 			<p>
 				The CLI to Boost Your Productivity creating SvelteKit powered
 				static websites.

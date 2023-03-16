@@ -10,11 +10,11 @@
 		JsonLdWebSite,
 		JsonLdBreadcrumbs,
 		JsonLdSiteNavigationElements,
-		JsonLdWebPage,
-		PageMetaTags
-	} from '@sveltinio/seo';
-	import { GoogleFonts } from '@sveltinio/services';
-	import { ScrollToTopButton } from '@sveltinio/widgets';
+		JsonLdWebPage
+	} from '@sveltinio/seo/schemaorg';
+	import { PageMetaTags } from '@sveltinio/seo/metadata';
+	import { GoogleFonts } from '@sveltinio/services/google';
+	import { ScrollToTopButton } from '@sveltinio/widgets/scroll-to-top';
 	import Footer from '$themes/{{ .Theme.Name }}/partials/Footer.svelte';
 
 	const sortedMenu = orderBy(menu, 'weight');

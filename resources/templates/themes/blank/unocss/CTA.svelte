@@ -1,6 +1,6 @@
 <script>
 	import { sveltinVersion, sveltekitVersion } from '$config/defaults.js';
-	import { Link } from '@sveltinio/essentials';
+	import { Link } from '@sveltinio/essentials/link';
 </script>
 
 <h1>Your Sveltin project is up & running!</h1>
