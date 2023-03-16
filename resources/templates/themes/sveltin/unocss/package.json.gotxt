@@ -49,7 +49,7 @@
 		"remark-emoji": "^3.1.1",
 		"remark-reading-time": "1.0.1",
 		"rimraf": "^4.4.0",
-		"svelte": "^3.56.0",
+		"svelte": "^3.57.0",
 		"svelte-check": "^3.1.4",
 		"svelte-preprocess": "^5.0.1",
 		"tslib": "^2.5.0",
