@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { TOC } from '@sveltinio/widgets/toc';
-	import { PagesNavigator } from '@sveltinio/widgets/pagesnavigator';
+	import { PagesNavigator } from '@sveltinio/widgets/pages-navigator';
 
 	export let data;
 
