@@ -18,22 +18,20 @@ import (
 )
 
 var npmPackagesMap = map[string]string{
-	"@indaco/svelte-iconoir":   "^3.3.1",
-	"@sveltinio/essentials":    "^0.7.0",
-	"@sveltinio/media-content": "^0.4.0",
-	"@sveltinio/seo":           "^0.4.0",
-	"@sveltinio/services":      "^0.4.0",
-	"@sveltinio/widgets":       "^0.7.0",
+	"@sveltinio/essentials":    "^0.7.1",
+	"@sveltinio/media-content": "^0.4.1",
+	"@sveltinio/seo":           "^0.4.1",
+	"@sveltinio/services":      "^0.4.1",
+	"@sveltinio/widgets":       "^0.7.1",
 	"@sveltejs/adapter-static": "2.0.1",
-	"@sveltejs/kit":            "1.12.0",
-	"@types/gtag.js":           "^0.0.12",
+	"@sveltejs/kit":            "1.13.0",
 	"rimraf":                   "^4.4.0",
 	"svelte":                   "^3.57.0",
 	"svelte-check":             "^3.1.4",
 	"svelte-preprocess":        "^5.0.1",
 	"tslib":                    "^2.5.0",
-	"typescript":               "^4.9.5",
-	"vite":                     "^4.2.0",
+	"typescript":               "^5.0.2",
+	"vite":                     "^4.2.1",
 }
 
 //=============================================================================
