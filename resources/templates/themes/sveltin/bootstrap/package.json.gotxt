@@ -15,7 +15,6 @@
 		"format": "prettier --plugin-search-dir=. --write ."
 	},
 	"devDependencies": {
-		"@indaco/svelte-iconoir": "^3.3.1",
 		"@popperjs/core": "^2.11.6",
 		"@sveltejs/adapter-static": "2.0.1",
 		"@sveltejs/kit": "1.12.0",
@@ -27,7 +26,6 @@
 		"@sveltinio/services": "^0.4.1",
 		"@sveltinio/ts-utils": "^0.2.0",
 		"@sveltinio/widgets": "^0.7.1",
-		"@types/gtag.js": "^0.0.12",
 		"@types/node": "^18.15.3",
 		"@typescript-eslint/eslint-plugin": "^5.55.0",
 		"@typescript-eslint/parser": "^5.55.0",
