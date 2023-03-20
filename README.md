@@ -328,7 +328,7 @@ Sveltin leverages many great open source libraries:
 | [bubble](https://github.com/charmbracelet/bubbles)      | `0.15.0`  | MIT          |
 | [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.2`  | MIT          |
 | [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.6.0`   | MIT          |
-| [validator](https://github.com/go-playground/validator) | `10.11.2` | MIT          |
+| [validator](https://github.com/go-playground/validator) | `10.12.0` | MIT          |
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
 | [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
 | [is](https://github.com/matryer/is)                     | `1.4.1`   | MIT          |
