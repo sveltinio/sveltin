@@ -4,12 +4,12 @@
  */
 export namespace Sveltin {
 	type MdSveXResolver = {
-		default: Object;
-		metadata: Object;
+		default: object;
+		metadata: object;
 	};
 
 	type MdSveXComponent = {
-		meta: Record<string, any>;
+		meta: Record<PropertyKey, any>;
 		path: string;
 	};
 
@@ -40,7 +40,7 @@ export namespace Sveltin {
 		headline?: string;
 		created_at?: string;
 		updated_at?: string;
-		readingTime?: Record<string, string>;
+		readingTime?: Record<PropertyKey, string>;
 		cover?: string;
 		misc?: DynamicObject;
 	};
