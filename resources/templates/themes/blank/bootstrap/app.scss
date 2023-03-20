@@ -1,7 +1,8 @@
 @charset "utf-8";
 
 @import url('./tw-preflight.css');
-@import url('../static/css/github/github-markdown-light-5.2.0.css') screen;
+@import url('../static/css/github-markdown-5.2.0.min.css') screen;
+/* Additional themes available at https://github.com/PrismJS/prism-themes */
 @import url('../static/css/prism/themes/prism-shades-of-purple.css') screen;
 
 /*
@@ -83,7 +84,10 @@ pre[class*='language-'] {
 	background-color: $orange;
 }
 
-/* Overriding styles inherit from github-markdown-light-5.2.0.css */
+/*
+ * https://github.com/sindresorhus/github-markdown-css
+ * Overriding styles inherit from github-markdown-5.2.0.min.css
+ */
 .markdown-body {
 	box-sizing: border-box;
 	margin: 3rem auto 0.75rem;

@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+/* Additional themes available at https://github.com/PrismJS/prism-themes */
 @import url('../static/css/prism/themes/prism-shades-of-purple.css') screen;
 
 html {
