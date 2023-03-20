@@ -2,7 +2,7 @@
 <script lang="ts">
 	import { assets, base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { capitalizeFirstLetter } from '$lib/utils/strings.js';
+	import { toTitle } from '@sveltinio/ts-utils/strings';
 	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { Card, CardAction, CardImage } from '@sveltinio/widgets/card';
 
@@ -15,7 +15,7 @@
 	<Breadcrumbs url={$page.url.href} />
 	<div class="page-wrapper__content">
 		{#if items.length != 0}
-			<h1>{capitalizeFirstLetter(resource)}</h1>
+			<h1>{toTitle(resource)}</h1>
 			<div class="cards">
 				{#each items as item}
 					<Card

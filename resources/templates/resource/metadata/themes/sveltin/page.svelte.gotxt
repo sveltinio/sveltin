@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
-	import { capitalizeFirstLetter } from '$lib/utils/strings.js';
+	import { toTitle } from '@sveltinio/ts-utils/strings';
 
 	export let data;
 
@@ -13,7 +13,7 @@
 <div class="page-wrapper">
 	<Breadcrumbs url={$page.url.href} />
 	<div class="page-wrapper__content">
-		<h1>Grouped by {capitalizeFirstLetter(mdName)}</h1>
+		<h1>Grouped by {toTitle(mdName)}</h1>
 		{#if metadata.length != 0}
 			{#each metadata as {{ $mdName}} }
 			<h2>

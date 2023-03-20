@@ -1,11 +1,13 @@
 {{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
 import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
+import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
 import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-import { capitalizeFirstLetter, canonicalPageUrl, getFavicon } from '$lib/utils/strings.js';
+import { canonicalURL, defaultImage } from '@sveltinio/ts-utils/urls';
+import { toTitle } from '@sveltinio/ts-utils/strings';
 
 //! Edit for page SEO related data.
 let pageTitle = '';
@@ -21,13 +23,15 @@ export const load = (async ({ url, params }) => {
 	pageTitle = slug;
 	pageDescription = `Description for ${pageTitle}.`;
 
+	const baseUrl = dev ? url.origin : website.baseURL;
+
 	const metadata = await groupedBy(slug);
 	const seoData = {
-		url: canonicalPageUrl(url.pathname, website.baseURL),
-		title: capitalizeFirstLetter(pageTitle),
+		url: canonicalURL(baseUrl, url.pathname),
+		title: toTitle(pageTitle),
 		description: pageDescription,
 		keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
-		image: getFavicon(website),
+		image: defaultImage(baseUrl),
 		opengraph: {
 			type: OpenGraphType.Article
 		},

@@ -2,12 +2,13 @@
 {{- $resourceNameAsVar := $resourceName | ToVariableName | ReplaceIfNested -}}
 import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
-import { error } from '@sveltejs/kit';
 import { dev } from '$app/environment';
+import { error } from '@sveltejs/kit';
 import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-import { capitalizeFirstLetter, canonicalPageUrl, getCoverImagePath } from '$lib/utils/strings.js';
+import { canonicalURL, makeImagePath } from '@sveltinio/ts-utils/urls';
+import { toTitle } from '@sveltinio/ts-utils/strings';
 
 /*
  * Returns values available to the page and page SEO data used
@@ -19,14 +20,15 @@ export const load = (async ({ url, params }) => {
 	const { metadata } = current;
 
 	const baseUrl = dev ? url.origin : website.baseURL;
+	const imagePath = makeImagePath(baseUrl, 'resources', url.pathname, metadata.cover);
 
 	const seoData = {
-		url: canonicalPageUrl(url.pathname, baseUrl),
-		title: capitalizeFirstLetter(metadata.title),
+		url: canonicalURL(baseUrl, url.pathname),
+		title: toTitle(metadata.title),
 		description: metadata.headline,
 		keywords: metadata.keywords.length != 0 ? metadata.keywords : website.keywords,
 		author: metadata.author,
-		image: getCoverImagePath(current, website),
+		image: imagePath,
 		opengraph: {
 			type: OpenGraphType.Article,
 			article: {

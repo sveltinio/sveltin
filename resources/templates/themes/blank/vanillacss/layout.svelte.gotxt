@@ -4,7 +4,7 @@
 	import { website } from '$config/website.js';
 	//import { googleFonts } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
-	import orderBy from 'lodash-es/orderBy.js';
+	import { orderBy } from '@sveltinio/ts-utils/collections';
 	import {
 		JsonLdWebSite,
 		JsonLdBreadcrumbs,

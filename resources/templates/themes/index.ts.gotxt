@@ -1,20 +1,24 @@
 import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
+import { dev } from '$app/environment';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-import { canonicalPageUrl, capitalizeFirstLetter, getSocialImage } from '$lib/utils/strings.js';
+import { canonicalURL, defaultImage } from '@sveltinio/ts-utils/urls';
+import { toTitle } from '@sveltinio/ts-utils/strings';
 
 /*
  * Returns values available to the page and page SEO data used
  * by the SEO components in the root layout via the $page.data prop.
  */
 export const load = (async ({ url }) => {
+	const baseUrl = dev ? url.origin : website.baseURL;
+
 	const seoData = {
-		url: canonicalPageUrl(url.pathname, website.baseURL),
-		title: capitalizeFirstLetter(website.name),
+		url: canonicalURL(baseUrl, url.pathname),
+		title: toTitle(website.name),
 		description: website.description,
 		keywords: website.keywords,
-		image: getSocialImage(website.baseURL, '/images/sveltin', 'logo.png'),
+		image: defaultImage(baseUrl),
 		opengraph: {
 			type: OpenGraphType.Article
 		},

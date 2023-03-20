@@ -1,14 +1,15 @@
 {{- $resourceName := .Metadata.Resource | ToVariableName | Capitalize -}}
 {{- $mdName := .Metadata.Name | ToSnakeCase -}}
 import type { Sveltin } from '$sveltin';
-import { groupedByMany } from '$lib/utils/collections.js';
+import { groupedByMany } from '@sveltinio/ts-utils/collections';
 import { list } from './load{{ $resourceName }}';
 
 export const all = async (): Promise<Sveltin.ContentMetadata[]> => {
+	const selectorPath = 'meta.';
 	const mdName = '{{ $mdName }}';
 	const data = await list();
-	const values = ['title', 'slug', 'headline'];
-	const grouped = groupedByMany(mdName, data, values);
+	const filteredProps = ['title', 'slug', 'headline'].map((path) => selectorPath.concat(path));
+	const grouped = groupedByMany(selectorPath.concat(mdName), data, filteredProps);
 
 	return grouped.reduce((acc:  Array<Sveltin.ContentMetadata>, curr) => {
 		const { name, items } = curr;

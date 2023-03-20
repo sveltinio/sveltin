@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { assets, base } from '$app/paths';
 	import { page } from '$app/stores';
+	import { toTitle } from '@sveltinio/ts-utils/strings';
 	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { Card, CardAction, CardImage } from '@sveltinio/widgets/card';
 
@@ -14,7 +15,7 @@
 	<Breadcrumbs url={$page.url.href} />
 	<div>
 		{#if items.length != 0}
-			<h1>{capitalizeFirstLetter(resource)}</h1>
+			<h1>{toTitle(resource)}</h1>
 			{#each items as item}
 				<Card
 					title={item.metadata.title}

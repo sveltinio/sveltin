@@ -1,6 +1,7 @@
 import type { Sveltin } from '$sveltin';
+import { orderBy } from '@sveltinio/ts-utils/collections';
 
-export async function list(orderdByDate: boolean = true) {
+export async function list(orderdByDate = true) {
 	const contentFiles = import.meta.glob('/{{ .Settings.Paths.Content }}/{{ .Resource.Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
 
@@ -18,7 +19,7 @@ export async function list(orderdByDate: boolean = true) {
 
 	contents = contents.filter((elem) => !elem.meta['draft']);
 	if (orderdByDate) {
-		return contents.sort((a, b) => (a.meta['created_at'] < b.meta['created_at'] ? 1 : -1));
+		return orderBy(contents, 'meta.created_at');
 	}
 
 	return contents;
