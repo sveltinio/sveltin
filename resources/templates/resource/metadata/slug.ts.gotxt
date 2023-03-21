@@ -24,23 +24,23 @@ export const load = (async ({ url, params }) => {
 	pageDescription = `Description for ${pageTitle}.`;
 
 	const baseUrl = dev ? url.origin : website.baseURL;
-
 	const metadata = await groupedBy(slug);
-	const seoData = {
-		url: canonicalURL(baseUrl, url.pathname),
-		title: toTitle(pageTitle),
-		description: pageDescription,
-		keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
-		image: defaultImage(baseUrl),
-		opengraph: {
-			type: OpenGraphType.Article
-		},
-		twitter: {
-			type: TwitterCardType.Summary
-		}
-	} satisfies SEOWebPage;
 
-	if (metadata) {
+	if (typeof metadata !== "undefined") {
+		const seoData = {
+			url: canonicalURL(baseUrl, url.pathname),
+			title: toTitle(pageTitle),
+			description: pageDescription,
+			keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
+			image: defaultImage(baseUrl),
+			opengraph: {
+				type: OpenGraphType.Article
+			},
+			twitter: {
+				type: TwitterCardType.Summary
+			}
+		} satisfies SEOWebPage;
+
 		return {
 			mdName: slug,
 			seoData,

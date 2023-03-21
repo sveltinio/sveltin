@@ -17,31 +17,31 @@ import { toTitle } from '@sveltinio/ts-utils/strings';
 export const load = (async ({ url, params }) => {
 	const { slug } = params;
 	const { resource, status, current, previous, next } = await getSingle(slug);
-	const { metadata } = current;
-
-	const baseUrl = dev ? url.origin : website.baseURL;
-	const imagePath = makeImagePath(baseUrl, 'resources', url.pathname, metadata.cover);
-
-	const seoData = {
-		url: canonicalURL(baseUrl, url.pathname),
-		title: toTitle(metadata.title),
-		description: metadata.headline,
-		keywords: metadata.keywords.length != 0 ? metadata.keywords : website.keywords,
-		author: metadata.author,
-		image: imagePath,
-		opengraph: {
-			type: OpenGraphType.Article,
-			article: {
-				published_at: new Date(metadata.created_at),
-				modified_at: new Date(metadata.updated_at)
-			}
-		},
-		twitter: {
-			type: TwitterCardType.Summary
-		}
-	} satisfies SEOWebPage;
-
 	if (status == 200) {
+		const { metadata } = current;
+
+		const baseUrl = dev ? url.origin : website.baseURL;
+		const imagePath = makeImagePath(baseUrl, 'resources', url.pathname, metadata.cover);
+
+		const seoData = {
+			url: canonicalURL(baseUrl, url.pathname),
+			title: toTitle(metadata.title),
+			description: metadata.headline,
+			keywords: metadata.keywords.length != 0 ? metadata.keywords : website.keywords,
+			author: metadata.author,
+			image: imagePath,
+			opengraph: {
+				type: OpenGraphType.Article,
+				article: {
+					published_at: new Date(metadata.created_at),
+					modified_at: new Date(metadata.updated_at)
+				}
+			},
+			twitter: {
+				type: TwitterCardType.Summary
+			}
+		} satisfies SEOWebPage;
+
 		return {
 			resource,
 			seoData,

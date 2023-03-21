@@ -7,24 +7,28 @@
 	//import { googleFonts } from '$config/externals.js';
 	import { menu } from '$config/menu.js';
 	import { orderBy } from '@sveltinio/ts-utils/collections';
+	import { PageMetaTags } from '@sveltinio/seo/metadata';
 	import {
 		JsonLdWebSite,
 		JsonLdBreadcrumbs,
-		JsonLdSiteNavigationElements,
-		JsonLdWebPage
+		JsonLdWebPage,
+		JsonLdSiteNavigationElements
 	} from '@sveltinio/seo/schemaorg';
-	import { PageMetaTags } from '@sveltinio/seo/metadata';
 	import { ScrollToTopButton } from '@sveltinio/widgets/scroll-to-top';
 	//import { GoogleFonts } from '@sveltinio/services/google';
 
 	const sortedMenu = orderBy(menu, 'weight');
 </script>
 
-<PageMetaTags data={$page.data.seoData} />
+<!-- SEO Components -->
+{#if $page.data && $page.data.seoData}
+	<PageMetaTags data={$page.data.seoData} />
+	<JsonLdBreadcrumbs url={$page.url.href} />
+	<JsonLdWebPage data={$page.data.seoData} />
+{/if}
 <JsonLdWebSite data={website} />
-<JsonLdBreadcrumbs url={$page.url.href} />
 <JsonLdSiteNavigationElements baseURL={website.baseURL} data={sortedMenu} />
-<JsonLdWebPage data={$page.data.seoData} />
+<!-- End of SEO Components-->
 
 <!-- <GoogleFonts fonts={googleFonts} /> -->
 
