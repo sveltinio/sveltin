@@ -1,3 +1,10 @@
 {{- $pageName := .Page.Name | Capitalize -}}
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
+</script>
+
 <!-- Page markup-->
+<Breadcrumbs url={$page.url.href} />
+
 <h1>This is the {{ $pageName }} page</h1>

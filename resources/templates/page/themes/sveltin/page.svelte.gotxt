@@ -1,7 +1,14 @@
 {{- $pageName := .Page.Name | Capitalize -}}
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
+</script>
+
 <!-- Page markup-->
 <section class="page">
 	<div class="content">
+		<Breadcrumbs url={$page.url.href} />
+
 		<div class="centered">
 			<h1>This is the {{ $pageName }} page</h1>
 		</div>
@@ -9,6 +16,10 @@
 </section>
 
 <style>
+	.content {
+		padding: 2rem;
+	}
+
 	.centered {
 		position: fixed;
 		top: 30%;

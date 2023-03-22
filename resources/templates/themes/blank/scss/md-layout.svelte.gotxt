@@ -10,6 +10,9 @@
 	Refer to: https://mdsvex.pngwn.io/docs#layouts
 -->
 <script>
+	import { page } from '$app/stores';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
+
 	/** @type string */
 	//export let title;
 
@@ -20,5 +23,6 @@
 	//export let keywords;
 </script>
 
+<Breadcrumbs url={$page.url.href} />
 <!-- the mdsvex content will be slotted in here -->
 <slot />
