@@ -13,6 +13,7 @@
 
 <section>
 	<Breadcrumbs url={$page.url.href} />
+
 	<div>
 		{#if items.length != 0}
 			<h1>{toTitle(resource)}</h1>
@@ -21,13 +22,18 @@
 					title={item.metadata.title}
 					content={item.metadata.headline}
 					href="{base}/{resource}/{item.metadata.slug}"
+					prefetch="hover"
 				>
 					<CardImage
 						slot="cardImage"
 						alt={item.metadata.title}
 						src="{assets}/resources/{resource}/{item.metadata.slug}/{item.metadata.cover}"
 					/>
-					<CardAction slot="cardAction" href="{base}/{resource}/{item.metadata.slug}" />
+					<CardAction
+						slot="cardAction"
+						prefetch="hover"
+						href="{base}/{resource}/{item.metadata.slug}"
+					/>
 				</Card>
 			{/each}
 		{:else}

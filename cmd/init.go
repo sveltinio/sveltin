@@ -430,7 +430,7 @@ func createProjectRoutesLocalFolder(themeData *tpltypes.ThemeData) *composer.Fol
 	// GET FOLDER: src/routes folder
 	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
 
-	// NEW FILE: src/routes/{+page.svelte, +page.ts}
+	// NEW FILE: src/routes/{+page.svelte, +page.server.ts}
 	for _, item := range []string{IndexPageFileId, IndexPageLoadFileId} {
 		f := &composer.File{
 			Name:       helpers.GetRouteFilename(item, cfg.settings),

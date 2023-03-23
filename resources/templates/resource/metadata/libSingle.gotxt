@@ -5,7 +5,7 @@ import { groupedByOne } from '@sveltinio/ts-utils/collections';
 import { list } from './load{{ $resourceName }}';
 
 export const all = async (): Promise<Sveltin.ContentMetadata[]> => {
-	const selectorPath = 'meta.';
+	const selectorPath = 'metadata.';
 	const mdName = '{{ $mdName }}';
 	const data = await list();
 	const filteredProps = ['title', 'slug', 'headline'].map((path) => selectorPath.concat(path));

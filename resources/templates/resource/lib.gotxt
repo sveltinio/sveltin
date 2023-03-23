@@ -5,21 +5,25 @@ export async function list(orderdByDate = true) {
 	const contentFiles = import.meta.glob('/{{ .Settings.Paths.Content }}/{{ .Resource.Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
 
-	let contents: Array<Sveltin.MdSveXComponent> = await Promise.all(
+	let contents: Array<Sveltin.MdSveXFile> = await Promise.all(
 		contentFilesArray.map(async ([path, resolver]) => {
-			const data = (await resolver()) as Sveltin.MdSveXResolver;
-			const { metadata: meta } = data;
+			const contentItem: { path: string; resolver: Sveltin.MdSveXResolver } = {
+				path: path,
+				resolver: resolver as unknown as Sveltin.MdSveXResolver
+			};
+
+			const data = await contentItem.resolver();
 
 			return {
-				meta,
-				path
-			} satisfies Sveltin.MdSveXComponent;
+				component: data.default,
+				metadata: data.metadata
+			} satisfies Sveltin.MdSveXFile;
 		})
 	);
 
-	contents = contents.filter((elem) => !elem.meta['draft']);
+	contents = contents.filter((elem) => !elem.metadata['draft']);
 	if (orderdByDate) {
-		return orderBy(contents, 'meta.created_at');
+		return orderBy(contents, 'metadata.created_at');
 	}
 
 	return contents;
@@ -29,27 +33,28 @@ export async function list(orderdByDate = true) {
 export async function getSingle(slug: string) {
 	const resource = '{{ $slugName }}';
 	const contentList = await list();
-	const selected = contentList.filter((item) => item.meta['slug'] == slug);
+	const selected = contentList.filter((item) => item.metadata['slug'] == slug);
 
 	if (selected.length != 0) {
-		const selectedIndex = contentList.findIndex((elem) => slug === elem.meta['slug']);
+		const selectedIndex = contentList.findIndex((elem) => slug === elem.metadata['slug']);
 		const selected = contentList[selectedIndex];
 
 		const current = {
-			metadata: selected.meta as Sveltin.YAMLFrontmatter
+			component: selected.component,
+			metadata: selected.metadata as unknown as Sveltin.YAMLFrontmatter
 		} satisfies Sveltin.ResourceContent;
 
 		const previous = {
 			metadata: {
-				title: contentList[selectedIndex + 1]?.meta['title'],
-				slug: contentList[selectedIndex + 1]?.meta['slug']
+				title: contentList[selectedIndex + 1]?.metadata['title'],
+				slug: contentList[selectedIndex + 1]?.metadata['slug']
 			} as Sveltin.YAMLFrontmatter
 		} satisfies Sveltin.ResourceContent;
 
 		const next = {
 			metadata: {
-				title: contentList[selectedIndex - 1]?.meta['title'],
-				slug: contentList[selectedIndex - 1]?.meta['slug']
+				title: contentList[selectedIndex - 1]?.metadata['title'],
+				slug: contentList[selectedIndex - 1]?.metadata['slug']
 			} as Sveltin.YAMLFrontmatter
 		} satisfies Sveltin.ResourceContent;
 

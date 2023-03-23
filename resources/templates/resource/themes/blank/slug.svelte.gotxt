@@ -7,10 +7,11 @@
 
 	export let data;
 
-	$: ({ resource, current, previous, next, mdsvexComponent } = data);
+	$: ({ resource, current, previous, next } = data);
 </script>
 
 <Breadcrumbs url={$page.url.href} />
+
 <article>
 	<h1>{current.metadata.title}</h1>
 	<div>
@@ -38,7 +39,7 @@
 	<TOC data={current.metadata.headings} />
 
 	<div class="markdown-body max-width-none">
-		<svelte:component this={mdsvexComponent} />
+		<svelte:component this={current.component} />
 	</div>
 
 	<PagesNavigator

@@ -33,7 +33,7 @@ func TestSveltinResourceFS(t *testing.T) {
 	is := is.New(t)
 	is.Equal("templates/resource/lib.gotxt", ResourceFilesMap["lib"])
 	is.Equal("templates/resource/themes/blank/page.svelte.gotxt", ResourceFilesMap["index_blank"])
-	is.Equal("templates/resource/page.ts.gotxt", ResourceFilesMap["index_pageload"])
+	is.Equal("templates/resource/page.server.ts.gotxt", ResourceFilesMap["index_pageload"])
 	is.Equal("templates/resource/themes/sveltin/slug.svelte.gotxt", ResourceFilesMap["slug_sveltin"])
 	is.Equal("templates/resource/slug.ts.gotxt", ResourceFilesMap["slug_pageload"])
 }

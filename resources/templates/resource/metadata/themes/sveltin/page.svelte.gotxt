@@ -12,6 +12,7 @@
 
 <div class="page-wrapper">
 	<Breadcrumbs url={$page.url.href} />
+
 	<div class="page-wrapper__content">
 		<h1>Grouped by {toTitle(mdName)}</h1>
 		{#if metadata.length != 0}

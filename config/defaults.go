@@ -142,13 +142,12 @@ func (c *SveltinSettings) GetThemePartialsPath() string {
 	return c.Theme.Partials
 }
 
-// GetIndexPageFilename returns a string representing the path to the 'index'
-// file relative to the current working directory.
+// GetIndexPageFilename returns '+page.svelte' file.
 func (c *SveltinSettings) GetIndexPageFilename() string {
 	return c.Pages.Index
 }
 
-// GetIndexEndpointFilename returns '+page.svelte' file.
+// GetIndexEndpointFilename returns '+page.server.ts' file.
 func (c *SveltinSettings) GetIndexEndpointFilename() string {
 	return c.Pages.IndexEndpoint
 }

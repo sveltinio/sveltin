@@ -53,7 +53,7 @@ func TestGetResourceRouteFilename(t *testing.T) {
 		want string
 	}{
 		{name: "index", want: "+page.svelte"},
-		{name: "index_pageload", want: "+page.ts"},
+		{name: "index_pageload", want: "+page.server.ts"},
 		{name: "slug", want: "+page.svelte"},
 		{name: "slug_pageload", want: "+page.ts"},
 		{name: "slug_layout", want: "+layout.svelte"},

@@ -46,7 +46,7 @@ var ProjectFilesMap = EmbeddedFSEntry{
 	"license":          "templates/misc/LICENSE.gotxt",
 	"index":            "templates/themes/index.svelte.gotxt",
 	"index_notheme":    "templates/themes/index.notheme.svelte.gotxt",
-	"index_pageload":   "templates/themes/index.ts.gotxt",
+	"index_pageload":   "templates/themes/index.server.ts.gotxt",
 	"theme_config":     "templates/themes/theme.config.js.gotxt",
 }
 
@@ -55,7 +55,7 @@ var ResourceFilesMap = EmbeddedFSEntry{
 	"lib":            "templates/resource/lib.gotxt",
 	"index_blank":    "templates/resource/themes/blank/page.svelte.gotxt",
 	"index_sveltin":  "templates/resource/themes/sveltin/page.svelte.gotxt",
-	"index_pageload": "templates/resource/page.ts.gotxt",
+	"index_pageload": "templates/resource/page.server.ts.gotxt",
 	"slug_blank":     "templates/resource/themes/blank/slug.svelte.gotxt",
 	"slug_sveltin":   "templates/resource/themes/sveltin/slug.svelte.gotxt",
 	"slug_pageload":  "templates/resource/slug.ts.gotxt",
@@ -95,7 +95,7 @@ var PageFilesMap = EmbeddedFSEntry{
 	"svelte_sveltin":   "templates/page/themes/sveltin/page.svelte.gotxt",
 	"markdown_blank":   "templates/page/themes/blank/page.svx.gotxt",
 	"markdown_sveltin": "templates/page/themes/sveltin/page.svx.gotxt",
-	"index_pageload":   "templates/page/page.ts.gotxt",
+	"index_pageload":   "templates/page/page.server.ts.gotxt",
 }
 
 // ContentFilesMap is the map for the content template files.

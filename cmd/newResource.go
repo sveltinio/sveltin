@@ -246,7 +246,7 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceData.Name)
-	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.ts}
+	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.server.ts}
 	cfg.log.Info("Routes")
 	for _, item := range []string{IndexPageFileId, IndexPageLoadFileId} {
 		f := &composer.File{

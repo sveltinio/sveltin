@@ -20,33 +20,33 @@ const pageKeywords: Array<string> = [];
  */
 export const load = (async ({ url, params }) => {
 	const { slug } = params;
+	const metadata = await groupedBy(slug);
+
+	if (typeof metadata === "undefined") {
+		throw error(404, { message: 'Not found' });
+	}
+
 	pageTitle = slug;
 	pageDescription = `Description for ${pageTitle}.`;
 
 	const baseUrl = dev ? url.origin : website.baseURL;
-	const metadata = await groupedBy(slug);
+	const seoData = {
+		url: canonicalURL(baseUrl, url.pathname),
+		title: toTitle(pageTitle),
+		description: pageDescription,
+		keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
+		image: defaultImage(baseUrl),
+		opengraph: {
+			type: OpenGraphType.Article
+		},
+		twitter: {
+			type: TwitterCardType.Summary
+		}
+	} satisfies SEOWebPage;
 
-	if (typeof metadata !== "undefined") {
-		const seoData = {
-			url: canonicalURL(baseUrl, url.pathname),
-			title: toTitle(pageTitle),
-			description: pageDescription,
-			keywords: pageKeywords.length != 0 ? pageKeywords : website.keywords,
-			image: defaultImage(baseUrl),
-			opengraph: {
-				type: OpenGraphType.Article
-			},
-			twitter: {
-				type: TwitterCardType.Summary
-			}
-		} satisfies SEOWebPage;
-
-		return {
-			mdName: slug,
-			seoData,
-			metadata
-		};
-	}
-
-	throw error(404, 'Not found');
+	return {
+		mdName: slug,
+		seoData,
+		metadata
+	};
 }) satisfies PageLoad;

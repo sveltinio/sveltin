@@ -2,20 +2,20 @@
  ** Sveltin namespace reflects types exported by some of the @sveltinio/[packages].
  ** This file exists to allow using sveltin's features with no lock-in to the sveltinio packages.
  */
+
+import type { ComponentType, SvelteComponentTyped } from 'svelte';
+
 export namespace Sveltin {
-	type MdSveXResolver = {
-		default: object;
-		metadata: object;
+	export type MdSveXFile = {
+		component: ComponentType<SvelteComponentTyped>;
+		metadata: Record<PropertyKey, string>;
 	};
 
-	type MdSveXComponent = {
-		meta: Record<PropertyKey, any>;
-		path: string;
-	};
+	export type MdSveXResolver = () => Promise<MdsvexFile>;
 
 	export type ResourceContent = {
 		metadata: YAMLFrontmatter;
-		html?: string;
+		component?: ComponentType<SvelteComponentTyped>;
 	};
 
 	export type ContentMetadata = {

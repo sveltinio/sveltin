@@ -1,4 +1,4 @@
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { dev } from '$app/environment';
 import { website } from '$config/website.js';
@@ -30,4 +30,4 @@ export const load = (async ({ url }) => {
 	return {
 		seoData
 	};
-}) satisfies PageLoad;
+}) satisfies PageServerLoad;

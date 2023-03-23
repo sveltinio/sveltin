@@ -86,7 +86,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageFile := cfg.fsManager.NewPublicPageFile(pageData, &cfg.projectSettings)
 	utils.ExitIfError(err)
 
-	// NEW FILE: src/routes/<page_name>/+page.ts>
+	// NEW FILE: src/routes/<page_name>/+page.server.ts>
 	pageLoadFile := &composer.File{
 		Name:       helpers.GetRouteFilename(IndexPageLoadFileId, cfg.settings),
 		TemplateID: IndexPageLoadFileId,

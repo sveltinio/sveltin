@@ -214,7 +214,7 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 	// NEW FOLDER: <metadata_name>
 	resourceMedatadaRoutesFolder := composer.NewFolder(metadataData.Name)
 
-	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.ts}
+	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.server.ts}
 	for _, item := range []string{IndexPageFileId, IndexPageLoadFileId} {
 		f := &composer.File{
 			Name:       helpers.GetRouteFilename(item, cfg.settings),

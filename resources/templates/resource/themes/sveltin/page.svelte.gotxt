@@ -13,22 +13,28 @@
 
 <section class="page-wrapper">
 	<Breadcrumbs url={$page.url.href} />
+
 	<div class="page-wrapper__content">
 		{#if items.length != 0}
 			<h1>{toTitle(resource)}</h1>
 			<div class="cards">
 				{#each items as item}
 					<Card
-					title={item.metadata.title}
-					content={item.metadata.headline}
-					href="{base}/{resource}/{item.metadata.slug}"
+						title={item.metadata.title}
+						content={item.metadata.headline}
+						href="{base}/{resource}/{item.metadata.slug}"
+						prefetch="hover"
 					>
 						<CardImage
 							slot="cardImage"
 							alt={item.metadata.title}
 							src="{assets}/resources/{resource}/{item.metadata.slug}/{item.metadata.cover}"
 						/>
-						<CardAction slot="cardAction" href="{base}/{resource}/{item.metadata.slug}" />
+						<CardAction
+							slot="cardAction"
+							prefetch="hover"
+							href="{base}/{resource}/{item.metadata.slug}"
+						/>
 					</Card>
 				{/each}
 			</div>

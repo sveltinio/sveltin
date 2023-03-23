@@ -13,6 +13,7 @@
 
 <div>
 	<Breadcrumbs url={$page.url.href} />
+
 	<div>
 		{#if metadata}
 			<h2>{toTitle(mdName)}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
