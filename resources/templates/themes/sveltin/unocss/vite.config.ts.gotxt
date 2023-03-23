@@ -44,8 +44,7 @@ const config = defineConfig({
 			extractors: [extractorSvelte]
 		}),
 		sveltekit()
-	],
-	ssr: { noExternal: ['@indaco/svelte-iconoir/**'] }
+	]
 });
 
 export default config;
