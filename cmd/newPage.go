@@ -8,6 +8,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -15,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/composer"
+	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
@@ -77,32 +79,18 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 		Language: pageLanguage,
 	}
 
-	// GET FOLDER: src/routes
-	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
-
-	// NEW FOLDER: src/routes/<page_name>
-	pageFolder := composer.NewFolder(pageData.Name)
-	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
-	pageFile := cfg.fsManager.NewPublicPageFile(pageData, &cfg.projectSettings)
+	// MAKE FOLDER STRUCTURE: src/routes/<page_name>
+	routesFolder, err := makePageFolderStructure(RoutesFolder, pageData)
 	utils.ExitIfError(err)
 
-	// NEW FILE: src/routes/<page_name>/+page.server.ts>
-	pageLoadFile := &composer.File{
-		Name:       helpers.GetRouteFilename(IndexPageLoadFileId, cfg.settings),
-		TemplateID: IndexPageLoadFileId,
-		TemplateData: &config.TemplateData{
-			Page: pageData,
-		},
-	}
-	pageFolder.Add(pageLoadFile)
-
-	// ADD TO THE ROUTES FOLDER
-	pageFolder.Add(pageFile)
-	routesFolder.Add(pageFolder)
+	// MAKE FOLDER STRUCTURE: static/pages/<page_name>
+	staticFolder, err := makePageFolderStructure(StaticFolder, pageData)
+	utils.ExitIfError(err)
 
 	// SET FOLDER STRUCTURE
 	projectFolder := cfg.fsManager.GetFolder(RootFolder)
 	projectFolder.Add(routesFolder)
+	projectFolder.Add(staticFolder)
 
 	// GENERATE THE FOLDER TREE
 	sfs := factory.NewPageArtifact(&resources.SveltinTemplatesFS, cfg.fs)
@@ -135,4 +123,58 @@ func newPageCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) (
 		comps = cobra.AppendActiveHelp(comps, activehelps.Hint("[WARN] This command does not take any more arguments but accepts flags"))
 	}
 	return comps, cobra.ShellCompDirectiveDefault
+}
+
+//=============================================================================
+
+func makePageFolderStructure(folderName string, pageData *tpltypes.PageData) (*composer.Folder, error) {
+	switch folderName {
+	case RoutesFolder:
+		return createPageRoutesFolder(folderName, pageData), nil
+	case StaticFolder:
+		return createPageStaticFolder(folderName, pageData), nil
+	default:
+		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
+		return nil, sveltinerr.NewDefaultError(err)
+	}
+}
+
+//=============================================================================
+
+func createPageRoutesFolder(folderName string, pageData *tpltypes.PageData) *composer.Folder {
+	// GET FOLDER: src/routes folder
+	routesFolder := cfg.fsManager.GetFolder(folderName)
+
+	// NEW FOLDER: src/routes/<page_name>
+	pageFolder := composer.NewFolder(pageData.Name)
+	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
+	pageFile := cfg.fsManager.NewPublicPageFile(pageData, &cfg.projectSettings)
+
+	// NEW FILE: src/routes/<page_name>/+page.server.ts>
+	pageLoadFile := &composer.File{
+		Name:       helpers.GetRouteFilename(IndexPageLoadFileId, cfg.settings),
+		TemplateID: IndexPageLoadFileId,
+		TemplateData: &config.TemplateData{
+			Page: pageData,
+		},
+	}
+
+	pageFolder.Add(pageFile)
+	pageFolder.Add(pageLoadFile)
+	routesFolder.Add(pageFolder)
+
+	return routesFolder
+}
+
+func createPageStaticFolder(folderName string, PageData *tpltypes.PageData) *composer.Folder {
+	// GET FOLDER: static
+	staticFolder := cfg.fsManager.GetFolder(folderName)
+	// NEW FOLDER static/pages
+	allPagesFolder := composer.NewFolder("pages")
+	// NEW FOLDER static/pages/<page_name>
+	pageFolder := composer.NewFolder(PageData.Name)
+	allPagesFolder.Add(pageFolder)
+	staticFolder.Add(allPagesFolder)
+
+	return staticFolder
 }
