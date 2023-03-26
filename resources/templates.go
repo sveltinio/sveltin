@@ -58,7 +58,7 @@ var ResourceFilesMap = EmbeddedFSEntry{
 	"index_pageload": "templates/resource/page.server.ts.gotxt",
 	"slug_blank":     "templates/resource/themes/blank/slug.svelte.gotxt",
 	"slug_sveltin":   "templates/resource/themes/sveltin/slug.svelte.gotxt",
-	"slug_pageload":  "templates/resource/slug.ts.gotxt",
+	"slug_pageload":  "templates/resource/slug.server.ts.gotxt",
 	"slug_layout":    "templates/resource/layout.svelte.gotxt",
 }
 
@@ -86,7 +86,7 @@ var MetadataFilesMap = EmbeddedFSEntry{
 	"index_pageload": "templates/resource/metadata/page.ts.gotxt",
 	"slug_blank":     "templates/resource/metadata/themes/blank/slug.svelte.gotxt",
 	"slug_sveltin":   "templates/resource/metadata/themes/sveltin/slug.svelte.gotxt",
-	"slug_pageload":  "templates/resource/metadata/slug.ts.gotxt",
+	"slug_pageload":  "templates/resource/metadata/slug.server.ts.gotxt",
 }
 
 // PageFilesMap is the map for the page template files.

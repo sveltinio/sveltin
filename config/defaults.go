@@ -157,7 +157,7 @@ func (c *SveltinSettings) GetSlugPageFilename() string {
 	return c.Pages.Slug
 }
 
-// GetSlugEndpointFilename returns '+page.ts' as filename for the slug.
+// GetSlugEndpointFilename returns '+page.server.ts' as filename for the slug.
 func (c *SveltinSettings) GetSlugEndpointFilename() string {
 	return c.Pages.SlugEndpoint
 }

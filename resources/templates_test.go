@@ -35,7 +35,7 @@ func TestSveltinResourceFS(t *testing.T) {
 	is.Equal("templates/resource/themes/blank/page.svelte.gotxt", ResourceFilesMap["index_blank"])
 	is.Equal("templates/resource/page.server.ts.gotxt", ResourceFilesMap["index_pageload"])
 	is.Equal("templates/resource/themes/sveltin/slug.svelte.gotxt", ResourceFilesMap["slug_sveltin"])
-	is.Equal("templates/resource/slug.ts.gotxt", ResourceFilesMap["slug_pageload"])
+	is.Equal("templates/resource/slug.server.ts.gotxt", ResourceFilesMap["slug_pageload"])
 }
 
 func TestSveltinAPIFS(t *testing.T) {
@@ -53,7 +53,7 @@ func TestSveltinMetadataFS(t *testing.T) {
 	is.Equal("templates/resource/metadata/themes/blank/page.svelte.gotxt", MetadataFilesMap["index_blank"])
 	is.Equal("templates/resource/metadata/page.ts.gotxt", MetadataFilesMap["index_pageload"])
 	is.Equal("templates/resource/metadata/themes/sveltin/slug.svelte.gotxt", MetadataFilesMap["slug_sveltin"])
-	is.Equal("templates/resource/metadata/slug.ts.gotxt", MetadataFilesMap["slug_pageload"])
+	is.Equal("templates/resource/metadata/slug.server.ts.gotxt", MetadataFilesMap["slug_pageload"])
 }
 
 func TestSveltinPageFS(t *testing.T) {

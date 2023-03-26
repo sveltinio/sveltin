@@ -31,7 +31,7 @@ func TestPages(t *testing.T) {
 	is.Equal("index.svx", settings.GetContentPageFilename())
 	is.Equal("+page.svelte", settings.GetIndexPageFilename())
 	is.Equal("+page.svelte", settings.GetSlugPageFilename())
-	is.Equal("+page.ts", settings.GetSlugEndpointFilename())
+	is.Equal("+page.server.ts", settings.GetSlugEndpointFilename())
 }
 
 func TestPaths(t *testing.T) {

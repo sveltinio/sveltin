@@ -48,7 +48,7 @@ This command:
 - Add the resource as route within the "src/routes" folder, creating its own folder
 - Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name>
 - Scaffold +page.svelte component and +page.serve.ts endpoint to list all the content belongs to a resource
-- Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page`)
+- Scaffold [slug]/+page.svelte component and [slug]/+page.server.ts endpoint to get access to a specific content page`)
 )
 
 // Bind command flags.
@@ -264,7 +264,7 @@ func createResourceRoutesFolder(folderName string, cfg appConfig, resourceData *
 
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
-	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
+	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.server.ts}
 	slugFiles := []string{SlugPageFileId, SlugPageLoadFileId}
 	if resourceData.SlugLayout {
 		slugFiles = append(slugFiles, SlugLayoutFileId)

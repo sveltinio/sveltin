@@ -1,5 +1,5 @@
 {{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
@@ -49,4 +49,4 @@ export const load = (async ({ url, params }) => {
 		seoData,
 		metadata
 	};
-}) satisfies PageLoad;
+}) satisfies PageServerLoad;

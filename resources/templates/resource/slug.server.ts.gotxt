@@ -1,6 +1,6 @@
 {{- $resourceName := .Resource.Name -}}
 {{- $resourceNameAsVar := $resourceName | ToVariableName | ReplaceIfNested -}}
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
@@ -47,10 +47,11 @@ export const load = (async ({ url, params }) => {
 
 	return {
 		resource,
+		slug,
 		seoData,
 		current,
 		previous,
 		next
 	};
 
-}) satisfies PageLoad;
+}) satisfies PageServerLoad;
