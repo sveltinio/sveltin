@@ -1,9 +1,7 @@
 {{- $resourceName := .Resource.Name -}}
 <script lang="ts">
 	import { assets, base } from '$app/paths';
-	import { page } from '$app/stores';
 	import { toTitle } from '@sveltinio/ts-utils/strings';
-	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { Card, CardAction, CardImage } from '@sveltinio/widgets/card';
 
 	export let data;
@@ -12,8 +10,6 @@
 </script>
 
 <section class="page-wrapper">
-	<Breadcrumbs url={$page.url.href} />
-
 	<div class="page-wrapper__content">
 		{#if items.length != 0}
 			<h1>{toTitle(resource)}</h1>

@@ -1,8 +1,6 @@
 {{- $mdName := .Metadata.Name | ToVariableName -}}
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { page } from '$app/stores';
-	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { toTitle } from '@sveltinio/ts-utils/strings';
 
 	export let data;
@@ -11,24 +9,20 @@
 	$: itemsCounter = metadata.items.length;
 </script>
 
-<div class="page-wrapper">
-	<Breadcrumbs url={$page.url.href} />
-
-	<div class="page-wrapper__content">
-		{#if metadata}
-			<h2>{toTitle(mdName)}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
-			<ul>
-				{#each metadata.items as item}
-					<li>
-						<a data-sveltekit-preload-data="hover" href="{base}/posts/{item.slug}">{item.title}</a>
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<h2 class="message message--warning">
-				Please, check all your content files ensuring the YAML frontmatter contains "<i>{mdName}</i
-				>".
-			</h2>
-		{/if}
-	</div>
+<div class="page-wrapper__content">
+	{#if metadata}
+		<h2>{toTitle(mdName)}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>
+		<ul>
+			{#each metadata.items as item}
+				<li>
+					<a data-sveltekit-preload-data="hover" href="{base}/posts/{item.slug}">{item.title}</a>
+				</li>
+			{/each}
+		</ul>
+	{:else}
+		<h2 class="message message--warning">
+			Please, check all your content files ensuring the YAML frontmatter contains "<i>{mdName}</i
+			>".
+		</h2>
+	{/if}
 </div>

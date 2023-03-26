@@ -1,62 +1,84 @@
 <script lang="ts">
+	import type { Sveltin } from '$sveltin';
+	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { assets, base } from '$app/paths';
-	import { page } from '$app/stores';
-	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { TOC } from '@sveltinio/widgets/toc';
 	import { PagesNavigator } from '@sveltinio/widgets/pages-navigator';
 
 	export let data;
 
-	$: ({ resource, current, previous, next } = data);
+	$: ({ slug, resource, current, previous, next } = data);
+
+	async function retrieveMdSveXComponent(): Promise<Sveltin.MdSvexContentComponent> {
+		const module = await import(`../../../../content/${resource}/${slug}/index.svx`);
+		return await module.default;
+	}
+
+	let mdContentComponent: Promise<Sveltin.MdSvexContentComponent>;
+
+	onMount(async () => {
+		mdContentComponent = retrieveMdSveXComponent();
+	});
+
+	afterNavigate(async () => {
+		mdContentComponent = retrieveMdSveXComponent();
+	});
 </script>
 
-<article class="page-wrapper">
-	<Breadcrumbs url={$page.url.href} />
 
-	<h1>{current.metadata.title}</h1>
-	<div class="entry-meta">
-		{#if current.metadata.created_at}
-			<time datetime={current.metadata.created_at}>
-				Created At {current.metadata.created_at}
-			</time>
-		{/if}
-		{#if current.metadata.updated_at}
-			<time datetime={current.metadata.updated_at}>
-				Updated On {current.metadata.updated_at}
-			</time>
-		{/if}
-		{#if current.metadata.readingTime}
-			<span>{current.metadata.readingTime.text}</span>
-		{/if}
-	</div>
-	{#if current.metadata.cover}
-		<div class="cover">
-			<img
-				src="{assets}/resources/{resource}/{current.metadata.slug}/{current.metadata.cover}"
-				alt="cover image for {current.metadata.title}"
-			/>
+
+{#await mdContentComponent}
+	<p>Loading content...</p>
+{:then mdContentComponent}
+	<article class="page-wrapper">
+		<h1>{current.metadata.title}</h1>
+		<div class="entry-meta">
+			{#if current.metadata.created_at}
+				<time datetime={current.metadata.created_at}>
+					Created At {current.metadata.created_at}
+				</time>
+			{/if}
+			{#if current.metadata.updated_at}
+				<time datetime={current.metadata.updated_at}>
+					Updated On {current.metadata.updated_at}
+				</time>
+			{/if}
+			{#if current.metadata.readingTime}
+				<span>{current.metadata.readingTime.text}</span>
+			{/if}
 		</div>
-	{/if}
+		{#if current.metadata.cover}
+			<div class="cover">
+				<img
+					src="{assets}/resources/{resource}/{current.metadata.slug}/{current.metadata.cover}"
+					alt="cover image for {current.metadata.title}"
+				/>
+			</div>
+		{/if}
 
-	<TOC data={current.metadata.headings} class="sveltin" />
+		<TOC data={current.metadata.headings} class="sveltin" />
 
-	<div class="markdown-body max-width-none">
-		<svelte:component this={current.component} />
-	</div>
+		<div class="markdown-body max-width-none">
+			<svelte:component this={mdContentComponent} />
+		</div>
 
-	<PagesNavigator
-		prev={ {
-			label: previous.metadata.title,
-			href: `${base}/${resource}/${previous.metadata.slug}`,
-			title: `link to ${previous.metadata.title}`
-		} }
-		next={ {
-			label: next.metadata.title,
-			href: `${base}/${resource}/${next.metadata.slug}`,
-			title: `link to ${next.metadata.title}`
-		} }
-	/>
-</article>
+		<PagesNavigator
+			prev={ {
+				label: previous.metadata.title,
+				href: `${base}/${resource}/${previous.metadata.slug}`,
+				title: `link to ${previous.metadata.title}`
+			} }
+			next={ {
+				label: next.metadata.title,
+				href: `${base}/${resource}/${next.metadata.slug}`,
+				title: `link to ${next.metadata.title}`
+			} }
+		/>
+	</article>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
 
 
 <style>

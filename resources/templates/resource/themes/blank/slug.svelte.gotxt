@@ -1,20 +1,37 @@
 <script lang="ts">
+	import type { Sveltin } from '$sveltin';
+	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { assets, base } from '$app/paths';
-	import { page } from '$app/stores';
-	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { TOC } from '@sveltinio/widgets/toc';
 	import { PagesNavigator } from '@sveltinio/widgets/pages-navigator';
 
 	export let data;
 
-	$: ({ resource, current, previous, next } = data);
+	$: ({ slug, resource, current, previous, next } = data);
+
+	async function retrieveMdSveXComponent(): Promise<Sveltin.MdSvexContentComponent> {
+		const module = await import(`../../../../content/${resource}/${slug}/index.svx`);
+		return await module.default;
+	}
+
+	let mdContentComponent: Promise<Sveltin.MdSvexContentComponent>;
+
+	onMount(async () => {
+		mdContentComponent = retrieveMdSveXComponent();
+	});
+
+	afterNavigate(async () => {
+		mdContentComponent = retrieveMdSveXComponent();
+	});
 </script>
 
-<Breadcrumbs url={$page.url.href} />
-
+{#await mdContentComponent}
+	<p>Loading content...</p>
+{:then mdContentComponent}
 <article>
-	<h1>{current.metadata.title}</h1>
 	<div>
+		<h1>{current.metadata.title}</h1>
 		{#if current.metadata.created_at}
 			<time datetime={current.metadata.created_at}>
 				Created At {current.metadata.created_at}
@@ -39,7 +56,7 @@
 	<TOC data={current.metadata.headings} />
 
 	<div class="markdown-body max-width-none">
-		<svelte:component this={current.component} />
+		<svelte:component this={mdContentComponent} />
 	</div>
 
 	<PagesNavigator
@@ -55,6 +72,9 @@
 		} }
 	/>
 </article>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
 
 <style>
 	article {

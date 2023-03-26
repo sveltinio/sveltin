@@ -1,8 +1,6 @@
 {{- $mdName := .Metadata.Name | ToVariableName -}}
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { page } from '$app/stores';
-	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { toTitle } from '@sveltinio/ts-utils/strings';
 
 	export let data;
@@ -12,8 +10,6 @@
 </script>
 
 <div>
-	<Breadcrumbs url={$page.url.href} />
-
 	<div>
 		{#if metadata}
 			<h2>{toTitle(mdName)}&nbsp;<span>[ Total: {itemsCounter} ]</span></h2>

@@ -21,13 +21,15 @@
 </script>
 
 <!-- SEO Components -->
-{#if $page.data && $page.data.seoData}
-	<PageMetaTags data={$page.data.seoData} />
-	<JsonLdBreadcrumbs url={$page.url.href} />
-	<JsonLdWebPage data={$page.data.seoData} />
-{/if}
 <JsonLdWebSite data={website} />
 <JsonLdSiteNavigationElements baseURL={website.baseURL} data={sortedMenu} />
+{#key $page.url.href}
+	<JsonLdBreadcrumbs url={$page.url.href} />
+{/key}
+{#if $page.data && $page.data.seoData}
+	<PageMetaTags data={$page.data.seoData} />
+	<JsonLdWebPage data={$page.data.seoData} />
+{/if}
 <!-- End of SEO Components-->
 
 <GoogleFonts fonts={googleFonts} />
@@ -37,6 +39,10 @@
 	style="min-height: 100vh;"
 >
 	<main class="is-flex-grow-1">
+		{#key $page.url.href}
+			<Breadcrumbs url={$page.url.href} />
+		{/key}
+
 		<slot />
 	</main>
 
