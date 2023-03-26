@@ -1,7 +1,7 @@
 import type { Sveltin } from '$sveltin';
 import { orderBy } from '@sveltinio/ts-utils/collections';
 
-export async function list(orderdByDate = true) {
+export async function list(orderdByDate = true): Promise<Sveltin.MdSveXFile[]> {
 	const contentFiles = import.meta.glob('/{{ .Settings.Paths.Content }}/{{ .Resource.Name }}/**/*.{svelte.md,md,svx}');
 	const contentFilesArray = Object.entries(contentFiles);
 
@@ -15,7 +15,6 @@ export async function list(orderdByDate = true) {
 			const data = await contentItem.resolver();
 
 			return {
-				component: data.default,
 				metadata: data.metadata
 			} satisfies Sveltin.MdSveXFile;
 		})
@@ -32,41 +31,41 @@ export async function list(orderdByDate = true) {
 {{ $slugName := .Resource.Name | ToSlug}}
 export async function getSingle(slug: string) {
 	const resource = '{{ $slugName }}';
-	const contentList = await list();
-	const selected = contentList.filter((item) => item.metadata['slug'] == slug);
+	const contentList: Sveltin.MdSveXFile[] = await list();
+	const exists = contentList.filter((item) => item.metadata['slug'] == slug);
 
-	if (selected.length != 0) {
-		const selectedIndex = contentList.findIndex((elem) => slug === elem.metadata['slug']);
-		const selected = contentList[selectedIndex];
-
-		const current = {
-			component: selected.component,
-			metadata: selected.metadata as unknown as Sveltin.YAMLFrontmatter
-		} satisfies Sveltin.ResourceContent;
-
-		const previous = {
-			metadata: {
-				title: contentList[selectedIndex + 1]?.metadata['title'],
-				slug: contentList[selectedIndex + 1]?.metadata['slug']
-			} as Sveltin.YAMLFrontmatter
-		} satisfies Sveltin.ResourceContent;
-
-		const next = {
-			metadata: {
-				title: contentList[selectedIndex - 1]?.metadata['title'],
-				slug: contentList[selectedIndex - 1]?.metadata['slug']
-			} as Sveltin.YAMLFrontmatter
-		} satisfies Sveltin.ResourceContent;
-
+	if (exists.length == 0) {
 		return {
-			status: 200,
-			resource,
-			current,
-			previous,
-			next
+			status: 404
 		};
 	}
+
+	const selectedIndex = contentList.findIndex((elem) => slug === elem.metadata['slug']);
+	const selected = contentList[selectedIndex];
+
+	const current = {
+		metadata: selected.metadata as unknown as Sveltin.YAMLFrontmatter
+	} satisfies Sveltin.ResourceContent;
+
+	const previous = {
+		metadata: {
+			title: contentList[selectedIndex + 1]?.metadata['title'],
+			slug: contentList[selectedIndex + 1]?.metadata['slug']
+		} as Sveltin.YAMLFrontmatter
+	} satisfies Sveltin.ResourceContent;
+
+	const next = {
+		metadata: {
+			title: contentList[selectedIndex - 1]?.metadata['title'],
+			slug: contentList[selectedIndex - 1]?.metadata['slug']
+		} as Sveltin.YAMLFrontmatter
+	} satisfies Sveltin.ResourceContent;
+
 	return {
-		status: 404
+		status: 200,
+		resource,
+		current,
+		previous,
+		next
 	};
 };

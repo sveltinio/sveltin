@@ -7,15 +7,17 @@ import type { ComponentType, SvelteComponentTyped } from 'svelte';
 
 export namespace Sveltin {
 	export type MdSveXFile = {
-		component: ComponentType<SvelteComponentTyped>;
 		metadata: Record<PropertyKey, string>;
 	};
 
 	export type MdSveXResolver = () => Promise<MdsvexFile>;
 
+	export type MdSvexContentComponent = Promise<
+		ComponentType<SvelteComponentTyped>
+	>;
+
 	export type ResourceContent = {
 		metadata: YAMLFrontmatter;
-		component?: ComponentType<SvelteComponentTyped>;
 	};
 
 	export type ContentMetadata = {
