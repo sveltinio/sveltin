@@ -80,7 +80,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)
 	utils.ExitIfError(err)
 
-	// MAKE FOLDER STRUCTURE: static/images/resources/<resource_name>/<content_name>
+	// MAKE FOLDER STRUCTURE: static/resources/<resource_name>/<content_name>
 	staticFolder, err := makeContentFolderStructure(StaticFolder, contentData)
 	utils.ExitIfError(err)
 
@@ -138,9 +138,9 @@ func addContentCmdValidArgs(cmd *cobra.Command, args []string, toComplete string
 func makeContentFolderStructure(folderName string, contentData *tpltypes.ContentData) (*composer.Folder, error) {
 	switch folderName {
 	case ContentFolder:
-		return createContentLocalFolder(contentData), nil
+		return createContentFolder(folderName, contentData), nil
 	case StaticFolder:
-		return createStaticFolderStructure(contentData), nil
+		return createStaticFolderStructure(folderName, contentData), nil
 	default:
 		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
 		return nil, sveltinerr.NewDefaultError(err)
@@ -149,9 +149,9 @@ func makeContentFolderStructure(folderName string, contentData *tpltypes.Content
 
 //=============================================================================
 
-func createContentLocalFolder(contentData *tpltypes.ContentData) *composer.Folder {
+func createContentFolder(folderName string, contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: content
-	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
+	contentFolder := cfg.fsManager.GetFolder(folderName)
 	// NEW FOLDER content/<resource_name>/<content_name>
 	resourceContentFolder := cfg.fsManager.NewResourceContentFolder(contentData)
 	// NEW FILE: content/<resource_name>/<content_name>/index.svx
@@ -163,9 +163,9 @@ func createContentLocalFolder(contentData *tpltypes.ContentData) *composer.Folde
 	return contentFolder
 }
 
-func createStaticFolderStructure(contentData *tpltypes.ContentData) *composer.Folder {
+func createStaticFolderStructure(folderName string, contentData *tpltypes.ContentData) *composer.Folder {
 	// GET FOLDER: static
-	staticFolder := cfg.fsManager.GetFolder(StaticFolder)
+	staticFolder := cfg.fsManager.GetFolder(folderName)
 	// NEW FOLDER static/resources
 	allResourcesFolder := composer.NewFolder("resources")
 	// NEW FOLDER static/resources/<resource_name>

@@ -154,15 +154,15 @@ func newResourceCmdValidArgs(cmd *cobra.Command, args []string, toComplete strin
 func makeResourceFolderStructure(folderName string, resourceData *tpltypes.ResourceData, cfg appConfig) (*composer.Folder, error) {
 	switch folderName {
 	case ContentFolder:
-		return createResourceContentLocalFolder(resourceData), nil
+		return createResourceContentFolder(folderName, resourceData), nil
 	case ParamsFolder:
-		return createResourceParamsLocalFolder(resourceData), nil
+		return createResourceParamsFolder(folderName, resourceData), nil
 	case LibFolder:
-		return createResourceLibLocalFolder(resourceData), nil
+		return createResourceLibFolder(folderName, resourceData), nil
 	case RoutesFolder:
-		return createResourceRoutesLocalFolder(cfg, resourceData), nil
+		return createResourceRoutesFolder(folderName, cfg, resourceData), nil
 	case ApiFolder:
-		return createResourceAPIRoutesLocalFolder(resourceData), nil
+		return createResourceAPIRoutesFolder(folderName, resourceData), nil
 	default:
 		err := errors.New("something went wrong: folder not found as mapped resource for sveltin projects")
 		return nil, sveltinerr.NewDefaultError(err)
@@ -171,9 +171,9 @@ func makeResourceFolderStructure(folderName string, resourceData *tpltypes.Resou
 
 //=============================================================================
 
-func createResourceContentLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
+func createResourceContentFolder(folderName string, resourceData *tpltypes.ResourceData) *composer.Folder {
 	// GET FOLDER: content folder
-	contentFolder := cfg.fsManager.GetFolder(ContentFolder)
+	contentFolder := cfg.fsManager.GetFolder(folderName)
 
 	// NEW FOLDER: content/<resource_name>. Here is where the "new content" command saves files
 	cfg.log.Info("Content folder")
@@ -183,9 +183,9 @@ func createResourceContentLocalFolder(resourceData *tpltypes.ResourceData) *comp
 	return contentFolder
 }
 
-func createResourceLibLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
+func createResourceLibFolder(folderName string, resourceData *tpltypes.ResourceData) *composer.Folder {
 	// GET FOLDER: src/lib folder
-	libFolder := cfg.fsManager.GetFolder(LibFolder)
+	libFolder := cfg.fsManager.GetFolder(folderName)
 
 	// NEW FOLDER: /src/lib/<resource_name>
 	resourceLibFolder := composer.NewFolder(resourceData.Name)
@@ -207,10 +207,10 @@ func createResourceLibLocalFolder(resourceData *tpltypes.ResourceData) *composer
 	return libFolder
 }
 
-func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
+func createResourceParamsFolder(folderName string, resourceData *tpltypes.ResourceData) *composer.Folder {
 	cfg.log.Info("Parameters matchers")
 	// GET FOLDER: src/params folder
-	paramsFolder := cfg.fsManager.GetFolder(ParamsFolder)
+	paramsFolder := cfg.fsManager.GetFolder(folderName)
 
 	// NEW FILE: src/params/string.js
 	stringMatcherFile := &composer.File{
@@ -240,9 +240,9 @@ func createResourceParamsLocalFolder(resourceData *tpltypes.ResourceData) *compo
 	return paramsFolder
 }
 
-func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.ResourceData) *composer.Folder {
+func createResourceRoutesFolder(folderName string, cfg appConfig, resourceData *tpltypes.ResourceData) *composer.Folder {
 	// GET FOLDER: src/routes folder
-	routesFolder := cfg.fsManager.GetFolder(RoutesFolder)
+	routesFolder := cfg.fsManager.GetFolder(folderName)
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceData.Name)
@@ -297,10 +297,10 @@ func createResourceRoutesLocalFolder(cfg appConfig, resourceData *tpltypes.Resou
 	return routesFolder
 }
 
-func createResourceAPIRoutesLocalFolder(resourceData *tpltypes.ResourceData) *composer.Folder {
+func createResourceAPIRoutesFolder(folderName string, resourceData *tpltypes.ResourceData) *composer.Folder {
 	cfg.log.Info("REST endpoints")
 	// GET FOLDER: src/routes/api/<api_version> folder
-	apiFolder := cfg.fsManager.GetFolder(ApiFolder)
+	apiFolder := cfg.fsManager.GetFolder(folderName)
 
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>
 	resourceAPIFolder := composer.NewFolder(resourceData.Name)
