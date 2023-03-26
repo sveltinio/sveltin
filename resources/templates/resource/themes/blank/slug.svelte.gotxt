@@ -11,7 +11,11 @@
 	$: ({ slug, resource, current, previous, next } = data);
 
 	async function retrieveMdSveXComponent(): Promise<Sveltin.MdSvexContentComponent> {
+		{{ if .Resource.Group -}}
+		const module = await import(`../../../../../content/${resource}/${slug}/index.svx`)
+		{{ else -}}
 		const module = await import(`../../../../content/${resource}/${slug}/index.svx`);
+		{{- end -}}
 		return await module.default;
 	}
 
