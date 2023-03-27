@@ -37,13 +37,31 @@ const config = {
 					'"Segoe UI Symbol"',
 				],
 			},
-			typography: {
+			typography: (theme) => ({
 				DEFAULT: {
 					css: {
-						a: { 'text-decoration': 'none' },
+						h1: {
+							color: theme('colors.base'),
+							'margin-top': '2rem',
+							'margin-bottom': '2rem',
+							'font-size': '1.875rem',
+							'line-height': '2.25rem',
+							'font-weight': '500',
+						},
+						h2: {
+							'font-weight': '500',
+							'font-size': '1.5em',
+							'margin-top': '2em',
+							'margin-bottom': '1em',
+							'line-height': '1.3333333',
+						},
+						a: {
+							color: theme('colors.base'),
+							'text-decoration': 'none',
+						},
 					},
 				},
-			},
+			}),
 		},
 	},
 	plugins: [
