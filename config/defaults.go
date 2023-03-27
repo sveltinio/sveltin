@@ -5,7 +5,6 @@
  * that can be found in the LICENSE file.
  */
 
-// Package config contains structs and interfaces used to map sveltin artifact to configurations.
 package config
 
 import (

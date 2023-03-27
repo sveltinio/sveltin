@@ -7,13 +7,6 @@
 
 package config
 
-// AppTemplate is the stuct presenting the github repository
-// used by sveltin to clone the starter project repos.
-type AppTemplate struct {
-	Name string
-	URL  string
-}
-
 // StarterTemplate is the stuct presenting the github repository
 // used by sveltin to clone the starter project repos.
 type StarterTemplate struct {

@@ -12,8 +12,8 @@ func TestGitClone(t *testing.T) {
 	is := is.New(t)
 	osFs := afero.NewOsFs()
 
-	appTemplatesMap := make(map[string]config.AppTemplate)
-	appTemplatesMap["hello-world"] = config.AppTemplate{
+	appTemplatesMap := make(map[string]config.StarterTemplate)
+	appTemplatesMap["hello-world"] = config.StarterTemplate{
 		Name: "golang-example",
 		URL:  "https://github.com/golang/example.git",
 	}
