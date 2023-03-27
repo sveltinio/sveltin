@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
@@ -27,7 +28,7 @@ func IsValidFileForContent(f fs.FileInfo) bool {
 
 	filePrefix := strings.HasPrefix(f.Name(), "__")
 	fileExt := filepath.Ext(f.Name())
-	if !filePrefix && common.Contains(acceptedExt, fileExt) {
+	if !filePrefix && lo.Contains(acceptedExt, fileExt) {
 		return true
 	}
 	return false

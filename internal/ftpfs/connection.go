@@ -20,9 +20,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/jlaffaye/ftp"
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/prompti/progressbar"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/utils"
 	"github.com/sveltinio/yinlog"
 )
@@ -154,7 +154,7 @@ func (s *FTPServerConnection) DeleteAll(exclude []string, dryrun bool) error {
 			case ftp.EntryTypeFile:
 				if !dryrun {
 					file := filepath.Join(s.serverFolder, entry.Name)
-					if !common.Contains(exclude, filepath.Base(file)) {
+					if !lo.Contains(exclude, filepath.Base(file)) {
 						if err := s.client.Delete(file); err != nil {
 							return nil
 						}

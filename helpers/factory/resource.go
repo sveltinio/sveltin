@@ -11,17 +11,21 @@ package factory
 import (
 	"embed"
 
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/resources"
 )
 
 // NewResourceArtifact create an Artifact struct.
 func NewResourceArtifact(efs *embed.FS, fs afero.Fs) *Artifact {
 	return &Artifact{
-		efs:       efs,
-		fs:        fs,
-		builder:   "resource",
-		resources: common.UnionMap(resources.ResourceFilesMap, common.UnionMap(resources.APIFilesMap, resources.MatchersFilesMap)),
+		efs:     efs,
+		fs:      fs,
+		builder: "resource",
+		resources: lo.Assign(
+			resources.ResourceFilesMap,
+			resources.APIFilesMap,
+			resources.MatchersFilesMap,
+		),
 	}
 }

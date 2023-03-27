@@ -1,9 +1,9 @@
 package prompts
 
 import (
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/prompti/choose"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
@@ -29,7 +29,7 @@ func SelectResourceHandler(fs afero.Fs, mdResourceFlag string, s *config.Sveltin
 		}
 		return utils.ToSlug(result), nil
 	case nameLenght != 0:
-		if !common.Contains(availableResources, mdResourceFlag) {
+		if !lo.Contains(availableResources, mdResourceFlag) {
 			return "", sveltinerr.NewResourceNotFoundError()
 		}
 		return utils.ToSlug(mdResourceFlag), nil

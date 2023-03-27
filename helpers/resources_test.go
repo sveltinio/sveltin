@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
 	"github.com/sveltinio/sveltin/common"
@@ -52,7 +53,7 @@ func TestGetResources(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		is.True(common.Contains(resources, tc.resName))
+		is.True(lo.Contains(resources, tc.resName))
 	}
 }
 
@@ -96,9 +97,9 @@ func TestGetResourceContentMap(t *testing.T) {
 	retrievedContents := GetResourceContentMap(memFs, resources, settings.GetContentPath())
 
 	for res, content := range retrievedContents {
-		is.True(common.Contains(resources, res))
+		is.True(lo.Contains(resources, res))
 		for _, c := range content {
-			is.True(common.Contains(dummyContents, c))
+			is.True(lo.Contains(dummyContents, c))
 		}
 	}
 
@@ -148,9 +149,9 @@ func TestGetResourceMetadataMap(t *testing.T) {
 	retrievedMetadata := GetResourceMetadataMap(memFs, resources, settings.GetRoutesPath())
 
 	for res, metadata := range retrievedMetadata {
-		is.True(common.Contains(dummyResources, res))
+		is.True(lo.Contains(dummyResources, res))
 		for _, m := range metadata {
-			is.True(common.Contains(dummyMetadata, m))
+			is.True(lo.Contains(dummyMetadata, m))
 		}
 	}
 

@@ -12,8 +12,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 )
 
 // RefactorPageServerTSTypes is the struct representing the migration update the defaults.js.ts file.
@@ -62,7 +62,7 @@ func (m *RefactorPageServerTSTypes) up() error {
 		targetFiles := []string{"+page.server.ts"}
 
 		walkFunc := func(file string, info os.FileInfo, err error) error {
-			if common.Contains(targetFiles, info.Name()) {
+			if lo.Contains(targetFiles, info.Name()) {
 				files = append(files, file)
 			}
 			return nil

@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/sveltinio/sveltin/common"
+	"github.com/samber/lo"
 	"github.com/sveltinio/sveltin/resources"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -116,7 +116,7 @@ func ConvertJSStringToStringArray(value string) string {
 	res = strings.ReplaceAll(res, "'", "")
 	res = strings.ReplaceAll(res, "\"", "")
 	res1 := strings.Split(res, ",")
-	res1 = common.RemoveEmpty(res1)
+	res1 = lo.WithoutEmpty(res1)
 
 	var newKeywords []string
 	for _, v := range res1 {

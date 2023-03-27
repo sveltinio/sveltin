@@ -4,9 +4,9 @@ import (
 	"errors"
 
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/samber/lo"
 	"github.com/sveltinio/prompti/choose"
 	"github.com/sveltinio/prompti/input"
-	"github.com/sveltinio/sveltin/common"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/utils"
@@ -57,7 +57,7 @@ func SelectPageLanguageHandler(name string) (string, error) {
 		return result, nil
 	case nameLenght != 0:
 		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, name) {
+		if !lo.Contains(valid, name) {
 			return "", sveltinerr.NewPageTypeNotValidError()
 		}
 		return name, nil

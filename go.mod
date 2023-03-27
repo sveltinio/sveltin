@@ -10,6 +10,7 @@ require (
 	github.com/gosimple/slug v1.13.1
 	github.com/jlaffaye/ftp v0.1.0
 	github.com/matryer/is v1.4.1
+	github.com/samber/lo v1.38.1
 	github.com/spf13/afero v1.9.5
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
@@ -56,6 +57,7 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
+	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/term v0.6.0 // indirect

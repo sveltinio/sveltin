@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
@@ -23,7 +24,7 @@ import (
 // ResourceExists return nil if a Resource identified by name exists.
 func ResourceExists(fs afero.Fs, name string, s *config.SveltinSettings) error {
 	availableResources := GetAllResources(fs, s.GetContentPath())
-	if !common.Contains(availableResources, name) {
+	if !lo.Contains(availableResources, name) {
 		return sveltinerr.NewResourceNotFoundError()
 	}
 	return nil
@@ -66,12 +67,12 @@ func GetAllRoutes(fs afero.Fs, path string) []string {
 							element = strings.ReplaceAll(res, element, "")
 							element = strings.Replace(element, "/", "", 1)
 
-							if !common.Contains(entries, element) {
+							if !lo.Contains(entries, element) {
 								entries = append(entries, element)
 							}
 						}
 					} else {
-						if !common.Contains(entries, res) {
+						if !lo.Contains(entries, res) {
 							entries = append(entries, res)
 						}
 					}
@@ -91,7 +92,7 @@ func GetAllRoutes(fs afero.Fs, path string) []string {
 	for _, file := range entries {
 		routes = append(routes, strings.Replace(file, "/", "", 1))
 	}
-	return common.Unique(routes)
+	return lo.Uniq(routes)
 }
 
 // GetResourceContentMap returns a map of resources and relative contents.

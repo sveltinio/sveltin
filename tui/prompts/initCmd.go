@@ -4,9 +4,9 @@ import (
 	"errors"
 
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/samber/lo"
 	"github.com/sveltinio/prompti/choose"
 	"github.com/sveltinio/prompti/input"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
@@ -63,7 +63,7 @@ func SelectCSSLibHandler(cssLibName string) (string, error) {
 		return result, nil
 	case nameLenght != 0:
 		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, cssLibName) {
+		if !lo.Contains(valid, cssLibName) {
 			return "", sveltinerr.NewOptionNotValidError(cssLibName, valid)
 		}
 		return cssLibName, nil
@@ -93,7 +93,7 @@ func SelectThemeHandler(themeFlag string) (string, error) {
 		return result, nil
 	case themeFlagLenght != 0:
 		valid := choose.GetItemsKeys(entries)
-		if !common.Contains(valid, themeFlag) {
+		if !lo.Contains(valid, themeFlag) {
 			return "", sveltinerr.NewOptionNotValidError(themeFlag, valid)
 		}
 		return themeFlag, nil
@@ -129,7 +129,7 @@ func SelectNPMClientHandler(items []string, npmClientFlagValue string, logger *l
 		}
 		return result, nil
 	case nameLenght != 0:
-		if !common.Contains(items, npmClientFlagValue) {
+		if !lo.Contains(items, npmClientFlagValue) {
 			return "", sveltinerr.NewOptionNotValidError(npmClientFlagValue, items)
 		}
 		return npmClientFlagValue, nil

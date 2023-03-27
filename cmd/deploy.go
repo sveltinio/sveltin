@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/common"
@@ -78,7 +79,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 	if len(withExcludeFile) != 0 {
 		lines, err := common.ReadFileLineByLine(cfg.fs, withExcludeFile)
 		utils.ExitIfError(err)
-		withExclude = common.Union(withExclude, lines)
+		withExclude = lo.Union(withExclude, lines)
 	}
 
 	ftpConnectionConfig := newFTPConnectionConfig(cfg.prodData)
