@@ -36,7 +36,7 @@ export default defineConfig({
 		},
 	},
 	shortcuts: [
-		{ 'markdown-body': 'mx-auto prose prose-gray text-justify' },
+		{ 'markdown-body': 'max-w-full mx-auto prose prose-gray text-justify' },
 		{ 'max-width-none': 'max-w-none' },
 	],
 	transformers: [transformerDirectives()],
@@ -44,6 +44,14 @@ export default defineConfig({
 		presetUno(),
 		presetTypography({
 			cssExtend: {
+				h1: {
+					color: 'var(--base)',
+					'margin-top': '2rem',
+					'margin-bottom': '2rem',
+					'font-size': '1.875rem',
+					'line-height': '2.25rem',
+					'font-weight': '500',
+				},
 				h2: {
 					'font-weight': '500',
 					'font-size': '1.5em',
@@ -52,6 +60,7 @@ export default defineConfig({
 					'line-height': '1.3333333',
 				},
 				a: {
+					color: 'var(--base)',
 					'text-decoration': 'none',
 				},
 			},

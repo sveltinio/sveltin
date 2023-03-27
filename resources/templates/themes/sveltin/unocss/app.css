@@ -39,34 +39,27 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-@media only screen and (min-width: 1024px) {
-	code[class*='language-'] {
-		font-size: 1rem !important;
-	}
-
-	code[class*='language-'],
-	pre[class*='language-'] {
-		line-height: 25px;
-	}
-}
-
-.main-container {
-	@apply relative min-h-screen w-full flex flex-col justify-center;
+main {
+	@apply relative min-h-screen w-full flex flex-col;
 }
 
 .page-wrapper {
-	@apply text-dark flex flex-col justify-center p-11 mx-auto my-7 max-w-4xl;
+	@apply w-full text-dark flex flex-col grow p-11 mx-auto my-7 max-w-4xl;
+}
+
+:is(.page-wrapper) h1 {
+	@apply my-8;
 }
 
 .page-wrapper__content {
-	@apply w-full my-4 mx-auto text-gray-800 leading-6;
+	@apply grow w-full my-4 mx-auto text-gray-800 leading-6;
 }
 
-:is(.page-wrapper, .page-wrapper__content) h1 {
+:is(.page-wrapper__content) h1 {
 	@apply my-8 text-3xl font-medium;
 }
 
-.page-wrapper__content h2 {
+:is(.page-wrapper__content) h2 {
 	@apply text-2xl font-medium;
 }
 
@@ -80,4 +73,24 @@ pre[class*='language-'] {
 
 .text-default {
 	@apply text-base leading-6;
+}
+
+.markdown-body {
+	@apply max-w-full;
+}
+
+.pagesnav-sveltin {
+	--mt: 2rem;
+	--border-t-width: 2px;
+}
+
+@media only screen and (min-width: 1024px) {
+	code[class*='language-'] {
+		font-size: 1rem !important;
+	}
+
+	code[class*='language-'],
+	pre[class*='language-'] {
+		line-height: 25px;
+	}
 }
