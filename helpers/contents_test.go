@@ -7,7 +7,7 @@ import (
 
 	"github.com/matryer/is"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 func TestValidFileForContent(t *testing.T) {
@@ -24,7 +24,7 @@ func TestValidFileForContent(t *testing.T) {
 
 	memFS := afero.NewMemMapFs()
 	for _, tc := range tests {
-		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
+		is.NoErr(utils.TouchFile(memFS, filepath.Join(path, tc.filename)))
 	}
 
 	files, err := afero.ReadDir(memFS, path)
@@ -48,7 +48,7 @@ func TestNotValidFileForContent(t *testing.T) {
 
 	memFS := afero.NewMemMapFs()
 	for _, tc := range notValidFileExtTests {
-		is.NoErr(common.TouchFile(memFS, filepath.Join(path, tc.filename)))
+		is.NoErr(utils.TouchFile(memFS, filepath.Join(path, tc.filename)))
 	}
 
 	files, err := afero.ReadDir(memFS, path)

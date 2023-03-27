@@ -12,8 +12,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // OverwriteSveltinDTS is the struct representing the migration add the sveltin.json file.
@@ -52,7 +52,7 @@ func (m *OverwriteSveltinDTS) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.TargetPath)
+	exists, err := utils.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if !exists {
 		return err
 	}

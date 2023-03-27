@@ -16,9 +16,9 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // ResourceExists return nil if a Resource identified by name exists.
@@ -33,7 +33,7 @@ func ResourceExists(fs afero.Fs, name string, s *config.SveltinSettings) error {
 // GetAllResources returns a slice of resource names as string.
 func GetAllResources(fs afero.Fs, path string) []string {
 	resources := []string{}
-	if common.DirExists(fs, path) {
+	if utils.DirExists(fs, path) {
 		files, err := afero.ReadDir(fs, path)
 		if err != nil {
 			log.Fatalf("Something went wrong visiting the folder %s. Are you sure it exists?", path)
@@ -50,7 +50,7 @@ func GetAllResources(fs afero.Fs, path string) []string {
 // GetAllRoutes return a slice of all routes names as string.
 func GetAllRoutes(fs afero.Fs, path string) []string {
 	entries := []string{}
-	if common.DirExists(fs, path) {
+	if utils.DirExists(fs, path) {
 		walkFunc := func(filepath string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				replacer := strings.NewReplacer(path, "", "/[slug]", "")
@@ -98,7 +98,7 @@ func GetAllRoutes(fs afero.Fs, path string) []string {
 // GetResourceContentMap returns a map of resources and relative contents.
 func GetResourceContentMap(fs afero.Fs, resources []string, path string) map[string][]string {
 	content := make(map[string][]string)
-	if common.DirExists(fs, path) {
+	if utils.DirExists(fs, path) {
 		for _, resource := range resources {
 			resourcePath := filepath.Join(path, resource)
 			r, _ := afero.ReadDir(fs, resourcePath)
@@ -116,7 +116,7 @@ func GetResourceContentMap(fs afero.Fs, resources []string, path string) map[str
 // GetResourceMetadataMap returns a map of metadata and relative name.
 func GetResourceMetadataMap(fs afero.Fs, resources []string, path string) map[string][]string {
 	metadata := make(map[string][]string)
-	if common.DirExists(fs, path) {
+	if utils.DirExists(fs, path) {
 		for _, resource := range resources {
 			resourcePath := filepath.Join(path, resource)
 			r, _ := afero.ReadDir(fs, resourcePath)

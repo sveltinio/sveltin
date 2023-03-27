@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // Artifact is the struct with all is needed to define a sveltin's artifact.
@@ -53,5 +53,5 @@ func (sf *Artifact) GetResources() map[string]string {
 
 // CreateFolder wraps Mkdir to create a folders structure on the file system.
 func (sf *Artifact) CreateFolder(x ...string) error {
-	return common.MkDir(sf.fs, filepath.Join(x...))
+	return utils.MkDir(sf.fs, filepath.Join(x...))
 }

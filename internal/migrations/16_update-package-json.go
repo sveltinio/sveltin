@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -72,7 +71,7 @@ func (m *UpdatePackageJson) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.TargetPath)
+	exists, err := utils.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if err != nil {
 		return err
 	}

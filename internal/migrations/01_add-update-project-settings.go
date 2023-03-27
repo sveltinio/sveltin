@@ -14,7 +14,6 @@ import (
 	"strings"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
@@ -58,7 +57,7 @@ func (m *AddUpdateProjectSettings) up() error {
 		return nil
 	}
 
-	exists, _ := common.FileExists(m.getServices().fs, m.Data.TargetPath)
+	exists, _ := utils.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if !exists {
 		m.getServices().logger.Info(fmt.Sprintf("Creating %s", filepath.Base(m.Data.TargetPath)))
 		return addProjectSettingsFile(m)

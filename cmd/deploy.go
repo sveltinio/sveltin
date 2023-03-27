@@ -17,7 +17,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/internal/ftpfs"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
@@ -77,7 +76,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
 	if len(withExcludeFile) != 0 {
-		lines, err := common.ReadFileLineByLine(cfg.fs, withExcludeFile)
+		lines, err := utils.ReadFileLineByLine(cfg.fs, withExcludeFile)
 		utils.ExitIfError(err)
 		withExclude = lo.Union(withExclude, lines)
 	}
@@ -106,7 +105,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		// create a local tar archive as backup for the remote folder content
 		if isBackup {
 			backupsFolderPath := filepath.Join(cfg.pathMaker.GetRootFolder(), BackupsFolder)
-			utils.ExitIfError(common.MkDir(cfg.fs, backupsFolderPath))
+			utils.ExitIfError(utils.MkDir(cfg.fs, backupsFolderPath))
 			pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 			projectName, err := utils.RetrieveProjectName(cfg.fs, pathToPkgFile)
 			utils.ExitIfError(err)

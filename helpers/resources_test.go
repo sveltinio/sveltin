@@ -11,8 +11,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 func TestGetResources(t *testing.T) {
@@ -33,12 +33,12 @@ func TestGetResources(t *testing.T) {
 	is.Equal(filepath.Join("content"), settings.GetContentPath())
 
 	memFs := afero.NewMemMapFs()
-	is.NoErr(common.MkDir(memFs, settings.GetContentPath()))
+	is.NoErr(utils.MkDir(memFs, settings.GetContentPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
+		is.NoErr(utils.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
 	}
 
 	resources := GetAllResources(memFs, settings.GetContentPath())
@@ -76,12 +76,12 @@ func TestGetResourceContentMap(t *testing.T) {
 	is.Equal(filepath.Join("content"), settings.GetContentPath())
 
 	memFs := afero.NewMemMapFs()
-	is.NoErr(common.MkDir(memFs, settings.GetContentPath()))
+	is.NoErr(utils.MkDir(memFs, settings.GetContentPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
+		is.NoErr(utils.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
 	}
 
 	resources := GetAllResources(memFs, settings.GetContentPath())
@@ -91,7 +91,7 @@ func TestGetResourceContentMap(t *testing.T) {
 	dummyContents := []string{"first", "second", "third"}
 	for _, r := range dummyResources {
 		for _, c := range dummyContents {
-			is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r, c)))
+			is.NoErr(utils.MkDir(memFs, filepath.Join(settings.GetContentPath(), r, c)))
 		}
 	}
 	retrievedContents := GetResourceContentMap(memFs, resources, settings.GetContentPath())
@@ -126,13 +126,13 @@ func TestGetResourceMetadataMap(t *testing.T) {
 	is.Equal(filepath.Join("src", "routes"), settings.GetRoutesPath())
 
 	memFs := afero.NewMemMapFs()
-	is.NoErr(common.MkDir(memFs, settings.GetRoutesPath()))
+	is.NoErr(utils.MkDir(memFs, settings.GetRoutesPath()))
 
 	// Create dummy folders for resources
 	dummyResources := []string{"posts", "projects", "testimonials"}
 	for _, r := range dummyResources {
-		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
-		is.NoErr(common.MkDir(memFs, filepath.Join(settings.GetRoutesPath(), r)))
+		is.NoErr(utils.MkDir(memFs, filepath.Join(settings.GetContentPath(), r)))
+		is.NoErr(utils.MkDir(memFs, filepath.Join(settings.GetRoutesPath(), r)))
 	}
 
 	resources := GetAllResources(memFs, settings.GetContentPath())
@@ -142,7 +142,7 @@ func TestGetResourceMetadataMap(t *testing.T) {
 	dummyMetadata := []string{"author", "category"}
 	for _, r := range resources {
 		for _, m := range dummyMetadata {
-			is.NoErr(common.MkDir(memFs, filepath.Join(pwd, settings.GetRoutesPath(), r, m)))
+			is.NoErr(utils.MkDir(memFs, filepath.Join(pwd, settings.GetRoutesPath(), r, m)))
 		}
 	}
 

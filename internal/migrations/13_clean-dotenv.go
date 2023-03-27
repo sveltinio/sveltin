@@ -14,7 +14,7 @@ import (
 	"strings"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // CleanDotEnv is the struct representing the migration update the defaults.js.ts file.
@@ -53,7 +53,7 @@ func (m *CleanDotEnv) up() error {
 		return nil
 	}
 
-	exists, err := common.FileExists(m.getServices().fs, m.Data.TargetPath)
+	exists, err := utils.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if err != nil {
 		return err
 	}

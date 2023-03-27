@@ -14,12 +14,11 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 )
 
 // ExitIfExists panics on os.Exit(1) if the given path exists.
 func ExitIfExists(fs afero.Fs, path string) {
-	if common.DirExists(fs, path) {
+	if DirExists(fs, path) {
 		name := filepath.Base(path)
 		err := fmt.Errorf("%s already exists in %s. Remove it to re-create", name, path)
 		log.Fatalf("\x1b[31;1m✘ %s\x1b[0m\n", fmt.Sprintf("error: %s", err))

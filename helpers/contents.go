@@ -16,9 +16,9 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/spf13/afero"
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/internal/builder"
+	"github.com/sveltinio/sveltin/utils"
 )
 
 // IsValidFileForContent checks is the provided FileInfo has valid
@@ -53,7 +53,7 @@ func MakeFileContent(efs *embed.FS, content builder.Content) []byte {
 
 // WriteContentToDisk saves content file to the file system.
 func WriteContentToDisk(fs afero.Fs, saveAs string, fileContent []byte) error {
-	err := common.WriteToDisk(fs, saveAs, bytes.NewReader(fileContent))
+	err := utils.WriteToDisk(fs, saveAs, bytes.NewReader(fileContent))
 	if err != nil {
 		return err
 	}

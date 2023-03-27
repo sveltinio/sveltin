@@ -11,7 +11,6 @@ import (
 	"errors"
 	"path/filepath"
 
-	"github.com/sveltinio/sveltin/common"
 	"github.com/sveltinio/sveltin/helpers/factory"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/utils"
@@ -58,8 +57,8 @@ func (f *Folder) GetComponents() []Component {
 
 // Create is the function to create the entire folder structure on the file system.
 func (f *Folder) Create(sf *factory.Artifact) error {
-	if !common.DirExists(sf.GetFS(), f.GetPath()) {
-		err := common.MkDir(sf.GetFS(), f.GetPath())
+	if !utils.DirExists(sf.GetFS(), f.GetPath()) {
+		err := utils.MkDir(sf.GetFS(), f.GetPath())
 		utils.IsError(err, false)
 	}
 
