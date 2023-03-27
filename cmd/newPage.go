@@ -10,6 +10,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/config"
@@ -61,6 +62,9 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageName, err := prompts.AskPageNameHandler(args)
 	utils.ExitIfError(err)
 
+	resultPath := filepath.Join(cfg.pathMaker.GetRoutesFolder(), pageName)
+	utils.ExitIfExists(cfg.fs, resultPath)
+
 	var pageLanguage string
 	if withSvelte {
 		pageLanguage = tpltypes.Svelte
@@ -71,13 +75,13 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	pageLanguage, err = prompts.SelectPageLanguageHandler(pageLanguage)
 	utils.ExitIfError(err)
 
-	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageLanguage)
-	cfg.log.Plain(markup.H1(headingText))
-
 	pageData := &tpltypes.PageData{
 		Name:     pageName,
 		Language: pageLanguage,
 	}
+
+	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageLanguage)
+	cfg.log.Plain(markup.H1(headingText))
 
 	// MAKE FOLDER STRUCTURE: src/routes/<page_name>
 	routesFolder, err := makePageFolderStructure(RoutesFolder, pageData)

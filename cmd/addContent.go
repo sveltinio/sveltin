@@ -71,6 +71,9 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	contentResource, err := prompts.SelectResourceHandler(cfg.fs, resourceNameForContent, cfg.settings)
 	utils.ExitIfError(err)
 
+	resultPath := filepath.Join(cfg.pathMaker.GetContentFolder(), contentResource, contentName)
+	utils.ExitIfExists(cfg.fs, resultPath)
+
 	contentData := tpltypes.NewContentData(contentName, contentResource, withSampleContent)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)

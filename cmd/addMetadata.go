@@ -10,6 +10,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/config"
@@ -74,6 +75,9 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 
 	mdType, err := prompts.SelectMetadataTypeHandler(metadataType)
 	utils.ExitIfError(err)
+
+	resultPath := filepath.Join(cfg.pathMaker.GetRoutesFolder(), mdResource, mdName)
+	utils.ExitIfExists(cfg.fs, resultPath)
 
 	metadataTemplateData := tpltypes.NewMetadataData(mdName, mdResource, mdType)
 

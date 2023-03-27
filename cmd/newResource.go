@@ -10,6 +10,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 
 	"github.com/sveltinio/sveltin/config"
 	"github.com/sveltinio/sveltin/helpers"
@@ -75,6 +76,9 @@ var newResourceCmd = &cobra.Command{
 func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	resourceName, err := prompts.AskResourceNameHandler(args)
 	utils.ExitIfError(err)
+
+	resultPath := filepath.Join(cfg.pathMaker.GetRoutesFolder(), resourceName)
+	utils.ExitIfExists(cfg.fs, resultPath)
 
 	resourceData := &tpltypes.ResourceData{
 		Name:       resourceName,
