@@ -24,8 +24,8 @@ const config = {
 			pages: sveltekit.adapter.pages,
 			assets: sveltekit.adapter.assets,
 			fallback: sveltekit.adapter.fallback,
-			precompress: sveltekit.adapter.precompress || false,
-			strict: sveltekit.adapter.strict || true,
+			precompress: sveltekit.adapter.precompress,
+			strict: sveltekit.adapter.strict,
 		}),
 		prerender: {
 			crawl: true,
