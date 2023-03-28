@@ -8,7 +8,7 @@ export async function list(orderdByDate = true): Promise<Sveltin.MdSveXFile[]> {
 	let contents: Array<Sveltin.MdSveXFile> = await Promise.all(
 		contentFilesArray.map(async ([path, resolver]) => {
 			const contentItem: { path: string; resolver: Sveltin.MdSveXResolver } = {
-
+				path: path,
 				resolver: resolver as unknown as Sveltin.MdSveXResolver
 			};
 
