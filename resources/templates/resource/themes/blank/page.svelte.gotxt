@@ -10,36 +10,34 @@
 </script>
 
 <section>
-	<div>
-		{#if items.length != 0}
-			<h1>{toTitle(resource)}</h1>
-			{#each items as item}
-				<Card
-					title={item.metadata.title}
-					content={item.metadata.headline}
-					href="{base}/{resource}/{item.metadata.slug}"
+	{#if items.length != 0}
+		<h1>{toTitle(resource)}</h1>
+		{#each items as item}
+			<Card
+				title={item.metadata.title}
+				content={item.metadata.headline}
+				href="{base}/{resource}/{item.metadata.slug}"
+				prefetch="hover"
+			>
+				<CardImage
+					slot="cardImage"
+					alt={item.metadata.title}
+					src="{assets}/resources/{resource}/{item.metadata.slug}/{item.metadata.cover}"
+				/>
+				<CardAction
+					slot="cardAction"
 					prefetch="hover"
-				>
-					<CardImage
-						slot="cardImage"
-						alt={item.metadata.title}
-						src="{assets}/resources/{resource}/{item.metadata.slug}/{item.metadata.cover}"
-					/>
-					<CardAction
-						slot="cardAction"
-						prefetch="hover"
-						href="{base}/{resource}/{item.metadata.slug}"
-					/>
-				</Card>
-			{/each}
-		{:else}
-			<h2 class="message message--warning">
-				Nothing to show here! Create some content first and reload the page:
-				<span
-					><pre><code class="text-default">sveltin new content {resource}/getting-started</code
-						></pre></span
-				>
-			</h2>
-		{/if}
-	</div>
+					href="{base}/{resource}/{item.metadata.slug}"
+				/>
+			</Card>
+		{/each}
+	{:else}
+		<h2 class="message message--warning">
+			Nothing to show here! Create some content first and reload the page:
+			<span
+				><pre><code class="text-default">sveltin new content {resource}/getting-started</code
+					></pre></span
+			>
+		</h2>
+	{/if}
 </section>
