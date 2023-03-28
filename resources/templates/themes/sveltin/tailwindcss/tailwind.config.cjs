@@ -49,6 +49,7 @@ const config = {
 							'font-weight': '500',
 						},
 						h2: {
+							color: theme('colors.base'),
 							'font-weight': '500',
 							'font-size': '1.5em',
 							'margin-top': '2em',
