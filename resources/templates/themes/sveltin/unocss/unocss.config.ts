@@ -36,7 +36,7 @@ export default defineConfig({
 		},
 	},
 	shortcuts: [
-		{ 'markdown-body': 'max-w-full mx-auto prose prose-gray text-justify' },
+		{ 'markdown-body': 'mx-auto prose prose-gray text-justify max-w-full' },
 		{ 'max-width-none': 'max-w-none' },
 	],
 	transformers: [transformerDirectives()],
@@ -53,6 +53,7 @@ export default defineConfig({
 					'font-weight': '500',
 				},
 				h2: {
+					color: 'var(--base)',
 					'font-weight': '500',
 					'font-size': '1.5em',
 					'margin-top': '2em',
