@@ -15,15 +15,21 @@ html {
 }
 
 body {
-	height: 100%;
-	line-height: 1.5;
-	background-color: $white;
 	margin-left: auto;
 	margin-right: auto;
+	background-color: $white;
+	font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont,
+		'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+	line-height: 1.5;
 }
 
 main {
-	flex-grow: 1;
+	position: relative;
+	min-height: 100vh;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 h1 {
@@ -36,7 +42,7 @@ h1 {
 }
 
 a {
-	color: currentcolor;
+	color: $base;
 	text-decoration: none;
 
 	&:hover {
@@ -54,40 +60,37 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-.main-container {
-	position: relative;
-	min-height: 100vh;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
 .page-wrapper {
 	color: $dark;
-	margin: 1.75rem auto;
-	display: flex;
+	width: 100%;
 	max-width: 56rem;
-	flex-direction: column;
-	justify-content: center;
+	margin: 1.75rem auto;
 	padding: 2.75rem;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 
 	&__content {
+		line-height: 1.5rem;
 		margin: 1rem auto;
 		width: 100%;
+		flex-grow: 1;
 
+		:is(&) h1,
 		h2 {
 			font-weight: 500;
+		}
+
+		h1 {
+			margin: 2rem 0;
+			font-size: 1.875rem;
+			line-height: 2.25rem;
+		}
+
+		h2 {
 			font-size: 1.5rem;
 			line-height: 2rem;
 		}
-	}
-
-	:is(&, &__content) h1 {
-		margin: 2rem 0;
-		font-weight: 500;
-		font-size: 1.875rem;
-		line-height: 2.25rem;
 	}
 }
 
@@ -128,6 +131,16 @@ pre[class*='language-'] {
 	font-size: 1rem;
 	line-height: 1.75;
 
+	h1 {
+		color: $base;
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+		font-size: 1.875rem;
+		line-height: 2.25rem;
+		font-weight: 500;
+		border: 0 solid;
+	}
+
 	h2 {
 		color: $gray-900;
 		font-weight: 500;
@@ -139,7 +152,7 @@ pre[class*='language-'] {
 	}
 
 	a {
-		color: currentcolor;
+		color: $base;
 		text-decoration: none;
 
 		&:hover {
@@ -151,6 +164,11 @@ pre[class*='language-'] {
 
 .max-width-none {
 	max-width: none;
+}
+
+.pagesnav-sveltin {
+	--mt: 2rem;
+	--border-t-width: 2px;
 }
 
 @media only screen and (min-width: 1024px) {
