@@ -14,6 +14,7 @@
 		JsonLdSiteNavigationElements
 	} from '@sveltinio/seo/schemaorg';
 	import { GoogleFonts } from '@sveltinio/services/google';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { ScrollToTopButton } from '@sveltinio/widgets/scroll-to-top';
 	import Footer from '$themes/{{ .Theme.Name }}/partials/Footer.svelte';
 
@@ -34,16 +35,15 @@
 
 <GoogleFonts fonts={googleFonts} />
 
-<div class="main-container">
-	<main>
+<main>
+	<div class="page-wrapper">
 		{#key $page.url.href}
 			<Breadcrumbs url={$page.url.href} />
 		{/key}
 
 		<slot />
-	</main>
-
+	</div>
 	<Footer logoSrc="{assets}/images/sveltin/{website.logo}" />
-</div>
+</main>
 
 <ScrollToTopButton bounce />
