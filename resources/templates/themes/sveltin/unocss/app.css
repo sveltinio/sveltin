@@ -39,10 +39,6 @@ pre[class*='language-'] {
 	line-height: 20px;
 }
 
-main {
-	@apply relative min-h-screen w-full flex flex-col;
-}
-
 .page-wrapper {
 	@apply w-full text-dark flex flex-col grow p-11 mx-auto my-7 max-w-4xl;
 }

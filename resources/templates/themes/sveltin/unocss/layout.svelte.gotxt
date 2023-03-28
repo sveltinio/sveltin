@@ -37,7 +37,7 @@
 
 <GoogleFonts fonts={googleFonts} />
 
-<main>
+<main class="relative min-h-screen w-full flex flex-col">
 	<div class="page-wrapper">
 		{#key $page.url.href}
 			<Breadcrumbs url={$page.url.href} />
