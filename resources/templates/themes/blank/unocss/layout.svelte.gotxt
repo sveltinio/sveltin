@@ -14,6 +14,7 @@
 		JsonLdWebPage,
 		JsonLdSiteNavigationElements
 	} from '@sveltinio/seo/schemaorg';
+	import { Breadcrumbs } from '@sveltinio/widgets/breadcrumbs';
 	import { ScrollToTopButton } from '@sveltinio/widgets/scroll-to-top';
 	//import { GoogleFonts } from '@sveltinio/services/google';
 
