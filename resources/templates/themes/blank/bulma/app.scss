@@ -25,7 +25,6 @@ html {
 }
 
 body {
-	height: 100%;
 	line-height: 1.5;
 	background-color: $white;
 	margin-left: auto;
@@ -70,26 +69,6 @@ pre[class*='language-'] {
 	text-align: justify;
 	font-size: 1rem;
 	line-height: 1.75;
-
-	h2 {
-		color: $gray-900;
-		font-weight: 500;
-		font-size: 1.5em;
-		margin-top: 2em;
-		margin-bottom: 1em;
-		line-height: 1.3333333;
-		border: 0 solid;
-	}
-
-	a {
-		color: currentcolor;
-		text-decoration: none;
-
-		&:hover {
-			color: currentcolor;
-			text-decoration: none;
-		}
-	}
 }
 
 .max-width-none {
