@@ -32,6 +32,12 @@ const config = {
 		prerender: {
 			crawl: true,
 			entries: ['*'],
+			/**
+			 * While prerendering, silently ignore the failure "no element with id exists on..."
+			 * This is due to the mdsvex component import on the client-side with onMount, so
+			 * before that prerender cannot find ids.
+			 */
+			handleMissingId: 'ignore',
 		},
 	},
 };
