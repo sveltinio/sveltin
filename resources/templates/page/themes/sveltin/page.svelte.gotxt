@@ -1,28 +1,5 @@
 {{- $pageName := .Page.Name | Capitalize -}}
 <!-- Page markup-->
-<section class="page">
-	<div class="content">
-		<div class="centered">
-			<h1>This is the {{ $pageName }} page</h1>
-		</div>
-	</div>
+<section class="page-wrapper__content">
+	<h1>This is the {{ $pageName }} page</h1>
 </section>
-
-<style>
-	.content {
-		padding: 2rem;
-	}
-
-	.centered {
-		position: fixed;
-		top: 30%;
-		left: 40%;
-		margin-top: -50px;
-		margin-left: -100px;
-	}
-
-	.centered h1 {
-		font-size: 3rem;
-		line-height: 1;
-	}
-</style>
