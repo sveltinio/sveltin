@@ -20,18 +20,10 @@
 	//export let keywords;
 </script>
 
-<!-- Page markup-->
-<section class="page">
-	<div class="content">
-		<div class="markdown-body">
-			<!-- the mdsvex content will be slotted in here -->
-			<slot />
-		</div>
+<!-- Page markup -->
+<section>
+	<div class="markdown-body">
+		<!-- the mdsvex content will be slotted in here -->
+		<slot />
 	</div>
 </section>
-
-<style>
-	.content {
-		padding: 2rem;
-	}
-</style>
