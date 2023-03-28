@@ -7,6 +7,7 @@
 	import { PagesNavigator } from '@sveltinio/widgets/pages-navigator';
 
 	export let data;
+	let mdsvexComponent: Promise<Sveltin.MdSvexContentComponent>;
 
 	$: ({ slug, resource, current, previous, next } = data);
 
@@ -15,27 +16,23 @@
 		const module = await import(`../../../../../content/${resource}/${slug}/index.svx`)
 		{{ else -}}
 		const module = await import(`../../../../content/${resource}/${slug}/index.svx`);
-		{{- end -}}
+		{{ end -}}
 		return await module.default;
 	}
 
-	let mdContentComponent: Promise<Sveltin.MdSvexContentComponent>;
-
 	onMount(async () => {
-		mdContentComponent = retrieveMdSveXComponent();
+		mdsvexComponent = retrieveMdSveXComponent();
 	});
 
 	afterNavigate(async () => {
-		mdContentComponent = retrieveMdSveXComponent();
+		mdsvexComponent = retrieveMdSveXComponent();
 	});
 </script>
 
-
-
-{#await mdContentComponent}
-	<p>Loading content...</p>
-{:then mdContentComponent}
-	<article class="page-wrapper">
+{#await mdsvexComponent}
+	<p class="loader">Loading content...</p>
+{:then mdsvexComponent}
+	<article class="page-wrapper__content">
 		<h1>{current.metadata.title}</h1>
 		<div class="entry-meta">
 			{#if current.metadata.created_at}
@@ -64,10 +61,11 @@
 		<TOC data={current.metadata.headings} class="sveltin" />
 
 		<div class="markdown-body max-width-none">
-			<svelte:component this={mdContentComponent} />
+			<svelte:component this={mdsvexComponent} />
 		</div>
 
 		<PagesNavigator
+			class="pagesnav-sveltin"
 			prev={ {
 				label: previous.metadata.title,
 				href: `${base}/${resource}/${previous.metadata.slug}`,
@@ -84,8 +82,11 @@
 	<p style="color: red">{error.message}</p>
 {/await}
 
-
 <style>
+	.loader {
+		padding: 1rem 0;
+	}
+
 	.entry-meta {
 		color: #475569;
 		letter-spacing: 0.025em;

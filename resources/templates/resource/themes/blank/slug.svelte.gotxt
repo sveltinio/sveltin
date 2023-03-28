@@ -7,6 +7,7 @@
 	import { PagesNavigator } from '@sveltinio/widgets/pages-navigator';
 
 	export let data;
+	let mdsvexComponent: Promise<Sveltin.MdSvexContentComponent>;
 
 	$: ({ slug, resource, current, previous, next } = data);
 
@@ -15,24 +16,22 @@
 		const module = await import(`../../../../../content/${resource}/${slug}/index.svx`)
 		{{ else -}}
 		const module = await import(`../../../../content/${resource}/${slug}/index.svx`);
-		{{- end -}}
+		{{ end -}}
 		return await module.default;
 	}
 
-	let mdContentComponent: Promise<Sveltin.MdSvexContentComponent>;
-
 	onMount(async () => {
-		mdContentComponent = retrieveMdSveXComponent();
+		mdsvexComponent = retrieveMdSveXComponent();
 	});
 
 	afterNavigate(async () => {
-		mdContentComponent = retrieveMdSveXComponent();
+		mdsvexComponent = retrieveMdSveXComponent();
 	});
 </script>
 
-{#await mdContentComponent}
+{#await mdsvexComponent}
 	<p>Loading content...</p>
-{:then mdContentComponent}
+{:then mdsvexComponent}
 <article>
 	<div>
 		<h1>{current.metadata.title}</h1>
@@ -60,7 +59,7 @@
 	<TOC data={current.metadata.headings} />
 
 	<div class="markdown-body max-width-none">
-		<svelte:component this={mdContentComponent} />
+		<svelte:component this={mdsvexComponent} />
 	</div>
 
 	<PagesNavigator
