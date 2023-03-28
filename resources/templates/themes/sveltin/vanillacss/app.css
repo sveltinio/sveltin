@@ -49,7 +49,7 @@ h1 {
 }
 
 a {
-	color: currentcolor;
+	color: var(--base);
 	text-decoration: none;
 }
 
@@ -84,7 +84,6 @@ pre[class*='language-'] {
 }
 
 .page-wrapper__content {
-	color: rgb(31, 41, 55);
 	line-height: 1.5rem;
 	margin: 1rem auto;
 	width: 100%;
@@ -149,6 +148,7 @@ pre[class*='language-'] {
 	font-size: 1.875rem;
 	line-height: 2.25rem;
 	font-weight: 500;
+	border: 0 solid;
 }
 
 :is(.markdown-body) h2 {
@@ -158,6 +158,7 @@ pre[class*='language-'] {
 	margin-top: 2em;
 	margin-bottom: 1em;
 	line-height: 1.3333333;
+	border: 0 solid;
 }
 
 :is(.markdown-body) a {
