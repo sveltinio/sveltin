@@ -51,24 +51,29 @@ The Smartest Way to Create SvelteKit powered static websites.
 
 Sveltin is a CLI (Command Line Interface) created to boost the developers productivity working on <strong>SvelteKit v1.x.x powered static websites</strong>.
 
+## :warning: Project Status
+
+> Sveltin is under active development and changes are expected before we hit version 1.0. Those changes are more related to the auto-generated Svelte code than to the CLI itself. If you are interesting on it please, give it a try and let it evolves, see the **Contributing** section. If you get stuck, reach out for help in the [discussions] tab or open an [issue].
+
 ## :information_source: SvelteKit versions
 
-> Latest tested SvelteKit version is [1.13.0](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.13.0). SvelteKit reached v1.x.x then no more breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions.
+> Latest tested SvelteKit version is [1.14.0](https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%401.14.0). SvelteKit reached v1.x.x then no more breakings are expected until a new major release. Although we decided to stay sticked to the tested version, you should be able to upgrade SvelteKit to the upcoming minor versions without disruptions.
 
 ## :mega: Overview
 
 Sveltin is a simple, quick and powerful CLI to:
 
-- Scaffold SvelteKit powered websites
-- Generate resources, libs and endpoints
-- Add content to the resources
-- Generate menu structure, sitemap and rss
-- Make your site SEO Ready (Metadata, Json-LD, OpenGraph) in a easy way
+- scaffold SvelteKit powered websites;
+- generate resources (routes) and relative API endpoints;
+- add content to the resources;
+- add and manage content's metadata (category, tags, user...);
+- generate menu structure, sitemap and RSS;
+- make your site SEO Ready (Metadata, Json-LD, OpenGraph).
 
 Sveltin provides:
 
-- Out-of-the-box support for Bootstrap, Bulma, Sass/SCSS, Tailwind CSS, UnoCSS and vanilla CSS
-- Ready to use Svelte [components](https://github.com/sveltinio/sveltin-components-library)
+- Out-of-the-box support for Bootstrap, Bulma, Sass/SCSS, Tailwind CSS, UnoCSS and vanilla CSS;
+- Ready to use Svelte [components].
 
 ## :rocket: Quick Start
 
@@ -152,7 +157,7 @@ go install github.com/sveltinio/sveltin@latest
 
 ### Manually
 
-You can download the pre-compiled binary for you specific OS from the [releases page](https://github.com/sveltinio/sveltin/releases). You will need to copy the and extract the binary, then move it to your local bin folder. Please, refer to the example below:
+You can download the pre-compiled binary for you specific OS from the [releases page]. You will need to copy the and extract the binary, then move it to your local bin folder. Please, refer to the example below:
 
 ```bash
 curl https://github.com/sveltinio/sveltin/releases/download/${VERSION}/${PACKAGE_NAME} -o ${PACKAGE_NAME}
@@ -332,6 +337,7 @@ Sveltin leverages many great open source libraries:
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
 | [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
 | [is](https://github.com/matryer/is)                     | `1.4.1`   | MIT          |
+| [lo](https://github.com/samber/lo)                      | `1.38.1`  | MIT          |
 | [afero](https://github.com/spf13/afero)                 | `1.9.5`   | Apache-2.0   |
 | [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
 | [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |
@@ -364,3 +370,10 @@ Sveltin is free and open-source software licensed under the Apache 2.0 License.
 [preview]: https://docs.sveltin.io/cli/preview/
 [server]: https://docs.sveltin.io/cli/server/
 [update]: https://docs.sveltin.io/cli/update/
+
+<!-- -->
+
+[components]: https://github.com/sveltinio/sveltin-components-library
+[discussions]: https://github.com/sveltinio/sveltin/discussions
+[issue]: https://github.com/sveltinio/sveltin/issues
+[releases page]: https://github.com/sveltinio/sveltin/releases
