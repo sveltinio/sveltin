@@ -46,10 +46,10 @@ func RunPreviewCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Preview your Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
+	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
 	utils.ExitIfError(err)
 
-	err = helpers.RunPMCommand(npmClient.Name, "preview", "", nil, false)
+	err = helpers.RunNPMCommand(npmClientInfo.Name, "preview", "", nil)
 	utils.ExitIfError(err)
 }
 

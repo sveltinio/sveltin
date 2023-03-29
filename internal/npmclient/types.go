@@ -5,14 +5,20 @@
  * that can be found in the LICENSE file.
  */
 
-package npmc
+package npmclient
 
 import (
 	"strings"
 )
 
-// NPMClient is the struct representing an npm client with name and version.
-type NPMClient struct {
+const (
+	Npm  = "npm"
+	Yarn = "yarn"
+	Pnpm = "pnpm"
+)
+
+// NPMClientInfo is the struct representing an npm client with name and version.
+type NPMClientInfo struct {
 	Name    string
 	Desc    string
 	Version string
@@ -23,14 +29,14 @@ type NPMClientInfoStr string
 
 // ToString returns a valid string representing the package manager name and version
 // <pm_name@pm_version>
-func (n NPMClient) ToString() string {
+func (n NPMClientInfo) ToString() string {
 	return strings.TrimSuffix(n.Name+"@"+n.Version, "\n")
 }
 
-// ToNPMClient takes an NPMClientInfoStr string alias and returns the relative NPMClient struct
-func (s NPMClientInfoStr) ToNPMClient() NPMClient {
+// ToNPMClientInfo takes an NPMClientInfoStr string alias and returns the relative NPMClient struct
+func (s NPMClientInfoStr) ToNPMClientInfo() NPMClientInfo {
 	splitted := strings.Split(string(s), "@")
-	return NPMClient{
+	return NPMClientInfo{
 		Name:    splitted[0],
 		Version: splitted[1],
 	}

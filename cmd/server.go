@@ -43,10 +43,10 @@ func RunServerCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Running the Vite server"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
+	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
 	utils.ExitIfError(err)
 
-	err = helpers.RunPMCommand(npmClient.Name, "dev", "", nil, false)
+	err = helpers.RunNPMCommand(npmClientInfo.Name, "dev", "", nil)
 	utils.ExitIfError(err)
 }
 

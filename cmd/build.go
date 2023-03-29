@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/sveltin/helpers"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/npmclient"
 	"github.com/sveltinio/sveltin/tui/activehelps"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -49,11 +50,11 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	cfg.log.Plain(markup.H1("Building the Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
-	npmClient, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
+	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
 	utils.ExitIfError(err)
 
 	os.Setenv("VITE_PUBLIC_BASE_PATH", cfg.prodData.BaseURL)
-	err = helpers.RunPMCommand(npmClient.Name, "build", "", nil, false)
+	err = helpers.RunNPMCommand(npmClientInfo.Name, npmclient.BuildCmd, "", nil)
 	utils.ExitIfError(err)
 
 	cfg.log.Success("Done\n")

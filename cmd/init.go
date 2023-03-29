@@ -25,7 +25,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/gitclient"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/notifier"
-	"github.com/sveltinio/sveltin/internal/npmc"
+	"github.com/sveltinio/sveltin/internal/npmclient"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
@@ -320,7 +320,7 @@ func getNewThemeName(value, projectName string) string {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func getSelectedNPMClient(npmcFlag string, logger *logger.Logger) npmc.NPMClient {
+func getSelectedNPMClient(npmcFlag string, logger *logger.Logger) npmclient.NPMClientInfo {
 	installedNPMClients := utils.GetInstalledNPMClientList()
 	npmcNames := utils.GetNPMClientNames(installedNPMClients)
 	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag, logger)

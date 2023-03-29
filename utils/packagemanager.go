@@ -12,17 +12,18 @@ import (
 
 	"github.com/spf13/afero"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
-	"github.com/sveltinio/sveltin/internal/npmc"
+	"github.com/sveltinio/sveltin/internal/npmclient"
 )
 
-// GetInstalledNPMClientList returns the list of installed npmClient as slice of NPMClient.
-func GetInstalledNPMClientList() []npmc.NPMClient {
-	valid := []string{"npm", "yarn", "pnpm"}
-	npmClientList := []npmc.NPMClient{}
+// GetInstalledNPMClientList returns the list of installed npmClient as slice of NPMClientInfo.
+func GetInstalledNPMClientList() []npmclient.NPMClientInfo {
+	valid := []string{npmclient.Npm, npmclient.Yarn, npmclient.Pnpm}
+
+	npmClientList := []npmclient.NPMClientInfo{}
 	for _, pm := range valid {
 		valid, version := GetNPMClientInfo(pm)
 		if valid {
-			a := npmc.NPMClient{
+			a := npmclient.NPMClientInfo{
 				Name:    pm,
 				Desc:    pm,
 				Version: version,
@@ -34,7 +35,7 @@ func GetInstalledNPMClientList() []npmc.NPMClient {
 }
 
 // GetNPMClientNames returns the list of installed npmClient as slice of strings.
-func GetNPMClientNames(items []npmc.NPMClient) []string {
+func GetNPMClientNames(items []npmclient.NPMClientInfo) []string {
 	npmClientNames := []string{}
 	for _, v := range items {
 		npmClientNames = append(npmClientNames, v.Name)
@@ -59,8 +60,8 @@ func GetNPMClientInfo(name string) (bool, string) {
 	return true, string(out)
 }
 
-func filter(in []npmc.NPMClient, name string) npmc.NPMClient {
-	var out npmc.NPMClient
+func filter(in []npmclient.NPMClientInfo, name string) npmclient.NPMClientInfo {
+	var out npmclient.NPMClientInfo
 	for _, each := range in {
 		if each.Name == name {
 			out = each
@@ -69,8 +70,8 @@ func filter(in []npmc.NPMClient, name string) npmc.NPMClient {
 	return out
 }
 
-// GetSelectedNPMClient returns the selected NPMClient struct out of the available ones.
-func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
+// GetSelectedNPMClient returns the selected NPMClientInfo struct out of the available ones.
+func GetSelectedNPMClient(in []npmclient.NPMClientInfo, name string) npmclient.NPMClientInfo {
 	return filter(in, name)
 }
 
@@ -78,7 +79,7 @@ func GetSelectedNPMClient(in []npmc.NPMClient, name string) npmc.NPMClient {
 func RetrieveProjectName(appFS afero.Fs, pathToPkgJSON string) (string, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJSON)
 	ExitIfError(err)
-	pkgParsed := npmc.Parse(pkgFileContent)
+	pkgParsed := npmclient.Parse(pkgFileContent)
 	if pkgParsed.Name != "" {
 		return pkgParsed.Name, nil
 	}
@@ -86,16 +87,16 @@ func RetrieveProjectName(appFS afero.Fs, pathToPkgJSON string) (string, error) {
 	return "", sveltinerr.NewProjectNameNotFoundError()
 }
 
-// RetrievePackageManagerFromPkgJSON returns NPMClient struct parsing the package.json file.
-func RetrievePackageManagerFromPkgJSON(appFS afero.Fs, pathToPkgJSON string) (npmc.NPMClient, error) {
+// RetrievePackageManagerFromPkgJSON returns NPMClientInfo struct parsing the package.json file.
+func RetrievePackageManagerFromPkgJSON(appFS afero.Fs, pathToPkgJSON string) (npmclient.NPMClientInfo, error) {
 	pkgFileContent, err := afero.ReadFile(appFS, pathToPkgJSON)
 	ExitIfError(err)
-	pkgParsed := npmc.Parse(pkgFileContent)
+	pkgParsed := npmclient.Parse(pkgFileContent)
 	if pkgParsed.PackageManager != "" {
-		pmInfoString := npmc.NPMClientInfoStr(pkgParsed.PackageManager)
-		return pmInfoString.ToNPMClient(), nil
+		pmInfoString := npmclient.NPMClientInfoStr(pkgParsed.PackageManager)
+		return pmInfoString.ToNPMClientInfo(), nil
 	}
-	return npmc.NPMClient{}, sveltinerr.NewPackageManagerKeyNotFoundOnPackageJSONFile()
+	return npmclient.NPMClientInfo{}, sveltinerr.NewPackageManagerKeyNotFoundOnPackageJSONFile()
 }
 
 // RetrieveCSSLib returns the css lib name used by the project.
@@ -104,7 +105,7 @@ func RetrieveCSSLib(appFS afero.Fs, pathToPkgJSON string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	pkgParsed := npmc.Parse(pkgFileContent)
+	pkgParsed := npmclient.Parse(pkgFileContent)
 
 	if isTailwindCSS(pkgParsed) {
 		return "tailwindcss", nil
@@ -119,28 +120,28 @@ func RetrieveCSSLib(appFS afero.Fs, pathToPkgJSON string) (string, error) {
 	}
 }
 
-func isTailwindCSS(p *npmc.PackageJSON) bool {
+func isTailwindCSS(p *npmclient.PackageJSON) bool {
 	if _, exists := p.DevDependencies["tailwindcss"]; exists {
 		return true
 	}
 	return false
 }
 
-func isBootstrap(p *npmc.PackageJSON) bool {
+func isBootstrap(p *npmclient.PackageJSON) bool {
 	if _, exists := p.DevDependencies["bootstrap"]; exists {
 		return true
 	}
 	return false
 }
 
-func isBulma(p *npmc.PackageJSON) bool {
+func isBulma(p *npmclient.PackageJSON) bool {
 	if _, exists := p.DevDependencies["bulma"]; exists {
 		return true
 	}
 	return false
 }
 
-func isSass(p *npmc.PackageJSON) bool {
+func isSass(p *npmclient.PackageJSON) bool {
 	if _, exists := p.DevDependencies["tailwindcss"]; exists {
 		return true
 	}
