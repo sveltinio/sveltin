@@ -21,8 +21,8 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/gitclient"
 	"github.com/sveltinio/sveltin/internal/markup"
-	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
@@ -74,8 +74,7 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 	themeStarterTemplate := cfg.startersMap[ThemeStarter]
 	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
 
-	gitClient := shell.NewGitClient()
-	err = gitClient.RunClone(themeStarterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
+	err = gitclient.RunClone(themeStarterTemplate.URL, CliVersion, cfg.pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// NEW FILE: config/defaults.js

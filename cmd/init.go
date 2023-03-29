@@ -22,10 +22,10 @@ import (
 	"github.com/sveltinio/sveltin/internal/composer"
 	"github.com/sveltinio/sveltin/internal/css"
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
+	"github.com/sveltinio/sveltin/internal/gitclient"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/notifier"
 	"github.com/sveltinio/sveltin/internal/npmc"
-	"github.com/sveltinio/sveltin/internal/shell"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
@@ -103,8 +103,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	starterTemplate := cfg.startersMap[SvelteKitStarter]
 	cfg.log.Info(fmt.Sprintf("Getting the %s", starterTemplate.Name))
 
-	gitClient := shell.NewGitClient()
-	err = gitClient.RunClone(starterTemplate.URL, cfg.pathMaker.GetProjectRoot(projectName), true)
+	err = gitclient.RunClone(starterTemplate.URL, CliVersion, cfg.pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
 
 	// GET FOLDER: <project_name>
@@ -181,7 +180,8 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	// INITIALIZE GIT REPO
 	if isInitGitRepo(withGit) {
 		cfg.log.Info("Initializing an empty Git repository")
-		err = gitClient.RunInit(projectFolder.GetPath(), true)
+		err = gitclient.RunInit(projectFolder.GetPath())
+		//err = gitClient.RunInit(projectFolder.GetPath(), true)
 		utils.ExitIfError(err)
 	}
 
