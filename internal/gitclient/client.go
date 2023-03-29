@@ -13,11 +13,17 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/bitfield/script"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/utils"
+)
+
+const (
+	MasterBranch = "master"
+	MainBranch   = "main"
 )
 
 type Release struct {
@@ -26,7 +32,7 @@ type Release struct {
 }
 
 // RunInit initialize an empty git repository at the given path.
-func RunInit(localPath string) error {
+func RunInit(localPath, defaultBranch string) error {
 	if localPath == "" {
 		_err := fmt.Errorf("%s canno be empty", localPath)
 		return sveltinerr.NewDefaultError(_err)
@@ -34,6 +40,13 @@ func RunInit(localPath string) error {
 
 	repoPath := strings.Join([]string{localPath, git.GitDirName}, "/")
 	_, err := git.PlainInit(repoPath, true)
+	utils.ExitIfError(err)
+
+	/**
+	 * go-git Init and PlainInit create "master" as default branch and it is not configurable:
+	 * https://github.com/go-git/go-git/blob/3f1cfde283c93f33218c807602e93d47f72f7b90/repository.go#L88
+	 */
+	err = renameGitBranch(localPath, MasterBranch, defaultBranch)
 	utils.ExitIfError(err)
 
 	return nil
@@ -85,6 +98,17 @@ func RunClone(repoURL, tag, inpath string) error {
 	}
 
 	return nil
+}
+
+func renameGitBranch(reposPath, old, new string) error {
+	err := os.Chdir(reposPath)
+	if err != nil {
+		return err
+	}
+
+	cmdString := fmt.Sprintf("git branch -m %s %s", old, new)
+	_, err = script.Exec(cmdString).Stdout()
+	return err
 }
 
 func cleanupGitRepository(localPath string, f ...string) error {

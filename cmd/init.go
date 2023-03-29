@@ -180,8 +180,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	// INITIALIZE GIT REPO
 	if isInitGitRepo(withGit) {
 		cfg.log.Info("Initializing an empty Git repository")
-		err = gitclient.RunInit(projectFolder.GetPath())
-		//err = gitClient.RunInit(projectFolder.GetPath(), true)
+		err = gitclient.RunInit(projectFolder.GetPath(), gitclient.MainBranch)
 		utils.ExitIfError(err)
 	}
 
