@@ -20,7 +20,7 @@ func WriteToFile(appFS afero.Fs, pkg *PackageJSON, saveAs string, prefix string,
 	return afero.WriteFile(appFS, saveAs, file, 0644)
 }
 
-func jsonMarshal(t interface{}) ([]byte, error) {
+func jsonMarshal(t any) ([]byte, error) {
 	buffer := &bytes.Buffer{}
 	encoder := json.NewEncoder(buffer)
 	encoder.SetEscapeHTML(false)
@@ -28,7 +28,7 @@ func jsonMarshal(t interface{}) ([]byte, error) {
 	return buffer.Bytes(), err
 }
 
-func jsonMarshalIndent(t interface{}, prefix, indent string) ([]byte, error) {
+func jsonMarshalIndent(t any, prefix, indent string) ([]byte, error) {
 	b, err := jsonMarshal(t)
 	if err != nil {
 		return nil, err
