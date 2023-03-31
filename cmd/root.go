@@ -41,6 +41,13 @@ type appConfig struct {
 	fs              afero.Fs
 }
 
+type sveltinCmdConfig struct {
+	NpmClient  string `mapstructure:"npmClient" env:"SVELTIN_NPM_CLIENT"`
+	CssLib     string `mapstructure:"css" env:"SVELTIN_CSS_LIB"`
+	PortNumber string `mapstructure:"port" env:"SVELTIN_SERVER_PORT"`
+	InitGit    bool   `mapstructure:"git" env:"SVELTIN_INIT_GIT"`
+}
+
 // CliVersion is the current sveltin cli version number.
 const CliVersion string = "0.12.0"
 
@@ -147,7 +154,7 @@ func Execute() {
 
 // Command initialization.
 func init() {
-	cobra.OnInitialize(loadSveltinSettings, initAppConfig)
+	cobra.OnInitialize(loadSveltinSettings, initAppConfig, sveltinCmdConfigSetup)
 }
 
 //=============================================================================
@@ -181,6 +188,13 @@ func initAppConfig() {
 	cfg.fs = afero.NewOsFs()
 }
 
+func sveltinCmdConfigSetup() {
+	err := bindSveltinCmdFlagsAndEnv()
+	if err != nil {
+		return
+	}
+}
+
 func loadProjectSettings(filename string) (prjConfig tpltypes.ProjectSettings, err error) {
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
@@ -201,20 +215,101 @@ func loadProjectSettings(filename string) (prjConfig tpltypes.ProjectSettings, e
 	return
 }
 
-func loadEnvFile(filename string) (tplData tpltypes.EnvProductionData, err error) {
+// Used to load .env.production file and make the data available to the deploy cmd.
+func loadEnvFile(filename string) (tpltypes.EnvProductionData, error) {
+	var tplData tpltypes.EnvProductionData
+
 	currentDir, _ := os.Getwd()
 	viper.AddConfigPath(currentDir)
 	viper.SetConfigName(filename)
 	viper.SetConfigType("env")
 	viper.AutomaticEnv()
 
-	err = viper.ReadInConfig()
+	err := viper.ReadInConfig()
 	if err != nil {
-		return
+		return tpltypes.EnvProductionData{}, err
 	}
 
 	err = viper.Unmarshal(&tplData)
-	return
+	if err != nil {
+		return tpltypes.EnvProductionData{}, err
+	}
+
+	return tplData, nil
+}
+
+//=============================================================================
+
+// Set the dependency between the config sources.
+func bindSveltinCmdFlagsAndEnv() error {
+	tags, err := utils.GetStructTags(sveltinCmdConfig{})
+	if err != nil {
+		return err
+	}
+
+	for _, t := range tags {
+		canonicalTag, err := t.Get("mapstructure")
+		if err != nil {
+			return err
+		}
+		envTag, err := t.Get("env")
+		if err != nil {
+			return err
+		}
+
+		err = viper.BindPFlag(canonicalTag.Name, initCmd.Flags().Lookup(canonicalTag.Name))
+		if err != nil {
+			return err
+		}
+
+		err = viper.BindEnv(canonicalTag.Name, envTag.Name)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+ * Configuration options priority:
+ * - 1: CLI flags
+ * - 2: env variables
+ * - 3: sveltin_config.yaml
+ */
+func setCmdsDefaultConfigs(defaultsConfig *sveltinCmdConfig) error {
+	config, err := readSveltinCmdConfig()
+	if err != nil {
+		return err
+	}
+
+	// Set defaultsConfig
+	defaultsConfig.NpmClient = config.NpmClient
+	defaultsConfig.CssLib = config.CssLib
+	defaultsConfig.PortNumber = config.PortNumber
+	defaultsConfig.InitGit = config.InitGit
+
+	return nil
+}
+
+func readSveltinCmdConfig() (*sveltinCmdConfig, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return nil, err
+	}
+	viper.AddConfigPath(homeDir)
+	viper.SetConfigName("sveltin_config")
+	viper.SetConfigType("yaml")
+
+	_ = viper.ReadInConfig()
+
+	cfg := &sveltinCmdConfig{}
+	err = viper.Unmarshal(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return cfg, nil
 }
 
 //=============================================================================

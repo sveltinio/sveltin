@@ -7,6 +7,7 @@ require (
 	github.com/charmbracelet/bubbles v0.15.0
 	github.com/charmbracelet/bubbletea v0.23.2
 	github.com/charmbracelet/lipgloss v0.6.0
+	github.com/fatih/structtag v1.2.0
 	github.com/go-git/go-git/v5 v5.6.1
 	github.com/go-playground/validator/v10 v10.12.0
 	github.com/gosimple/slug v1.13.1

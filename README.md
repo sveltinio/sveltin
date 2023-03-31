@@ -344,6 +344,7 @@ Sveltin leverages many great open source libraries, in alphabetical order:
 | [script](https://github.com/bitfield/script)            | `0.21.4`  | MIT          |
 | [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |
+| [structtag](github.com/fatih/structtag)                 | `1.2.0`   | BSD-3-Clause |
 | [text](https://golang.org/x/text)                       | `0.8.0`   | BSD-3-Clause |
 | [validator](https://github.com/go-playground/validator) | `10.12.0` | MIT          |
 | [viper](https://github.com/spf13/viper)                 | `1.15.0`  | MIT          |

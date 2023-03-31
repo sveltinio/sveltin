@@ -52,21 +52,60 @@ const (
 
 var (
 	// How to use the command.
-	initCmdExample = `sveltin init blog --css tailwindcss
-sveltin init blog --css unocss -n pnpm -p 3030 --git`
+	initCmdExample = `
+# CLI Flags
+
+sveltin init blog --css tailwindcss
+sveltin init blog --css unocss -n pnpm -p 3030 --git
+
+# Env vars
+
+SVELTIN_INIT_GIT=true sveltin init
+
+# sveltin_config.yaml placed in your homeDir:
+#
+# npmClient: pnpm
+# css: tailwindcss
+# git: true
+
+sveltin init
+
+## or any combination
+
+SVELTIN_NPM_CLIENT=pnpm SVELTIN_INIT_GIT=true sveltin init --css unocss`
 	// Short description shown in the 'help' output.
-	initCmdShortMsg = "Initialize a new Sveltin project"
+	initCmdShortMsg = "Initialise a new Sveltin project"
 	// Long message shown in the 'help <this-command>' output.
-	initCmdLongMsg = utils.MakeCmdLongMsg("Command used to initialize/scaffold a new sveltin project.")
+	initCmdLongMsg = utils.MakeCmdLongMsg(`Command used to initialise/scaffold a new sveltin project.
+
+The "init" command, like any other sveltin commands, can be executed in interactive way or using flags. Compared to other commands, "init" needs more information to be executed (e.g. npm client, css lib etc.).
+
+A user is likely to always use the same set of configurations. For that reason, the "init" command provides different ways to pass information to it enhancing the flexibility and the developer experience
+
+The configuration options and relative priorities are:
+
+  1: CLI flags
+  2: env variables
+  3: sveltin_config.yaml (in your homeDir)
+
+| CLI Flag    | Env Variable        | Config file key |
+| ----------- | ------------------- | --------------- |
+| --npmClient | SVELTIN_NPM_CLIENT  | npmClient       |
+| --css       | SVELTIN_CSS_LIB     | css             |
+| --port      | SVELTIN_SERVER_PORT | port            |
+| --git       | SVELTIN_INIT_GIT    | git             |
+`)
 )
 
 // Bind command flags.
 var (
-	withCSSLib     string
-	withThemeName  string
-	withPortNumber string
-	withGit        bool
+	withThemeName string
 )
+
+var initCmdDefaultsCfg = &sveltinCmdConfig{
+	PortNumber: "5173",
+	InitGit:    false,
+}
 
 //=============================================================================
 
@@ -86,7 +125,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	projectName, err := prompts.AskProjectNameHandler(args)
 	utils.ExitIfError(err)
 
-	cssLibName, err := prompts.SelectCSSLibHandler(withCSSLib)
+	cssLibName, err := prompts.SelectCSSLibHandler(initCmdDefaultsCfg.CssLib)
 	utils.ExitIfError(err)
 
 	themeSelection, err := prompts.SelectThemeHandler(withThemeName)
@@ -94,7 +133,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	themeData, err := buildThemeData(themeSelection, withThemeName, projectName, cssLibName)
 	utils.ExitIfError(err)
 
-	npmClient := getSelectedNPMClient(npmClientName, cfg.log)
+	npmClient := getSelectedNPMClient(initCmdDefaultsCfg.NpmClient, cfg.log)
 	npmClientName = npmClient.Name
 
 	cfg.log.Plain(markup.H1("Setup a new Sveltin project"))
@@ -170,7 +209,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 			Info:    npmClient.ToString(),
 		},
 		Vite: &tpltypes.ViteData{
-			Port: withPortNumber,
+			Port: initCmdDefaultsCfg.PortNumber,
 		},
 		Theme: themeData,
 	}
@@ -178,7 +217,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	utils.ExitIfError(err)
 
 	// INITIALIZE GIT REPO
-	if isInitGitRepo(withGit) {
+	if isInitGitRepo(initCmdDefaultsCfg.InitGit) {
 		cfg.log.Info("Initializing an empty Git repository")
 		err = gitclient.RunInit(projectFolder.GetPath(), gitclient.MainBranch)
 		utils.ExitIfError(err)
@@ -206,7 +245,7 @@ func init() {
 // Assign flags to the command.
 func initCmdFlags(cmd *cobra.Command) {
 	// npmClient flag
-	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
+	cmd.Flags().StringP("npmClient", "n", initCmdDefaultsCfg.NpmClient, "The name of your preferred npm client")
 	err := cmd.RegisterFlagCompletionFunc("npmClient", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		installedNPMClients := utils.GetInstalledNPMClientList()
 		npmcNames := utils.GetNPMClientNames(installedNPMClients)
@@ -222,7 +261,7 @@ func initCmdFlags(cmd *cobra.Command) {
 	utils.ExitIfError(err)
 
 	// css flag
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
+	cmd.Flags().StringP("css", "c", initCmdDefaultsCfg.CssLib,
 		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
 			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
 	err = cmd.RegisterFlagCompletionFunc("css", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -231,8 +270,8 @@ func initCmdFlags(cmd *cobra.Command) {
 	utils.ExitIfError(err)
 
 	// others
-	cmd.Flags().StringVarP(&withPortNumber, "port", "p", "5173", "The port to start the server on")
-	cmd.Flags().BoolVarP(&withGit, "git", "g", false, "Initialize an empty Git repository")
+	cmd.Flags().StringP("port", "p", initCmdDefaultsCfg.PortNumber, "The port to start the server on")
+	cmd.Flags().BoolP("git", "g", initCmdDefaultsCfg.InitGit, "Initialize an empty Git repository")
 }
 
 // Adding Active Help messages enhancing shell completions.
@@ -248,6 +287,8 @@ func initCmdValidArgs(cmd *cobra.Command, args []string, toComplete string) ([]s
 
 // Run before the main Run function of init command to check and alert about newer version.
 func initCmdPreRunHook(cmd *cobra.Command, args []string) {
+	err := setCmdsDefaultConfigs(initCmdDefaultsCfg)
+	utils.ExitIfError(err)
 	handleReleaseNotifier(notifier.InitCmd)
 }
 

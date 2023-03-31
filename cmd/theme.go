@@ -23,6 +23,7 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/gitclient"
 	"github.com/sveltinio/sveltin/internal/markup"
+	"github.com/sveltinio/sveltin/internal/notifier"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
@@ -40,14 +41,20 @@ var (
 	themeCmdLongMsg = utils.MakeCmdLongMsg("Command used to create a new theme for projects so that can be shared with others and reused.")
 )
 
+var themeCmdDefaultsCfg = &sveltinCmdConfig{
+	PortNumber: "5173",
+	InitGit:    false,
+}
+
 //=============================================================================
 
 var themeCmd = &cobra.Command{
-	Use:               "theme [name]",
+	Use:               "theme [theme_name]",
 	Aliases:           []string{"t"},
 	Example:           themeCmdExample,
 	Short:             themeCmdShortMsg,
 	Long:              themeCmdLongMsg,
+	Hidden:            true,
 	ValidArgsFunction: themeCmdValidArgFunction,
 	PersistentPreRun:  themeCmdPreRunHook,
 	Run:               ThemeCmdRun,
@@ -61,7 +68,7 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 
 	projectName := themeName + "_project"
 
-	cssLibName, err := prompts.SelectCSSLibHandler(withCSSLib)
+	cssLibName, err := prompts.SelectCSSLibHandler(themeCmdDefaultsCfg.CssLib)
 	utils.ExitIfError(err)
 	cfg.log.Info(cssLibName)
 
@@ -116,7 +123,7 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 			Info:    npmClient.ToString(),
 		},
 		Vite: &tpltypes.ViteData{
-			Port: withPortNumber,
+			Port: themeCmdDefaultsCfg.PortNumber,
 		},
 		Theme: themeData,
 	}
@@ -140,7 +147,7 @@ func init() {
 
 // Assign flags to the command.
 func themeCmdFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&withCSSLib, "css", "c", "",
+	cmd.Flags().StringP("css", "c", themeCmdDefaultsCfg.CssLib,
 		fmt.Sprintf("The CSS lib to use. Valid: %s, %s, %s, %s, %s, %s",
 			css.Bootstrap, css.Bulma, css.Scss, css.TailwindCSS, css.UnoCSS, css.VanillaCSS))
 	cmd.Flags().StringVarP(&npmClientName, "npmClient", "n", "", "The name of your preferred npm client")
@@ -159,6 +166,10 @@ func themeCmdValidArgFunction(cmd *cobra.Command, args []string, toComplete stri
 
 // Run before the main Run function of init command to check and alert about newer version.
 func themeCmdPreRunHook(cmd *cobra.Command, args []string) {
+	err := setCmdsDefaultConfigs(themeCmdDefaultsCfg)
+	utils.ExitIfError(err)
+	handleReleaseNotifier(notifier.InitCmd)
+
 	pwd, _ := os.Getwd()
 	pathToPkgJSON := filepath.Join(pwd, "package.json")
 	exists, _ := afero.Exists(cfg.fs, pathToPkgJSON)
