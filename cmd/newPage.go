@@ -154,7 +154,7 @@ func createPageRoutesFolder(folderName string, pageData *tpltypes.PageData) *com
 	// NEW FILE: src/routes/<page_name>/+page.svelte|svx>
 	pageFile := cfg.fsManager.NewPublicPageFile(pageData, &cfg.projectSettings)
 
-	// NEW FILE: src/routes/<page_name>/+page.server.ts>
+	// NEW FILE: src/routes/<page_name>/+page.ts>
 	pageLoadFile := &composer.File{
 		Name:       helpers.GetRouteFilename(IndexPageLoadFileId, cfg.settings),
 		TemplateID: IndexPageLoadFileId,

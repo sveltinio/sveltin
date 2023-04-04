@@ -146,7 +146,7 @@ func (c *SveltinSettings) GetIndexPageFilename() string {
 	return c.Pages.Index
 }
 
-// GetIndexEndpointFilename returns '+page.server.ts' file.
+// GetIndexEndpointFilename returns '+page.ts' file.
 func (c *SveltinSettings) GetIndexEndpointFilename() string {
 	return c.Pages.IndexEndpoint
 }
@@ -156,7 +156,7 @@ func (c *SveltinSettings) GetSlugPageFilename() string {
 	return c.Pages.Slug
 }
 
-// GetSlugEndpointFilename returns '+page.server.ts' as filename for the slug.
+// GetSlugEndpointFilename returns '+page.ts' as filename for the slug.
 func (c *SveltinSettings) GetSlugEndpointFilename() string {
 	return c.Pages.SlugEndpoint
 }

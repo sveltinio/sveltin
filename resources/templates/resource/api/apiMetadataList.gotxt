@@ -1,8 +1,7 @@
 import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
 import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ .Metadata.Name | ToVariableName | Capitalize }}';
-
-export const prerender = false;
+import { json } from '@sveltejs/kit';
 
 export const GET = (async ({ url }) => {
 	const { pathname } = url;
@@ -12,7 +11,7 @@ export const GET = (async ({ url }) => {
 		const data = await groupedBy(metadataName);
 
 		if (data) {
-			return new Response(JSON.stringify(data));
+			return json(data);
 		}
 	}
 

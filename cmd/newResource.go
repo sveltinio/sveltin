@@ -49,7 +49,7 @@ This command:
 - Add the resource as route within the "src/routes" folder, creating its own folder
 - Scaffold a GET endpoint for the resource within "src/routes/api/<api_version>/<resource_name>
 - Scaffold +page.svelte component and +page.serve.ts endpoint to list all the content belongs to a resource
-- Scaffold [slug]/+page.svelte component and [slug]/+page.server.ts endpoint to get access to a specific content page`)
+- Scaffold [slug]/+page.svelte component and [slug]/+page.ts endpoint to get access to a specific content page`)
 )
 
 // Bind command flags.
@@ -250,7 +250,7 @@ func createResourceRoutesFolder(folderName string, cfg appConfig, resourceData *
 
 	// NEW FOLDER: src/routes/<resource_name>
 	resourceRoutesFolder := composer.NewFolder(resourceData.Name)
-	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.server.ts}
+	// NEW FILE: src/routes/<resource_name>/{+page.svelte, +page.ts}
 	cfg.log.Info("Routes")
 	for _, item := range []string{IndexPageFileId, IndexPageLoadFileId} {
 		f := &composer.File{
@@ -268,7 +268,7 @@ func createResourceRoutesFolder(folderName string, cfg appConfig, resourceData *
 
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
-	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.server.ts}
+	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
 	slugFiles := []string{SlugPageFileId, SlugPageLoadFileId}
 	if resourceData.SlugLayout {
 		slugFiles = append(slugFiles, SlugLayoutFileId)
@@ -306,11 +306,11 @@ func createResourceAPIRoutesFolder(folderName string, resourceData *tpltypes.Res
 	// GET FOLDER: src/routes/api/<api_version> folder
 	apiFolder := cfg.fsManager.GetFolder(folderName)
 
-	// NEW FOLDER: src/routes/api/<version>/<resource_name>
-	resourceAPIFolder := composer.NewFolder(resourceData.Name)
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>.json
+	resourceApiFolder := composer.NewFolder(fmt.Sprintf("%s.%s", resourceData.Name, "json"))
 
-	// NEW FILE: src/routes/api/<version>/<resource_name>/+server.ts
-	apiFile := &composer.File{
+	// NEW FILE: src/routes/api/<version>/<resource_name>.json/+server.ts
+	allApiFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiIndexFileId,
 		TemplateData: &config.TemplateData{
@@ -319,12 +319,14 @@ func createResourceAPIRoutesFolder(folderName string, resourceData *tpltypes.Res
 			Settings: cfg.settings,
 		},
 	}
-	resourceAPIFolder.Add(apiFile)
+	resourceApiFolder.Add(allApiFile)
 
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>
+	slugApiFolder := composer.NewFolder(resourceData.Name)
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>/[slug=string]
-	slugStringFolder := composer.NewFolder(fmt.Sprintf("%s%s%s%s%s", "[", "slug", "=", "string", "]"))
+	slugMatcherFolder := composer.NewFolder("[slug=string]")
 	// NEW FILE: src/routes/api/<version>/<resource_name>/[slug=string]/+server.ts
-	apiSlugFile := &composer.File{
+	slugApiFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiSlugFileId,
 		TemplateData: &config.TemplateData{
@@ -333,11 +335,12 @@ func createResourceAPIRoutesFolder(folderName string, resourceData *tpltypes.Res
 			Settings: cfg.settings,
 		},
 	}
-	slugStringFolder.Add(apiSlugFile)
-	resourceAPIFolder.Add(slugStringFolder)
+	slugMatcherFolder.Add(slugApiFile)
+	slugApiFolder.Add(slugMatcherFolder)
 
 	// Add folders to src/routes/api/<version>/
-	apiFolder.Add(resourceAPIFolder)
+	apiFolder.Add(resourceApiFolder)
+	apiFolder.Add(slugApiFolder)
 
 	return apiFolder
 }

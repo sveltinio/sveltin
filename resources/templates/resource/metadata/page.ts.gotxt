@@ -3,11 +3,10 @@ import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
-import { all } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
 import { canonicalURL, defaultImage } from '@sveltinio/ts-utils/urls';
-import { toTitle } from '@sveltinio/ts-utils/strings';
+import { removeTrailingSlash, toTitle } from '@sveltinio/ts-utils/strings';
 
 //! Edit for page SEO related data.
 const pageTitle = '{{ .Metadata.Name }}';
@@ -18,11 +17,12 @@ const pageKeywords: Array<string> = [];
  * Returns values available to the page and page SEO data used
  * by the SEO components in the root layout via the $page.data prop.
  */
-export const load = (async ({ url }) => {
-	const mdName = pageTitle;
+export const load = (async ({ fetch, url }) => {
+	const mdName = '{{ .Metadata.Name }}';
 	const baseUrl = dev ? url.origin : website.baseURL;
 
-	const data = await all();
+	const response = await fetch(`/api/v1${removeTrailingSlash(url.pathname)}.json`);
+	const data = await response.json();
 
 	const seoData = {
 		url: canonicalURL(baseUrl, url.pathname),

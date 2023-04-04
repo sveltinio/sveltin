@@ -1,22 +1,29 @@
 {{- $resourceName := .Resource.Name -}}
 {{- $resourceNameAsVar := $resourceName | ToVariableName | ReplaceIfNested -}}
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
-import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-import { canonicalURL, makeImagePath } from '@sveltinio/ts-utils/urls';
+import { parentPathname, canonicalURL, makeImagePath } from '@sveltinio/ts-utils/urls';
 import { toTitle } from '@sveltinio/ts-utils/strings';
 
 /*
  * Returns values available to the page and page SEO data used
  * by the SEO components in the root layout via the $page.data prop.
  */
-export const load = (async ({ url, params }) => {
+export const load = (async ({ fetch, url, params }) => {
 	const { slug } = params;
-	const { resource, status, current, previous, next } = await getSingle(slug);
+
+	const parentPath = parentPathname(url.href);
+	if (parentPath.isErr()) {
+		throw error(422, { message: `${parentPath.error.message}` });
+	}
+
+	const response = await fetch(`/api/v1/${parentPath.value}/${slug}`);
+	const data = await response.json();
+	const { resource, status, current, previous, next } = data;
 
 	if (status != 200) {
 		throw error(404, { message: 'Not found' });
@@ -54,4 +61,4 @@ export const load = (async ({ url, params }) => {
 		next
 	};
 
-}) satisfies PageServerLoad;
+}) satisfies PageLoad;

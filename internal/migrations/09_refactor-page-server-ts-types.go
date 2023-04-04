@@ -59,7 +59,7 @@ func (m *RefactorPageServerTSTypes) up() error {
 
 	if exists {
 		files := []string{}
-		targetFiles := []string{"+page.server.ts"}
+		targetFiles := []string{"+page.ts"}
 
 		walkFunc := func(file string, info os.FileInfo, err error) error {
 			if lo.Contains(targetFiles, info.Name()) {

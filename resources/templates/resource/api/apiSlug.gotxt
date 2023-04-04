@@ -1,8 +1,7 @@
 import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
 import { getSingle } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
-
-export const prerender = false;
+import { json } from '@sveltejs/kit';
 
 export const GET = (async ({ url }) => {
 	const { pathname } = url;
@@ -12,7 +11,7 @@ export const GET = (async ({ url }) => {
 		const data = await getSingle(slug);
 
 		if (data) {
-			return new Response(JSON.stringify(data));
+			return json(data);
 		}
 	}
 

@@ -1,8 +1,7 @@
 import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
 import { list } from '$lib/{{ .Resource.Name }}/load{{ .Resource.Name | ToVariableName | Capitalize }}';
-
-export const prerender = false;
+import { json } from '@sveltejs/kit';
 
 export const GET = (async () => {
 	const data = await list();
@@ -11,7 +10,7 @@ export const GET = (async () => {
 	}));
 
 	if (body) {
-		return new Response(JSON.stringify(body));
+		return json(body);
 	}
 
 	throw error(404, 'Nothing here yet');

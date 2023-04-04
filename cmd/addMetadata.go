@@ -218,7 +218,7 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 	// NEW FOLDER: <metadata_name>
 	resourceMedatadaRoutesFolder := composer.NewFolder(metadataData.Name)
 
-	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.server.ts}
+	// NEW FILE: src/routes/<resource_name>/<metadata_name>/{+page.svelte, +page.ts}
 	for _, item := range []string{IndexPageFileId, IndexPageLoadFileId} {
 		f := &composer.File{
 			Name:       helpers.GetRouteFilename(item, cfg.settings),
@@ -234,7 +234,7 @@ func createOrAddContentForMetadataToRoutesLocalFolder(metadataData *tpltypes.Met
 
 	// NEW FOLDER: src/routes/<resource_name>/[slug]
 	slugFolder := composer.NewFolder("[slug]")
-	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.server.ts}
+	// NEW FILE: src/routes/<resource_name>/[slug]{+page.svelte, +page.ts}
 	for _, item := range []string{SlugPageFileId, SlugPageLoadFileId} {
 		f := &composer.File{
 			Name:       helpers.GetRouteFilename(item, cfg.settings),
@@ -268,11 +268,11 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataData *tpltypes.Metada
 	// NEW FOLDER: src/routes/api/<api_version>/<resource_name>
 	resourceAPIFolder := composer.NewFolder(metadataData.Resource)
 
-	// NEW FOLDER: src/routes/api/<version>/<resource_name>/<metadata_name>
-	resourceAPIMetadataMatcherFolder := composer.NewFolder(utils.ToSnakeCase(metadataData.Name))
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>/<metadata_name>.json
+	allApiFolder := composer.NewFolder(fmt.Sprintf("%s.%s", utils.ToSnakeCase(metadataData.Name), "json"))
 
-	// NEW FILE: src/routes/api/<version>/<resource_name>/[<resource_name> = <metadata_name>]/+server.ts
-	resourceMetadataIndexAPIFile := &composer.File{
+	// NEW FILE: src/routes/api/<version>/<resource_name>/<metadata_name>.json/+server.ts
+	allApiFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiMetadataIndexId,
 		TemplateData: &config.TemplateData{
@@ -280,14 +280,16 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataData *tpltypes.Metada
 			Metadata: metadataData,
 		},
 	}
-	resourceAPIMetadataMatcherFolder.Add(resourceMetadataIndexAPIFile)
-	resourceAPIFolder.Add(resourceAPIMetadataMatcherFolder)
+	allApiFolder.Add(allApiFile)
+	resourceAPIFolder.Add(allApiFolder)
 
+	// NEW FOLDER: src/routes/api/<version>/<resource_name>/<metadata_name>
+	slugApiFolder := composer.NewFolder(metadataData.Name)
 	// NEW FOLDER: src/routes/api/<version>/<resource_name>/<metadata_name>/[slug=string]
-	resourceAPIMetadataNameMatcherFolder := composer.NewFolder("[slug=string]")
+	slugMatcherFolder := composer.NewFolder("[slug=string]")
 
 	// NEW FILE: src/routes/api/<version>/<resource_name>/<metadata_name>/[slug=string]/+server.ts
-	resourceMetadataNameIndexAPIFile := &composer.File{
+	slugApiFile := &composer.File{
 		Name:       cfg.settings.GetAPIFilename(),
 		TemplateID: ApiFolder,
 		TemplateData: &config.TemplateData{
@@ -295,8 +297,9 @@ func createOrAddContentForMetadataToApiLocalFolder(metadataData *tpltypes.Metada
 			Metadata: metadataData,
 		},
 	}
-	resourceAPIMetadataNameMatcherFolder.Add(resourceMetadataNameIndexAPIFile)
-	resourceAPIMetadataMatcherFolder.Add(resourceAPIMetadataNameMatcherFolder)
+	slugMatcherFolder.Add(slugApiFile)
+	slugApiFolder.Add(slugMatcherFolder)
+	resourceAPIFolder.Add(slugApiFolder)
 
 	apiFolder.Add(resourceAPIFolder)
 

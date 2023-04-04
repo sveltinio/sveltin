@@ -1,12 +1,11 @@
 {{- $mdName := .Metadata.Name | ToVariableName | Capitalize -}}
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 import type { SEOWebPage } from '@sveltinio/seo/types';
 import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
-import { groupedBy } from '$lib/{{ .Metadata.Resource }}/load{{ $mdName }}';
 import { website } from '$config/website.js';
 import { OpenGraphType, TwitterCardType } from '@sveltinio/seo/types';
-import { canonicalURL, defaultImage } from '@sveltinio/ts-utils/urls';
+import { parentPathname, canonicalURL, defaultImage } from '@sveltinio/ts-utils/urls';
 import { toTitle } from '@sveltinio/ts-utils/strings';
 
 //! Edit for page SEO related data.
@@ -18,11 +17,18 @@ const pageKeywords: Array<string> = [];
  * Returns values available to the page and page SEO data used
  * by the SEO components in the root layout via the $page.data prop.
  */
-export const load = (async ({ url, params }) => {
+export const load = (async ({ fetch, url, params }) => {
 	const { slug } = params;
-	const metadata = await groupedBy(slug);
 
-	if (typeof metadata === "undefined") {
+	const parentPath = parentPathname(url.href);
+	if (parentPath.isErr()) {
+		throw error(422, { message: `${parentPath.error.message}` });
+	}
+
+	const response = await fetch(`/api/v1/${parentPath.value}/${slug}`);
+	const metadata = await response.json();
+
+	if (typeof metadata === 'undefined') {
 		throw error(404, { message: 'Not found' });
 	}
 
@@ -49,4 +55,4 @@ export const load = (async ({ url, params }) => {
 		seoData,
 		metadata
 	};
-}) satisfies PageServerLoad;
+}) satisfies PageLoad;
