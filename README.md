@@ -333,7 +333,7 @@ Sveltin leverages many great open source libraries, in alphabetical order:
 | [afero](https://github.com/spf13/afero)                 | `1.9.5`   | Apache-2.0   |
 | [bubble](https://github.com/charmbracelet/bubbles)      | `0.15.0`  | MIT          |
 | [bubbletea](https://github.com/charmbracelet/bubbletea) | `0.23.2`  | MIT          |
-| [cobra](https://github.com/spf13/cobra)                 | `1.6.1`   | Apache-2.0   |
+| [cobra](https://github.com/spf13/cobra)                 | `1.7.0`   | Apache-2.0   |
 | [ftp](https://github.com/jlaffaye/ftp)                  | `0.1.0`   | ISC          |
 | [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
 | [go-git](https://github.com/go-git/go-git)              | `5.6.1`   | Apache-2.0   |
