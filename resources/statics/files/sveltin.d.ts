@@ -17,6 +17,7 @@ export namespace Sveltin {
 	>;
 
 	export type ResourceContent = {
+		component?: MdSvexContentComponent;
 		metadata: YAMLFrontmatter;
 	};
 

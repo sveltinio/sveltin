@@ -28,7 +28,7 @@ export async function list(orderdByDate = true): Promise<Sveltin.MdSveXFile[]> {
 	return contents;
 }
 
-{{ $slugName := .Resource.Name | ToSlug}}
+{{ $slugName := .Resource.Name | ToSlug -}}
 export async function getSingle(slug: string) {
 	const resource = '{{ $slugName }}';
 	const contentList: Sveltin.MdSveXFile[] = await list();

@@ -30,6 +30,12 @@ export const load = (async ({ fetch, url, params }) => {
 	}
 
 	const { metadata } = current;
+	{{ if .Resource.Group -}}
+	current.component = (await import(`../../../../../content/${resource}/${slug}/index.svx`)).default;
+	{{ else -}}
+	current.component = (await import(`../../../../content/${resource}/${slug}/index.svx`)).default;
+	{{ end }}
+
 	const baseUrl = dev ? url.origin : website.baseURL;
 	const imagePath = makeImagePath(baseUrl, 'resources', url.pathname, metadata.cover);
 
@@ -54,11 +60,9 @@ export const load = (async ({ fetch, url, params }) => {
 
 	return {
 		resource,
-		slug,
 		seoData,
 		current,
 		previous,
 		next
 	};
-
 }) satisfies PageLoad;

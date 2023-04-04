@@ -1,37 +1,13 @@
 <script lang="ts">
-	import type { Sveltin } from '$sveltin';
-	import { onMount } from 'svelte';
-	import { afterNavigate } from '$app/navigation';
 	import { assets, base } from '$app/paths';
 	import { TOC } from '@sveltinio/widgets/toc';
 	import { PagesNavigator } from '@sveltinio/widgets/pages-navigator';
 
 	export let data;
-	let mdsvexComponent: Promise<Sveltin.MdSvexContentComponent>;
 
 	$: ({ slug, resource, current, previous, next } = data);
-
-	async function retrieveMdSveXComponent(): Promise<Sveltin.MdSvexContentComponent> {
-		{{ if .Resource.Group -}}
-		const module = await import(`../../../../../content/${resource}/${slug}/index.svx`)
-		{{ else -}}
-		const module = await import(`../../../../content/${resource}/${slug}/index.svx`);
-		{{ end -}}
-		return await module.default;
-	}
-
-	onMount(async () => {
-		mdsvexComponent = retrieveMdSveXComponent();
-	});
-
-	afterNavigate(async () => {
-		mdsvexComponent = retrieveMdSveXComponent();
-	});
 </script>
 
-{#await mdsvexComponent}
-	<p>Loading content...</p>
-{:then mdsvexComponent}
 <article>
 	<div>
 		<h1>{current.metadata.title}</h1>
@@ -59,7 +35,7 @@
 	<TOC data={current.metadata.headings} />
 
 	<div class="markdown-body max-width-none">
-		<svelte:component this={mdsvexComponent} />
+		<svelte:component this={current.component} />
 	</div>
 
 	<PagesNavigator
@@ -75,9 +51,6 @@
 		} }
 	/>
 </article>
-{:catch error}
-	<p style="color: red">{error.message}</p>
-{/await}
 
 <style>
 	article {
