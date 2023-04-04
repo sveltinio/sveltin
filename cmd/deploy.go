@@ -8,7 +8,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -21,6 +20,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -71,8 +71,8 @@ var deployCmd = &cobra.Command{
 
 // DeployCmdRun is the actual work function.
 func DeployCmdRun(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Deploy your website to the FTP server"))
-	cfg.log.Important("Run: \"sveltin deploy --help\" to ensure the pre-requisites are in place.")
+	cfg.log.Print(markup.H1("Deploy your website to the FTP server"))
+	cfg.log.Info("Run: \"sveltin deploy --help\" to ensure the pre-requisites are in place.")
 
 	// if --excludeFile is set, combines its lines with values from the --exclude flag.
 	if len(withExcludeFile) != 0 {
@@ -114,7 +114,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		}
 
 		// delete content from the remote folder with exclude list
-		cfg.log.Important(fmt.Sprintf("If present, the following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", ")))
+		cfg.log.Warnf("If present, the following files will not be deleted from the remote folder: %s", strings.Join(withExclude, ", "))
 		err = ftpfs.DeleteAllAction(ftpConn, withExclude, isDryRun).Run()
 		utils.ExitIfError(err)
 
@@ -175,7 +175,7 @@ func DeployCmdRun(cmd *cobra.Command, args []string) {
 		err = ftpfs.LogoutAction(ftpConn).Run()
 		utils.ExitIfError(err)
 
-		cfg.log.Success("Done\n")
+		cfg.log.Print(feedbacks.Success())
 	}
 }
 

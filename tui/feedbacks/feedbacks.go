@@ -16,6 +16,15 @@ import (
 	"github.com/sveltinio/sveltin/utils"
 )
 
+// SuccessMsg prints a success message.
+func SuccessMsg(text string) string {
+	return fmt.Sprintf("%s %s\n", markup.Green("\u2714"), text)
+}
+
+func Success() string {
+	return fmt.Sprintf("%s Done\n", markup.Green("\u2714"))
+}
+
 // ShowNewProjectNextStepsHelpMessage prints an help message as next steps for a project creation.
 func ShowNewProjectNextStepsHelpMessage(uc *config.ProjectConfig) {
 	steps := []string{

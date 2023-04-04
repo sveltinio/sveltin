@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"fmt"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -75,7 +74,7 @@ func (m *UpdateMDsveXPlugins) up() error {
 		}
 
 		if mustMigrate(fileContent, gatekeeper) && patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			m.getServices().logger.Infof("Migrating %s", filepath.Base(m.Data.TargetPath))
 			updatedContent := []byte(fixRehypeAutoLinkHeadingsUsage(fileContent))
 			if _, err := m.runMigration(updatedContent, ""); err != nil {
 				return err

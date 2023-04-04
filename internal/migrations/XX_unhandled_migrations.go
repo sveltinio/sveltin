@@ -9,7 +9,6 @@ package migrations
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -111,7 +110,7 @@ func (m *UnhandledMigration) up() error {
 				if !bytes.Contains(fileContent, []byte("[sveltin migrate] @IMPORTANT")) {
 					localFilePath :=
 						strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
-					m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+					m.getServices().logger.Infof("Migrating %s", localFilePath)
 					if _, err := m.runMigration(fileContent, file); err != nil {
 						return err
 					}

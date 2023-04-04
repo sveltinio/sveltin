@@ -15,6 +15,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/npmclient"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -43,7 +44,7 @@ var installCmd = &cobra.Command{
 
 // RunInstallCmd is the actual work function.
 func RunInstallCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Installing all dependencies"))
+	cfg.log.Print(markup.H1("Installing all dependencies"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
@@ -52,7 +53,7 @@ func RunInstallCmd(cmd *cobra.Command, args []string) {
 	err = helpers.RunNPMCommand(npmClientInfo.Name, npmclient.InstallCmd, "", nil)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 }
 
 // Command initialization.

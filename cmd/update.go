@@ -15,6 +15,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/npmclient"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -42,7 +43,7 @@ var updateCmd = &cobra.Command{
 
 // RunUpdateCmd is the actual work function.
 func RunUpdateCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Updating all dependencies"))
+	cfg.log.Print(markup.H1("Updating all dependencies"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
@@ -51,7 +52,7 @@ func RunUpdateCmd(cmd *cobra.Command, args []string) {
 	err = helpers.RunNPMCommand(npmClientInfo.Name, npmclient.UpdateCmd, "", nil)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 }
 
 // Command initialization.

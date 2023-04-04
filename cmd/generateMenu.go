@@ -13,6 +13,7 @@ import (
 	"github.com/sveltinio/sveltin/helpers/factory"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/resources"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -48,7 +49,7 @@ var generateMenuCmd = &cobra.Command{
 
 // RunGenerateMenuCmd is the actual work function.
 func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Generating the menu structure file"))
+	cfg.log.Print(markup.H1("Generating the menu structure file"))
 
 	cfg.log.Info("Getting list of all resources contents")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.settings.GetContentPath())
@@ -74,7 +75,7 @@ func RunGenerateMenuCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 }
 
 // Command initialization.

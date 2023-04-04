@@ -88,7 +88,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 
 	// MAKE FOLDER STRUCTURE: content folder
 	headingText := fmt.Sprintf("Creating '%s' as resource", resourceData.Name)
-	cfg.log.Plain(markup.H1(headingText))
+	cfg.log.Print(markup.H1(headingText))
 
 	contentFolder, err := makeResourceFolderStructure(ContentFolder, resourceData, cfg)
 	utils.ExitIfError(err)
@@ -122,7 +122,7 @@ func RunNewResourceCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(markup.Green("\u2714 Done\n"))
 
 	// NEXT STEPS
 	feedbacks.ShowNewResourceHelpMessage(resourceName)

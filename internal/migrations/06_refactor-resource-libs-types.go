@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -93,7 +92,7 @@ func (m *RefactorResourcesLibsTypes) up() error {
 			localFilePath :=
 				strings.Replace(file, m.getServices().pathMaker.GetRootFolder(), "", 1)
 			if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
-				m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+				m.getServices().logger.Infof("Migrating %s", localFilePath)
 				if _, err := m.runMigration(fileContent, file); err != nil {
 					return err
 				}

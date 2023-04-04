@@ -81,7 +81,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	}
 
 	headingText := fmt.Sprintf("Creating the '%s' page (type: %s)", pageName, pageLanguage)
-	cfg.log.Plain(markup.H1(headingText))
+	cfg.log.Print(markup.H1(headingText))
 
 	// MAKE FOLDER STRUCTURE: src/routes/<page_name>
 	routesFolder, err := makePageFolderStructure(RoutesFolder, pageData)
@@ -100,7 +100,7 @@ func NewPageCmdRun(cmd *cobra.Command, args []string) {
 	sfs := factory.NewPageArtifact(&resources.SveltinTemplatesFS, cfg.fs)
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
-	cfg.log.Success("Done\n")
+	cfg.log.Print(markup.Green("\u2714 Done\n"))
 }
 
 // Command initialization.

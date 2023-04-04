@@ -17,6 +17,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/migrations"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -48,7 +49,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 
 	if isConfirm {
 		cwd, _ := os.Getwd()
-		cfg.log.Plain(markup.H1(fmt.Sprintf("Migrating your project to sveltin v%s", CliVersion)))
+		cfg.log.Print(markup.H1(fmt.Sprintf("Migrating your project to sveltin v%s", CliVersion)))
 
 		migrationManager := migrations.NewMigrationManager()
 		migrationServices := migrations.NewMigrationServices(cfg.fs, cfg.fsManager, cfg.pathMaker, cfg.log)
@@ -109,7 +110,7 @@ func RunMigrateCmd(cmd *cobra.Command, args []string) {
 			utils.ExitIfError(err)
 		}
 
-		cfg.log.Success(markup.Green(fmt.Sprintf("Your project is ready for sveltin v%s\n", CliVersion)))
+		cfg.log.Print(feedbacks.SuccessMsg(fmt.Sprintf("Your project is ready for sveltin v%s", CliVersion)))
 	}
 }
 

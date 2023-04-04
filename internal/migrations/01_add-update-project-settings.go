@@ -59,10 +59,10 @@ func (m *AddUpdateProjectSettings) up() error {
 
 	exists, _ := utils.FileExists(m.getServices().fs, m.Data.TargetPath)
 	if !exists {
-		m.getServices().logger.Info(fmt.Sprintf("Creating %s", filepath.Base(m.Data.TargetPath)))
+		m.getServices().logger.Infof("Creating %s", filepath.Base(m.Data.TargetPath))
 		return addProjectSettingsFile(m)
 	} else if exists && m.Data.ProjectCliVersion != m.Data.CliVersion {
-		m.getServices().logger.Info(fmt.Sprintf("Bumping Sveltin CLI version in %s", filepath.Base(m.Data.TargetPath)))
+		m.getServices().logger.Infof("Bumping Sveltin CLI version in %s", filepath.Base(m.Data.TargetPath))
 		return updateFileContent(m)
 	}
 

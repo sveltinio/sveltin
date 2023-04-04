@@ -75,11 +75,11 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient(npmClientName, cfg.log)
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(markup.H1("A Starter project will be created"))
+	cfg.log.Print(markup.H1("A Starter project will be created"))
 
 	// Clone starter template github repository
 	themeStarterTemplate := cfg.startersMap[ThemeStarter]
-	cfg.log.Info(fmt.Sprintf("Cloning the %s repos", themeStarterTemplate.Name))
+	cfg.log.Infof("Cloning the %s repos", themeStarterTemplate.Name)
 
 	err = gitclient.RunClone(themeStarterTemplate.URL, CliVersion, cfg.pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
@@ -130,7 +130,7 @@ func ThemeCmdRun(cmd *cobra.Command, args []string) {
 	err = setupThemeCSSLib(&resources.SveltinTemplatesFS, cfg, &tplData)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(markup.Green("\u2714 Done\n"))
 
 	// NEXT STEPS
 	projectConfigSummary := config.NewProjectConfig(projectName, cssLibName, themeName, npmClient.Desc)

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/charmbracelet/log"
 	"github.com/samber/lo"
 	"github.com/sveltinio/prompti/choose"
 	"github.com/sveltinio/prompti/input"
@@ -11,7 +12,6 @@ import (
 	sveltinerr "github.com/sveltinio/sveltin/internal/errors"
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/tpltypes"
-	logger "github.com/sveltinio/yinlog"
 )
 
 //=============================================================================
@@ -104,7 +104,7 @@ func SelectThemeHandler(themeFlag string) (string, error) {
 }
 
 // SelectNPMClientHandler if no flag passed, prompts a list of installed npm client and ask the user to select one.
-func SelectNPMClientHandler(items []string, npmClientFlagValue string, logger *logger.Logger) (string, error) {
+func SelectNPMClientHandler(items []string, npmClientFlagValue string, logger *log.Logger) (string, error) {
 	if len(items) == 0 {
 		err := errors.New("it seems there is no package manager installed on your machine. We cannot proceed now")
 		return "", sveltinerr.NewNPMClientNotFoundError(err)

@@ -82,7 +82,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	metadataTemplateData := tpltypes.NewMetadataData(mdName, mdResource, mdType)
 
 	headingText := fmt.Sprintf("Creating '%s' as metadata for the '%s' resource", metadataTemplateData.Name, metadataTemplateData.Resource)
-	cfg.log.Plain(markup.H1(headingText))
+	cfg.log.Print(markup.H1(headingText))
 
 	// MAKE FOLDER STRUCTURE: src/lib folder
 	libFolder, err := makeOrAddContentForMetadataToProjectStructure(LibFolder, metadataTemplateData)
@@ -111,7 +111,7 @@ func RunAddMetadataCmd(cmd *cobra.Command, args []string) {
 	err = projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 
 	// NEXT STEPS
 	feedbacks.ShowNewMetadataHelpMessage(metadataTemplateData)

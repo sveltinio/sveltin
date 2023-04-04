@@ -19,12 +19,12 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/log"
 	"github.com/jlaffaye/ftp"
 	"github.com/samber/lo"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/prompti/progressbar"
 	"github.com/sveltinio/sveltin/utils"
-	"github.com/sveltinio/yinlog"
 )
 
 // FTPServerConnection is the struct with all is needed to establish and act on the FTP remote server.
@@ -32,7 +32,7 @@ type FTPServerConnection struct {
 	Config       FTPConnectionConfig
 	serverFolder string
 	client       *ftp.ServerConn
-	logger       *yinlog.Logger
+	logger       *log.Logger
 }
 
 // NewFTPServerConnection returns a new FTPServerConnection struct.
@@ -55,7 +55,7 @@ func (s *FTPServerConnection) SetRootFolder(name string) {
 }
 
 // SetLogger sets the root folder on the FTP remote server.
-func (s *FTPServerConnection) SetLogger(logger *yinlog.Logger) {
+func (s *FTPServerConnection) SetLogger(logger *log.Logger) {
 	s.logger = logger
 }
 
@@ -141,7 +141,7 @@ func (s *FTPServerConnection) DeleteAll(exclude []string, dryrun bool) error {
 	}
 
 	if len(entries) > 0 {
-		s.logger.Important("Deleting previous content from the FTP remote folder")
+		s.logger.Info("Deleting previous content from the FTP remote folder")
 		for _, entry := range entries {
 			switch entry.Type {
 			case ftp.EntryTypeFolder:
@@ -179,7 +179,7 @@ func (s *FTPServerConnection) DoBackup(appFs afero.Fs, tarballFilePath string, d
 				return err
 			}
 		} else {
-			s.logger.Important("Nothing to backup on the server!")
+			s.logger.Info("Nothing to backup on the server!")
 		}
 	}
 	return nil

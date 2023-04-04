@@ -40,7 +40,7 @@ var serverCmd = &cobra.Command{
 
 // RunServerCmd is the actual work function.
 func RunServerCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Running the Vite server"))
+	cfg.log.Print(markup.H1("Running the Vite server"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)

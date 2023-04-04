@@ -14,6 +14,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -39,7 +40,7 @@ var generateRssCmd = &cobra.Command{
 
 // RunGenerateRSSCmd is the actual work function.
 func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Generating the RSS feed file"))
+	cfg.log.Print(markup.H1("Generating the RSS feed file"))
 
 	cfg.log.Info("Getting list of all resources contents")
 	existingResources := helpers.GetAllResources(cfg.fs, cfg.pathMaker.GetPathToExistingResources())
@@ -65,7 +66,7 @@ func RunGenerateRSSCmd(cmd *cobra.Command, args []string) {
 	err := projectFolder.Create(sfs)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 }
 
 // Command initialization.

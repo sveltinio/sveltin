@@ -16,6 +16,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/markup"
 	"github.com/sveltinio/sveltin/internal/npmclient"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/utils"
 )
 
@@ -47,7 +48,7 @@ var buildCmd = &cobra.Command{
 
 // RunBuildCmd is the actual work function.
 func RunBuildCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Building the Sveltin project"))
+	cfg.log.Print(markup.H1("Building the Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)
@@ -57,7 +58,7 @@ func RunBuildCmd(cmd *cobra.Command, args []string) {
 	err = helpers.RunNPMCommand(npmClientInfo.Name, npmclient.BuildCmd, "", nil)
 	utils.ExitIfError(err)
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 }
 
 // Command initialization.

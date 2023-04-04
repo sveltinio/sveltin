@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"fmt"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -70,7 +69,7 @@ func (m *CleanDotEnv) up() error {
 			patterns[svelteKitBuildComment],
 		}
 		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			m.getServices().logger.Infof("Migrating %s", filepath.Base(m.Data.TargetPath))
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}

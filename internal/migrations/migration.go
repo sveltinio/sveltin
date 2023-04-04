@@ -14,10 +14,10 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/charmbracelet/log"
 	"github.com/spf13/afero"
 	"github.com/sveltinio/sveltin/internal/fsm"
 	"github.com/sveltinio/sveltin/internal/pathmaker"
-	"github.com/sveltinio/yinlog"
 )
 
 type matcherFunc = func([]byte, string, string) bool
@@ -38,11 +38,11 @@ type MigrationServices struct {
 	fs        afero.Fs
 	fsManager *fsm.SveltinFSManager
 	pathMaker *pathmaker.SveltinPathMaker
-	logger    *yinlog.Logger
+	logger    *log.Logger
 }
 
 // NewMigrationServices creates an instance of MigrationService struct.
-func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pathmaker.SveltinPathMaker, logger *yinlog.Logger) *MigrationServices {
+func NewMigrationServices(fs afero.Fs, fsm *fsm.SveltinFSManager, pathmaker *pathmaker.SveltinPathMaker, logger *log.Logger) *MigrationServices {
 	return &MigrationServices{
 		fs:        fs,
 		fsManager: fsm,
@@ -129,7 +129,7 @@ func overwriteFile(m IMigration, content []byte) error {
 	return nil
 }
 
-func appendToFile(fs afero.Fs, filename string, contentToAppend []string, logger *yinlog.Logger) {
+func appendToFile(fs afero.Fs, filename string, contentToAppend []string, logger *log.Logger) {
 	f, err := fs.OpenFile(filename, os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		logger.Fatalf("failed opening file: %s", err)

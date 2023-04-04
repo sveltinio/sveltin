@@ -21,6 +21,7 @@ import (
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	"github.com/sveltinio/sveltin/resources"
 	"github.com/sveltinio/sveltin/tui/activehelps"
+	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
 )
@@ -77,7 +78,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 	contentData := tpltypes.NewContentData(contentName, contentResource, withSampleContent)
 
 	headingText := fmt.Sprintf("Adding '%s' as content to the '%s' resource", contentData.Name, contentData.Resource)
-	cfg.log.Plain(markup.H1(headingText))
+	cfg.log.Print(markup.H1(headingText))
 
 	// MAKE FOLDER STRUCTURE: content/<resource_name>/<content_name>
 	contentFolder, err := makeContentFolderStructure(ContentFolder, contentData)
@@ -101,7 +102,7 @@ func RunAddContentCmd(cmd *cobra.Command, args []string) {
 		err := addSampleCoverImage(contentData)
 		utils.ExitIfError(err)
 	}
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 }
 
 // Command initialization.

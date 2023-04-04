@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"fmt"
 	"path"
 	"strings"
 
@@ -67,7 +66,7 @@ func (m *OverwriteSveltinDTS) up() error {
 		if mustMigrate(fileContent, gatekeeper) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+			m.getServices().logger.Infof("Migrating %s", localFilePath)
 			saveTo := path.Join(m.Services.pathMaker.GetSrcFolder())
 			return m.Services.fsManager.CopyFileFromEmbed(&resources.SveltinStaticFS, m.Services.fs, resources.SveltinFilesFS, "sveltin_d_ts", saveTo)
 		}

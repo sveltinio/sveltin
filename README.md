@@ -338,9 +338,10 @@ Sveltin leverages many great open source libraries, in alphabetical order:
 | [gjson](https://github.com/tidwall/gjson)               | `1.14.4`  | MIT          |
 | [go-git](https://github.com/go-git/go-git)              | `5.6.1`   | Apache-2.0   |
 | [is](https://github.com/matryer/is)                     | `1.4.1`   | MIT          |
-| [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.6.0`   | MIT          |
+| [lipgloss](https://github.com/charmbracelet/lipgloss)   | `0.7.1`   | MIT          |
 | [lo](https://github.com/samber/lo)                      | `1.38.1`  | MIT          |
-| [prompti](https://github.com/sveltinio/prompti)         | `0.2.2`   | MIT          |
+| [log](https://github.com/charmbracelet/log)             | `0.2.1`   | MIT          |
+| [prompti](https://github.com/sveltinio/prompti)         | `0.2.3`   | MIT          |
 | [script](https://github.com/bitfield/script)            | `0.21.4`  | MIT          |
 | [sjson](https://github.com/tidwall/sjson)               | `1.2.5`   | MIT          |
 | [slug](https://github.com/gosimple/slug)                | `1.13.1`  | MPL-2.0      |

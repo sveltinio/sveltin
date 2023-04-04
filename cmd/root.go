@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/charmbracelet/log"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -27,11 +28,10 @@ import (
 	"github.com/sveltinio/sveltin/internal/tpltypes"
 	projectvalidator "github.com/sveltinio/sveltin/internal/validator"
 	"github.com/sveltinio/sveltin/utils"
-	logger "github.com/sveltinio/yinlog"
 )
 
 type appConfig struct {
-	log             *logger.Logger
+	log             *log.Logger
 	settings        *config.SveltinSettings
 	projectSettings tpltypes.ProjectSettings
 	prodData        tpltypes.EnvProductionData
@@ -173,13 +173,7 @@ func loadSveltinSettings() {
 }
 
 func initAppConfig() {
-	cfg.log = logger.New()
-	cfg.log.Printer.SetPrinterOptions(&logger.PrinterOptions{
-		Timestamp: false,
-		Colors:    true,
-		Labels:    false,
-		Icons:     true,
-	})
+	cfg.log = utils.SetupLogger()
 	cfg.pathMaker = pathmaker.NewSveltinPathMaker(cfg.settings)
 	cfg.fsManager = fsm.NewSveltinFSManager(cfg.pathMaker)
 	cfg.startersMap = helpers.InitStartersTemplatesMap()
@@ -395,11 +389,11 @@ func handleReleaseNotifier(cmdName string) {
 		// Register the Observers to the ReleaseMonitor.
 		_, err := newReleaseMonitor.Register(&cmdObserver)
 		if err != nil {
-			cfg.log.Important(markup.Faint(err.Error()))
+			cfg.log.Info(markup.Faint(err.Error()))
 		}
 		_, err = newReleaseMonitor.Register(&sveltinJsonObserver)
 		if err != nil {
-			cfg.log.Important(markup.Faint(err.Error()))
+			cfg.log.Info(markup.Faint(err.Error()))
 		}
 
 		// Start the ReleaseNotifier.

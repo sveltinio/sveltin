@@ -8,7 +8,6 @@
 package migrations
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -68,7 +67,7 @@ func (m *RefactorThemeConfig) up() error {
 		if patternsMatched(fileContent, migrationTriggers, findStringMatcher) {
 			localFilePath :=
 				strings.Replace(m.Data.TargetPath, m.getServices().pathMaker.GetRootFolder(), "", 1)
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", localFilePath))
+			m.getServices().logger.Infof("Migrating %s", localFilePath)
 			if _, err := m.runMigration(fileContent, ""); err != nil {
 				return err
 			}

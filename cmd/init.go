@@ -14,6 +14,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 	"github.com/sveltinio/prompti/input"
 	"github.com/sveltinio/sveltin/config"
@@ -32,7 +33,6 @@ import (
 	"github.com/sveltinio/sveltin/tui/feedbacks"
 	"github.com/sveltinio/sveltin/tui/prompts"
 	"github.com/sveltinio/sveltin/utils"
-	logger "github.com/sveltinio/yinlog"
 )
 
 // names for the available style options.
@@ -136,11 +136,11 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 	npmClient := getSelectedNPMClient(initCmdDefaultsCfg.NpmClient, cfg.log)
 	npmClientName = npmClient.Name
 
-	cfg.log.Plain(markup.H1("Setup a new Sveltin project"))
+	cfg.log.Print(markup.H1("Setup a new Sveltin project"))
 
 	// Clone starter template github repository
 	starterTemplate := cfg.startersMap[SvelteKitStarter]
-	cfg.log.Info(fmt.Sprintf("Getting the %s", starterTemplate.Name))
+	cfg.log.Infof("Getting the %s", starterTemplate.Name)
 
 	err = gitclient.RunClone(starterTemplate.URL, CliVersion, cfg.pathMaker.GetProjectRoot(projectName))
 	utils.ExitIfError(err)
@@ -223,7 +223,7 @@ func InitCmdRun(cmd *cobra.Command, args []string) {
 		utils.ExitIfError(err)
 	}
 
-	cfg.log.Success("Done\n")
+	cfg.log.Print(feedbacks.Success())
 
 	projectConfigSummary := config.NewProjectConfig(projectName, cssLibName, themeSelection, npmClient.Desc)
 	// NEXT STEPS
@@ -360,7 +360,7 @@ func getNewThemeName(value, projectName string) string {
  * prompt to select the package manager from the ones currently
  * installed on the machine and store its value as settings.
  */
-func getSelectedNPMClient(npmcFlag string, logger *logger.Logger) npmclient.NPMClientInfo {
+func getSelectedNPMClient(npmcFlag string, logger *log.Logger) npmclient.NPMClientInfo {
 	installedNPMClients := utils.GetInstalledNPMClientList()
 	npmcNames := utils.GetNPMClientNames(installedNPMClients)
 	client, err := prompts.SelectNPMClientHandler(npmcNames, npmcFlag, logger)

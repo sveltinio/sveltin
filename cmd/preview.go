@@ -43,7 +43,7 @@ var previewCmd = &cobra.Command{
 
 // RunPreviewCmd is the actual work function.
 func RunPreviewCmd(cmd *cobra.Command, args []string) {
-	cfg.log.Plain(markup.H1("Preview your Sveltin project"))
+	cfg.log.Print(markup.H1("Preview your Sveltin project"))
 
 	pathToPkgFile := filepath.Join(cfg.pathMaker.GetRootFolder(), "package.json")
 	npmClientInfo, err := utils.RetrievePackageManagerFromPkgJSON(cfg.fs, pathToPkgFile)

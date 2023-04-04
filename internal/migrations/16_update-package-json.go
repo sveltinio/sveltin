@@ -90,7 +90,7 @@ func (m *UpdatePackageJson) up() error {
 
 		isMigrate := patternsMatched(fileContent, migrationTriggers, findStringMatcher)
 		if isMigrate {
-			m.getServices().logger.Info(fmt.Sprintf("Migrating %s", filepath.Base(m.Data.TargetPath)))
+			m.getServices().logger.Infof("Migrating %s", filepath.Base(m.Data.TargetPath))
 			if updatedContent, err = m.runMigration(updatedContent, ""); err != nil {
 				return err
 			}
@@ -101,7 +101,7 @@ func (m *UpdatePackageJson) up() error {
 			currentVersion, ok := getDevDependency(fileContent, name)
 
 			if ok && !isEqual(currentVersion, nextVersion) {
-				m.getServices().logger.Info(fmt.Sprintf("Bump %s to %s", name, nextVersion))
+				m.getServices().logger.Infof("Bump %s to %s", name, nextVersion)
 				updateVersion = true
 
 				updatedContent, err = utils.SetJsonStringValue(
@@ -116,7 +116,7 @@ func (m *UpdatePackageJson) up() error {
 		}
 
 		if isMigrate || updateVersion {
-			m.getServices().logger.Important(markup.Purple("Remember to run: sveltin install (or npm run install, pnpm install ...)"))
+			m.getServices().logger.Print(markup.Purple("\u2691 Remember to run: sveltin install (or npm run install, pnpm install ...)"))
 		}
 
 		// save new package.json file
