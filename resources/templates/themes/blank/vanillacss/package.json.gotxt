@@ -23,7 +23,7 @@
 		"@sveltinio/remark-headings": "^1.0.1",
 		"@sveltinio/seo": "^0.4.1",
 		"@sveltinio/services": "^0.4.1",
-		"@sveltinio/ts-utils": "^0.3.1",
+		"@sveltinio/ts-utils": "^0.4.0",
 		"@sveltinio/widgets": "^0.7.3",
 		"@types/node": "^18.15.11",
 		"@typescript-eslint/eslint-plugin": "^5.57.0",
